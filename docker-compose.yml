@@ -40,6 +40,9 @@ services:
       - 'LDAP_BACKEND=bdb'
       - 'LDAP_DOMAIN=esco-centre.fr'
       - 'LDAP_BASE_DN=dc=esco-centre,dc=fr'
+    ports:
+      - ${DOCKER_DEVBOX_PORT_PREFIX}89:389
+      - ${DOCKER_DEVBOX_PORT_PREFIX}36:636
     volumes:
       - 'ldap-data:/var/lib/ldap'
       - 'ldap-config:/etc/ldap/slapd.d'
