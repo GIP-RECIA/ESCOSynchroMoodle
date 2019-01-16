@@ -7,7 +7,8 @@ services:
     environment:
       - MARIADB_USER=moodle
       - MARIADB_DATABASE=moodle
-      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_PASSWORD=moodle
+      - MARIADB_ROOT_PASSWORD=moodle
     ports:
       - ${DOCKER_DEVBOX_PORT_PREFIX}06:3306
     volumes:
@@ -21,7 +22,7 @@ services:
       - MARIADB_PORT_NUMBER=3306
       - MOODLE_DATABASE_USER=moodle
       - MOODLE_DATABASE_NAME=moodle
-      - ALLOW_EMPTY_PASSWORD=yes
+      - MOODLE_DATABASE_PASSWORD=moodle
     ports:
       - ${DOCKER_DEVBOX_PORT_PREFIX}80:80
     volumes:
