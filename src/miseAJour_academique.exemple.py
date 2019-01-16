@@ -3,8 +3,8 @@
 
 import logging
 import sys
-from miseAJourTrt import miseAJour
-from utilsOptions import purge_demandee
+from synchromoodle.miseAJourTrt import miseAJour
+from synchromoodle.utilsOptions import purge_demandee
 
 logging.basicConfig( format = "%(levelname)s:%(message)s", stream = sys.stdout, level = logging.INFO )
 

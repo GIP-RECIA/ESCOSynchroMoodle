@@ -2,8 +2,8 @@
 # coding: utf-8
 
 import sys
-from miseAJourTrt import *
-from utilsOptions import purge_demandee
+from synchromoodle.miseAJourTrt import miseAJourMahara
+from synchromoodle.utilsOptions import purge_demandee
 
 
 #######################################

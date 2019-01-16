@@ -3,8 +3,8 @@
 
 import logging
 import sys
-from miseAJourTrt import miseAJour
-from utilsOptions import purge_demandee
+from synchromoodle.miseAJourTrt import miseAJour
+from synchromoodle.utilsOptions import purge_demandee
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
@@ -58,10 +58,10 @@ fileSeparator = '-'
 #           { NomEtabRgp : "Regroupement 1", UaiRgp : ['0180755y','0410590u']}
 #        ];
 
-NomEtabRgp = "<NomEtabRgp>";
-UaiRgp = "uai";
+NomEtabRgp = "<NomEtabRgp>"
+UaiRgp = "uai"
 
-EtabRgp = [ ];
+EtabRgp = [ ]
 
 listeEtab = ['0370074E']
 

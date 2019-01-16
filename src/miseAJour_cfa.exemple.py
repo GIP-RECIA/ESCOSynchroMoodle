@@ -2,9 +2,9 @@
 # coding: utf-8
 
 import sys
-from miseAJourTrt import miseAJour
-from miseAJourTrt import miseAJourInterEtabs
-from utilsOptions import purge_demandee
+from synchromoodle.miseAJourTrt import miseAJour
+from synchromoodle.miseAJourTrt import miseAJourInterEtabs
+from synchromoodle.utilsOptions import purge_demandee
 
 
 #######################################
@@ -64,8 +64,8 @@ fileSeparator    = "-"
 #           { NomEtabRgp : "Regroupement 1", UaiRgp : ["0180755y","0410590u"]}
 #        ];
 
-NomEtabRgp  = "<NomEtabRgp>" ;
-UaiRgp      = "uai" ;
+NomEtabRgp  = "<NomEtabRgp>" 
+UaiRgp      = "uai" 
 
 EtabRgp = [
            { NomEtabRgp : "CFA DU CHER", UaiRgp : [ "0180755y", "0180939y", "0410892y" ]},

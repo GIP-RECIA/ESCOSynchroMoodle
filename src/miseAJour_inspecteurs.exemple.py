@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # coding: utf-8
 
-from miseAJourTrt import miseAJourInspecteurs
+from synchromoodle.miseAJourTrt import miseAJourInspecteurs
 
 #######################################
 # Infos pour la connexion et l'acces  
