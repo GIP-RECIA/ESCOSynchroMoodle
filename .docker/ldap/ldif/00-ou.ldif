@@ -1,0 +1,22 @@
+version: 1
+
+dn: ou=groups,dc=esco-centre,dc=fr
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+dn: ou=structures,dc=esco-centre,dc=fr
+objectClass: organizationalUnit
+objectClass: top
+ou: structures
+
+dn: ou=people,dc=esco-centre,dc=fr
+objectClass: organizationalUnit
+objectClass: top
+ou: people
+
+dn: ou=administrateurs,dc=esco-centre,dc=fr
+objectClass: organizationalUnit
+objectClass: top
+ou: administrateurs
+

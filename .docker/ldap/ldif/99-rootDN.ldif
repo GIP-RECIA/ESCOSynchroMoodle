@@ -1,0 +1,6 @@
+version: 1
+
+dn: olcDatabase={1}bdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=admin,ou=administrateurs,dc=esco-centre,dc=fr

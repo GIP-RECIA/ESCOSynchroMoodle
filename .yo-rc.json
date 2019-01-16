@@ -1,0 +1,12 @@
+{
+  "@gfi-centre-ouest/generator-docker-devbox": {
+    "promptValues": {
+      "projectName": "synchro-moodle",
+      "authorName": "Rémi Alvergnat",
+      "authorEmail": "remi.alvergnat@gfi.fr",
+      "features~0": [],
+      "features~0~more": false,
+      "portPrefix": "98"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+version: '2.2'
+services:
+  moodle-db:
+    image: 'bitnami/mariadb'
+    init: true
+    restart: '${DOCKER_DEVBOX_RESTART_POLICY}'
+    environment:
+      - MARIADB_USER=moodle
+      - MARIADB_DATABASE=moodle
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - ${DOCKER_DEVBOX_PORT_PREFIX}06:3306
+    volumes:
+      - 'moodle-db:/bitnami'
+  moodle:
+    image: 'bitnami/moodle'
+    init: true
+    restart: '${DOCKER_DEVBOX_RESTART_POLICY}'
+    environment:
+      - MARIADB_HOST=moodle-db
+      - MARIADB_PORT_NUMBER=3306
+      - MOODLE_DATABASE_USER=moodle
+      - MOODLE_DATABASE_NAME=moodle
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - ${DOCKER_DEVBOX_PORT_PREFIX}80:80
+    volumes:
+      - 'moodle:/bitnami'
+    depends_on:
+      - moodle-db
+  ldap:
+    build:
+      context: .docker
+      dockerfile: ldap/Dockerfile
+    image: '${DOCKER_DEVBOX_REGISTRY}recia-env/ldap'
+    init: true
+    restart: '${DOCKER_DEVBOX_RESTART_POLICY}'
+    environment:
+      - 'LDAP_BACKEND=bdb'
+      - 'LDAP_DOMAIN=esco-centre.fr'
+      - 'LDAP_BASE_DN=dc=esco-centre,dc=fr'
+    volumes:
+      - 'ldap-data:/var/lib/ldap'
+      - 'ldap-config:/etc/ldap/slapd.d'
+volumes:
+  moodle-db:
+  moodle:
+  ldap-data:
+  ldap-config:

@@ -1,0 +1,23 @@
+version: 1
+
+dn: olcDatabase={1}bdb,cn=config
+changetype: modify
+add: olcDbIndex
+#olcDbIndex: objectClass,entryCSN,entryUUID eq
+#olcDbIndex: uid eq
+olcDbIndex: ENTPersonLogin eq
+olcDbIndex: cn pres,eq,sub
+olcDbIndex: hasMember eq
+olcDbIndex: member eq
+olcDbIndex: isMemberOf pres,sub,eq
+#olcDbIndex: ENTEleveClasses eq,sub
+#olcDbIndex: ENTEleveGroupes eq,sub
+#olcDbIndex: ENTAuxEnsClasses eq,sub
+#olcDbIndex: ENTAuxEnsGroupes  eq,sub
+olcDbIndex: ESCOUAI eq
+olcDbIndex: ESCOSIREN eq
+olcDbIndex: ESCOUAICourant eq
+olcDbIndex: ESCOSIRENCourant eq
+olcDbIndex: ENTStructureUAI eq
+#olcDbIndex: mail pres,eq
+
