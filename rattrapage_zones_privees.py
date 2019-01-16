@@ -1,5 +1,5 @@
-#!/usr/bin/python -d
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python2
+# coding: utf-8
 
 # System imports
 import datetime
