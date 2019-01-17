@@ -1,7 +1,7 @@
 version: '2.2'
 services:
   moodle-db:
-    image: 'bitnami/mariadb'
+    image: 'bitnami/mariadb:10.1'
     init: true
     restart: '${DOCKER_DEVBOX_RESTART_POLICY}'
     environment:
@@ -14,7 +14,7 @@ services:
     volumes:
       - 'moodle-db:/bitnami'
   moodle:
-    image: 'bitnami/moodle'
+    image: 'bitnami/moodle:3.5.0'
     init: true
     restart: '${DOCKER_DEVBOX_RESTART_POLICY}'
     environment:
