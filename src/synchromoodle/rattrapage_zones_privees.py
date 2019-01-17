@@ -328,7 +328,7 @@ def get_etab_users(ldap, uai_etab):
 
 ### Fonction permettant d'etablir une connexion a un LDAP
 def connect_ldap(ldap_server, ldap_username, ldap_password):
-    l = ldap.open(ldap_server)
+    l = ldap.initialize(ldap_server)
     l.protocol_version = ldap.VERSION3
     l.simple_bind_s(ldap_username, ldap_password)
     return l

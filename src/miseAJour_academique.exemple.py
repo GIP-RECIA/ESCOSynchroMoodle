@@ -25,7 +25,7 @@ entete = "mdl_"
 # Infos pour la connexion et l"acces 
 # aux donnees sur le serveur LDAP
 #######################################
-ldapServer = "ldap://192.168.1.100:9839"
+ldapServer = "ldap://192.168.1.100:9889"
 ldapUsername = "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr"
 ldapPassword = "admin"
 

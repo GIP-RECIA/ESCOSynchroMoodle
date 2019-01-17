@@ -10,7 +10,6 @@ import re
 
 import sys
 
-()
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
 # Personnal imports
@@ -234,6 +233,14 @@ def miseAJour(host, user, password, nomBD, port, ldapServer, ldapUsername, ldapP
         # Liste pour stocker les admins locaux durant le traitement
         list_admin = []
 
+        ###################################################
+        # Connexion au LDAP
+        ###################################################
+        l = connect_ldap(ldapServer, ldapUsername, ldapPassword)
+
+        # Récupération de la liste UAI-Domaine des établissements
+        map_etab_domaine = get_domaines_etabs(l, structures_dn)
+
         # Ids des categories inter etablissements
         id_context_categorie_inter_etabs = get_id_context_inter_etabs(mark, entete)
 
@@ -258,14 +265,6 @@ def miseAJour(host, user, password, nomBD, port, ldapServer, ldapUsername, ldapP
 
         # Recuperation de l'id du champ personnalisé Domaine
         id_field_domaine = get_field_domaine(mark, entete)
-
-        ###################################################
-        # Connexion au LDAP
-        ###################################################
-        l = connect_ldap(ldapServer, ldapUsername, ldapPassword)
-
-        # Récupération de la liste UAI-Domaine des établissements
-        map_etab_domaine = get_domaines_etabs(l, structures_dn)
 
         ###################################################
         # On ne va traiter, dans la suite du programme, 
