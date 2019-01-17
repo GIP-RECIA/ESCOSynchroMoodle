@@ -1,8 +1,10 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # coding: utf-8
 
 import logging
+
 import sys
+
 from synchromoodle.miseAJourTrt import miseAJour
 from synchromoodle.utilsOptions import purge_demandee
 
@@ -23,14 +25,14 @@ entete = "mdl_"
 # Infos pour la connexion et l'acces 
 # aux donnees sur le serveur LDAP
 #######################################
-ldapServer="<ldapServer>"
+ldapServer = "<ldapServer>"
 ldapUsername = "<ldapUsername>"
 ldapPassword = "<ldapPassword>"
 
 baseDN = ",dc=esco-centre,dc=fr"
-structuresDN = "ou=structures"+baseDN
-personnesDN = "ou=people"+baseDN
-adminDN = "ou=administrateurs"+baseDN
+structuresDN = "ou=structures" + baseDN
+personnesDN = "ou=people" + baseDN
+adminDN = "ou=administrateurs" + baseDN
 
 #######################################
 # Administrateurs locaux de Moodle
@@ -54,14 +56,14 @@ fileSeparator = '-'
 #######################################
 # Etablissements synchronises
 #######################################
-#EtabRgp = [
+# EtabRgp = [
 #           { NomEtabRgp : "Regroupement 1", UaiRgp : ['0180755y','0410590u']}
 #        ];
 
 NomEtabRgp = "<NomEtabRgp>"
 UaiRgp = "uai"
 
-EtabRgp = [ ]
+EtabRgp = []
 
 listeEtab = ['0370074E']
 
@@ -74,10 +76,12 @@ listeEtabSansMail = []
 # Mise a jour
 ###################
 if __name__ == "__main__":
-    purge_cohortes = purge_demandee( sys.argv[ 1: ] )
+    purge_cohortes = purge_demandee(sys.argv[1:])
     # Mise a jour pour chaque etablissement de listeEtab :
     #  - de l'etablissement lui-meme
     #  - des enseignants
     #  - des eleves
     #  - des administrateurs locaux
-    miseAJour(host, user, password, nomBD, port, ldapServer, ldapUsername, ldapPassword, listeEtab, listeEtabSansAdmin, listeEtabSansMail, structuresDN, personnesDN, entete, prefixAdminMoodleLocal, prefixAdminLocal, EtabRgp, NomEtabRgp, UaiRgp, fileTrtPrecedent, fileSeparator, purge_cohortes )
+    miseAJour(host, user, password, nomBD, port, ldapServer, ldapUsername, ldapPassword, listeEtab, listeEtabSansAdmin,
+              listeEtabSansMail, structuresDN, personnesDN, entete, prefixAdminMoodleLocal, prefixAdminLocal, EtabRgp,
+              NomEtabRgp, UaiRgp, fileTrtPrecedent, fileSeparator, purge_cohortes)
