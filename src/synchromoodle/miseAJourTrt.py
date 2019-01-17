@@ -16,7 +16,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level
 from .utilsDB import *
 from .utilsFile import *
 from .utilsLDAP import *
-from .config import DatabaseConfig, LdapConfig, EtablissementsConfig, Config
+from .config import EtablissementsConfig, Config
 
 ###############################################################################
 # CONSTANTES
@@ -179,49 +179,13 @@ def mettre_a_jour_droits_enseignant(mark, entete, enseignant_infos, gereAdminLoc
         logging.info("         Les seuls établissements autorisés pour cet enseignant sont '%s'" % themes_autorises)
 
 
-######################################################################
-# Fonction permettant d'effectuer la mise a jour de la BD
-# Moodle via les infos issues du LDAP
-#
-# Parametres:
-# -----------
-#  - host     : hote hebergeant la BD moodle
-#  - user     : utilisateur pour la connexion a la BD moodle
-#  - password : mot de passe pour la connexion a la BD moodle
-#  - nomBD    : nom de la BD moodle
-#
-#  - ldapServer   : hote hebergeant le serveur LDAP
-#  - ldapUserName : utilisateur pour la connexion au LDAP
-#  - ldapPassword : mot de passe pour la connexion au serveur LDAP
-#
-#  - listeEtab          : liste des etablissements a traiter 
-#  - listeEtabSansAdmin : liste des etablissements n'ayant pas d'admin
-#
-#  - structureDN : nom absolu pour acceder aux structures dans le LDAP
-#  - personneDN  : nom absolu pour acceder aux personnes dans le LDAP
-#
-#  - entete : entete des noms de table dans la BD moodle
-#
-#  - prefixAdminMoodle : contenu de l'attribut 'isMemberOf' dans le LDAP
-#                  indiquant le statut d'administrateur de Moodle 
-#           d'une personne
-#
-#  - prefixAdminLocal : contenu de l'attribut 'isMemberOf' dans le LDAP
-#                  indiquant le statut d'administrateur local d'une personne
-#
-#  - EtabRgp    : regroupement d'etablissements
-#  - nomEtabRgp : nom du regroupement d'etablissements
-#  - uaiRgp     : etablissement_uai du regroupement d'etablissements 
-#
-#  - fileTrtPrecedent : fichier contenant les dates de traitement
-#                       precedent pour les etablissements
-#  - fileSeparator    : seperateur utilise dans le fichier de 
-#                       traitement pour separarer l'etablissement de
-#                       sa date de traitement precedent
-#  - purgeCohortes    : booleen indiquant si la purge des cohortes
-#                       doit etre effectuee, ou non
-######################################################################
-def miseAJour(config: Config, purgeCohortes: bool):
+def miseAJour(config: Config, purge_cohortes: bool):
+    """
+    Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
+
+    :param config: Configuration d'execution
+    :param purge_cohortes: True si la purge des cohortes doit etre effectuée
+    """
     try:
         logging.info('============================================')
         logging.info('Synchronisation établissements : DEBUT')
@@ -277,7 +241,8 @@ def miseAJour(config: Config, purgeCohortes: bool):
         # une modification depuis le dernier traitement 
         ###################################################
         # Recuperation des dates de traitement precedent par etablissement
-        timeStampByEtab = read_time_stamp_by_etab(config.etablissements.fileTrtPrecedent, config.etablissements.fileSeparator)
+        timeStampByEtab = read_time_stamp_by_etab(config.etablissements.fileTrtPrecedent,
+                                                  config.etablissements.fileSeparator)
 
         # Recuperation du time stamp actuel au format LDAP
         now = datetime.datetime.now()
@@ -316,8 +281,10 @@ def miseAJour(config: Config, purgeCohortes: bool):
             for ldap_entry in result_set:
                 #  Recuperation des informations
                 ldap_entry_infos = ldap_entry[0][1]
-                etablissement_nom = ldap_entry_infos['ou'][0].replace("'", "\\'").replace("-ac-ORL._TOURS", "").decode(
-                    "utf-8")
+                etablissement_nom = ldap_entry_infos['ou'][0]\
+                    .replace("'", "\\'")\
+                    .replace("-ac-ORL._TOURS", "")\
+                    .decode("utf-8")
                 etablissement_type_structure = ldap_entry_infos['ENTStructureTypeStruct'][0]
                 etablissement_code_postal = ldap_entry_infos['postalCode'][0][:2]
                 etablissement_siren = ldap_entry_infos['ENTStructureSIREN'][0]
@@ -374,7 +341,7 @@ def miseAJour(config: Config, purgeCohortes: bool):
 
             # Date du dernier traitement effectue
             time_stamp = timeStampByEtab.get(uai_etablissement.upper())
-            if purgeCohortes:
+            if purge_cohortes:
                 # Si la purge des cohortes a ete demandee
                 # On recupere tous les eleves sans prendre en compte le timestamp
                 time_stamp = None
@@ -494,7 +461,7 @@ def miseAJour(config: Config, purgeCohortes: bool):
                 set_user_domain(mark, config.database.entete, eleve_id, id_field_domaine, user_domain)
 
             # Purge des cohortes des eleves
-            if purgeCohortes:
+            if purge_cohortes:
                 logging.info('    |_ Purge des cohortes des élèves')
                 purge_cohorts(mark, config.database.entete, eleves_by_cohortes)
 
@@ -627,7 +594,7 @@ def miseAJour(config: Config, purgeCohortes: bool):
                         user_domain = map_etab_domaine[enseignant_uai_courant][0]
                 logging.debug("Insertion du Domaine")
                 set_user_domain(mark, config.database.entete, id_user, id_field_domaine, user_domain)
-        if purgeCohortes:
+        if purge_cohortes:
             # Si la purge des cohortes a ete demandee
             # On recupere tous les eleves sans prendre en compte le timestamp
             time_stamp = None

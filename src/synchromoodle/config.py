@@ -153,13 +153,13 @@ class EtablissementsConfig:
         self.__dict__.update(entries)
 
     NomEtabRgp = "nomEtabRgp"
-    """???"""
+    """Nom du regroupement d'etablissements"""
 
     UaiRgp = "uai"
-    """???"""
+    """Etablissement_uai du regroupement d'etablissements """
 
     EtabRgp = []
-    """???"""
+    """Regroupement d'etablissements"""
 
     listeEtab = []
     """Liste des établissements"""
@@ -171,10 +171,10 @@ class EtablissementsConfig:
     """Etablissements dont le mail des professeurs n'est pas synchronise"""
 
     fileTrtPrecedent = "trtPrecedent_academique.txt"
-    """Nom du fichier"""
+    """Fichier contenant les dates de traitement précedent pour les établissements"""
 
     fileSeparator = "-"
-    """Séparateur du fichier"""
+    """Séparateur utilisé dans le fichier de traitement pour séparer l'etablissement des date de traitement précedent"""
 
 
 class Config:
