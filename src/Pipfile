@@ -9,6 +9,7 @@ pylint = "*"
 [packages]
 mysql-connector-python = "*"
 python-ldap = {file = "https://download.lfd.uci.edu/pythonlibs/r5uhg2lo/python_ldap-3.1.0-cp37-cp37m-win_amd64.whl"}
+ruamel-yaml = "*"
 
 [requires]
 python_version = "3.7"

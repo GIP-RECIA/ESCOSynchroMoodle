@@ -5,6 +5,7 @@
 ###############################################################################
 import mysql.connector
 
+from synchromoodle.config import DatabaseConfig
 from .utilsFile import *
 from .utilsLDAP import *
 
@@ -267,10 +268,15 @@ def add_role_to_user_for_contexts(mark, entete, role_id, ids_contexts_by_courses
 # Fonction permettant d'etablir une connexion a une BD 
 # MySQL
 ###########################################################
-def connect_db(host, user, password, database, port, db_charset):
+def connect_db(config: DatabaseConfig):
     # Etablissement de la connexion
-    conn = mysql.connector.connect(host=host, user=user, passwd=password, db=database, charset=db_charset,
-                                   port=int(port))
+    conn = mysql.connector.connect(host=config.host,
+                                   user=config.user,
+                                   passwd=config.password,
+                                   db=config.database,
+                                   charset=config.charset,
+                                   port=config.port)
+
     # conn.set_character_set(db_charset)
     # Choix des options
     mark = conn.cursor()
@@ -300,16 +306,15 @@ def create_classes_cohorts(mark, entete, id_context_etab, classes_names, time_cr
 # etablissement.
 # Puis de remplir la cohorte avec les enseignants de l'etablissement
 ###########################################################
-def create_profs_etabs_cohorts(mark, entete, id_context_etab, etab_name, time_created, time_stamp, ldapServer,
-                               ldapUsername, ldapPassword, personnes_dn):
+def create_profs_etabs_cohorts(mark, entete, id_context_etab, etab_name, time_created, time_stamp, ldap_config: LdapConfig):
     liste_professeurs_insere = []
     cohort_name = P_COHORT_NAME_FOR_ETAB % (etab_name)
     cohort_description = P_COHORT_DESC_FOR_ETAB % (etab_name)
     id_cohort = create_cohort(mark, entete, id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
-    l = connect_ldap(ldapServer, ldapUsername, ldapPassword)
+    l = connect_ldap(ldap_config)
     filtre = get_filtre_enseignants_etablissement(time_stamp, etab_name)
     logging.debug('      |_ Filtre LDAP pour récupérer les enseignants pour la cohorte de profs : %s' % filtre)
-    ldap_result_id = ldap_search_teacher(l, personnes_dn, filtre)
+    ldap_result_id = ldap_search_teacher(l, ldap_config.personnesDN, filtre)
     # Recuperation du resultat de la recherche
     result_set = ldap_retrieve_all_entries(l, ldap_result_id)
     maintenant_sql = get_timestamp_now(mark)

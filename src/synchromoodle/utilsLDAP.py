@@ -9,6 +9,8 @@ import ldap
 # CONSTANTES
 ###############################################################################
 # Attributs retournes pour une structure
+from synchromoodle.config import LdapConfig
+
 ATTRIBUTES_STRUCTURE = ['ou', 'ENTStructureSIREN', 'ENTStructureTypeStruct', 'postalCode', 'ENTStructureUAI',
                         'ESCODomaines', '+']
 
@@ -28,10 +30,10 @@ ATTRIBUTES_TEACHER = ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI'
 ###########################################################
 # Fonction permettant d'etablir une connexion a un LDAP 
 ###########################################################
-def connect_ldap(ldap_server, ldap_username, ldap_password):
-    l = ldap.initialize(ldap_server)
+def connect_ldap(config: LdapConfig):
+    l = ldap.initialize(config.uri)
     l.protocol_version = ldap.VERSION3
-    l.simple_bind_s(ldap_username, ldap_password)
+    l.simple_bind_s(config.username, config.password)
     return l
 
 
