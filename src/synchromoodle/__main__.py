@@ -22,7 +22,7 @@ def main():
     options, _ = parser.parse_args()
 
     config_loader = ConfigLoader()
-    config = config_loader.load(['config.yml', 'config.yaml'])
+    config = config_loader.load(['config.yml', 'config.yaml'], True)
 
     config = config_loader.update(config, options.config)
 

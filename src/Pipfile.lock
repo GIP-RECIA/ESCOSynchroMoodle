@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e352f32c6bcd2020731b477ce030c1ef76355eda5a04835a34735eb5ef540ac0"
+            "sha256": "486507d0d87ca35a648e9347843a38aaa8f0de6e22dd544cac676d74e6e736f0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -77,12 +77,18 @@
             "version": "==0.2.3"
         },
         "python-ldap": {
-            "file": "https://download.lfd.uci.edu/pythonlibs/r5uhg2lo/python_ldap-3.1.0-cp35-cp35m-win_amd64.whl",
             "hashes": [
                 "sha256:41975e79406502c092732c57ef0c2c2eb318d91e8e765f81f5d4ab6c1db727c5"
             ],
             "index": "pypi",
+            "markers": "sys_platform != 'win32'",
             "version": "==3.1.0"
+        },
+        "python-ldap-win32": {
+            "file": "https://download.lfd.uci.edu/pythonlibs/r5uhg2lo/python_ldap-3.1.0-cp35-cp35m-win_amd64.whl",
+            "name": "python-ldap",
+            "sys_platform": "== 'win32'",
+            "version": "*"
         },
         "ruamel-yaml": {
             "hashes": [
@@ -228,7 +234,6 @@
         },
         "wrapt": {
             "hashes": [
-                "sha256:256ca8a7468ea499b4ee1c758dff780f2aff307473039f9209cd0f8ab3314bf3",
                 "sha256:e03f19f64d81d0a3099518ca26b04550026f131eced2e76ced7b85c6b8d32128"
             ],
             "version": "==1.11.0"
