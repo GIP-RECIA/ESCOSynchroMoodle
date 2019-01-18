@@ -10,3 +10,5 @@ trtPrecedent*.txt
 
 *.pyc
 __pycache__/
+
+*.sql
