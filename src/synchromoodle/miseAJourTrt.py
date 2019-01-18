@@ -1,9 +1,5 @@
 # coding: utf-8
 
-###############################################################################
-# IMPORTS
-###############################################################################
-# System imports
 import datetime
 import logging
 import re
@@ -12,94 +8,12 @@ import sys
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
-# Personnal imports
 from .utilsDB import *
 from .utilsFile import *
 from .utilsLDAP import *
 from .config import EtablissementsConfig, Config
 
-###############################################################################
-# CONSTANTES
-###############################################################################
 
-#######################################
-# THEME PAR DEFAUT POUR LES
-# UTILISATEURS INTER-ETABS
-#######################################
-DEFAULT_MOODLE_THEME = "netocentre"
-
-#######################################
-# MAIL
-#######################################
-# Par defaut les mails sont uniquement
-# affiches aux participants du cours
-DEFAULT_MAIL_DISPLAY = 2
-
-# Email utilise lorsque les personnes
-# n'ont pas d'email dans le LDAP
-DEFAULT_MAIL = 'non_renseigne@netocentre.fr'
-
-# Domaine par défaut
-DEFAULT_DOMAIN = "lycees.netocentre.fr"
-
-#######################################
-# CLES UTILISE POUR STOCKER LES
-# TIMESTAMP
-#######################################
-# Cle pour pour stocker le timestamp dud dernier traitement inter-etablissements
-CLE_TRT_INTER_ETAB = "INTER_ETAB"
-
-# Cle pour stocker le timestamp dernier traitement mahara
-CLE_TRT_MAHARA = "MAHARA"
-
-#######################################
-# NIVEAUX DE CONTEXTES
-#######################################
-# Id de l'instance concernant Moodle
-ID_INSTANCE_MOODLE = 1
-
-# Niveau de contexte pour un cours
-NIVEAU_CTX_COURS = 50
-
-#######################################
-# ID ROLES
-#######################################
-# Id pour le role createur de cours
-ID_ROLE_CREATEUR_COURS = 2
-
-# Id pour le role enseignant
-ID_ROLE_ENSEIGNANT = 3
-
-# Id pour le role eleve
-ID_ROLE_ELEVE = 5
-
-# Id pour le role inspecteur
-ID_ROLE_INSPECTEUR = 9
-
-# Id pour le role directeur
-ID_ROLE_DIRECTEUR = 18
-
-# Id pour le role d'utilisateur avec droits limites
-ID_ROLE_UTILISATEUR_LIMITE = 14
-
-#######################################
-# LDAP
-#######################################
-# Type de structure d'un CFA
-TYPE_STRUCTURE_CFA = "CFA"
-
-# Type de structure d'un college
-TYPE_STRUCTURE_CLG = "COLLEGE"
-
-
-###############################################################################
-# FONCTIONS
-###############################################################################
-
-######################################################################
-# Fonction permettant d'indiquer si un etablissement fait partie
-# d'un regroupement etablissement_ou non.
-######################################################################
 def estGrpEtab(rne: str, etablissements_config: EtablissementsConfig):
     """
     Indique si un établissement fait partie d'un regroupement d'établissement ou non
@@ -113,11 +27,13 @@ def estGrpEtab(rne: str, etablissements_config: EtablissementsConfig):
     return False
 
 
-######################################################################
-# Fonction permettant d'extraire le nom des classes a partir de 
-# classes issues de l'annuaire LDAP
-######################################################################
 def extraireClassesLdap(classesLdap):
+    """
+    Extrait le nom des classes à partir de l'entrée issue de l'annuaire ldap.
+
+    :param classesLdap:  entrée issue du LDAP.
+    :return
+    """
     classes = []
     for classeLdap in classesLdap:
         split = classeLdap.rsplit("$")
@@ -190,17 +106,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         logging.info('============================================')
         logging.info('Synchronisation établissements : DEBUT')
 
-        ###################################################
-        # Connexion a la BD Moodle et recuperation 
-        # d'informations
-        ###################################################
         connection, mark = connect_db(config.database)
-
-        # Liste pour stocker les admins locaux de Moodle durant le traitement
-        list_moodle_not_admin = []
-
-        # Liste pour stocker les admins locaux durant le traitement
-        list_admin = []
 
         ###################################################
         # Connexion au LDAP
@@ -213,7 +119,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         # Ids des categories inter etablissements
         id_context_categorie_inter_etabs = get_id_context_inter_etabs(mark, config.database.entete)
 
-        id_categorie_inter_cfa = get_id_categorie_inter_etabs_cfa(mark, config.database.entete)
+        id_categorie_inter_cfa = get_id_categorie_inter_etabs(mark, config.database.entete, config.etablissements.inter_etab_categorie_name_cfa)
         id_context_categorie_inter_cfa = get_id_context_categorie(mark, config.database.entete, id_categorie_inter_cfa)
 
         # Recuperation des ids des roles admin local et extended teacher
@@ -260,10 +166,10 @@ def miseAJour(config: Config, purge_cohortes: bool):
             etablissement_regroupe = estGrpEtab(uai_etablissement, config.etablissements)
 
             # Regex pour savoir si l'utilisateur est administrateur moodle
-            regexpAdminMoodle = config.ldap.prefixAdminMoodleLocal + ".*_%s$" % uai_etablissement
+            regexpAdminMoodle = config.users.prefixAdminMoodleLocal + ".*_%s$" % uai_etablissement
 
             # Regex pour savoir si l'utilisateur est administrateur local
-            regexpAdminLocal = config.ldap.prefixAdminLocal + ".*_%s$" % uai_etablissement
+            regexpAdminLocal = config.users.prefixAdminLocal + ".*_%s$" % uai_etablissement
 
             ####################################
             # Mise a jour de l'etablissement 
@@ -281,9 +187,9 @@ def miseAJour(config: Config, purge_cohortes: bool):
             for ldap_entry in result_set:
                 #  Recuperation des informations
                 ldap_entry_infos = ldap_entry[0][1]
-                etablissement_nom = ldap_entry_infos['ou'][0]\
-                    .replace("'", "\\'")\
-                    .replace("-ac-ORL._TOURS", "")\
+                etablissement_nom = ldap_entry_infos['ou'][0] \
+                    .replace("'", "\\'") \
+                    .replace("-ac-ORL._TOURS", "") \
                     .decode("utf-8")
                 etablissement_type_structure = ldap_entry_infos['ENTStructureTypeStruct'][0]
                 etablissement_code_postal = ldap_entry_infos['postalCode'][0][:2]
@@ -293,8 +199,8 @@ def miseAJour(config: Config, purge_cohortes: bool):
 
                 # Si l'etablissement fait partie d'un groupement
                 if etablissement_regroupe:
-                    etablissement_ou = etablissement_regroupe[config.etablissements.NomEtabRgp]
-                    etablissement_uai = etablissement_regroupe[config.etablissements.UaiRgp][0]
+                    etablissement_ou = etablissement_regroupe["NomEtabRgp"]
+                    etablissement_uai = etablissement_regroupe["UaiRgp"][0]
                 else:
                     etablissement_ou = etablissement_nom
 
@@ -372,8 +278,8 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 eleve_uai_courant = ldap_entry_infos['ESCOUAICourant'][0]
 
                 # Recuperation du mail
-                eleve_mail = DEFAULT_MAIL
-                mail_display = DEFAULT_MAIL_DISPLAY
+                eleve_mail = config.constantes.default_mail
+                mail_display = config.constantes.default_mail_display
                 if ldap_entry_infos.__contains__('mail'):
                     eleve_mail = ldap_entry_infos['mail'][0]
 
@@ -400,8 +306,9 @@ def miseAJour(config: Config, purge_cohortes: bool):
 
                 # Ajout du role d'utilisateur avec droits limites
                 # Pour les eleves de college
-                if etablissement_type_structure == TYPE_STRUCTURE_CLG:
-                    add_role_to_user(mark, config.database.entete, ID_ROLE_UTILISATEUR_LIMITE, ID_INSTANCE_MOODLE,
+                if etablissement_type_structure == config.constantes.type_structure_clg:
+                    add_role_to_user(mark, config.database.entete, config.constantes.id_role_utilisateur_limite,
+                                     config.constantes.id_instance_moodle,
                                      eleve_id)
                     logging.info(
                         "      |_ Ajout du role d'utilisateur avec des droits limites à l'utilisateur %s %s %s (id = %s)" % (
@@ -451,7 +358,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
                     logging.debug("Insertion user_info_data")
 
                 # Mise a jour du Domaine
-                user_domain = DEFAULT_DOMAIN
+                user_domain = config.constantes.default_domain
                 if len(eleve_domaines) == 1:
                     user_domain = eleve_domaines[0]
                 else:
@@ -504,12 +411,12 @@ def miseAJour(config: Config, purge_cohortes: bool):
                     enseignant_profils = ldap_entry_infos['ENTPersonProfils']
 
                 # Recuperation du mail
-                mail = DEFAULT_MAIL
+                mail = config.constantes.default_mail
                 if ldap_entry_infos.__contains__('mail'):
                     mail = ldap_entry_infos['mail'][0]
 
                 # Affichage du mail reserve aux membres de cours
-                mail_display = DEFAULT_MAIL_DISPLAY
+                mail_display = config.constantes.default_mail_display
                 if etablissement_uai in config.etablissements.listeEtabSansMail:
                     # Desactivation de l'affichage du mail
                     mail_display = 0
@@ -534,19 +441,21 @@ def miseAJour(config: Config, purge_cohortes: bool):
                                                     id_context_categorie, id_context_course_forum, id_user, uais)
 
                 # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
-                add_role_to_user(mark, config.database.entete, ID_ROLE_CREATEUR_COURS, id_context_categorie_inter_etabs,
+                add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
+                                 id_context_categorie_inter_etabs,
                                  id_user)
                 logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
 
                 # Si l'enseignant fait partie d'un CFA
                 # Ajout du role createur de cours au niveau de la categorie inter-cfa
-                if etablissement_type_structure == TYPE_STRUCTURE_CFA:
-                    add_role_to_user(mark, config.database.entete, ID_ROLE_CREATEUR_COURS,
+                if etablissement_type_structure == config.constantes.type_structure_cfa:
+                    add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
                                      id_context_categorie_inter_cfa, id_user)
                     logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-cfa")
 
                 # ajout du role de createur de cours dans l'etablissement
-                add_role_to_user(mark, config.database.entete, ID_ROLE_CREATEUR_COURS, id_context_categorie, id_user)
+                add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
+                                 id_context_categorie, id_user)
 
                 # Ajouts des autres roles pour le personnel établissement
                 if 'National_3' in enseignant_profils or 'National_5' in enseignant_profils or 'National_6' in enseignant_profils or 'National_4' in enseignant_profils:
@@ -560,7 +469,8 @@ def miseAJour(config: Config, purge_cohortes: bool):
                             add_role_to_user(mark, config.database.entete, id_role_extended_teacher,
                                              id_context_categorie, id_user)
                     elif 'National_4' in enseignant_profils:
-                        add_role_to_user(mark, config.database.entete, ID_ROLE_DIRECTEUR, id_context_categorie, id_user)
+                        add_role_to_user(mark, config.database.entete, config.constantes.id_role_directeur,
+                                         id_context_categorie, id_user)
 
                 # Ajout des droits d'administration locale pour l'etablissement
                 if gereAdminLocal:
@@ -586,7 +496,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
                                     enseignant_uid, enseignant_given_name, enseignant_sn))
 
                 # Mise a jour du Domaine
-                user_domain = DEFAULT_DOMAIN
+                user_domain = config.constantes.default_domain
                 if len(enseignant_domaines) == 1:
                     user_domain = enseignant_domaines[0]
                 else:
@@ -614,7 +524,8 @@ def miseAJour(config: Config, purge_cohortes: bool):
         # Mise a jour du fichier contenant les informations
         # sur les traitements des etablissements
         ###################################################
-        write_time_stamp_by_etab(timeStampByEtab, fileTrtPrecedent, fileSeparator)
+        write_time_stamp_by_etab(timeStampByEtab, config.etablissements.fileTrtPrecedent,
+                                 config.etablissements.fileSeparator)
 
         logging.info('Synchronisation établissements : FIN')
         logging.info('============================================')
@@ -626,192 +537,20 @@ def miseAJour(config: Config, purge_cohortes: bool):
     connection.close()
 
 
-######################################################################
-# Fonction permettant d'effectuer la mise a jour de la BD
-# Moodle via les infos issues du LDAP
-#
-# Cette mise a jour concerne les utilisateurs et administrateurs
-# inter-etablissements
-#
-# Parametres:
-# -----------
-#  - host     : hote hebergeant la BD moodle
-#  - user     : utilisateur pour la connexion a la BD moodle
-#  - password : mot de passe pour la connexion a la BD moodle
-#  - nomBD    : nom de la BD moodle
-#
-#  - ldapServer   : hote hebergeant le serveur LDAP
-#  - ldapUserName : utilisateur pour la connexion au LDAP
-#  - ldapPassword : mot de passe pour la connexion au serveur LDAP
-#
-#  - structureDN : nom absolu pour acceder aux structures dans le LDAP
-#  - personneDN  : nom absolu pour acceder aux personnes dans le LDAP
-#
-#  - entete : entete des noms de table dans la BD moodle
-#
-#  - ldap_attribut_user : attribut LDAP utilise pour savoir si un utilisateur
-#                         est un utilisateur de l'inter-etablissements
-#
-#  - ldap_valeur_attribut_user : valeur de l'attribut LDAP permettant de savoir
-#                                si un utilisateur est un utilisateur de
-#                                l'inter-etablissements
-#
-#  - ldap_valeur_attribut_admin : valeur de l'attribut LDAP permettant de savoir
-#                                 si un utilisateur est un administrateur de
-#                                 l'inter-etablissements
-#
-#  - inter_etabs_cohorts : tableau associatif contenant comme cles
-#                          les attributs 'isMemberOf' (permettant de
-#                          recuperer les utilisateurs LDAP) et comme
-#                          valeurs les noms des cohortes dans
-#                          lesquelles injectees les utilisateurs trouves
-#  - purgeCohortes    : booleen indiquant si la purge des cohortes
-#                       doit etre effectuee, ou non
-######################################################################
-def miseAJourInterEtabsAll(host, user, password, nomBD, port, ldapServer, ldapUsername, ldapPassword, structures_dn,
-                           personnes_dn, entete, ldap_attribut_user, ldap_valeur_attribut_user,
-                           ldap_valeur_attribut_admin, inter_etabs_cohorts, fileTrtPrecedent, fileSeparator,
-                           purgeCohortes):
-    # Connection BD
-    connection, mark = connect_db(host, user, password, nomBD, port, 'utf8')
+def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
+    """
+    Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
 
-    # ID du contexte pour la categorie inter etablissements regroupant tous les etablissements
-    # CFA, Lycees, Colleges,...
-    id_categorie_inter_etabs = get_id_categorie_inter_etabs(mark, entete)
-    id_context_categorie_inter_etabs = get_id_context_categorie(mark, entete, id_categorie_inter_etabs)
+    Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
 
-    # Mise a jour
-    logging.info('============================================')
-    logging.info('Synchronisation inter-établissements (tous etablissements) : DEBUT')
-
-    miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword, structures_dn, personnes_dn, entete,
-                        id_context_categorie_inter_etabs, ldap_attribut_user, ldap_valeur_attribut_user,
-                        ldap_valeur_attribut_admin, inter_etabs_cohorts, fileTrtPrecedent, fileSeparator, purgeCohortes)
-
-    logging.info('Synchronisation inter-établissements (tous etablissements) : FIN')
-    logging.info('============================================')
-
-    # Fermeture connection
-    connection.close()
-
-
-######################################################################
-# Fonction permettant d'effectuer la mise a jour de la BD
-# Moodle via les infos issues du LDAP
-#
-# Cette mise a jour concerne les utilisateurs et administrateurs
-# inter-etablissements
-#
-# Parametres:
-# -----------
-#  - host     : hote hebergeant la BD moodle
-#  - user     : utilisateur pour la connexion a la BD moodle
-#  - password : mot de passe pour la connexion a la BD moodle
-#  - nomBD    : nom de la BD moodle
-#
-#  - ldapServer   : hote hebergeant le serveur LDAP
-#  - ldapUserName : utilisateur pour la connexion au LDAP
-#  - ldapPassword : mot de passe pour la connexion au serveur LDAP
-#
-#  - structureDN : nom absolu pour acceder aux structures dans le LDAP
-#  - personneDN  : nom absolu pour acceder aux personnes dans le LDAP
-#
-#  - entete : entete des noms de table dans la BD moodle
-#
-#  - ldap_attribut_user : attribut LDAP utilise pour savoir si un utilisateur
-#                         est un utilisateur de l'inter-etablissements
-#
-#  - ldap_valeur_attribut_user : valeur de l'attribut LDAP permettant de savoir
-#                                si un utilisateur est un utilisateur de
-#                                l'inter-etablissements
-#
-#  - ldap_valeur_attribut_admin : valeur de l'attribut LDAP permettant de savoir
-#                                 si un utilisateur est un administrateur de
-#                                 l'inter-etablissements
-#
-#  - inter_etabs_cohorts : tableau associatif contenant comme cles
-#                          les attributs 'isMemberOf' (permettant de
-#                          recuperer les utilisateurs LDAP) et comme
-#                          valeurs les noms des cohortes dans
-#                          lesquelles injectees les utilisateurs trouves
-#  - purgeCohortes    : booleen indiquant si la purge des cohortes
-#                       doit etre effectuee, ou non
-######################################################################
-def miseAJourInterEtabsCFA(host, user, password, nomBD, port, ldapServer, ldapUsername, ldapPassword, structures_dn,
-                           personnes_dn, entete, ldap_attribut_user, ldap_valeur_attribut_user,
-                           ldap_valeur_attribut_admin, inter_etabs_cohorts, fileTrtPrecedent, fileSeparator,
-                           purgeCohortes):
-    # Connection BD
-    connection, mark = connect_db(host, user, password, nomBD, port, 'utf8')
-
-    # ID du contexte pour la categorie inter etablissements regroupant tous les etablissements
-    # CFA, Lycees, Colleges,...
-    id_categorie_inter_etabs = get_id_categorie_inter_etabs_cfa(mark, entete)
-    id_context_categorie_inter_etabs = get_id_context_categorie(mark, entete, id_categorie_inter_etabs)
-
-    # Mise a jour
-    logging.info('============================================')
-    logging.info('Synchronisation inter-cfa : DEBUT')
-
-    miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword, structures_dn, personnes_dn, entete,
-                        id_context_categorie_inter_etabs, ldap_attribut_user, ldap_valeur_attribut_user,
-                        ldap_valeur_attribut_admin, inter_etabs_cohorts, fileTrtPrecedent, fileSeparator, purgeCohortes)
-
-    logging.info('Synchronisation inter-cfa : FIN')
-    logging.info('============================================')
-
-    # Fermeture connection
-    connection.close()
-
-
-######################################################################
-# Fonction permettant d'effectuer la mise a jour de la BD
-# Moodle via les infos issues du LDAP
-#
-# Cette mise a jour concerne les utilisateurs et administrateurs
-# inter-etablissements
-#
-# Parametres:
-# -----------
-#  - connection   : connexion au serveur de BD
-#  - mark         : pour les requestes en BD
-#
-#  - ldapServer   : hote hebergeant le serveur LDAP
-#  - ldapUserName : utilisateur pour la connexion au LDAP
-#  - ldapPassword : mot de passe pour la connexion au serveur LDAP
-#
-#  - structureDN : nom absolu pour acceder aux structures dans le LDAP
-#  - personneDN  : nom absolu pour acceder aux personnes dans le LDAP
-#
-#  - entete : entete des noms de table dans la BD moodle
-#  - id_context_categorie_inter_etabs : id du contexte de la categorie 
-#                                       inter etablissements a traiter 
-#
-#  - ldap_attribut_user : attribut LDAP utilise pour savoir si un utilisateur
-#                         est un utilisateur de l'inter-etablissements
-#
-#  - ldap_valeur_attribut_user : valeur de l'attribut LDAP permettant de savoir
-#                                si un utilisateur est un utilisateur de
-#                                l'inter-etablissements
-#
-#  - ldap_valeur_attribut_admin : valeur de l'attribut LDAP permettant de savoir
-#                                 si un utilisateur est un administrateur de
-#                                 l'inter-etablissements
-#
-#  - inter_etabs_cohorts : tableau associatif contenant comme cles
-#                          les attributs 'isMemberOf' (permettant de
-#                          recuperer les utilisateurs LDAP) et comme
-#                          valeurs les noms des cohortes dans
-#                          lesquelles injectees les utilisateurs trouves
-#  - purgeCohortes    : booleen indiquant si la purge des cohortes
-#                       doit etre effectuee, ou non
-######################################################################
-def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword, structures_dn, personnes_dn, entete,
-                        id_context_categorie_inter_etabs, ldap_attribut_user, ldap_valeur_attribut_user,
-                        ldap_valeur_attribut_admin, inter_etabs_cohorts, fileTrtPrecedent, fileSeparator,
-                        purgeCohortes):
+    :param config: Configuration d'execution
+    :param purge_cohortes: 
+    :return: 
+    """
     try:
         logging.info("  |_ Traitement de l'inter-établissements")
+
+        connection, mark = connect_db(config.database)
 
         ###################################################
         # Connexion a la BD Moodle et recuperation 
@@ -824,13 +563,14 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
         ###################################################
         # Connexion au LDAP
         ###################################################
-        l = connect_ldap(ldapServer, ldapUsername, ldapPassword)
+        l = connect_ldap(config.ldap)
 
         ###################################################
         # Recuperation de la date de dernier traitement
         ###################################################
-        time_stamp_by_etab = read_time_stamp_by_etab(fileTrtPrecedent, fileSeparator)
-        time_stamp = time_stamp_by_etab.get(CLE_TRT_INTER_ETAB)
+        time_stamp_by_etab = read_time_stamp_by_etab(config.etablissements.fileTrtPrecedent,
+                                                     config.etablissements.fileSeparator)
+        time_stamp = time_stamp_by_etab.get(config.constantes.cle_trt_inter_etab)
 
         # Recuperation du time stamp actuel au format LDAP
         now = datetime.datetime.now()
@@ -843,9 +583,15 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
 
         list_moodle_not_admin = []
 
-        filtre = get_filtre_personnes(time_stamp, ldap_attribut_user, ldap_valeur_attribut_user)
+        id_categorie_inter_etabs = get_id_categorie_inter_etabs(mark, config.database.entete,
+                                                                config.inter_etablissements.categorie_name)
+        id_context_categorie_inter_etabs = get_id_context_categorie(mark, config.database.entete,
+                                                                    id_categorie_inter_etabs)
+
+        filtre = get_filtre_personnes(time_stamp, config.users.ldap_attribut_user,
+                                      config.users.ldap_valeur_attribut_user)
         logging.debug('      |_ Filtre LDAP pour récupérer les utilisateurs inter-établissements : %s' % filtre)
-        ldap_result_id = ldap_search_people(l, personnes_dn, filtre)
+        ldap_result_id = ldap_search_people(l, config.ldap.personnesDN, filtre)
 
         # Recuperation du resultat de la recherche
         result_set = ldap_retrieve_all_entries(l, ldap_result_id)
@@ -859,37 +605,43 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
             people_given_name = ldap_entry_infos['givenName'][0].replace("'", "\\'")
 
             people_is_member_of = []
-            if ldap_entry_infos.__contains__(ldap_attribut_user):
-                people_is_member_of = ldap_entry_infos[ldap_attribut_user]
+            if ldap_entry_infos.__contains__(config.users.ldap_attribut_user):
+                people_is_member_of = ldap_entry_infos[config.users.ldap_attribut_user]
 
-            people_mail = DEFAULT_MAIL
+            people_mail = config.constantes.default_mail
             if ldap_entry_infos.__contains__('mail'):
                 people_mail = ldap_entry_infos['mail'][0]
 
             # Creation de l'utilisateur
-            id_user = get_user_id(mark, entete, people_uid)
+            id_user = get_user_id(mark, config.database.entete, people_uid)
             if not id_user:
-                insert_moodle_user(mark, entete, people_uid, people_given_name, people_sn, people_mail,
-                                   DEFAULT_MAIL_DISPLAY, DEFAULT_MOODLE_THEME)
-                id_user = get_user_id(mark, entete, people_uid)
+                insert_moodle_user(mark, config.database.entete, people_uid, people_given_name, people_sn, people_mail,
+                                   config.constantes.default_mail_display, config.constantes.default_moodle_theme)
+                id_user = get_user_id(mark, config.database.entete, people_uid)
             else:
-                update_moodle_user(mark, entete, id_user, people_given_name, people_sn, people_mail,
-                                   DEFAULT_MAIL_DISPLAY, DEFAULT_MOODLE_THEME)
+                update_moodle_user(mark, config.database.entete, id_user, people_given_name, people_sn, people_mail,
+                                   config.constantes.default_mail_display, config.constantes.default_moodle_theme)
 
             # Ajout du role de createur de cours 
-            add_role_to_user(mark, entete, ID_ROLE_CREATEUR_COURS, id_context_categorie_inter_etabs, id_user)
+            add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
+                             id_context_categorie_inter_etabs,
+                             id_user)
 
             # Attribution du role admin local si necessaire
             for member in people_is_member_of:
-                admin = re.match(ldap_valeur_attribut_admin, member, flags=re.IGNORECASE)
+                admin = re.match(config.users.ldap_valeur_attribut_admin, member, flags=re.IGNORECASE)
                 if admin:
-                    insert = insert_moodle_local_admin(mark, entete, id_context_categorie_inter_etabs, id_user)
+                    insert = insert_moodle_local_admin(mark, config.database.entete,
+                                                       id_context_categorie_inter_etabs,
+                                                       id_user)
                     if insert:
                         logging.info(
                             "      |_ Insertion d'un admin local %s %s %s" % (people_uid, people_given_name, people_sn))
                     break
                 else:
-                    delete = delete_moodle_local_admin(mark, entete, id_context_categorie_inter_etabs, id_user)
+                    delete = delete_moodle_local_admin(mark, config.database.entete,
+                                                       id_context_categorie_inter_etabs,
+                                                       id_user)
                     if delete:
                         logging.info("      |_ Suppression d'un admin local %s %s %s" % (
                             people_uid, people_given_name, people_sn))
@@ -900,7 +652,7 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
         logging.info('    |_ Mise à jour des cohortes de la categorie inter-etablissements')
 
         # Si la purge des cohortes a ete demandee
-        if purgeCohortes:
+        if purge_cohortes:
             # On ignore le time stamp afin de traiter tous les utilisateurs
             time_stamp = None
 
@@ -909,11 +661,14 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
         utilisateurs_by_cohortes = {}
 
         # Mise a jour de chaque cohorte declaree
-        for is_member_of, cohort_name in inter_etabs_cohorts.iteritems():
+        for is_member_of, cohort_name in config.inter_etablissements.cohorts.iteritems():
             # Creation de la cohort si necessaire
-            create_cohort(mark, entete, id_context_categorie_inter_etabs, cohort_name, cohort_name, cohort_name,
+            create_cohort(mark, config.database.entete, id_context_categorie_inter_etabs,
+                          cohort_name, cohort_name,
+                          cohort_name,
                           maintenant_sql)
-            id_cohort = get_id_cohort(mark, entete, id_context_categorie_inter_etabs, cohort_name)
+            id_cohort = get_id_cohort(mark, config.database.entete,
+                                      id_context_categorie_inter_etabs, cohort_name)
 
             # Liste permettant de sauvegarder les utilisateurs de la cohorte
             utilisateurs_by_cohortes[id_cohort] = []
@@ -924,7 +679,7 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
             logging.debug(
                 '      |_ Filtre LDAP pour récupérer les membres de cohortes inter-etablissements : %s' % filtre)
 
-            ldap_result_id = ldap_search_people(l, personnes_dn, filtre)
+            ldap_result_id = ldap_search_people(l, config.ldap.personnesDN, filtre)
             result_set = ldap_retrieve_all_entries(l, ldap_result_id)
 
             # Ajout des utilisateurs dans la cohorte
@@ -935,9 +690,10 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
                 people_given_name = ldap_entry_infos['givenName'][0].replace("'", "\\'")
                 people_infos = "%s %s %s" % (people_uid, people_given_name.decode("utf-8"), people_sn.decode("utf-8"))
 
-                people_id = get_user_id(mark, entete, people_uid)
+                people_id = get_user_id(mark, config.database.entete, people_uid)
                 if people_id:
-                    enroll_user_in_cohort(mark, entete, id_cohort, people_id, people_infos, maintenant_sql)
+                    enroll_user_in_cohort(mark, config.database.entete, id_cohort, people_id, people_infos,
+                                          maintenant_sql)
                     # Mise a jour des utilisateurs de la cohorte
                     utilisateurs_by_cohortes[id_cohort].append(people_id)
                 else:
@@ -946,15 +702,16 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
                     logging.warn(message)
 
         # Purge des cohortes des eleves
-        if purgeCohortes:
+        if purge_cohortes:
             logging.info('    |_ Purge des cohortes de la catégorie inter-établissements')
-            purge_cohorts(mark, entete, utilisateurs_by_cohortes)
+            purge_cohorts(mark, config.database.entete, utilisateurs_by_cohortes)
 
         connection.commit()
 
         # Mise a jour de la date de dernier traitement
-        time_stamp_by_etab[CLE_TRT_INTER_ETAB] = time_stamp_now
-        write_time_stamp_by_etab(time_stamp_by_etab, fileTrtPrecedent, fileSeparator)
+        time_stamp_by_etab[config.constantes.cle_trt_inter_etab] = time_stamp_now
+        write_time_stamp_by_etab(time_stamp_by_etab, config.etablissements.fileTrtPrecedent,
+                                 config.etablissements.fileSeparator)
 
     except Exception as err:
         logging.exception("An exception has been thrown");
@@ -962,36 +719,16 @@ def miseAJourInterEtabs(connection, mark, ldapServer, ldapUsername, ldapPassword
         sys.exit(2)
 
 
-######################################################################
-# Fonction permettant d'effectuer la mise a jour de la BD
-# Moodle via les infos issues du LDAP
-#
-# Cette mise a jour concerne les inspecteurs
-#
-# Parametres:
-# -----------
-#  - host     : hote hebergeant la BD moodle
-#  - user     : utilisateur pour la connexion a la BD moodle
-#  - password : mot de passe pour la connexion a la BD moodle
-#  - nomBD    : nom de la BD moodle
-#
-#  - ldapServer   : hote hebergeant le serveur LDAP
-#  - ldapUserName : utilisateur pour la connexion au LDAP
-#  - ldapPassword : mot de passe pour la connexion au serveur LDAP
-#
-#  - personneDN  : nom absolu pour acceder aux personnes dans le LDAP
-#
-#  - entete : entete des noms de table dans la BD moodle
-#
-#  - ldap_attribut_user : attribut LDAP utilise pour savoir si un utilisateur
-#                         est un inspecteur
-#
-#  - ldap_valeur_attribut_user : valeur de l'attribut LDAP permettant de savoir
-#                                si un utilisateur est un inspecteur
-#
-######################################################################
-def miseAJourInspecteurs(host, user, password, nomBD, port, ldapServer, ldapUsername, ldapPassword, personnes_dn,
-                         structures_dn, entete, ldap_attribut_user, ldap_valeur_attribut_user):
+def miseAJourInspecteurs(config: Config):
+    """
+    Effectue la mise a jour de la BD
+    
+    Moodle via les infos issues du LDAP
+    
+    Cette mise a jour concerne les inspecteurs
+    
+    :param config: Configuration d'exection
+    """
     try:
         logging.info('============================================')
         logging.info('Synchronisation des inspecteurs : DEBUT')
@@ -1001,12 +738,12 @@ def miseAJourInspecteurs(host, user, password, nomBD, port, ldapServer, ldapUser
         # Connexion a la BD Moodle et recuperation 
         # d'informations
         ###################################################
-        connection, mark = connect_db(host, user, password, nomBD, port, 'utf8')
+        connection, mark = connect_db(config.database)
 
         ###################################################
         # Connexion au LDAP
         ###################################################
-        l = connect_ldap(ldapServer, ldapUsername, ldapPassword)
+        l = connect_ldap(config.ldap)
 
         ###################################################
         # Mise a jour des inspecteurs
@@ -1014,21 +751,22 @@ def miseAJourInspecteurs(host, user, password, nomBD, port, ldapServer, ldapUser
         logging.info('    |_ Mise à jour des inspecteurs')
 
         # Recuperation de l'id du champ personnalisé Domaine
-        id_field_domaine = get_field_domaine(mark, entete)
+        id_field_domaine = get_field_domaine(mark, config.database.entete)
 
         # Récupération de la liste UAI-Domaine des établissements
-        map_etab_domaine = get_domaines_etabs(l, structures_dn)
+        map_etab_domaine = get_domaines_etabs(l, config.ldap.structuresDN)
 
         # TODO : gerer le time_stamp
         time_stamp = None
 
         # Recuperation de l'id du contexte correspondant à la categorie inter_etabs
-        id_context_categorie_inter_etabs = get_id_context_inter_etabs(mark, entete)
+        id_context_categorie_inter_etabs = get_id_context_inter_etabs(mark, config.database.entete)
 
-        filtre = get_filtre_personnes(time_stamp, ldap_attribut_user, ldap_valeur_attribut_user)
+        filtre = get_filtre_personnes(time_stamp, config.users.ldap_attribut_user,
+                                      config.users.ldap_valeur_attribut_user)
         logging.debug('      |_ Filtre LDAP pour récupérer les inspecteurs : %s' % filtre)
 
-        ldap_result_id = ldap_search_people(l, personnes_dn, filtre)
+        ldap_result_id = ldap_search_people(l, config.ldap.personnesDN, filtre)
 
         # Recuperation du resultat de la recherche
         result_set = ldap_retrieve_all_entries(l, ldap_result_id)
@@ -1043,24 +781,25 @@ def miseAJourInspecteurs(host, user, password, nomBD, port, ldapServer, ldapUser
             people_domaines = ldap_entry_infos['ESCODomaines']
             people_uai_courant = ldap_entry_infos['ESCOUAICourant'][0]
 
-            people_mail = DEFAULT_MAIL
+            people_mail = config.constantes.default_mail
             if ldap_entry_infos.__contains__('mail'):
                 people_mail = ldap_entry_infos['mail'][0]
 
             # Creation de l'utilisateur
-            insert_moodle_user(mark, entete, people_uid, people_given_name, people_sn, people_mail,
-                               DEFAULT_MAIL_DISPLAY, DEFAULT_MOODLE_THEME)
-            id_user = get_user_id(mark, entete, people_uid)
+            insert_moodle_user(mark, config.database.entete, people_uid, people_given_name, people_sn, people_mail,
+                               config.constantes.default_mail_display, config.constantes.default_moodle_theme)
+            id_user = get_user_id(mark, config.database.entete, people_uid)
             if not id_user:
-                insert_moodle_user(mark, entete, people_uid, people_given_name, people_sn, people_mail,
-                                   DEFAULT_MAIL_DISPLAY, DEFAULT_MOODLE_THEME)
-                id_user = get_user_id(mark, entete, people_uid)
+                insert_moodle_user(mark, config.database.entete, people_uid, people_given_name, people_sn, people_mail,
+                                   config.constantes.default_mail_display, config.constantes.default_moodle_theme)
+                id_user = get_user_id(mark, config.database.entete, people_uid)
             else:
-                update_moodle_user(mark, entete, id_user, people_given_name, people_sn, people_mail,
-                                   DEFAULT_MAIL_DISPLAY, DEFAULT_MOODLE_THEME)
+                update_moodle_user(mark, config.database.entete, id_user, people_given_name, people_sn, people_mail,
+                                   config.constantes.default_mail_display, config.constantes.default_moodle_theme)
 
             # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
-            add_role_to_user(mark, entete, ID_ROLE_CREATEUR_COURS, id_context_categorie_inter_etabs, id_user)
+            add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
+                             id_context_categorie_inter_etabs, id_user)
             logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
 
             # if ldap_entry_infos.has_key('ESCOUAICourant'):
@@ -1080,14 +819,14 @@ def miseAJourInspecteurs(host, user, password, nomBD, port, ldapServer, ldapUser
             # logging.info( "        |_ Ajout du role de personnel de direction dans l'établissement de l'inspecteur" )
 
             # Mise a jour du Domaine
-            user_domain = DEFAULT_DOMAIN
+            user_domain = config.constantes.default_domain
             if len(people_domaines) == 1:
                 user_domain = people_domaines[0]
             else:
                 if bool(people_uai_courant) and people_uai_courant in map_etab_domaine:
                     user_domain = map_etab_domaine[people_uai_courant][0]
             logging.debug("Insertion du Domaine")
-            set_user_domain(mark, entete, id_user, id_field_domaine, user_domain)
+            set_user_domain(mark, config.database.entete, id_user, id_field_domaine, user_domain)
 
         connection.commit()
 
@@ -1131,8 +870,15 @@ def miseAJourInspecteurs(host, user, password, nomBD, port, ldapServer, ldapUser
 #  - purge            : booleen indiquant si la purge des utilisateurs
 #                       doit etre effectuee, ou non
 ######################################################################
-def miseAJourMahara(host, user, password, nomBD, port, ldapServer, ldapUsername, ldapPassword, personnesDN, entete,
-                    maharaAttribut, maharaUser, fileTrtPrecedentMahara, fileSeparatorMahara, purge):
+def miseAJourMahara(config: Config, purge):
+    """
+    Fonction permettant d'effectuer la mise a jour de la BD Moodle via les infos issues du LDAP.
+
+    Cette mise a jour concerne les utilisateurs de Mahara.
+
+    :param config: Configuration d'execution
+    :param purge: True si la purge des utilisateurs doit être effectuée
+    """
     try:
         logging.info('============================================')
         logging.info('Synchronisation des utilisateurs Mahara : DEBUT')
@@ -1142,18 +888,19 @@ def miseAJourMahara(host, user, password, nomBD, port, ldapServer, ldapUsername,
         # Connexion a la BD Moodle et recuperation 
         # d'informations
         ###################################################
-        connection, mark = connect_db(host, user, password, nomBD, port, 'utf8')
+        connection, mark = connect_db(config.database)
 
         ###################################################
         # Connexion au LDAP
         ###################################################
-        l = connect_ldap(ldapServer, ldapUsername, ldapPassword)
+        l = connect_ldap(config.ldap)
 
         ###################################################
         # Recuperation de la date de dernier traitement
         ###################################################
-        time_stamp_by_etab = read_time_stamp_by_etab(fileTrtPrecedentMahara, fileSeparatorMahara)
-        time_stamp = time_stamp_by_etab.get(CLE_TRT_MAHARA)
+        time_stamp_by_etab = read_time_stamp_by_etab(config.etablissements.fileTrtPrecedent,
+                                                     config.etablissements.fileSeparator)
+        time_stamp = time_stamp_by_etab.get(config.constantes.cle_trt_mahara)
 
         # Recuperation du time stamp actuel au format LDAP
         now = datetime.datetime.now()
@@ -1167,17 +914,18 @@ def miseAJourMahara(host, user, password, nomBD, port, ldapServer, ldapUsername,
             # On ignore le time stamp afin de traiter tous les utilisateurs
             time_stamp = None
             # On enleve les roles aux utilisateurs de Mahara
-            delete_all_mahara_roles(mark, entete)
+            delete_all_mahara_roles(mark, config.database.entete)
 
         ###################################################
         # Mise a jour des utilisateurs
         ###################################################
         logging.info('    |_ Mise à jour des utilisateurs Mahara')
 
-        filtre = get_filtre_personnes(time_stamp, maharaAttribut, maharaUser)
+        filtre = get_filtre_personnes(time_stamp, config.users.ldap_attribut_user,
+                                      config.users.ldap_valeur_attribut_user)
         logging.debug('      |_ Filtre LDAP pour récupérer les utilisateurs Mahara : %s' % filtre)
 
-        ldap_result_id = ldap_search_people(l, personnesDN, filtre)
+        ldap_result_id = ldap_search_people(l, config.ldap.personnesDN, filtre)
 
         # Recuperation du resultat de la recherche
         result_set = ldap_retrieve_all_entries(l, ldap_result_id)
@@ -1192,7 +940,7 @@ def miseAJourMahara(host, user, password, nomBD, port, ldapServer, ldapUsername,
             people_infos = "%s %s %s" % (people_uid, people_given_name.decode("utf-8"), people_sn.decode("utf-8"))
 
             # Recuperation de l'utilisateur en bd
-            people_id = get_user_id(mark, entete, people_uid)
+            people_id = get_user_id(mark, config.database.entete, people_uid)
 
             # Si l'utilisateur n'est pas present dans Moodle
             if not people_id:
@@ -1205,13 +953,14 @@ def miseAJourMahara(host, user, password, nomBD, port, ldapServer, ldapUsername,
             message = "      |_ Ajout du droit utilisateur de Mahara a %s"
             message = message % people_infos
             logging.info(message)
-            add_role_mahara_to_user(mark, entete, people_id)
+            add_role_mahara_to_user(mark, config.database.entete, people_id)
 
         connection.commit()
 
         # Mise a jour de la date de dernier traitement
-        time_stamp_by_etab[CLE_TRT_MAHARA] = time_stamp_now
-        write_time_stamp_by_etab(time_stamp_by_etab, fileTrtPrecedentMahara, fileSeparatorMahara)
+        time_stamp_by_etab[config.constantes.cle_trt_mahara] = time_stamp_now
+        write_time_stamp_by_etab(time_stamp_by_etab, config.users.ldap_attribut_user,
+                                 config.users.ldap_valeur_attribut_user)
 
         logging.info('Synchronisation des utilisateurs Mahara : FIN')
         logging.info('============================================')
@@ -1222,45 +971,3 @@ def miseAJourMahara(host, user, password, nomBD, port, ldapServer, ldapUsername,
         sys.exit(2)
 
     connection.close()
-
-
-#######################################
-# Partie permettant de tester
-#######################################
-if __name__ == "__main__":
-    # Tests sur les dates
-    now = datetime.datetime.now()
-    logging.info("Test | Date actuelle : %s" % now)
-    logging.info("Test | Meme date au format LDAP (AAAAMMJJHHMMSS + la lettre Z) : %s" % format_date(now))
-    logging.info('')
-
-    # Tests sur la lecture des uai_etablissement et time stamp stockes dans un fichier
-    timeStampByEtab = read_time_stamp_by_etab('./test/trtPrecedentLectureTest.txt', '-')
-    logging.info("Test | Tableau associatif issu du fichier test/trtPrecedentLectureTest.txt : %s" % timeStampByEtab)
-    for key, value in timeStampByEtab.iteritems():
-        logging.info("     |_ Etablissement %s traite pour la derniere fois le %s" % (key, value))
-    logging.info('')
-
-    # Tests sur l'ecriture des uai_etablissement et time stamp
-    timeStampByEtab = {'0180345B': '20121201131332Z', '0410254R': '20100310132456Z'}
-    logging.info("Test | Ecriture du tableau associtaif dans test/trtPrecedentEritureTest.txt")
-    logging.info("     |_ Contenu prevu : %s" % timeStampByEtab)
-    write_time_stamp_by_etab(timeStampByEtab, './test/trtPrecedentEcritureTest.txt', '-')
-    timeStampByEtab = read_time_stamp_by_etab('./test/trtPrecedentEcritureTest.txt', '-')
-    logging.info("     |_ Contenu reel : %s" % timeStampByEtab)
-    logging.info("")
-
-    # Test sur les filtres
-    filtreEtab = 'ESCOUAI=0180345B'
-    logging.info('Test | Filtre pour les eleves du 0180345B (avec time stamp) : %s' % get_filtre_eleves(
-        timeStampByEtab.get('0180345B'), filtreEtab))
-    logging.info('Test | Filtre pour les eleves du 0180345B (sans time stamp) : %s' % get_filtre_eleves(
-        timeStampByEtab.get('01803B'), filtreEtab))
-    logging.info('')
-
-    filtreEtab = 'ESCOUAI=0180345B'
-    logging.info('Test | Filtre pour les enseignants du 0180345B (avec time stamp) :  %s' % get_filtre_enseignants(
-        timeStampByEtab.get('0180345B'), filtreEtab))
-    logging.info('Test | Filtre pour les enseignants du 0180345B (sans time stamp) :  %s' % get_filtre_enseignants(
-        timeStampByEtab.get('01803B'), filtreEtab))
-    logging.info('')

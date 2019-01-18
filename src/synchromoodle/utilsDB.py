@@ -3,7 +3,11 @@
 ###############################################################################
 # IMPORTS
 ###############################################################################
+from typing import Tuple
+
 import mysql.connector
+from mysql.connector import MySQLConnection
+from mysql.connector.cursor import MySQLCursor
 
 from synchromoodle.config import DatabaseConfig
 from .utilsFile import *
@@ -268,7 +272,7 @@ def add_role_to_user_for_contexts(mark, entete, role_id, ids_contexts_by_courses
 # Fonction permettant d'etablir une connexion a une BD 
 # MySQL
 ###########################################################
-def connect_db(config: DatabaseConfig):
+def connect_db(config: DatabaseConfig) -> Tuple[MySQLConnection, MySQLCursor]:
     # Etablissement de la connexion
     conn = mysql.connector.connect(host=config.host,
                                    user=config.user,
@@ -283,7 +287,7 @@ def connect_db(config: DatabaseConfig):
     # mark.execute('SET NAMES ' + db_charset + ';')
     # mark.execute('SET CHARACTER SET ' + db_charset + ';')
     # mark.execute('SET character_set_connection=' + db_charset + ';')
-    return (conn, mark)
+    return conn, mark
 
 
 ###########################################################
@@ -576,25 +580,12 @@ def get_id_block(mark, entete, parent_context_id):
 # Fonction permettant de recuperer l'id correspondant a la 
 # categorie inter-etablissements. 
 ###########################################################
-def get_id_categorie_inter_etabs(mark, entete):
-    s = "SELECT id FROM %scourse_categories where name like '%%Cat%%gorie inter%%tablissements'";
-    s = s % (entete)
+def get_id_categorie_inter_etabs(mark, entete, categorie_name):
+    s = "SELECT id FROM %scourse_categories where name like '%s'";
+    s = s % (entete, categorie_name)
     mark.execute(s);
     ligne = mark.fetchone();
     return ligne[0]
-
-
-###########################################################
-# Fonction permettant de recuperer l'id correspondant a la 
-# categorie inter-etablissements pour les CFA uniquement
-###########################################################
-def get_id_categorie_inter_etabs_cfa(mark, entete):
-    s = "SELECT id FROM %scourse_categories where name like 'Cat%%gorie Inter-CFA'";
-    s = s % (entete)
-    mark.execute(s);
-    ligne = mark.fetchone();
-    return ligne[0]
-
 
 ###########################################################
 # Fonction permettant de recuperer l'id d'une cohorte

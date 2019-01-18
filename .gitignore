@@ -4,3 +4,9 @@
 /.init/
 /.bash_enter.env
 /.bin/jq
+
+trtPrecedent*.txt
+/logs
+
+*.pyc
+__pycache__/

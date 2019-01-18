@@ -1,0 +1,25 @@
+actions: ['interetab']
+inter_etablissements:
+  cohorts:
+    "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs",
+    "cfa:Inter_etablissements:Tous_Direction": "CFA : Tout le personnel de direction",
+    "cfa:Inter_etablissements:Tous_Mediateur": "CFA : Tous les mediateurs",
+    "cfa:Inter_etablissements:Tous_Documentation": "CFA : Tous les documentalistes",
+    "cfa:Inter_etablissements:Tous_Profs": "CFA : Tous les formateurs",
+    "cfa:Inter_etablissements:Tous_Responsable_Pedagogique": "CFA : Tous les responsables pedagogiques",
+    "cfa:Inter_etablissements:Tous_Referent_DIMA": "CFA : Tous les referents DIMA",
+    "cfa:Inter_etablissements:Tous_Referent_SCB": "CFA : Tous les referents savoirs et competences de base",
+    "cfa:admin:local:*": "CFA : Tous les administrateurs ENT",
+  
+    "esco:Etablissements:*:Profs": "LYC : Tous les profs",
+    "esco:admin:local:*": "LYC : Tous les administrateurs ENT",
+    "esco:*:DIRECTION": "LYC : Tous les chefs d\'établissement",
+    "esco:*:EDUCATION": "LYC : Tous les CPE",
+  
+    "agri:Etablissements:*:Profs": "LA : Tous les profs",
+    "agri:admin:local:*": "LA : Tous les administrateurs ENT",
+  
+    "clg37:Etablissements:*:Profs": "CLG37 : Tous les profs",
+    "clg37:admin:local:*": "CLG37 : Tous les administrateurs ENT",
+    "clg37:*:DIRECTION": "CLG37 : Tous les chefs d\'établissement",
+    "clg37:*:EDUCATION": "CLG37 : Tous les CPE"

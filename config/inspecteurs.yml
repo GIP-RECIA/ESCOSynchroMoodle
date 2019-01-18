@@ -1,0 +1,5 @@
+actions: ['inspecteurs']
+users:
+  ldap_attribut_user: "ESCOPersonProfils"
+  ldap_valeur_attribut_user:
+    - "INS"

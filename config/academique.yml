@@ -1,23 +1,8 @@
-database:
-  database: moodle
-  user: moodle
-  password: moodle
-  host: 192.168.1.100
-  port: 9806
-ldap:
-  uri: ldap://192.168.1.100:9889
-  username: cn=admin,ou=administrateurs,dc=esco-centre,dc=fr
-  password: admin
-  baseDN: dc=esco-centre,dc=fr
-  structuresOU: ou=structures
-  personnesOU: ou=people
-  adminOU: ou=administrateurs
+users:
   prefixAdminMoodleLocal: "(esco|clg37):admin:Moodle:local:"
   prefixAdminLocal: "(esco|clg37):admin:local:"
 etablissements:
-  NomEtabRgp: nomEtabRgp
-  UaiRgp: uai
-  EtabRgp: []
+  fileTrtPrecedent: "trtAcademique_precedent.txt"
   listeEtab: ["0450822X", "0410031L", "0371122U", "0450066C", "0451483T", "0410593X", "0410030K", "0370001A", "0360003H",
               "0370040T", "0370036N", "0451304Y", "0450051L", "0180008L", "0360011S", "0280657M", "0280036M", "0450062Y",
               "0280021W", "0360024F", "0410959V", "0371417P", "0280864M", "0450042B", "0370009J", "0360002G", "0370039S",
@@ -34,7 +19,4 @@ etablissements:
               "0371101W", "0371158H", "0371191U", "0371248F", "0371391L", "0371397T", "0371403Z", "0371124W", "0370995F",
               "0370007G", "0370010K", "0371098T", "0370013N", "0371378X", "0370993D", "0370022Y", "0370034L", "0370766G",
               "0370044X", "0370045Y", "0370769K", "0370886M", "0370884K", "0371189S", "0370024A"]
-  listeEtabSansAdmin: []
   listeEtabSansMail: ["0371204H", "0371159J", "0370011L", "0370041U", "0370991B", "0371316E"]
-  fileTrtPrecedent: trtPrecedent_academique.txt
-  fileSeparator: "-"
