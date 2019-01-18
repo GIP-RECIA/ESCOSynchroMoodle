@@ -192,7 +192,7 @@ def get_domaines_etabs(ldap, structuresDN):
     for ldap_entry in result_set:
         ldap_entry_infos = ldap_entry[0][1]
         etab_domaines = ldap_entry_infos["ESCODomaines"]
-        etab_uai = ldap_entry_infos['ENTStructureUAI'][0]
+        etab_uai = ldap_entry_infos['ENTStructureUAI'][0].decode('utf8')
         # On ajoute les données dans la liste
         etabs_ldap[etab_uai] = etab_domaines
     return etabs_ldap

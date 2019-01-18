@@ -236,6 +236,20 @@ def array_to_sql_list(elements):
     return sql_list
 
 
+def array_to_safe_sql_list(elements, name=None):
+    if name:
+        format_strings = []
+        params = {}
+        for i, element in enumerate(elements):
+            format_strings.append('%({name}_{i})s'.format(name=name, i=i))
+            params['{name}_{i}'.format(name=name, i=i)] = element
+        return ','.join(format_strings), params
+    else:
+        format_strings = ['%s'] * len(elements)
+        params = tuple(elements)
+        return ','.join(format_strings), params
+
+
 ###########################################################
 # Fonction permettant d'ajouter un role a un utilisateur
 # Mahaea pour un contexte donne 
@@ -310,7 +324,8 @@ def create_classes_cohorts(mark, entete, id_context_etab, classes_names, time_cr
 # etablissement.
 # Puis de remplir la cohorte avec les enseignants de l'etablissement
 ###########################################################
-def create_profs_etabs_cohorts(mark, entete, id_context_etab, etab_name, time_created, time_stamp, ldap_config: LdapConfig):
+def create_profs_etabs_cohorts(mark, entete, id_context_etab, etab_name, time_created, time_stamp,
+                               ldap_config: LdapConfig):
     liste_professeurs_insere = []
     cohort_name = P_COHORT_NAME_FOR_ETAB % (etab_name)
     cohort_description = P_COHORT_DESC_FOR_ETAB % (etab_name)
@@ -324,9 +339,9 @@ def create_profs_etabs_cohorts(mark, entete, id_context_etab, etab_name, time_cr
     maintenant_sql = get_timestamp_now(mark)
     for ldap_entry in result_set:
         ldap_entry_infos = ldap_entry[0][1]
-        enseignant_uid = ldap_entry_infos['uid'][0]
-        enseignant_given_name = ldap_entry_infos['givenName'][0].replace("'", "\\'")
-        enseignant_sn = ldap_entry_infos['sn'][0].replace("'", "\\'")
+        enseignant_uid = ldap_entry_infos['uid'][0].decode('utf8')
+        enseignant_given_name = ldap_entry_infos['givenName'][0].decode('utf8')
+        enseignant_sn = ldap_entry_infos['sn'][0].decode('utf8')
         enseignant_infos = "%s %s %s" % (enseignant_uid, enseignant_given_name, enseignant_sn)
         id_user = get_user_id(mark, entete, enseignant_uid)
         enroll_user_in_cohort(mark, entete, id_cohort, id_user, enseignant_infos, maintenant_sql)
@@ -587,6 +602,7 @@ def get_id_categorie_inter_etabs(mark, entete, categorie_name):
     ligne = mark.fetchone();
     return ligne[0]
 
+
 ###########################################################
 # Fonction permettant de recuperer l'id d'une cohorte
 # par son nom et son contexte de rattachement.
@@ -641,10 +657,11 @@ def get_id_context_categorie(mark, entete, id_etab_categorie):
 # Fonction permettant de recuperer l'id du contexte 
 # de la categorie inter-etablissements
 ###########################################################
-def get_id_context_inter_etabs(mark, entete):
-    s = "SELECT id FROM %scontext WHERE contextlevel = %d AND instanceid = %d"
-    s = s % (entete, NIVEAU_CTX_CATEGORIE, ID_INSTANCE_INTER_ETABS)
-    mark.execute(s)
+def get_id_context_inter_etabs(mark, entete='mdl_'):
+    s = "SELECT id FROM {entete}context " \
+        "WHERE contextlevel = %(context_level)s AND instanceid = %(instanceid)s".format(entete=entete)
+    mark.execute(s, params={'table': entete + 'context', 'context_level': NIVEAU_CTX_CATEGORIE,
+                            'instanceid': ID_INSTANCE_INTER_ETABS})
     id_context_moodle = mark.fetchone()[0]
     return id_context_moodle
 
@@ -869,17 +886,16 @@ def get_id_user_info_field_classe(mark, entete):
 ###########################################################
 def get_ids_and_summaries_not_allowed_roles(mark, entete, id_user, allowed_forums_shortnames):
     # Construction de la liste des shortnames
-    ids_list = array_to_sql_list(allowed_forums_shortnames)
-    s = "SELECT mra.id, mco.summary" \
-        + " FROM %scourse mco, %srole_assignments mra, %scontext mc" \
-        + " WHERE mco.shortname LIKE 'ZONE-PRIVEE-%%'" \
-        + " AND mco.shortname NOT IN (%s)" \
-        + " AND mco.id = mc.instanceid" \
-        + " AND mc.contextlevel = 50" \
-        + " AND mc.id = mra.contextid" \
-        + " AND mra.userid = %s"
-    s = s % (entete, entete, entete, ids_list, id_user)
-    mark.execute(s)
+    ids_list, ids_list_params = array_to_safe_sql_list(allowed_forums_shortnames, 'ids_list')
+    s = "SELECT mra.id, mco.summary FROM {entete}course mco, {entete}role_assignments mra, {entete}context mc" \
+        " WHERE mco.shortname LIKE 'ZONE-PRIVEE-%%'" \
+        " AND mco.shortname NOT IN ({ids_list})" \
+        " AND mco.id = mc.instanceid" \
+        " AND mc.contextlevel = 50" \
+        " AND mc.id = mra.contextid" \
+        " AND mra.userid = %(id_user)s" \
+        .format(entete=entete, ids_list=ids_list)
+    mark.execute(s, params={'id_user': id_user, **ids_list_params})
     result_set = mark.fetchall()
     if not result_set:
         return [], []
@@ -1384,23 +1400,30 @@ def is_enseignant_avance(mark, entete, id_user, id_role_enseignant_avance):
 # Fonction pour saisir le Domaine d'un utilisateur Moodle
 ###########################################################
 def set_user_domain(mark, entete, id_user, id_field_domaine, user_domain):
-    if id_user != 0:
-        # pour un utilisateur qui est déjà dans la table "user_info_data" mais sur un autre domaine que le domaine "user_domain",
-        # le script va essayer de créer une nouvelle ligne (INSERT) avec le nouveau domaine => erreur !
-        # la requête doit donc être modifiée :
-        # sql = "SELECT id FROM %suser_info_data WHERE userid = %s AND fieldid = %s AND data = '%s'"
-        sql = "SELECT id FROM %suser_info_data WHERE userid = %s AND fieldid = %s"
-        sql = sql % (entete, id_user, id_field_domaine)
-        mark.execute(sql)
-        if mark.rowcount > 0:
-            result = mark.fetchone()
-            sql = "REPLACE INTO %suser_info_data (id, userid, fieldid, data) VALUES (%s, %s,%s,'%s')"
-            sql = sql % (entete, result[0], id_user, id_field_domaine, user_domain)
-            mark.execute(sql)
-        else:
-            sql = "INSERT INTO %suser_info_data (userid, fieldid, data) VALUES (%s,%s,'%s')"
-            sql = sql % (entete, id_user, id_field_domaine, user_domain)
-            mark.execute(sql)
-        return 1
+    # pour un utilisateur qui est déjà dans la table "user_info_data" mais sur un autre domaine que le domaine "user_domain",
+    # le script va essayer de créer une nouvelle ligne (INSERT) avec le nouveau domaine => erreur !
+    # la requête doit donc être modifiée :
+    # sql = "SELECT id FROM %suser_info_data WHERE userid = %s AND fieldid = %s AND data = '%s'"
+    sql = "SELECT id FROM {entete}user_info_data " \
+          "WHERE userid = %(id_user)s AND fieldid = %(id_field_domaine)s LIMIT 1" \
+        .format(entete=entete)
+    mark.execute(sql, params={'id_user': id_user, 'id_field_domaine': id_field_domaine})
+
+    result = mark.fetchone()
+    if result:
+        sql = "REPLACE INTO {entete}user_info_data " \
+              "(id, userid, fieldid, data) VALUES " \
+              "(%(id)s, %(id_user)s, %(id_field_domaine)s, %(user_domain)s)" \
+            .format(entete=entete)
+        mark.execute(sql, params={'id': result[0],
+                                  'id_user': id_user,
+                                  'id_field_domaine': id_field_domaine,
+                                  'user_domain': user_domain})
     else:
-        return 0
+        sql = "INSERT INTO {entete}user_info_data " \
+              "(userid, fieldid, data) VALUES " \
+              "(%(id_user)s, %(id_field_domaine)s, %(user_domain)s)" \
+            .format(entete=entete)
+        mark.execute(sql, params={'id_user': id_user,
+                                  'id_field_domaine': id_field_domaine,
+                                  'user_domain': user_domain})

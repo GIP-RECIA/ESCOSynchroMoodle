@@ -43,7 +43,7 @@ class ConstantesConfig(_BaseConfig):
     niveau_ctx_cours = 50  # type: int
     """Niveau de contexte pour un cours"""
 
-    id_role_createur_cour = 2  # type: int
+    id_role_createur_cours = 2  # type: int
     """Id pour le role createur de cours"""
 
     id_role_enseignant = 3  # type: int
@@ -142,10 +142,10 @@ class LdapConfig(_BaseConfig):
 
 
 class EtablissementRegroupement:
-    NomEtabRgp = None  # type: str
+    NomEtabRgp = ""  # type: str
     """Nom du regroupement d'etablissements"""
 
-    UaiRgp = None  # type: List[str]
+    UaiRgp = []  # type: List[str]
     """Liste des UAI consituant le regroupement"""
 
 
@@ -153,7 +153,7 @@ class EtablissementsConfig(_BaseConfig):
     def __init__(self, **entries):
         super().__init__(**entries)
 
-    EtabRgp = []  # type: List[EtablissementRegroupement]
+    etabRgp = []  # type: List[EtablissementRegroupement]
     """Regroupement d'etablissements"""
 
     inter_etab_categorie_name_cfa = 'Cat%%gorie Inter-CFA'  # type: str

@@ -39,6 +39,6 @@ def read_time_stamp_by_etab(file_location, separator):
 def write_time_stamp_by_etab(time_stamp_by_etab, file_location, separator):
     # Ecriture des etablissements associes au time stamp
     time_stamp_file = open(file_location, 'w')
-    for key, value in time_stamp_by_etab.iteritems():
+    for key, value in time_stamp_by_etab.items():
         time_stamp_file.write(key + separator + value + '\n')
     time_stamp_file.close()

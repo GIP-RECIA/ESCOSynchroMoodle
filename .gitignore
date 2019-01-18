@@ -12,3 +12,4 @@ trtPrecedent*.txt
 __pycache__/
 
 *.sql
+*_precedent.txt

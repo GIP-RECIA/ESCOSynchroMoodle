@@ -21,9 +21,9 @@ def estGrpEtab(rne: str, etablissements_config: EtablissementsConfig):
     :param config.etablissements: configuration
     :return: True si l'établissement fait partie d'un regroupement d'établissement
     """
-    for uai_etablissement in etablissements_config.etabRgp:
-        if rne in uai_etablissement[etablissements_config.uaiRgp]:
-            return uai_etablissement
+    for regroupement in etablissements_config.etabRgp:
+        if rne in regroupement.UaiRgp:
+            return regroupement
     return False
 
 
@@ -36,7 +36,7 @@ def extraireClassesLdap(classesLdap):
     """
     classes = []
     for classeLdap in classesLdap:
-        split = classeLdap.rsplit("$")
+        split = classeLdap.decode('utf8').rsplit("$")
         if len(split) > 1:
             classes.append(split[1])
     return classes
@@ -119,7 +119,8 @@ def miseAJour(config: Config, purge_cohortes: bool):
         # Ids des categories inter etablissements
         id_context_categorie_inter_etabs = get_id_context_inter_etabs(mark, config.database.entete)
 
-        id_categorie_inter_cfa = get_id_categorie_inter_etabs(mark, config.database.entete, config.etablissements.inter_etab_categorie_name_cfa)
+        id_categorie_inter_cfa = get_id_categorie_inter_etabs(mark, config.database.entete,
+                                                              config.etablissements.inter_etab_categorie_name_cfa)
         id_context_categorie_inter_cfa = get_id_context_categorie(mark, config.database.entete, id_categorie_inter_cfa)
 
         # Recuperation des ids des roles admin local et extended teacher
@@ -187,14 +188,11 @@ def miseAJour(config: Config, purge_cohortes: bool):
             for ldap_entry in result_set:
                 #  Recuperation des informations
                 ldap_entry_infos = ldap_entry[0][1]
-                etablissement_nom = ldap_entry_infos['ou'][0] \
-                    .replace("'", "\\'") \
-                    .replace("-ac-ORL._TOURS", "") \
-                    .decode("utf-8")
-                etablissement_type_structure = ldap_entry_infos['ENTStructureTypeStruct'][0]
-                etablissement_code_postal = ldap_entry_infos['postalCode'][0][:2]
-                etablissement_siren = ldap_entry_infos['ENTStructureSIREN'][0]
-                etablissement_uai = ldap_entry_infos['ENTStructureUAI'][0]
+                etablissement_nom = ldap_entry_infos['ou'][0].decode("utf-8").replace("-ac-ORL._TOURS", "")
+                etablissement_type_structure = ldap_entry_infos['ENTStructureTypeStruct'][0].decode("utf-8")
+                etablissement_code_postal = ldap_entry_infos['postalCode'][0][:2].decode("utf-8")
+                etablissement_siren = ldap_entry_infos['ENTStructureSIREN'][0].decode("utf-8")
+                etablissement_uai = ldap_entry_infos['ENTStructureUAI'][0].decode("utf-8")
                 etablissement_path = "/1"
 
                 # Si l'etablissement fait partie d'un groupement
@@ -269,23 +267,23 @@ def miseAJour(config: Config, purge_cohortes: bool):
             for ldap_entry in result_set:
                 #  Recuperation des informations
                 ldap_entry_infos = ldap_entry[0][1]
-                eleve_uid = ldap_entry_infos['uid'][0]
-                eleve_sn = ldap_entry_infos['sn'][0].replace("'", "\\'")
-                eleve_given_name = ldap_entry_infos['givenName'][0].replace("'", "\\'")
-                eleve_niveau_formation = ldap_entry_infos['ENTEleveNivFormation'][0]
-                eleve_infos = "%s %s %s" % (eleve_uid, eleve_given_name.decode("utf-8"), eleve_sn.decode("utf-8"))
-                eleve_domaines = ldap_entry_infos['ESCODomaines']
-                eleve_uai_courant = ldap_entry_infos['ESCOUAICourant'][0]
+                eleve_uid = ldap_entry_infos['uid'][0].decode('utf8')
+                eleve_sn = ldap_entry_infos['sn'][0].decode('utf8')
+                eleve_given_name = ldap_entry_infos['givenName'][0].decode('utf8')
+                eleve_niveau_formation = ldap_entry_infos['ENTEleveNivFormation'][0].decode('utf8')
+                eleve_infos = "%s %s %s" % (eleve_uid, eleve_given_name, eleve_sn)
+                eleve_domaines = [x.decode('utf8') for x in ldap_entry_infos['ESCODomaines']]
+                eleve_uai_courant = ldap_entry_infos['ESCOUAICourant'][0].decode('utf8')
 
                 # Recuperation du mail
                 eleve_mail = config.constantes.default_mail
                 mail_display = config.constantes.default_mail_display
-                if ldap_entry_infos.__contains__('mail'):
-                    eleve_mail = ldap_entry_infos['mail'][0]
+                if 'mail' in ldap_entry_infos:
+                    eleve_mail = ldap_entry_infos['mail'][0].decode('utf8')
 
                 # Recuperation des classes
                 eleve_classe = None
-                if ldap_entry_infos.__contains__('ENTEleveClasses'):
+                if 'ENTEleveClasses' in ldap_entry_infos:
                     eleve_classes = extraireClassesLdap(ldap_entry_infos['ENTEleveClasses'])
                     logging.debug(
                         "     |_ Les eleve_classes associees a l'eleve %s sont %s" % (eleve_infos, str(eleve_classes)))
@@ -388,32 +386,32 @@ def miseAJour(config: Config, purge_cohortes: bool):
             for ldap_entry in result_set:
                 #  Recuperation des informations
                 ldap_entry_infos = ldap_entry[0][1]
-                enseignant_uid = ldap_entry_infos['uid'][0]
-                enseignant_sn = ldap_entry_infos['sn'][0].replace("'", "\\'")
-                enseignant_given_name = ldap_entry_infos['givenName'][0].replace("'", "\\'")
-                enseignant_structure_rattachement = ldap_entry_infos['ENTPersonStructRattach'][0]
+                enseignant_uid = ldap_entry_infos['uid'][0].decode('utf8')
+                enseignant_sn = ldap_entry_infos['sn'][0].decode('utf8')
+                enseignant_given_name = ldap_entry_infos['givenName'][0].decode('utf8')
+                enseignant_structure_rattachement = ldap_entry_infos['ENTPersonStructRattach'][0].decode('utf8')
                 enseignant_infos = "%s %s %s" % (enseignant_uid, enseignant_given_name, enseignant_sn)
-                enseignant_domaines = ldap_entry_infos['ESCODomaines']
-                enseignant_uai_courant = ldap_entry_infos['ESCOUAICourant'][0]
+                enseignant_domaines = [x.decode('utf8') for x in ldap_entry_infos['ESCODomaines']]
+                enseignant_uai_courant = ldap_entry_infos['ESCOUAICourant'][0].decode('utf8')
 
                 # Recuperation des is_member_of
                 enseignant_is_member_of = []
-                if ldap_entry_infos.__contains__('isMemberOf'):
-                    enseignant_is_member_of = ldap_entry_infos['isMemberOf']
+                if 'isMemberOf' in ldap_entry_infos:
+                    enseignant_is_member_of = [x.decode('utf8') for x in ldap_entry_infos['isMemberOf']]
 
                 # Recuperation du theme courant
-                if ldap_entry_infos.has_key('ESCOUAICourant') and not etablissement_regroupe:
-                    etablissement_theme = ldap_entry_infos['ESCOUAICourant'][0].lower()
+                if 'ESCOUAICourant' in ldap_entry_infos and not etablissement_regroupe:
+                    etablissement_theme = ldap_entry_infos['ESCOUAICourant'][0].decode('utf8').lower()
 
                 # Recuperation des profils
                 enseignant_profils = []
-                if ldap_entry_infos.has_key('ENTPersonProfils'):
-                    enseignant_profils = ldap_entry_infos['ENTPersonProfils']
+                if 'ENTPersonProfils' in ldap_entry_infos:
+                    enseignant_profils = [x.decode('utf8') for x in ldap_entry_infos['ENTPersonProfils']]
 
                 # Recuperation du mail
                 mail = config.constantes.default_mail
-                if ldap_entry_infos.__contains__('mail'):
-                    mail = ldap_entry_infos['mail'][0]
+                if 'mail' in ldap_entry_infos:
+                    mail = ldap_entry_infos['mail'][0].decode('utf8')
 
                 # Affichage du mail reserve aux membres de cours
                 mail_display = config.constantes.default_mail_display
@@ -434,9 +432,9 @@ def miseAJour(config: Config, purge_cohortes: bool):
                                        etablissement_theme)
 
                 # Mise ajour des droits sur les anciens etablissement
-                if ldap_entry_infos.has_key('ESCOUAI') and not etablissement_regroupe:
+                if 'ESCOUAI' in ldap_entry_infos and not etablissement_regroupe:
                     # Recuperation des uais des etablissements dans lesquels l'enseignant est autorise
-                    uais = ldap_entry_infos['ESCOUAI']
+                    uais = [x.decode('utf8') for x in ldap_entry_infos['ESCOUAI']]
                     mettre_a_jour_droits_enseignant(mark, config.database.entete, enseignant_infos, gereAdminLocal,
                                                     id_context_categorie, id_context_course_forum, id_user, uais)
 
@@ -722,12 +720,12 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
 def miseAJourInspecteurs(config: Config):
     """
     Effectue la mise a jour de la BD
-    
+
     Moodle via les infos issues du LDAP
-    
+
     Cette mise a jour concerne les inspecteurs
-    
-    :param config: Configuration d'exection
+
+    :param config: Configuration d'execution
     """
     try:
         logging.info('============================================')
@@ -802,7 +800,7 @@ def miseAJourInspecteurs(config: Config):
                              id_context_categorie_inter_etabs, id_user)
             logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
 
-            # if ldap_entry_infos.has_key('ESCOUAICourant'):
+            # if 'ESCOUAICourant' in ldap_entry_infos:
             # people_structure_uai  = ldap_entry_infos['ESCOUAICourant'][0].lower()
 
             # Recuperation de l'id du contexte correspondant à l'etablissement de l'inspecteur
