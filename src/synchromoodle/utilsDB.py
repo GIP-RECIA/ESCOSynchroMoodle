@@ -933,7 +933,7 @@ def get_timestamp_now(mark):
 def get_user_id(mark, entete, username):
     s = "SELECT id FROM %suser WHERE username = %%s"
     s = s % (entete)
-    mark.execute(s, [username])
+    mark.execute(s, [username.lower()])
     ligne = mark.fetchone()
     if ligne == None:
         return None
@@ -1181,6 +1181,7 @@ def insert_moodle_structure(mark, entete, grp, nom_structure, path, ou, siren, u
 ###########################################################
 def insert_moodle_user(mark, entete, username, first_name, last_name, email, mail_display, theme):
     user_id = get_user_id(mark, entete, username)
+    username = username.lower()
     if user_id is None:
         s = "INSERT INTO %suser( auth, confirmed, username, firstname, lastname, email, maildisplay, city, country, lang, mnethostid, theme )" \
             + " VALUES ( %%s, 1, %%s, %%s, %%s, %%s, %%s, %%s, %%s, %%s, %%s, %%s )"
