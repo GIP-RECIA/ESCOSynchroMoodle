@@ -1,6 +1,8 @@
 import datetime
 import logging
 
+from synchromoodle.config import TimestampStoreConfig
+
 
 class TimestampStore:
     """
@@ -9,9 +11,8 @@ class TimestampStore:
     Permet de ne traiter que les utilisateurs ayant subi une modification depuis le dernier traitement
     """
 
-    def __init__(self, file_location: str, separator='-'):
-        self.file_location = file_location
-        self.separator = separator
+    def __init__(self, config: TimestampStoreConfig):
+        self.config = config
         self.now = datetime.datetime.now()
         self.timestamps = {}
         self.read()
@@ -42,14 +43,14 @@ class TimestampStore:
         self.timestamps.clear()
 
         try:
-            with open(self.file_location, 'r') as time_stamp_file:
+            with open(self.config.file, 'r') as time_stamp_file:
                 for line in time_stamp_file:
-                    etab_and_time = line.split(self.separator)
+                    etab_and_time = line.split(self.config.separator)
                     etab = etab_and_time[0]
                     time_stamp = etab_and_time[1]
                     self.timestamps[etab] = time_stamp[:-1]
         except IOError:
-            logging.warning("Impossible d'ouvrir le fichier : %s" % self.file_location)
+            logging.warning("Impossible d'ouvrir le fichier : %s" % self.config.file)
             return {}
 
     def write(self):
@@ -66,9 +67,9 @@ class TimestampStore:
         :return: 
         """
 
-        with open(self.file_location, 'w') as time_stamp_file:
+        with open(self.config.file, 'w') as time_stamp_file:
             time_stamp_file.writelines(
-                map(lambda item: item[0].upper() + self.separator + item[1], self.timestamps.items()))
+                map(lambda item: item[0].upper() + self.config.separator + item[1], self.timestamps.items()))
 
     def mark(self, uai):
         self.timestamps[uai.upper()] = self.current_timestamp

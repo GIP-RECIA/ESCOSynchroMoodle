@@ -71,7 +71,7 @@ class TeacherLdap(PeopleLdap):
             self.profils = [x.decode('utf8') for x in data['ENTPersonProfils']]
 
         # Mise ajour des droits sur les anciens etablissement
-        self.uais = []
+        self.uais = None
         if 'ESCOUAI' in data:
             self.uais = [x.decode('utf8') for x in data['ESCOUAI']]
 

@@ -31,12 +31,6 @@ class ConstantesConfig(_BaseConfig):
     default_domain = "lycees.netocentre.fr"  # type: str
     """Domaine par défaut"""
 
-    cle_trt_inter_etab = "INTER_ETAB"  # type: str
-    """Cle pour pour stocker le timestamp dud dernier traitement inter-etablissements"""
-
-    cle_trt_mahara = "MAHARA"  # type: str
-    """Cle pour stocker le timestamp dernier traitement mahara"""
-
     id_instance_moodle = 1  # type: int
     """Id de l'instance concernant Moodle"""
 
@@ -109,14 +103,15 @@ class LdapConfig(_BaseConfig):
     """Mot de passe"""
 
     baseDN = "dc=esco-centre,dc=fr"  # type: str
+    """DN de base"""
 
-    structuresOU = "ou=structures"  # type: str
+    structuresRDN = "ou=structures"  # type: str
     """OU pour les structures"""
 
-    personnesOU = "ou=people"  # type: str
+    personnesRDN = "ou=people"  # type: str
     """OU pour les personnes"""
 
-    adminOU = "administrateurs"  # type: str
+    adminRDN = "ou=administrateurs"  # type: str
     """OU pour les administrateurs"""
 
     @property
@@ -124,28 +119,28 @@ class LdapConfig(_BaseConfig):
         """
         DN pour les structures
         """
-        return self.structuresOU + ',' + self.baseDN
+        return self.structuresRDN + ',' + self.baseDN
 
     @property
     def personnesDN(self) -> str:
         """
         DN pour les personnes
         """
-        return self.personnesOU + ',' + self.baseDN
+        return self.personnesRDN + ',' + self.baseDN
 
     @property
     def adminDN(self) -> str:
         """
         DN pour les admins
         """
-        return self.adminOU + ',' + self.baseDN
+        return self.adminRDN + ',' + self.baseDN
 
 
 class EtablissementRegroupement:
-    NomEtabRgp = ""  # type: str
+    nom = ""  # type: str
     """Nom du regroupement d'etablissements"""
 
-    UaiRgp = []  # type: List[str]
+    uais = []  # type: List[str]
     """Liste des UAI consituant le regroupement"""
 
 
@@ -167,14 +162,6 @@ class EtablissementsConfig(_BaseConfig):
 
     listeEtabSansMail = []  # type: List[str]
     """Etablissements dont le mail des professeurs n'est pas synchronise"""
-
-    # TODO: A déplacer dans une section "trt"
-    fileTrtPrecedent = "trtPrecedent_academique.txt"  # type: str
-    """Fichier contenant les dates de traitement précedent pour les établissements"""
-
-    # TODO: A déplacer dans une section "trt"
-    fileSeparator = "-"  # type: str
-    """Séparateur utilisé dans le fichier de traitement pour séparer l'etablissement des date de traitement précedent"""
 
 
 class UsersConfig(_BaseConfig):
@@ -207,14 +194,40 @@ class InterEtablissementsConfig(_BaseConfig):
     categorie_name = '%%Cat%%gorie inter%%tablissements'  # type: str
     """Nom de la catégorie inter-etablissement"""
 
+    cle_timestamp = "INTER_ETAB"  # type: str
+    """Clé pour stocker le timestamp du dernier traitement inter-etablissements"""
+
+
+class TimestampStoreConfig(_BaseConfig):
+    def __init__(self, **entries):
+        super().__init__(**entries)
+
+    file = "timestamps.txt"  # type: str
+    """Fichier contenant les dates de traitement précedent pour les établissements"""
+
+    separator = "-"  # type: str
+    """Séparateur utilisé dans le fichier de traitement pour séparer l'etablissement des date de traitement précedent"""
+
+
+class MaharaConfig(_BaseConfig):
+    def __init__(self, **entries):
+        super().__init__(**entries)
+
+    cle_timestamp = "MAHARA"  # type: str
+
+
+"""Clé pour stocker le timestamp du dernier traitement mahara"""
+
 
 class Config:
     constantes = ConstantesConfig()  # type: ConstantesConfig
     database = DatabaseConfig()  # type: DatabaseConfig
     ldap = LdapConfig()  # type: LdapConfig
     users = UsersConfig()  # type: UsersConfig
+    timestamp_store = TimestampStoreConfig()  # type: TimestampStoreConfig
     etablissements = EtablissementsConfig()  # type: EtablissementsConfig
     inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
+    mahara = MaharaConfig()  # type: MaharaConfig
     actions = ["default"]  # type: List[str]
 
 
@@ -235,8 +248,10 @@ class ConfigLoader:
                         loaded_config.etablissements.update(**data['etablissements'])
                     if 'users' in data:
                         loaded_config.users.update(**data['users'])
-                    if 'inter_etablissements' in data:
-                        loaded_config.inter_etablissements.update(**data['etablinter_etablissementsissements'])
+                    if 'interEtablissements' in data:
+                        loaded_config.inter_etablissements.update(**data['interEtablissements'])
+                    if 'timestampStore' in data:
+                        loaded_config.timestamp_store.update(**data['timestampStore'])
                     if 'inspecteurs' in data:
                         loaded_config.inspecteurs.update(**data['inspecteurs'])
                     if 'mahara' in data:

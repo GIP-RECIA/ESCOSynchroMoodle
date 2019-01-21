@@ -1,4 +1,6 @@
 actions: ['interetab']
+timestampStore:
+  file: "trtInteretabAll_precedent.txt"
 inter_etablissements:
   cohorts:
     "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs",

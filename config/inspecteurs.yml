@@ -1,4 +1,6 @@
 actions: ['inspecteurs']
+timestampStore:
+  file: "trtInspecteurs_precedent.txt"
 users:
   ldap_attribut_user: "ESCOPersonProfils"
   ldap_valeur_attribut_user:

@@ -1,8 +1,9 @@
 users:
   prefixAdminMoodleLocal: "(esco|clg37):admin:Moodle:local:"
   prefixAdminLocal: "(esco|clg37):admin:local:"
+timestampStore:
+  file: "trtAcademique_precedent.txt"
 etablissements:
-  fileTrtPrecedent: "trtAcademique_precedent.txt"
   listeEtab: ["0450822X", "0410031L", "0371122U", "0450066C", "0451483T", "0410593X", "0410030K", "0370001A", "0360003H",
               "0370040T", "0370036N", "0451304Y", "0450051L", "0180008L", "0360011S", "0280657M", "0280036M", "0450062Y",
               "0280021W", "0360024F", "0410959V", "0371417P", "0280864M", "0450042B", "0370009J", "0360002G", "0370039S",

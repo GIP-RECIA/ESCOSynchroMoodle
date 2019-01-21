@@ -129,7 +129,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         # une modification depuis le dernier traitement 
         ###################################################
         # Recuperation des dates de traitement precedent par etablissement
-        timestamp_store = TimestampStore(config.etablissements.fileTrtPrecedent, config.etablissements.fileSeparator)
+        timestamp_store = TimestampStore(config.timestamp_store)
 
         ###################################################
         # Traitement etablissement par etablissement afin 
@@ -162,8 +162,8 @@ def miseAJour(config: Config, purge_cohortes: bool):
 
                 # Si l'etablissement fait partie d'un groupement
                 if etablissement_regroupe:
-                    etablissement_ou = etablissement_regroupe["NomEtabRgp"]
-                    ldap_structure.uai = etablissement_regroupe["UaiRgp"][0]
+                    etablissement_ou = etablissement_regroupe["nom"]
+                    ldap_structure.uai = etablissement_regroupe["uais"][0]
                 else:
                     etablissement_ou = ldap_structure.nom
 
@@ -475,7 +475,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         ###################################################
         # Recuperation de la date de dernier traitement
         ###################################################
-        timestamp_store = TimestampStore(config.etablissements.fileTrtPrecedent, config.etablissements.fileSeparator)
+        timestamp_store = TimestampStore(config.timestamp_store)
 
         ###################################################
         # Mise a jour des utilisateurs inter-etabs
@@ -576,7 +576,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
                 else:
                     message = "      |_ Impossible d'inserer l'utilisateur %s dans la cohorte %s, car il n'est pas connu dans Moodle"
                     message = message % (people_infos, cohort_name.decode("utf-8"))
-                    logging.warn(message)
+                    logging.warning(message)
 
         # Purge des cohortes des eleves
         if purge_cohortes:
@@ -586,7 +586,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         connection.commit()
 
         # Mise a jour de la date de dernier traitement
-        timestamp_store.mark(config.constantes.cle_trt_inter_etab)
+        timestamp_store.mark(config.inter_etablissements.cle_timestamp)
         timestamp_store.write()
 
     except Exception as err:
@@ -761,7 +761,7 @@ def miseAJourMahara(config: Config, purge):
         ###################################################
         # Recuperation de la date de dernier traitement
         ###################################################
-        timestamp_store = TimestampStore(config.etablissements.fileTrtPrecedent, config.etablissements.fileSeparator)
+        timestamp_store = TimestampStore(config.timestamp_store)
 
         ###################################################
         # Purge des utilisateurs de Mahara
@@ -804,7 +804,7 @@ def miseAJourMahara(config: Config, purge):
         connection.commit()
 
         # Mise a jour de la date de dernier traitement
-        timestamp_store.mark(config.constantes.cle_trt_mahara)
+        timestamp_store.mark(config.mahara.cle_timestamp)
         timestamp_store.write()
 
         logging.info('Synchronisation des utilisateurs Mahara : FIN')
