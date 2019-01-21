@@ -3,15 +3,16 @@
 ###############################################################################
 # IMPORTS
 ###############################################################################
+import logging
+import sys
 from typing import Tuple
 
 import mysql.connector
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
 
-from synchromoodle.config import DatabaseConfig
-from .utilsFile import *
-from .utilsLDAP import *
+from .config import DatabaseConfig
+from .ldaputils import Ldap
 
 ###############################################################################
 # CONSTANTS
@@ -325,25 +326,18 @@ def create_classes_cohorts(mark, entete, id_context_etab, classes_names, time_cr
 # Puis de remplir la cohorte avec les enseignants de l'etablissement
 ###########################################################
 def create_profs_etabs_cohorts(mark, entete, id_context_etab, etab_name, time_created, time_stamp,
-                               ldap_config: LdapConfig):
+                               ldap: Ldap):
     liste_professeurs_insere = []
     cohort_name = P_COHORT_NAME_FOR_ETAB % (etab_name)
     cohort_description = P_COHORT_DESC_FOR_ETAB % (etab_name)
     id_cohort = create_cohort(mark, entete, id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
-    l = connect_ldap(ldap_config)
-    filtre = get_filtre_enseignants_etablissement(time_stamp, etab_name)
-    logging.debug('      |_ Filtre LDAP pour récupérer les enseignants pour la cohorte de profs : %s' % filtre)
-    ldap_result_id = ldap_search_teacher(l, ldap_config.personnesDN, filtre)
-    # Recuperation du resultat de la recherche
-    result_set = ldap_retrieve_all_entries(l, ldap_result_id)
+
+    ldap_teachers = ldap.search_teacher(since_timestamp=time_stamp, uai=etab_name, tous=True)
+
     maintenant_sql = get_timestamp_now(mark)
-    for ldap_entry in result_set:
-        ldap_entry_infos = ldap_entry[0][1]
-        enseignant_uid = ldap_entry_infos['uid'][0].decode('utf8')
-        enseignant_given_name = ldap_entry_infos['givenName'][0].decode('utf8')
-        enseignant_sn = ldap_entry_infos['sn'][0].decode('utf8')
-        enseignant_infos = "%s %s %s" % (enseignant_uid, enseignant_given_name, enseignant_sn)
-        id_user = get_user_id(mark, entete, enseignant_uid)
+    for ldap_teacher in ldap_teachers:
+        enseignant_infos = "%s %s %s" % (ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn)
+        id_user = get_user_id(mark, entete, ldap_teacher.uid)
         enroll_user_in_cohort(mark, entete, id_cohort, id_user, enseignant_infos, maintenant_sql)
         liste_professeurs_insere.append(id_user)
     if time_stamp is None:
@@ -526,7 +520,7 @@ def enroll_user_in_cohort(mark, entete, id_cohort, id_user, user_infos, time_add
     s = s % (entete, id_cohort, id_user, time_added)
     mark.execute(s)
     cohort_name = get_cohort_name(mark, entete, id_cohort)
-    logging.info("      |_ Inscription de l'utilisateur  (id = %s) dans la cohorte '%s'" % (str(id_user), cohort_name))
+    logging.info("      |_ Inscription de l'utilisateur (id = %s) dans la cohorte '%s'" % (str(id_user), cohort_name))
 
 
 ###########################################################
