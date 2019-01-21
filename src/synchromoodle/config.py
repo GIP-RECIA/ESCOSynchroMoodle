@@ -242,7 +242,11 @@ class ConfigLoader:
                     if 'mahara' in data:
                         loaded_config.mahara.update(**data['mahara'])
             except FileNotFoundError as e:
-                log.warning("Le fichier de configuration n'a pas été chargé: " + str(e))
+                message = "Le fichier de configuration n'a pas été chargé: " + str(e)
+                if silent:
+                    log.debug(message)
+                else:
+                    log.warning(message)
         return loaded_config
 
     def load(self, config: List[str], silent=False) -> Config:
