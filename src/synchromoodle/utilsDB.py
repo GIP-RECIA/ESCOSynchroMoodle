@@ -220,23 +220,6 @@ USER_MNET_HOST_ID = 3
 # FONCTIONS
 ###############################################################################
 
-###########################################################
-# Fonction permettant de mettre les elements d'un tableau
-# sous forme de liste pour une requete SQL.
-###########################################################
-def array_to_sql_list(elements):
-    # Si la liste est vide
-    if not elements:
-        return "''"
-    # Sinon
-    sql_list = ""
-    for element in elements:
-        sql_list_to_fill = "%s'%s',"
-        sql_list = sql_list_to_fill % (sql_list, str(element))
-    sql_list = sql_list[:-1]
-    return sql_list
-
-
 def array_to_safe_sql_list(elements, name=None):
     if name:
         format_strings = []
@@ -267,10 +250,9 @@ def add_role_to_user(mark, entete, role_id, id_context, id_user):
     id_role_assignment = get_id_role_assignment(mark, entete, role_id, id_context, id_user)
     if not id_role_assignment:
         # Ajout du role dans le contexte
-        s = "INSERT INTO %srole_assignments( roleid, contextid, userid )" \
-            + " VALUES ( %d, %d, %d )"
-        s = s % (entete, role_id, id_context, id_user)
-        mark.execute(s)
+        s = "INSERT INTO {entete}role_assignments( roleid, contextid, userid )" \
+            " VALUES ( %(role_id)s, %(id_context)s, %(id_user)s )".format(entete=entete)
+        mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
 
 
 ###########################################################
@@ -350,10 +332,9 @@ def create_profs_etabs_cohorts(mark, entete, id_context_etab, etab_name, time_cr
 #
 ###############################################################
 def purge_cohort_profs(mark, entete, id_cohort, list_profs):
-    ids_list = array_to_sql_list(list_profs)
-    s = "DELETE FROM %scohort_members WHERE cohortid = %s AND userid NOT IN ( %s )"
-    s = s % (entete, id_cohort, ids_list)
-    mark.execute(s)
+    ids_list, ids_list_params = array_to_safe_sql_list(list_profs, 'ids_list')
+    s = "DELETE FROM {entete}cohort_members WHERE cohortid = %(id_cohort)s AND userid NOT IN ( {ids_list} )".format(entete=entete, ids_list=ids_list)
+    mark.execute(s, params={'id_cohort': id_cohort, **ids_list_params})
 
 
 ###########################################################
@@ -364,10 +345,9 @@ def create_cohort(mark, entete, id_context, name, id_number, description, time_c
     # Si la cohorte n'existe pas encore
     id_cohort = get_id_cohort(mark, entete, id_context, name)
     if id_cohort is None:
-        s = "INSERT INTO %scohort( contextid, name, idnumber, description, descriptionformat, timecreated, timemodified )" \
-            + " VALUES ( %%s, %%s, %%s, %%s, 0, %%s, %%s )"
-        s = s % (entete)
-        mark.execute(s, [id_context, name, id_number, description, time_created, time_created])
+        s = "INSERT INTO {entete}cohort( contextid, name, idnumber, description, descriptionformat, timecreated, timemodified )" \
+            " VALUES ( %(id_context)s, %(name)s, %(id_number)s, %(description)s, 0, %(time_created)s, %(time_created)s )".format(entete=entete)
+        mark.execute(s, params={'id_context': id_context, 'name': name, 'id_number': id_number, 'description': description, 'time_created': time_created})
         logging.info("      |_ Creation de la cohorte '%s'" % (name))
     return get_id_cohort(mark, entete, id_context, name)
 
@@ -388,9 +368,8 @@ def create_formation_cohort(mark, entete, id_context_etab, formation_name, time_
 # d'utilisateur de Mahara
 ###########################################################
 def delete_all_mahara_roles(mark, entete):
-    s = "DELETE FROM %srole_assignments WHERE roleid = %d AND contextid = %d"
-    s = s % (entete, ID_ROLE_MAHARA, ID_CONTEXT_SYSTEM)
-    mark.execute(s)
+    s = "DELETE FROM {entete}role_assignments WHERE roleid = %(ID_ROLE_MAHARA)s AND contextid = %(ID_CONTEXT_SYSTEM)s".format(entete=entete)
+    mark.execute(s, params={'ID_ROLE_MAHARA': ID_ROLE_MAHARA, 'ID_CONTEXT_SYSTEM': ID_CONTEXT_SYSTEM})
 
 
 ###########################################################
@@ -401,13 +380,12 @@ def delete_moodle_local_admins(mark, entete, id_context_categorie, ids_not_admin
     if len(ids_not_admin) == 0:
         return
     # Construction de la liste des ids admins a conserver
-    ids_list = array_to_sql_list(ids_not_admin)
+    ids_list, ids_list_params = array_to_safe_sql_list(ids_not_admin, 'ids_list')
     # Recuperation de l'id pour le role d'admin local
     id_role_admin_local = get_id_role_admin_local(mark, entete)
     # Suppression des admins non presents dans la liste
-    s = "DELETE FROM %srole_assignments WHERE roleid = %d AND contextid = %d AND userid IN ( %s )"
-    s = s % (entete, id_role_admin_local, id_context_categorie, ids_list)
-    mark.execute(s)
+    s = "DELETE FROM {entete}role_assignments WHERE roleid = %(id_role_admin_local)s AND contextid = %(id_context_categorie)s AND userid IN ( {ids_list} )".format(entete=entete, ids_list=ids_list)
+    mark.execute(s, params={'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie, **ids_list_params})
 
 
 ###########################################################
@@ -424,9 +402,8 @@ def delete_moodle_local_admin(mark, entete, id_context_categorie, userid):
 # dans un contexte
 ###########################################################
 def delete_moodle_assignment(mark, entete, id_context_category, userid, roleid):
-    s = "DELETE FROM %srole_assignments WHERE contextid = %d AND roleid = %d AND userid = %d"
-    s = s % (entete, id_context_category, roleid, userid)
-    mark.execute(s)
+    s = "DELETE FROM {entete}role_assignments WHERE contextid = %(id_context_category)s AND roleid = %(roleid)s AND userid = %(userid)s".format(entete=entete)
+    mark.execute(s, params={'id_context_category': id_context_category, 'roleid': roleid, 'userid': userid})
     return mark.rowcount > 0
 
 
@@ -444,15 +421,13 @@ def delete_role_for_contexts(mark, entete, role_id, ids_contexts_by_courses, id_
         # Suppression de l'enrolment associe
         id_user_enrolment = get_id_user_enrolment(mark, entete, id_enrol, id_user)
         if id_user_enrolment:
-            s = "DELETE FROM %suser_enrolments WHERE id = %d"
-            s = s % (entete, id_user_enrolment)
-            mark.execute(s)
+            s = "DELETE FROM {entete}user_enrolments WHERE id = %(id_user_enrolment)s}".format(entete=entete)
+            mark.execute(s, params={'id_user_enrolment': id_user_enrolment})
 
     # Suppression des roles dans les contextes
-    ids_list = array_to_sql_list(ids_contexts_by_courses.values())
-    s = "DELETE FROM %srole_assignments WHERE roleid = %d AND contextid IN ( %s ) AND userid = %d"
-    s = s % (entete, role_id, ids_list, id_user)
-    mark.execute(s)
+    ids_list, ids_list_params = array_to_safe_sql_list(ids_contexts_by_courses.values(), 'ids_list')
+    s = "DELETE FROM {entete}role_assignments WHERE roleid = %(role_id)s AND contextid IN ( {ids_list} ) AND userid = %(id_user)s".format(entete=entete, ids_list=ids_list)
+    mark.execute(s, params={'role_id': role_id, 'id_user': id_user, **ids_list_params})
 
 
 ###########################################################
@@ -460,10 +435,9 @@ def delete_role_for_contexts(mark, entete, role_id, ids_contexts_by_courses, id_
 ###########################################################
 def delete_roles(mark, entete, ids_roles):
     # Construction de la liste des ids des roles concernes
-    ids_list = array_to_sql_list(ids_roles)
-    s = "DELETE FROM %srole_assignments WHERE id IN ( %s )"
-    s = s % (entete, ids_list)
-    mark.execute(s)
+    ids_list, ids_list_params = array_to_safe_sql_list(ids_roles, 'ids_list')
+    s = "DELETE FROM {entete}role_assignments WHERE id IN ( {ids_list} )".format(entete=entete, ids_list=ids_list)
+    mark.execute(s, params={**ids_list_params})
 
 
 ###########################################################
@@ -474,10 +448,9 @@ def delete_roles(mark, entete, ids_roles):
 ###########################################################
 def disenroll_user_from_cohorts(mark, entete, ids_cohorts_to_keep, id_user):
     # Construction de la liste des ids des cohortes concernes
-    ids_list = array_to_sql_list(ids_cohorts_to_keep)
-    s = "DELETE FROM %scohort_members WHERE userid = %d and cohortid NOT IN ( %s )"
-    s = s % (entete, id_user, ids_list)
-    mark.execute(s)
+    ids_list, ids_list_params = array_to_safe_sql_list(ids_cohorts_to_keep, 'ids_list')
+    s = "DELETE FROM {entete}cohort_members WHERE userid = %(id_user)s and cohortid NOT IN ( {ids_list} )".format(entete=entete, ids_list=ids_list)
+    mark.execute(s, params={'id_user': id_user, **ids_list_params})
 
 
 ###########################################################
@@ -485,9 +458,8 @@ def disenroll_user_from_cohorts(mark, entete, ids_cohorts_to_keep, id_user):
 # cohorte.
 ###########################################################
 def disenroll_user_from_cohort(mark, entete, id_cohort, id_user):
-    s = "DELETE FROM %scohort_members WHERE cohortid = %d and userid = %d"
-    s = s % (entete, id_cohort, id_user)
-    mark.execute(s)
+    s = "DELETE FROM {entete}cohort_members WHERE cohortid = %(id_cohort)s and userid = %(id_user)s".format(entete=entete)
+    mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user})
 
 
 ###########################################################
@@ -498,17 +470,15 @@ def enroll_user_in_course(mark, entete, role_id, id_course, id_user):
     id_enrol = get_id_enrol(mark, entete, ENROL_METHOD_MANUAL, role_id, id_course)
     if not id_enrol:
         # Ajout de la methode d'enrolment dans le cours
-        s = "INSERT INTO %senrol( enrol, courseid, roleid )" \
-            + " VALUES ( %%s, %d, %d )"
-        s = s % (entete, id_course, role_id)
-        mark.execute(s, [ENROL_METHOD_MANUAL])
+        s = "INSERT INTO {entete}enrol( enrol, courseid, roleid )" \
+            " VALUES ( %(ENROL_METHOD_MANUAL)s, %(id_course)s, %(role_id)s )".format(entete=entete)
+        mark.execute(s, params={'ENROL_METHOD_MANUAL': ENROL_METHOD_MANUAL, 'id_course': id_course, 'role_id': role_id})
         id_enrol = get_id_enrol_max(mark, entete)
     if id_enrol:
         # Enrolement de l'utilisateur dans le cours
-        s = "INSERT IGNORE INTO %suser_enrolments( enrolid, userid )" \
-            + " VALUES ( %d, %d )"
-        s = s % (entete, id_enrol, id_user)
-        mark.execute(s)
+        s = "INSERT IGNORE INTO {entete}user_enrolments( enrolid, userid )" \
+            " VALUES ( %(id_enrol)s, %(id_user)s )".format(entete=entete)
+        mark.execute(s, params={'id_enrol': id_enrol, 'id_user': id_user})
 
 
 ###########################################################
@@ -516,9 +486,8 @@ def enroll_user_in_course(mark, entete, role_id, id_course, id_user):
 # cohorte.
 ###########################################################
 def enroll_user_in_cohort(mark, entete, id_cohort, id_user, user_infos, time_added):
-    s = "INSERT IGNORE INTO %scohort_members( cohortid, userid, timeadded ) VALUES ( %d, %d, %d )"
-    s = s % (entete, id_cohort, id_user, time_added)
-    mark.execute(s)
+    s = "INSERT IGNORE INTO {entete}cohort_members( cohortid, userid, timeadded ) VALUES ( %(id_cohort)s, %(id_user)s, %(time_added)s )".format(entete=entete)
+    mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user, 'time_added': time_added})
     cohort_name = get_cohort_name(mark, entete, id_cohort)
     logging.info("      |_ Inscription de l'utilisateur (id = %s) dans la cohorte '%s'" % (str(id_user), cohort_name))
 
@@ -536,9 +505,8 @@ def enroll_user_in_cohorts(mark, entete, id_context_etab, ids_cohorts, id_user, 
 # Fonction permettant de recuperer le nom d'une cohorte.
 ###########################################################
 def get_cohort_name(mark, entete, id_cohort):
-    s = "SELECT name FROM %scohort WHERE id = %d"
-    s = s % (entete, id_cohort)
-    mark.execute(s)
+    s = "SELECT name FROM {entete}cohort WHERE id = %(id_cohort)s".format(entete=entete)
+    mark.execute(s, params={'id_cohort': id_cohort})
     name = mark.fetchone()[0]
     logging.debug("Cohort : Name = %s" % name)
     return name
@@ -549,9 +517,8 @@ def get_cohort_name(mark, entete, id_cohort):
 # categorie.
 ###########################################################
 def get_description_course_category(mark, entete, id_category):
-    s = "SELECT description FROM %scourse_categories WHERE id = %d"
-    s = s % (entete, id_category)
-    mark.execute(s)
+    s = "SELECT description FROM {entete}course_categories WHERE id = %(id_category)s".format(entete=entete)
+    mark.execute(s, params={'id_category': id_category})
     description = mark.fetchone()[0]
     return description
 
@@ -561,12 +528,11 @@ def get_description_course_category(mark, entete, id_category):
 # categories.
 ###########################################################
 def get_descriptions_course_categories_by_themes(mark, entete, themes):
-    ids_list = array_to_sql_list(themes)
+    ids_list, ids_list_params = array_to_safe_sql_list(themes, 'ids_list')
     s = "SELECT description" \
-        + " FROM %scourse_categories" \
-        + " WHERE theme IN (%s)"
-    s = s % (entete, ids_list)
-    mark.execute(s)
+        " FROM {entete}course_categories" \
+        " WHERE theme IN ( {ids_list} )".format(entete=entete, ids_list=ids_list)
+    mark.execute(s, params={**ids_list_params})
     result_set = mark.fetchall()
     if not result_set:
         return []
@@ -578,9 +544,8 @@ def get_descriptions_course_categories_by_themes(mark, entete, themes):
 # Fonction permettant de recuperer l'id d'un bloc.
 ###########################################################
 def get_id_block(mark, entete, parent_context_id):
-    s = "SELECT id FROM %sblock_instances WHERE parentcontextid = %d";
-    s = s % (entete, parent_context_id)
-    mark.execute(s)
+    s = "SELECT id FROM {entete}block_instances WHERE parentcontextid = %(parent_context_id)s".format(entete=entete)
+    mark.execute(s, params={'parent_context_id': parent_context_id})
     id_block = mark.fetchone()[0]
     return id_block
 
@@ -590,10 +555,9 @@ def get_id_block(mark, entete, parent_context_id):
 # categorie inter-etablissements. 
 ###########################################################
 def get_id_categorie_inter_etabs(mark, entete, categorie_name):
-    s = "SELECT id FROM %scourse_categories where name like '%s'";
-    s = s % (entete, categorie_name)
-    mark.execute(s);
-    ligne = mark.fetchone();
+    s = "SELECT id FROM {entete}course_categories WHERE name LIKE %(categorie_name)s".format(entete=entete)
+    mark.execute(s, params={'categorie_name': categorie_name})
+    ligne = mark.fetchone()
     return ligne[0]
 
 
@@ -602,9 +566,8 @@ def get_id_categorie_inter_etabs(mark, entete, categorie_name):
 # par son nom et son contexte de rattachement.
 ###########################################################
 def get_id_cohort(mark, entete, id_context, cohort_name):
-    s = "SELECT id FROM %scohort WHERE contextid = %%s AND name = %%s"
-    s = s % (entete)
-    mark.execute(s, [id_context, cohort_name])
+    s = "SELECT id FROM {entete}cohort WHERE contextid = %(id_context)s AND name = %(cohort_name)s".format(entete=entete)
+    mark.execute(s, params={'id_context': id_context, 'cohort_name': cohort_name})
     ligne = mark.fetchone()
     if ligne == None:
         return None
@@ -616,9 +579,8 @@ def get_id_cohort(mark, entete, id_context, cohort_name):
 # le niveau et l'id de l'instance associee.
 ###########################################################
 def get_id_context_no_depth(mark, entete, context_level, instance_id):
-    s = "SELECT id FROM %scontext WHERE contextlevel = %d and instanceid = %d"
-    s = s % (entete, context_level, instance_id)
-    mark.execute(s)
+    s = "SELECT id FROM {entete}context WHERE contextlevel = %(context_level)s and instanceid = %(instance_id)s".format(entete=entete)
+    mark.execute(s, params={'context_level': context_level, 'instance_id': instance_id})
     ligne = mark.fetchone()
     if ligne is None:
         return None
@@ -630,9 +592,8 @@ def get_id_context_no_depth(mark, entete, context_level, instance_id):
 # le niveau, la profondeur et l'id de l'instance associee.
 ###########################################################
 def get_id_context(mark, entete, context_level, depth, instance_id):
-    s = "SELECT id FROM %scontext WHERE contextlevel = %d and depth = %d and instanceid = %d"
-    s = s % (entete, context_level, depth, instance_id)
-    mark.execute(s)
+    s = "SELECT id FROM {entete}context WHERE contextlevel = %(context_level)s and depth = %(depth)s and instanceid = %(instance_id)s".format(entete=entete)
+    mark.execute(s, params={'context_level': context_level, 'depth': depth, 'instance_id': instance_id})
     ligne = mark.fetchone()
     if ligne is None:
         return None
