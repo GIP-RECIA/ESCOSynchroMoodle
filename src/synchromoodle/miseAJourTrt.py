@@ -9,7 +9,6 @@ from synchromoodle.timestamp import TimestampStore
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
 from .utilsDB import *
-from .utilsFile import *
 from .config import EtablissementsConfig, Config
 from .ldaputils import Ldap
 

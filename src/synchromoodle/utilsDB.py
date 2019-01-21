@@ -704,7 +704,7 @@ def get_id_course_category_by_theme(mark, entete, theme):
 # cours.
 ###########################################################
 def get_id_course_module(mark, entete, course):
-    s = "SELECT id FROM {entete}course_modules WHERE course = %(course)d".format(entete=entete)
+    s = "SELECT id FROM {entete}course_modules WHERE course = %(course)s".format(entete=entete)
     mark.execute(s, params={'course': course})
     id_course_module = mark.fetchone()[0]
     return id_course_module
@@ -717,8 +717,8 @@ def get_id_course_module(mark, entete, course):
 def get_id_enrol(mark, entete, enrol_method, role_id, id_course):
     s = "SELECT e.id FROM {entete}enrol e" \
         " WHERE e.enrol = %(enrol_method)s" \
-        " AND e.courseid = %(id_course)d" \
-        " AND e.roleid = %(role_id)d".format(entete=entete)
+        " AND e.courseid = %(id_course)s" \
+        " AND e.roleid = %(role_id)s".format(entete=entete)
     mark.execute(s, params={'enrol_method': enrol_method, 'id_course': id_course, 'role_id': role_id})
     ligne = mark.fetchone()
     if ligne == None:
@@ -744,7 +744,7 @@ def get_id_enrol_max(mark, entete):
 # a moodle.
 ###########################################################
 def get_id_forum(mark, entete, course):
-    s = "SELECT id FROM {entete}forum WHERE course = %(course)d".format(entete=entete)
+    s = "SELECT id FROM {entete}forum WHERE course = %(course)s".format(entete=entete)
     mark.execute(s, params={'course': course})
     id_forum = mark.fetchone()[0]
     return id_forum
@@ -817,8 +817,9 @@ def get_id_role_by_shortname(mark, entete, short_name):
 # Fonction permettant de recuperer l'id d'un user enrolment
 ###########################################################
 def get_id_user_enrolment(mark, entete, id_enrol, id_user):
-    s = "SELECT id FROM {entete}user_enrolments " \
-        " WHERE userid = %(id_user)d AND enrolid = %(id_enrol)d".format(entete=entete)
+    s = "SELECT id" \
+        " FROM {entete}user_enrolments " \
+        " WHERE userid = %(id_user)s AND enrolid = %(id_enrol)s".format(entete=entete)
     mark.execute(s, params={'id_user': id_user, 'id_enrol': id_enrol})
     ligne = mark.fetchone()
     if ligne is None:
@@ -831,8 +832,9 @@ def get_id_user_enrolment(mark, entete, id_enrol, id_user):
 # l'id-user et l'id_field
 ###########################################################
 def get_id_user_info_data(mark, entete, id_user, id_field):
-    s = "SELECT id FROM {entete}user_info_data " \
-        + " WHERE userid = %(id_user)d AND fieldid = %(id_field)d".format(entete=entete)
+    s = "SELECT id" \
+        " FROM {entete}user_info_data " \
+        " WHERE userid = %(id_user)s AND fieldid = %(id_field)s".format(entete=entete)
     mark.execute(s, params={'id_user': id_user, 'id_field': id_field})
     ligne = mark.fetchone()
     if ligne is None:
@@ -845,7 +847,9 @@ def get_id_user_info_data(mark, entete, id_user, id_field):
 # son shortname.
 ###########################################################
 def get_id_user_info_field_by_shortname(mark, entete, short_name):
-    s = "SELECT id from {entete}user_info_field where shortname = %(short_name)s".format(entete=entete)
+    s = "SELECT id" \
+        " FROM {entete}user_info_field" \
+        " WHERE shortname = %(short_name)s".format(entete=entete)
     mark.execute(s, params={'short_name': short_name})
     ligne = mark.fetchone()
     if ligne is None:
@@ -869,7 +873,8 @@ def get_id_user_info_field_classe(mark, entete):
 def get_ids_and_summaries_not_allowed_roles(mark, entete, id_user, allowed_forums_shortnames):
     # Construction de la liste des shortnames
     ids_list, ids_list_params = array_to_safe_sql_list(allowed_forums_shortnames, 'ids_list')
-    s = "SELECT mra.id, mco.summary FROM {entete}course mco, {entete}role_assignments mra, {entete}context mc" \
+    s = "SELECT mra.id, mco.summary" \
+        " FROM {entete}course mco, {entete}role_assignments mra, {entete}context mc" \
         " WHERE mco.shortname LIKE 'ZONE-PRIVEE-%%'" \
         " AND mco.shortname NOT IN ({ids_list})" \
         " AND mco.id = mc.instanceid" \
@@ -896,11 +901,11 @@ def get_ids_and_themes_not_allowed_roles(mark, entete, id_user, allowed_themes):
     ids_list, ids_list_params = array_to_safe_sql_list(allowed_themes, 'ids_list')
     # Recuperation des roles sur les etablissements qui ne devraient plus exister 
     # (quand le prof n'est plus rattache aux etablissements) 
-    s = " SELECT mra.id, mcc.theme" \
+    s = "SELECT mra.id, mcc.theme" \
         " FROM {entete}course_categories mcc, {entete}context mc, {entete}role_assignments mra" \
         " WHERE mcc.theme NOT IN ({ids_list}) AND mcc.theme IS NOT NULL" \
         " AND mcc.id = mc.instanceid " \
-        " AND mc.contextlevel = %(NIVEAU_CTX_CATEGORIE)d AND mc.depth = %(PROFONDEUR_CTX_ETAB)d" \
+        " AND mc.contextlevel = %(NIVEAU_CTX_CATEGORIE)s AND mc.depth = %(PROFONDEUR_CTX_ETAB)s" \
         " AND mc.id = mra.contextid" \
         " AND mra.userid = %(id_user)s".format(entete=entete, ids_list=ids_list)
     mark.execute(s, params={**ids_list_params, 'NIVEAU_CTX_CATEGORIE': NIVEAU_CTX_CATEGORIE, 'PROFONDEUR_CTX_ETAB': PROFONDEUR_CTX_ETAB, 'id_user': id_user})
@@ -928,10 +933,11 @@ def get_timestamp_now(mark):
 # utilisateur moodle via son username.
 ###########################################################
 def get_user_id(mark, entete, username):
-    s = "SELECT id FROM {entete}user WHERE username = %(username)s".format(entete=entete)
+    s = "SELECT id FROM {entete}user " \
+        "WHERE username = %(username)s".format(entete=entete)
     mark.execute(s, params={'username': username.lower()})
     ligne = mark.fetchone()
-    if ligne == None:
+    if ligne is None:
         return None
     return ligne[0]
 
@@ -953,7 +959,7 @@ def get_users_ids(mark, entete, usernames):
 ###########################################################
 def insert_moodle_block(mark, entete, block_name, parent_context_id, show_in_subcontexts, page_type_pattern,
                         sub_page_pattern, default_region, default_weight):
-    s = "INSERT INTO {entete}block_instances( blockname, parentcontextid, showinsubcontexts, pagetypepattern, subpagepattern, defaultregion, defaultweight ) " \
+    s = "INSERT INTO {entete}block_instances ( blockname, parentcontextid, showinsubcontexts, pagetypepattern, subpagepattern, defaultregion, defaultweight ) " \
         " VALUES ( %(block_name)s, %(parent_context_id)s, %(show_in_subcontexts)s, %(page_type_pattern)s, %(sub_page_pattern)s, %(default_region)s, %(default_weight)s )".format(entete=entete)
     mark.execute(s, params={'block_name': block_name,
                             'parent_context_id': parent_context_id,
@@ -968,7 +974,8 @@ def insert_moodle_block(mark, entete, block_name, parent_context_id, show_in_sub
 # Fonction permettant d'inserer un contexte.
 ###########################################################
 def insert_moodle_context(mark, entete, context_level, depth, instance_id):
-    s = "INSERT INTO {entete}context( contextlevel, instanceid, depth ) VALUES ( %(context_level)d, %(instance_id)d,  %(depth)d )".format(entete=entete)
+    s = "INSERT INTO {entete}context ( contextlevel, instanceid, depth )" \
+        " VALUES ( %(context_level)s, %(instance_id)s,  %(depth)s )".format(entete=entete)
     mark.execute(s, params={'context_level': context_level, 'instance_id': instance_id, 'depth': depth})
 
 
@@ -995,7 +1002,7 @@ def insert_moodle_course(mark, entete, id_category, full_name, id_number, short_
 # Fonction permettant d'inserer une categorie.
 ###########################################################
 def insert_moodle_course_category(mark, entete, name, id_number, description, theme):
-    s = "INSERT INTO {entete}course_categories( name, idnumber, description, parent, sortorder, coursecount, visible, depth,theme )" \
+    s = "INSERT INTO {entete}course_categories ( name, idnumber, description, parent, sortorder, coursecount, visible, depth,theme )" \
         " VALUES( %(name)s, %(id_number)s, %(description)s, 0, 999,0, 1, 1, %(theme)s )".format(entete=entete)
     mark.execute(s, params={'name': name, 'id_number': id_number, 'description': description, 'theme': theme})
 
@@ -1004,7 +1011,8 @@ def insert_moodle_course_category(mark, entete, name, id_number, description, th
 # Fonction permettant d'inserer un module de cours.
 ###########################################################
 def insert_moodle_course_module(mark, entete, course, module, instance, added):
-    s = "INSERT INTO {entete}course_modules ( course, module, instance, added ) VALUES ( %(course)d , %(module)d, %(instance)d , %(added)d )".format(entete=entete)
+    s = "INSERT INTO {entete}course_modules ( course, module, instance, added )" \
+        " VALUES ( %(course)s , %(module)s, %(instance)s , %(added)s )".format(entete=entete)
     mark.execute(s, params={'course': course, 'module': module, 'instance': instance, 'added': added})
 
 
@@ -1013,7 +1021,8 @@ def insert_moodle_course_module(mark, entete, course, module, instance, added):
 # a un cours.
 ###########################################################
 def insert_moodle_enrol_capability(mark, entete, enrol, status, course_id, role_id):
-    s = "INSERT INTO {entete}enrol( enrol, status, courseid, roleid ) VALUES( %(enrol)s, %(status)s, %(course_id)s, %(role_id)s )".format(entete=entete)
+    s = "INSERT INTO {entete}enrol( enrol, status, courseid, roleid )" \
+        " VALUES( %(enrol)s, %(status)s, %(course_id)s, %(role_id)s )".format(entete=entete)
     mark.execute(s, params={'enrol': enrol, 'status': status, 'course_id': course_id, 'role_id': role_id})
 
 
@@ -1038,7 +1047,10 @@ def insert_moodle_forum(mark, entete, course, name, intro, intro_format, max_byt
 ###########################################################
 def is_moodle_local_admin(mark, entete, id_context_categorie, id_user):
     id_role_admin_local = get_id_role_admin_local(mark, entete)
-    sql = "SELECT id FROM {entete}role_assignments WHERE roleid = %(id_role_admin_local)d AND contextid = %(id_context_categorie)d AND userid = %(id_user)d".format(entete=entete)
+    sql = "SELECT id FROM {entete}role_assignments" \
+          " WHERE roleid = %(id_role_admin_local)s" \
+          " AND contextid = %(id_context_categorie)s" \
+          " AND userid = %(id_user)s".format(entete=entete)
     sql = sql % (id_role_admin_local, id_context_categorie, id_user)
     params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie, 'id_user': id_user}
     logging.info(sql % params)
@@ -1055,7 +1067,8 @@ def insert_moodle_local_admin(mark, entete, id_context_categorie, id_user):
     if is_moodle_local_admin(mark, entete, id_context_categorie, id_user):
         return False
     id_role_admin_local = get_id_role_admin_local(mark, entete)
-    s = "INSERT ignore INTO {entete}role_assignments( roleid, contextid, userid ) VALUES ( %(id_role_admin_local)d, %(id_context_categorie)d, %(id_user)d )".format(entete=entete)
+    s = "INSERT ignore INTO {entete}role_assignments( roleid, contextid, userid )" \
+        " VALUES ( %(id_role_admin_local)s, %(id_context_categorie)s, %(id_user)s )".format(entete=entete)
     params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie, 'id_user': id_user}
     logging.info(s % params)
     mark.execute(s, params=params)
@@ -1305,7 +1318,9 @@ def insert_zone_privee_context(mark, entete, id_zone_privee):
 def purge_cohorts(mark, entete, users_ids_by_cohorts_ids):
     for cohort_id, users_ids in users_ids_by_cohorts_ids.iteritems():
         ids_list, ids_list_params = array_to_safe_sql_list(users_ids, 'ids_list')
-        s = "DELETE FROM {entete}cohort_members WHERE cohortid = %(cohort_id)s AND userid NOT IN ( {ids_list} )".format(entete=entete, ids_list=ids_list)
+        s = "DELETE FROM {entete}cohort_members" \
+            " WHERE cohortid = %(cohort_id)s" \
+            " AND userid NOT IN ( {ids_list} )".format(entete=entete, ids_list=ids_list)
         mark.execute(s, params={'cohort_id': cohort_id, **ids_list_params})
 
 
@@ -1314,7 +1329,9 @@ def purge_cohorts(mark, entete, users_ids_by_cohorts_ids):
 # contexte.
 ###########################################################
 def update_context_path(mark, entete, id_context, new_path):
-    s = "UPDATE {entete}context SET path = %(new_path)s WHERE id = %(id_context)s".format(entete=entete)
+    s = "UPDATE {entete}context" \
+        " SET path = %(new_path)s" \
+        " WHERE id = %(id_context)s".format(entete=entete)
     mark.execute(s, params={'new_path': new_path, 'id_context': id_context})
 
 
@@ -1323,7 +1340,9 @@ def update_context_path(mark, entete, id_context, new_path):
 # d'une categorie.
 ###########################################################
 def update_course_category_description(mark, entete, id_category, new_description):
-    s = "UPDATE {entete}course_categories SET description = %(new_description)s WHERE id = %(id_category)s".format(entete=entete)
+    s = "UPDATE {entete}course_categories" \
+        " SET description = %(new_description)s" \
+        " WHERE id = %(id_category)s".format(entete=entete)
     mark.execute(s, params={'new_description': new_description, 'id_category': id_category})
 
 
@@ -1332,7 +1351,9 @@ def update_course_category_description(mark, entete, id_category, new_descriptio
 # d'une categorie.
 ###########################################################
 def update_course_category_name(mark, entete, id_category, new_name):
-    s = "UPDATE {entete}course_categories SET name = %(new_name)s WHERE id = %(id_category)s".format(entete=entete)
+    s = "UPDATE {entete}course_categories" \
+        " SET name = %(new_name)s" \
+        " WHERE id = %(id_category)s".format(entete=entete)
     mark.execute(s, params={'new_name': new_name, 'id_category': id_category})
 
 
