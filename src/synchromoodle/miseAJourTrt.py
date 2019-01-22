@@ -32,7 +32,7 @@ def estGrpEtab(rne: str, etablissements_config: EtablissementsConfig):
 #   - Supprimer les roles non autorises
 #   - ajouter les roles
 ######################################################################
-def mettre_a_jour_droits_enseignant(mark, entete, enseignant_infos, gereAdminLocal, id_enseignant, id_context_categorie,
+def mettre_a_jour_droits_enseignant(db, enseignant_infos, gereAdminLocal, id_enseignant, id_context_categorie,
                                     id_context_course_forum, uais_autorises):
     # Recuperation des themes autorises pour l'enseignant
     themes_autorises = [uai_autorise.lower() for uai_autorise in uais_autorises]
@@ -43,13 +43,12 @@ def mettre_a_jour_droits_enseignant(mark, entete, enseignant_infos, gereAdminLoc
     # ZONES PRIVEES
     #########################
     # Recuperation des ids des roles et les themes non autorises
-    ids_roles_non_autorises, ids_themes_non_autorises = get_ids_and_themes_not_allowed_roles(mark, entete,
-                                                                                             id_enseignant,
+    ids_roles_non_autorises, ids_themes_non_autorises = db.get_ids_and_themes_not_allowed_roles(id_enseignant,
                                                                                              themes_autorises)
 
     # Suppression des roles non autorises
     if ids_roles_non_autorises:
-        delete_roles(mark, entete, ids_roles_non_autorises)
+        db.delete_roles(ids_roles_non_autorises)
         logging.info("      |_ Suppression des rôles d'enseignant pour %s dans les établissements %s" % (
             enseignant_infos, str(ids_themes_non_autorises)))
         logging.info("         Les seuls établissements autorisés pour cet enseignant sont %s" % str(themes_autorises))
@@ -58,7 +57,7 @@ def mettre_a_jour_droits_enseignant(mark, entete, enseignant_infos, gereAdminLoc
     # FORUMS
     #########################
     # Recuperation des SIREN des etablissements dans lequel l'enseignant travaille
-    sirens = get_descriptions_course_categories_by_themes(mark, entete, themes_autorises)
+    sirens = db.get_descriptions_course_categories_by_themes(themes_autorises)
 
     # Shortname des forums associes
     # Modification RECIA pour erreur d'encodage : "UnicodeEncodeError: 'ascii' codec can't encode character u'\xe9' in position 41: ordinal not in range(128)"
@@ -67,13 +66,12 @@ def mettre_a_jour_droits_enseignant(mark, entete, enseignant_infos, gereAdminLoc
     shortnames_forums = [("ZONE-PRIVEE-%s" % str(siren.encode("utf-8"))) for siren in sirens]
 
     # Recuperation des roles sur les forums qui ne devraient plus exister
-    ids_roles_non_autorises, forums_summaries = get_ids_and_summaries_not_allowed_roles(mark, entete, id_enseignant,
-                                                                                        shortnames_forums)
+    ids_roles_non_autorises, forums_summaries = db.get_ids_and_summaries_not_allowed_roles(id_enseignant, shortnames_forums)
 
     # Suppression des roles non autorises
     if ids_roles_non_autorises:
         # Suppression des roles
-        delete_roles(mark, entete, ids_roles_non_autorises)
+        db.delete_roles(ids_roles_non_autorises)
         logging.info("      |_ Suppression des rôles d'enseignant pour %s sur les forum '%s' " % (
             enseignant_infos, str(forums_summaries)))
         logging.info("         Les seuls établissements autorisés pour cet enseignant sont '%s'" % themes_autorises)
@@ -90,7 +88,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         logging.info('============================================')
         logging.info('Synchronisation établissements : DEBUT')
 
-        connection, mark = connect_db(config.database)
+        db = Database(config.database)
 
         ldap = Ldap(config.ldap)
 
@@ -98,30 +96,29 @@ def miseAJour(config: Config, purge_cohortes: bool):
         map_etab_domaine = ldap.get_domaines_etabs()
 
         # Ids des categories inter etablissements
-        id_context_categorie_inter_etabs = get_id_context_inter_etabs(mark, config.database.entete)
+        id_context_categorie_inter_etabs = db.get_id_context_inter_etabs()
 
-        id_categorie_inter_cfa = get_id_categorie_inter_etabs(mark, config.database.entete,
-                                                              config.etablissements.inter_etab_categorie_name_cfa)
-        id_context_categorie_inter_cfa = get_id_context_categorie(mark, config.database.entete, id_categorie_inter_cfa)
+        id_categorie_inter_cfa = db.get_id_categorie_inter_etabs(config.etablissements.inter_etab_categorie_name_cfa)
+        id_context_categorie_inter_cfa = db.get_id_context_categorie(id_categorie_inter_cfa)
 
         # Recuperation des ids des roles admin local et extended teacher
-        id_role_admin_local = get_id_role_admin_local(mark, config.database.entete)
-        id_role_extended_teacher = get_id_role_extended_teacher(mark, config.database.entete)
+        id_role_admin_local = db.get_id_role_admin_local()
+        id_role_extended_teacher = db.get_id_role_extended_teacher()
 
         # Recuperation des ids du role d'utilisateur avancé
-        id_role_advanced_teacher = get_id_role_advanced_teacher(mark, config.database.entete)
+        id_role_advanced_teacher = db.get_id_role_advanced_teacher()
 
         # Recuperation du timestamp actuel
-        maintenant_sql = get_timestamp_now(mark)
+        maintenant_sql = db.get_timestamp_now()
 
         # Recuperation de l'id du user info field pour la classe
-        id_user_info_field_classe = get_id_user_info_field_classe(mark, config.database.entete)
+        id_user_info_field_classe = db.get_id_user_info_field_classe()
         if id_user_info_field_classe is None:
-            insert_moodle_user_info_field_classe(mark, config.database.entete)
-            id_user_info_field_classe = get_id_user_info_field_classe(mark, config.database.entete)
+            db.insert_moodle_user_info_field_classe()
+            id_user_info_field_classe = db.get_id_user_info_field_classe()
 
         # Recuperation de l'id du champ personnalisé Domaine
-        id_field_domaine = get_field_domaine(mark, config.database.entete)
+        id_field_domaine = db.get_field_domaine()
 
         ###################################################
         # On ne va traiter, dans la suite du programme, 
@@ -171,37 +168,33 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 etablissement_theme = ldap_structure.uai.lower()
 
                 # Creation de la structure si elle n'existe pas encore
-                id_etab_categorie = get_id_course_category_by_theme(mark, config.database.entete, etablissement_theme)
+                id_etab_categorie = db.get_id_course_category_by_theme(etablissement_theme)
                 if id_etab_categorie is None:
-                    insert_moodle_structure(mark, config.database.entete, etablissement_regroupe, ldap_structure.nom,
+                    db.insert_moodle_structure(etablissement_regroupe, ldap_structure.nom,
                                             etablissement_path,
                                             etablissement_ou, ldap_structure.siren, etablissement_theme)
-                    id_etab_categorie = get_id_course_category_by_id_number(mark, config.database.entete,
-                                                                            ldap_structure.siren)
+                    id_etab_categorie = db.get_id_course_category_by_id_number(ldap_structure.siren)
 
                 # Mise a jour de la description dans la cas d'un groupement d'etablissement
                 if etablissement_regroupe:
-                    description = get_description_course_category(mark, config.database.entete, id_etab_categorie)
+                    description = db.get_description_course_category(id_etab_categorie)
                     if description.find(ldap_structure.siren) == -1:
                         description = "%s$%s@%s" % (description, ldap_structure.siren, ldap_structure.nom)
-                        update_course_category_description(mark, config.database.entete, id_etab_categorie, description)
-                        update_course_category_name(mark, config.database.entete, id_etab_categorie, etablissement_ou)
+                        db.update_course_category_description(id_etab_categorie, description)
+                        db.update_course_category_name(id_etab_categorie, etablissement_ou)
 
                 # Recuperation de l'id du contexte correspondant à l'etablissement
-                id_context_categorie = get_id_context_categorie(mark, config.database.entete, id_etab_categorie)
-                id_zone_privee = get_id_course_by_id_number(mark, config.database.entete,
-                                                            "ZONE-PRIVEE-" + ldap_structure.siren)
+                id_context_categorie = db.get_id_context_categorie(id_etab_categorie)
+                id_zone_privee = db.get_id_course_by_id_number("ZONE-PRIVEE-" + ldap_structure.siren)
 
                 # Recreation de la zone privee si celle-ci n'existe plus
                 if id_zone_privee is None:
-                    id_zone_privee = insert_zone_privee(mark, config.database.entete, id_etab_categorie,
-                                                        ldap_structure.siren,
+                    id_zone_privee = db.insert_zone_privee(id_etab_categorie, ldap_structure.siren,
                                                         etablissement_ou, maintenant_sql)
 
-                id_context_course_forum = get_id_context(mark, config.database.entete, NIVEAU_CTX_COURS, 3,
-                                                         id_zone_privee)
+                id_context_course_forum = db.get_id_context(NIVEAU_CTX_COURS, 3, id_zone_privee)
                 if id_context_course_forum is None:
-                    id_context_course_forum = insert_zone_privee_context(mark, config.database.entete, id_zone_privee)
+                    id_context_course_forum = db.insert_zone_privee_context(id_zone_privee)
 
             ####################################
             # Mise a jour des eleves 
@@ -233,15 +226,15 @@ def miseAJour(config: Config, purge_cohortes: bool):
                     ldap_student.mail = config.constantes.default_mail
 
                 # Insertion de l'eleve
-                eleve_id = get_user_id(mark, config.database.entete, ldap_student.uid)
+                eleve_id = db.get_user_id(ldap_student.uid)
                 if not eleve_id:
-                    insert_moodle_user(mark, config.database.entete, ldap_student.uid, ldap_student.given_name,
+                    db.insert_moodle_user(ldap_student.uid, ldap_student.given_name,
                                        ldap_student.given_name, ldap_student.mail,
                                        mail_display,
                                        etablissement_theme)
-                    eleve_id = get_user_id(mark, config.database.entete, ldap_student.uid)
+                    eleve_id = db.get_user_id(ldap_student.uid)
                 else:
-                    update_moodle_user(mark, config.database.entete, eleve_id, ldap_student.given_name,
+                    db.update_moodle_user(eleve_id, ldap_student.given_name,
                                        ldap_student.given_name, ldap_student.mail,
                                        mail_display,
                                        etablissement_theme)
@@ -249,7 +242,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 # Ajout du role d'utilisateur avec droits limites
                 # Pour les eleves de college
                 if ldap_structure.type == config.constantes.type_structure_clg:
-                    add_role_to_user(mark, config.database.entete, config.constantes.id_role_utilisateur_limite,
+                    db.add_role_to_user(config.constantes.id_role_utilisateur_limite,
                                      config.constantes.id_instance_moodle,
                                      eleve_id)
                     logging.info(
@@ -259,24 +252,21 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 # Inscription dans les cohortes associees aux classes
                 eleve_cohorts = []
                 if ldap_student.classes:
-                    ids_classes_cohorts = create_classes_cohorts(mark, config.database.entete, id_context_categorie,
-                                                                 ldap_student.classes,
+                    ids_classes_cohorts = db.create_classes_cohorts(id_context_categorie, ldap_student.classes,
                                                                  maintenant_sql)
-                    enroll_user_in_cohorts(mark, config.database.entete, id_context_categorie, ids_classes_cohorts,
+                    db.enroll_user_in_cohorts(id_context_categorie, ids_classes_cohorts,
                                            eleve_id,
                                            eleve_infos, maintenant_sql)
                     eleve_cohorts.extend(ids_classes_cohorts)
 
                 # Inscription dans la cohorte associee au niveau de formation
                 if ldap_student.niveau_formation:
-                    id_formation_cohort = create_formation_cohort(mark, config.database.entete, id_context_categorie,
-                                                                  ldap_student.niveau_formation, maintenant_sql)
-                    enroll_user_in_cohort(mark, config.database.entete, id_formation_cohort, eleve_id, eleve_infos,
-                                          maintenant_sql)
+                    id_formation_cohort = db.create_formation_cohort(id_context_categorie, ldap_student.niveau_formation, maintenant_sql)
+                    db.enroll_user_in_cohort(id_formation_cohort, eleve_id, eleve_infos, maintenant_sql)
                     eleve_cohorts.append(id_formation_cohort)
 
                 # Desinscription des anciennes cohortes
-                disenroll_user_from_cohorts(mark, config.database.entete, eleve_cohorts, eleve_id)
+                db.disenroll_user_from_cohorts(eleve_cohorts, eleve_id)
 
                 # Mise a jour des dictionnaires concernant les cohortes
                 for cohort_id in eleve_cohorts:
@@ -288,15 +278,12 @@ def miseAJour(config: Config, purge_cohortes: bool):
                         eleves_by_cohortes[cohort_id] = [eleve_id]
 
                 # Mise a jour de la classe
-                id_user_info_data = get_id_user_info_data(mark, config.database.entete, eleve_id,
-                                                          id_user_info_field_classe)
+                id_user_info_data = db.get_id_user_info_data(eleve_id, id_user_info_field_classe)
                 if id_user_info_data is not None:
-                    update_user_info_data(mark, config.database.entete, eleve_id, id_user_info_field_classe,
-                                          ldap_student.classe)
+                    db.update_user_info_data(eleve_id, id_user_info_field_classe, ldap_student.classe)
                     logging.debug("Mise à jour user_info_data")
                 else:
-                    insert_moodle_user_info_data(mark, config.database.entete, eleve_id, id_user_info_field_classe,
-                                                 ldap_student.classe)
+                    db.insert_moodle_user_info_data(eleve_id, id_user_info_field_classe, ldap_student.classe)
                     logging.debug("Insertion user_info_data")
 
                 # Mise a jour du Domaine
@@ -307,12 +294,12 @@ def miseAJour(config: Config, purge_cohortes: bool):
                     if ldap_student.uai_courant and ldap_student.uai_courant in map_etab_domaine:
                         user_domain = map_etab_domaine[ldap_student.uai_courant][0]
                 logging.debug("Insertion du Domaine")
-                set_user_domain(mark, config.database.entete, eleve_id, id_field_domaine, user_domain)
+                db.set_user_domain(eleve_id, id_field_domaine, user_domain)
 
             # Purge des cohortes des eleves
             if purge_cohortes:
                 logging.info('    |_ Purge des cohortes des élèves')
-                purge_cohorts(mark, config.database.entete, eleves_by_cohortes)
+                db.purge_cohorts(eleves_by_cohortes)
 
             ####################################
             # Mise a jour des enseignants
@@ -338,26 +325,24 @@ def miseAJour(config: Config, purge_cohortes: bool):
                     mail_display = 0
 
                 # Insertion de l'enseignant
-                id_user = get_user_id(mark, config.database.entete, ldap_teacher.uid)
+                id_user = db.get_user_id(ldap_teacher.uid)
                 if not id_user:
-                    insert_moodle_user(mark, config.database.entete, ldap_teacher.uid, ldap_teacher.given_name,
-                                       ldap_teacher.sn, ldap_teacher.mail,
+                    db.insert_moodle_user(ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn, ldap_teacher.mail,
                                        mail_display, etablissement_theme)
-                    id_user = get_user_id(mark, config.database.entete, ldap_teacher.uid)
+                    id_user = db.get_user_id(ldap_teacher.uid)
                 else:
-                    update_moodle_user(mark, config.database.entete, id_user, ldap_teacher.given_name, ldap_teacher.sn,
-                                       ldap_teacher.mail, mail_display,
+                    db.update_moodle_user(id_user, ldap_teacher.given_name, ldap_teacher.sn, ldap_teacher.mail, mail_display,
                                        etablissement_theme)
 
                 # Mise ajour des droits sur les anciens etablissement
                 if ldap_teacher.uais is not None and not etablissement_regroupe:
                     # Recuperation des uais des etablissements dans lesquels l'enseignant est autorise
-                    mettre_a_jour_droits_enseignant(mark, config.database.entete, enseignant_infos, gereAdminLocal,
+                    mettre_a_jour_droits_enseignant(db, enseignant_infos, gereAdminLocal,
                                                     id_context_categorie, id_context_course_forum, id_user,
                                                     ldap_teacher.uais)
 
                 # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
-                add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
+                db.add_role_to_user(config.constantes.id_role_createur_cours,
                                  id_context_categorie_inter_etabs,
                                  id_user)
                 logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
@@ -365,28 +350,25 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 # Si l'enseignant fait partie d'un CFA
                 # Ajout du role createur de cours au niveau de la categorie inter-cfa
                 if ldap_structure.type == config.constantes.type_structure_cfa:
-                    add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
+                    db.add_role_to_user(config.constantes.id_role_createur_cours,
                                      id_context_categorie_inter_cfa, id_user)
                     logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-cfa")
 
                 # ajout du role de createur de cours dans l'etablissement
-                add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
-                                 id_context_categorie, id_user)
+                db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_categorie, id_user)
 
                 # Ajouts des autres roles pour le personnel établissement
                 if 'National_3' in ldap_teacher.profils or 'National_5' in ldap_teacher.profils or 'National_6' in ldap_teacher.profils or 'National_4' in ldap_teacher.profils:
                     # Ajout des roles sur le contexte forum
-                    add_role_to_user(mark, config.database.entete, ID_ROLE_ELEVE, id_context_course_forum, id_user)
+                    db.add_role_to_user(ID_ROLE_ELEVE, id_context_course_forum, id_user)
                     # Inscription à la Zone Privée
-                    enroll_user_in_course(mark, config.database.entete, ID_ROLE_ELEVE, id_zone_privee, id_user)
+                    db.enroll_user_in_course(ID_ROLE_ELEVE, id_zone_privee, id_user)
 
                     if 'National_3' in ldap_teacher.profils or 'National_5' in ldap_teacher.profils or 'National_6' in ldap_teacher.profils:
                         if not gereAdminLocal:
-                            add_role_to_user(mark, config.database.entete, id_role_extended_teacher,
-                                             id_context_categorie, id_user)
+                            db.add_role_to_user(id_role_extended_teacher, id_context_categorie, id_user)
                     elif 'National_4' in ldap_teacher.profils:
-                        add_role_to_user(mark, config.database.entete, config.constantes.id_role_directeur,
-                                         id_context_categorie, id_user)
+                        db.add_role_to_user(config.constantes.id_role_directeur, id_context_categorie, id_user)
 
                 # Ajout des droits d'administration locale pour l'etablissement
                 if gereAdminLocal:
@@ -394,19 +376,16 @@ def miseAJour(config: Config, purge_cohortes: bool):
                         # L'enseignant est il administrateur Moodle ?
                         adminMoodle = re.match(regexpAdminMoodle, member, flags=re.IGNORECASE)
                         if adminMoodle:
-                            insert = insert_moodle_local_admin(mark, config.database.entete, id_context_categorie,
-                                                               id_user)
+                            insert = db.insert_moodle_local_admin(id_context_categorie, id_user)
                             if insert:
                                 logging.info("      |_ Insertion d'un admin  local %s %s %s" % (
                                     ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn))
                             # Si il est adminin local on en fait un utilisateur avancé par default
-                            if not is_enseignant_avance(mark, config.database.entete, id_user,
-                                                        id_role_advanced_teacher):
-                                add_role_to_user(mark, config.database.entete, id_role_advanced_teacher, 1, id_user)
+                            if not db.is_enseignant_avance(id_user, id_role_advanced_teacher):
+                                db.add_role_to_user(id_role_advanced_teacher, 1, id_user)
                             break
                         else:
-                            delete = delete_moodle_local_admin(mark, config.database.entete,
-                                                               id_context_categorie_inter_etabs, id_user)
+                            delete = db.delete_moodle_local_admin(id_context_categorie_inter_etabs, id_user)
                             if delete:
                                 logging.info("      |_ Suppression d'un admin local %s %s %s" % (
                                     ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn))
@@ -419,17 +398,15 @@ def miseAJour(config: Config, purge_cohortes: bool):
                     if ldap_teacher.uai_courant and ldap_teacher.uai_courant in map_etab_domaine:
                         user_domain = map_etab_domaine[ldap_teacher.uai_courant][0]
                 logging.debug("Insertion du Domaine")
-                set_user_domain(mark, config.database.entete, id_user, id_field_domaine, user_domain)
+                db.set_user_domain(id_user, id_field_domaine, user_domain)
         if purge_cohortes:
             # Si la purge des cohortes a ete demandee
             # On recupere tous les eleves sans prendre en compte le timestamp
             time_stamp = None
         # CREATION DES COHORTES DE PROFS
-        create_profs_etabs_cohorts(mark, config.database.entete, id_context_categorie, uai,
-                                   maintenant_sql, time_stamp,
-                                   ldap)
+        db.create_profs_etabs_cohorts(id_context_categorie, uai,maintenant_sql, time_stamp, ldap)
 
-        connection.commit()
+        db.connection.commit()
 
         timestamp_store.mark(uai)
         timestamp_store.write()
@@ -441,7 +418,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         # logging.exception("Something went bad during the connection:\n", err)
         sys.exit(2)
 
-    connection.close()
+    db.disconnect()
 
 
 def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
@@ -457,7 +434,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
     try:
         logging.info("  |_ Traitement de l'inter-établissements")
 
-        connection, mark = connect_db(config.database)
+        db = Database(config.database)
 
         ###################################################
         # Connexion a la BD Moodle et recuperation 
@@ -465,7 +442,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         ###################################################
 
         # Recuperation du timestamp actuel
-        maintenant_sql = get_timestamp_now(mark)
+        maintenant_sql = db.get_timestamp_now()
 
         ###################################################
         # Connexion au LDAP
@@ -484,10 +461,8 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
 
         list_moodle_not_admin = []
 
-        id_categorie_inter_etabs = get_id_categorie_inter_etabs(mark, config.database.entete,
-                                                                config.inter_etablissements.categorie_name)
-        id_context_categorie_inter_etabs = get_id_context_categorie(mark, config.database.entete,
-                                                                    id_categorie_inter_etabs)
+        id_categorie_inter_etabs = db.get_id_categorie_inter_etabs(config.inter_etablissements.categorie_name)
+        id_context_categorie_inter_etabs = db.get_id_context_categorie(id_categorie_inter_etabs)
 
         people_filter = {config.users.ldap_attribut_user: config.users.ldap_valeur_attribut_user}
 
@@ -497,38 +472,30 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
                 ldap_people.mail = config.constantes.default_mail
 
             # Creation de l'utilisateur
-            id_user = get_user_id(mark, config.database.entete, ldap_people.uid)
+            id_user = db.get_user_id(ldap_people.uid)
             if not id_user:
-                insert_moodle_user(mark, config.database.entete, ldap_people.uid, ldap_people.given_name,
-                                   ldap_people.sn, ldap_people.mail,
+                db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
                                    config.constantes.default_mail_display, config.constantes.default_moodle_theme)
-                id_user = get_user_id(mark, config.database.entete, ldap_people.uid)
+                id_user = db.get_user_id(ldap_people.uid)
             else:
-                update_moodle_user(mark, config.database.entete, id_user, ldap_people.given_name, ldap_people.sn,
-                                   ldap_people.mail,
+                db.update_moodle_user(id_user, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
                                    config.constantes.default_mail_display, config.constantes.default_moodle_theme)
 
             # Ajout du role de createur de cours 
-            add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
-                             id_context_categorie_inter_etabs,
-                             id_user)
+            db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_categorie_inter_etabs, id_user)
 
             # Attribution du role admin local si necessaire
             for member in ldap_people.is_member_of:
                 admin = re.match(config.users.ldap_valeur_attribut_admin, member, flags=re.IGNORECASE)
                 if admin:
-                    insert = insert_moodle_local_admin(mark, config.database.entete,
-                                                       id_context_categorie_inter_etabs,
-                                                       id_user)
+                    insert = db.insert_moodle_local_admin(id_context_categorie_inter_etabs, id_user)
                     if insert:
                         logging.info(
                             "      |_ Insertion d'un admin local %s %s %s" % (
                                 ldap_people.uid, ldap_people.given_name, ldap_people.sn))
                     break
                 else:
-                    delete = delete_moodle_local_admin(mark, config.database.entete,
-                                                       id_context_categorie_inter_etabs,
-                                                       id_user)
+                    delete = db.delete_moodle_local_admin(id_context_categorie_inter_etabs, id_user)
                     if delete:
                         logging.info("      |_ Suppression d'un admin local %s %s %s" % (
                             ldap_people.uid, ldap_people.given_name, ldap_people.sn))
@@ -550,12 +517,8 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         # Mise a jour de chaque cohorte declaree
         for is_member_of, cohort_name in config.inter_etablissements.cohorts.items():
             # Creation de la cohort si necessaire
-            create_cohort(mark, config.database.entete, id_context_categorie_inter_etabs,
-                          cohort_name, cohort_name,
-                          cohort_name,
-                          maintenant_sql)
-            id_cohort = get_id_cohort(mark, config.database.entete,
-                                      id_context_categorie_inter_etabs, cohort_name)
+            db.create_cohort(id_context_categorie_inter_etabs, cohort_name, cohort_name, cohort_name, maintenant_sql)
+            id_cohort = db.get_id_cohort(id_context_categorie_inter_etabs, cohort_name)
 
             # Liste permettant de sauvegarder les utilisateurs de la cohorte
             utilisateurs_by_cohortes[id_cohort] = []
@@ -567,10 +530,9 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
             for ldap_people in ldap.search_people(since_timestamp=time_stamp, isMemberOf=is_member_of_list):
                 people_infos = "%s %s %s" % (ldap_people.uid, ldap_people.given_name, ldap_people.sn)
 
-                people_id = get_user_id(mark, config.database.entete, ldap_people.uid)
+                people_id = db.get_user_id(ldap_people.uid)
                 if people_id:
-                    enroll_user_in_cohort(mark, config.database.entete, id_cohort, people_id, people_infos,
-                                          maintenant_sql)
+                    db.enroll_user_in_cohort(id_cohort, people_id, people_infos, maintenant_sql)
                     # Mise a jour des utilisateurs de la cohorte
                     utilisateurs_by_cohortes[id_cohort].append(people_id)
                 else:
@@ -581,9 +543,10 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         # Purge des cohortes des eleves
         if purge_cohortes:
             logging.info('    |_ Purge des cohortes de la catégorie inter-établissements')
-            purge_cohorts(mark, config.database.entete, utilisateurs_by_cohortes)
+            db.purge_cohorts(utilisateurs_by_cohortes)
 
-        connection.commit()
+        db.connection.commit()
+        db.disconnect()
 
         # Mise a jour de la date de dernier traitement
         timestamp_store.mark(config.inter_etablissements.cle_timestamp)
@@ -614,7 +577,7 @@ def miseAJourInspecteurs(config: Config):
         # Connexion a la BD Moodle et recuperation 
         # d'informations
         ###################################################
-        connection, mark = connect_db(config.database)
+        db = Database(config.database)
 
         ###################################################
         # Connexion au LDAP
@@ -627,7 +590,7 @@ def miseAJourInspecteurs(config: Config):
         logging.info('    |_ Mise à jour des inspecteurs')
 
         # Recuperation de l'id du champ personnalisé Domaine
-        id_field_domaine = get_field_domaine(mark, config.database.entete)
+        id_field_domaine = db.get_field_domaine()
 
         # Récupération de la liste UAI-Domaine des établissements
         map_etab_domaine = ldap.get_domaines_etabs()
@@ -636,7 +599,7 @@ def miseAJourInspecteurs(config: Config):
         time_stamp = None
 
         # Recuperation de l'id du contexte correspondant à la categorie inter_etabs
-        id_context_categorie_inter_etabs = get_id_context_inter_etabs(mark, config.database.entete)
+        id_context_categorie_inter_etabs = db.get_id_context_inter_etabs()
 
         people_filter = {config.users.ldap_attribut_user: config.users.ldap_valeur_attribut_user}
 
@@ -646,23 +609,19 @@ def miseAJourInspecteurs(config: Config):
                 ldap_people.mail = config.constantes.default_mail
 
             # Creation de l'utilisateur
-            insert_moodle_user(mark, config.database.entete, ldap_people.uid, ldap_people.given_name, ldap_people.sn,
-                               ldap_people.mail,
+            db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
                                config.constantes.default_mail_display, config.constantes.default_moodle_theme)
-            id_user = get_user_id(mark, config.database.entete, ldap_people.uid)
+            id_user = db.get_user_id(ldap_people.uid)
             if not id_user:
-                insert_moodle_user(mark, config.database.entete, ldap_people.uid, ldap_people.given_name,
-                                   ldap_people.sn, ldap_people.mail,
+                db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
                                    config.constantes.default_mail_display, config.constantes.default_moodle_theme)
-                id_user = get_user_id(mark, config.database.entete, ldap_people.uid)
+                id_user = db.get_user_id(ldap_people.uid)
             else:
-                update_moodle_user(mark, config.database.entete, id_user, ldap_people.given_name, ldap_people.sn,
-                                   ldap_people.mail,
+                db.update_moodle_user(id_user, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
                                    config.constantes.default_mail_display, config.constantes.default_moodle_theme)
 
             # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
-            add_role_to_user(mark, config.database.entete, config.constantes.id_role_createur_cours,
-                             id_context_categorie_inter_etabs, id_user)
+            db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_categorie_inter_etabs, id_user)
             logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
 
             # if 'ESCOUAICourant' in ldap_entry_infos:
@@ -689,9 +648,9 @@ def miseAJourInspecteurs(config: Config):
                 if ldap_people.uai_courant and ldap_people.uai_courant in map_etab_domaine:
                     user_domain = map_etab_domaine[ldap_people.uai_courant][0]
             logging.debug("Insertion du Domaine")
-            set_user_domain(mark, config.database.entete, id_user, id_field_domaine, user_domain)
+            db.set_user_domain(id_user, id_field_domaine, user_domain)
 
-        connection.commit()
+        db.connection.commit()
 
         logging.info('Synchronisation des inspecteurs : FIN')
         logging.info('============================================')
@@ -701,7 +660,7 @@ def miseAJourInspecteurs(config: Config):
         # logging.exception("Something went bad during the connection:\n", err)
         sys.exit(2)
 
-    connection.close()
+    db.disconnect()
 
 
 ######################################################################
@@ -751,7 +710,7 @@ def miseAJourMahara(config: Config, purge):
         # Connexion a la BD Moodle et recuperation 
         # d'informations
         ###################################################
-        connection, mark = connect_db(config.database)
+        db = Database(config.database)
 
         ###################################################
         # Connexion au LDAP
@@ -771,7 +730,7 @@ def miseAJourMahara(config: Config, purge):
             # On ignore le time stamp afin de traiter tous les utilisateurs
             time_stamp = None
             # On enleve les roles aux utilisateurs de Mahara
-            delete_all_mahara_roles(mark, config.database.entete)
+            db.delete_all_mahara_roles()
 
         ###################################################
         # Mise a jour des utilisateurs
@@ -786,7 +745,7 @@ def miseAJourMahara(config: Config, purge):
             people_infos = "%s %s %s" % (ldap_people.uid, ldap_people.given_name, ldap_people.sn)
 
             # Recuperation de l'utilisateur en bd
-            people_id = get_user_id(mark, config.database.entete, ldap_people.uid)
+            people_id = db.get_user_id(ldap_people.uid)
 
             # Si l'utilisateur n'est pas present dans Moodle
             if not people_id:
@@ -799,9 +758,9 @@ def miseAJourMahara(config: Config, purge):
             message = "      |_ Ajout du droit utilisateur de Mahara a %s"
             message = message % people_infos
             logging.info(message)
-            add_role_mahara_to_user(mark, config.database.entete, people_id)
+            db.add_role_mahara_to_user(people_id)
 
-        connection.commit()
+        db.connection.commit()
 
         # Mise a jour de la date de dernier traitement
         timestamp_store.mark(config.mahara.cle_timestamp)
@@ -815,4 +774,4 @@ def miseAJourMahara(config: Config, purge):
         logging.exception("Something went bad during the connection:\n", err)
         sys.exit(2)
 
-    connection.close()
+    db.disconnect()
