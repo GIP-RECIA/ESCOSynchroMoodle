@@ -34,8 +34,20 @@ class ConstantesConfig(_BaseConfig):
     id_instance_moodle = 1  # type: int
     """Id de l'instance concernant Moodle"""
 
+    niveau_ctx_categorie = 40  # type: int
+    """Niveau de contexte pour une categorie"""
+
     niveau_ctx_cours = 50  # type: int
     """Niveau de contexte pour un cours"""
+
+    niveau_ctx_forum = 70  # type: int
+    """Niveau de contexte pour un forum"""
+
+    niveau_ctx_bloc = 80  # type: int
+    """Niveau de contexte pour un bloc"""
+
+    id_role_admin = 1  # type: int
+    """Id pour le role admin"""
 
     id_role_createur_cours = 2  # type: int
     """Id pour le role createur de cours"""
@@ -48,6 +60,9 @@ class ConstantesConfig(_BaseConfig):
 
     id_role_inspecteur = 9  # type: int
     """Id pour le role inspecteur"""
+
+    id_role_mahara = 16  # type: int
+    """Id pour le role utilisateur Mahara"""
 
     id_role_directeur = 18  # type: int
     """Id pour le role directeur"""

@@ -89,7 +89,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         logging.info('============================================')
         logging.info('Synchronisation établissements : DEBUT')
 
-        db = Database(config.database)
+        db = Database(config.database, config.constantes)
 
         ldap = Ldap(config.ldap)
 
@@ -193,7 +193,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
                     id_zone_privee = db.insert_zone_privee(id_etab_categorie, ldap_structure.siren,
                                                            etablissement_ou, maintenant_sql)
 
-                id_context_course_forum = db.get_id_context(NIVEAU_CTX_COURS, 3, id_zone_privee)
+                id_context_course_forum = db.get_id_context(config.constantes.niveau_ctx_cours, 3, id_zone_privee)
                 if id_context_course_forum is None:
                     id_context_course_forum = db.insert_zone_privee_context(id_zone_privee)
 
@@ -363,9 +363,9 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 # Ajouts des autres roles pour le personnel établissement
                 if 'National_3' in ldap_teacher.profils or 'National_5' in ldap_teacher.profils or 'National_6' in ldap_teacher.profils or 'National_4' in ldap_teacher.profils:
                     # Ajout des roles sur le contexte forum
-                    db.add_role_to_user(ID_ROLE_ELEVE, id_context_course_forum, id_user)
+                    db.add_role_to_user(config.constantes.id_role_eleve, id_context_course_forum, id_user)
                     # Inscription à la Zone Privée
-                    db.enroll_user_in_course(ID_ROLE_ELEVE, id_zone_privee, id_user)
+                    db.enroll_user_in_course(config.constantes.id_role_eleve, id_zone_privee, id_user)
 
                     if 'National_3' in ldap_teacher.profils or 'National_5' in ldap_teacher.profils or 'National_6' in ldap_teacher.profils:
                         if not gereAdminLocal:
@@ -437,7 +437,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
     try:
         logging.info("  |_ Traitement de l'inter-établissements")
 
-        db = Database(config.database)
+        db = Database(config.database, config.constantes)
 
         ###################################################
         # Connexion a la BD Moodle et recuperation 
@@ -580,7 +580,7 @@ def miseAJourInspecteurs(config: Config):
         # Connexion a la BD Moodle et recuperation 
         # d'informations
         ###################################################
-        db = Database(config.database)
+        db = Database(config.database, config.constantes)
 
         ###################################################
         # Connexion au LDAP
@@ -713,7 +713,7 @@ def miseAJourMahara(config: Config, purge):
         # Connexion a la BD Moodle et recuperation 
         # d'informations
         ###################################################
-        db = Database(config.database)
+        db = Database(config.database, config.constantes)
 
         ###################################################
         # Connexion au LDAP

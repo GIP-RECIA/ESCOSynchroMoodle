@@ -10,7 +10,7 @@ import mysql.connector
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
 
-from .config import DatabaseConfig
+from .config import DatabaseConfig, ConstantesConfig
 from .ldaputils import Ldap
 
 ###############################################################################
@@ -23,7 +23,6 @@ from .ldaputils import Ldap
 # Nom et description des cohortes crees pour les classes
 COHORT_NAME_FOR_CLASS = 'Élèves de la Classe %s'
 COHORT_DESC_FOR_CLASS = 'Élèves de la classe %s'
-COHORT_ID_NUMBER_FOR_CLASS = "Classe %s"
 
 # Nom et description des cohortes crees pour les niveaux de formation
 COHORT_NAME_FOR_FORMATION = 'Élèves du Niveau de formation %s'
@@ -58,21 +57,6 @@ BLOCK_FORUM_SEARCH_SUB_PAGE_PATTERN = ""
 #######################################
 # Id du contexte systeme
 ID_CONTEXT_SYSTEM = 1
-
-# Id de l'instance concernant Moodle
-ID_INSTANCE_INTER_ETABS = 1
-
-# Niveau de contexte pour une categorie
-NIVEAU_CTX_CATEGORIE = 40
-
-# Niveau de contexte pour un cours
-NIVEAU_CTX_COURS = 50
-
-# Niveau de contexte pour un forum
-NIVEAU_CTX_FORUM = 70
-
-# Niveau de contexte pour un bloc
-NIVEAU_CTX_BLOC = 80
 
 # Profondeur pour le contexte etablissement
 PROFONDEUR_CTX_ETAB = 2
@@ -144,21 +128,6 @@ FORUM_MAX_BYTES_ZONE_PRIVEE = 512000
 # Enrol method => manual enrolment
 ENROL_METHOD_MANUAL = "manual"
 
-# Id pour le role administrateur
-ID_ROLE_ADMIN = 1
-
-# Id pour le role enseignant
-ID_ROLE_ENSEIGNANT = 3
-
-# Id pour le role eleve
-ID_ROLE_ELEVE = 5
-
-# Id pour le role inspecteur
-ID_ROLE_INSPECTEUR = 9
-
-# Id pour le role utilisateur Mahara
-ID_ROLE_MAHARA = 16
-
 # Shortname du role admin local
 SHORTNAME_ADMIN_LOCAL = "adminlocal"
 
@@ -215,14 +184,35 @@ USER_LANG = "fr"
 USER_MNET_HOST_ID = 3
 
 
+def array_to_safe_sql_list(elements, name=None):
+    """
+    :param elements:
+    :param name:
+    :return:
+    """
+    if name:
+        format_strings = []
+        params = {}
+        for i, element in enumerate(elements):
+            format_strings.append('%({name}_{i})s'.format(name=name, i=i))
+            params['{name}_{i}'.format(name=name, i=i)] = element
+        return ','.join(format_strings), params
+    else:
+        format_strings = ['%s'] * len(elements)
+        params = tuple(elements)
+        return ','.join(format_strings), params
+
+
 class Database:
     config = None  # type: DatabaseConfig
+    constantes = None  # type: ConstantesConfig
     connection = None  # type: MySQLConnection
     mark = None  # type: MySQLCursor
     entete = None  # type: str
 
-    def __init__(self, config: DatabaseConfig):
+    def __init__(self, config: DatabaseConfig, constantes: ConstantesConfig):
         self.config = config
+        self.constantes = constantes
         self.entete = config.entete
         self.__connect()
 
@@ -251,24 +241,6 @@ class Database:
         self.mark.close()
         self.connection.close()
 
-    def array_to_safe_sql_list(self, elements, name=None):
-        """
-        :param elements:
-        :param name:
-        :return:
-        """
-        if name:
-            format_strings = []
-            params = {}
-            for i, element in enumerate(elements):
-                format_strings.append('%({name}_{i})s'.format(name=name, i=i))
-                params['{name}_{i}'.format(name=name, i=i)] = element
-            return ','.join(format_strings), params
-        else:
-            format_strings = ['%s'] * len(elements)
-            params = tuple(elements)
-            return ','.join(format_strings), params
-
     def add_role_mahara_to_user(self, id_user):
         """
         Fonction permettant d'ajouter un role a un utilisateur
@@ -276,7 +248,7 @@ class Database:
         :param id_user: int
         :return:
         """
-        self.add_role_to_user(ID_ROLE_MAHARA, ID_CONTEXT_SYSTEM, id_user)
+        self.add_role_to_user(self.constantes.id_role_mahara, ID_CONTEXT_SYSTEM, id_user)
 
     def add_role_to_user(self, role_id, id_context, id_user):
         """
@@ -495,7 +467,7 @@ class Database:
         :param list_profs:
         :return:
         """
-        ids_list, ids_list_params = self.array_to_safe_sql_list(list_profs, 'ids_list')
+        ids_list, ids_list_params = array_to_safe_sql_list(list_profs, 'ids_list')
         s = "DELETE FROM {entete}cohort_members" \
             " WHERE cohortid = %(id_cohort)s" \
             " AND userid NOT IN ({ids_list})" \
@@ -526,7 +498,8 @@ class Database:
             " WHERE roleid = %(ID_ROLE_MAHARA)s" \
             " AND contextid = %(ID_CONTEXT_SYSTEM)s" \
             .format(entete=self.entete)
-        self.mark.execute(s, params={'ID_ROLE_MAHARA': ID_ROLE_MAHARA, 'ID_CONTEXT_SYSTEM': ID_CONTEXT_SYSTEM})
+        self.mark.execute(s, params={'ID_ROLE_MAHARA': self.constantes.id_role_mahara,
+                                     'ID_CONTEXT_SYSTEM': ID_CONTEXT_SYSTEM})
 
     def delete_moodle_local_admins(self, id_context_categorie, ids_not_admin):
         """
@@ -539,7 +512,7 @@ class Database:
         if len(ids_not_admin) == 0:
             return
         # Construction de la liste des ids admins a conserver
-        ids_list, ids_list_params = self.array_to_safe_sql_list(ids_not_admin, 'ids_list')
+        ids_list, ids_list_params = array_to_safe_sql_list(ids_not_admin, 'ids_list')
         # Recuperation de l'id pour le role d'admin local
         id_role_admin_local = self.get_id_role_admin_local()
         # Suppression des admins non presents dans la liste
@@ -631,7 +604,7 @@ class Database:
                 self.mark.execute(s, params={'id_user_enrolment': id_user_enrolment})
 
         # Suppression des roles dans les contextes
-        ids_list, ids_list_params = self.array_to_safe_sql_list(ids_contexts_by_courses.values(), 'ids_list')
+        ids_list, ids_list_params = array_to_safe_sql_list(ids_contexts_by_courses.values(), 'ids_list')
         s = "DELETE FROM {entete}role_assignments" \
             " WHERE roleid = %(role_id)s" \
             " AND contextid IN ({ids_list})" \
@@ -684,7 +657,7 @@ class Database:
         :return:
         """
         # Construction de la liste des ids des roles concernes
-        ids_list, ids_list_params = self.array_to_safe_sql_list(ids_roles, 'ids_list')
+        ids_list, ids_list_params = array_to_safe_sql_list(ids_roles, 'ids_list')
         s = "DELETE FROM {entete}role_assignments" \
             " WHERE id IN ({ids_list})" \
             .format(entete=self.entete, ids_list=ids_list)
@@ -701,7 +674,7 @@ class Database:
         :return:
         """
         # Construction de la liste des ids des cohortes concernes
-        ids_list, ids_list_params = self.array_to_safe_sql_list(ids_cohorts_to_keep, 'ids_list')
+        ids_list, ids_list_params = array_to_safe_sql_list(ids_cohorts_to_keep, 'ids_list')
         s = "DELETE FROM {entete}cohort_members" \
             " WHERE userid = %(id_user)s" \
             " AND cohortid NOT IN ({ids_list})" \
@@ -771,7 +744,7 @@ class Database:
         :param themes:
         :return:
         """
-        ids_list, ids_list_params = self.array_to_safe_sql_list(themes, 'ids_list')
+        ids_list, ids_list_params = array_to_safe_sql_list(themes, 'ids_list')
         s = "SELECT description" \
             " FROM {entete}course_categories" \
             " WHERE theme IN ({ids_list})" \
@@ -859,7 +832,7 @@ class Database:
         :param id_etab_categorie:
         :return:
         """
-        return self.get_id_context(NIVEAU_CTX_CATEGORIE, 2, id_etab_categorie)
+        return self.get_id_context(self.constantes.niveau_ctx_categorie, 2, id_etab_categorie)
 
     def get_id_context_inter_etabs(self):
         """
@@ -872,7 +845,8 @@ class Database:
             " WHERE contextlevel = %(context_level)s" \
             " AND instanceid = %(instanceid)s" \
             .format(entete=self.entete)
-        self.mark.execute(s, params={'context_level': NIVEAU_CTX_CATEGORIE, 'instanceid': ID_INSTANCE_INTER_ETABS})
+        self.mark.execute(s, params={'context_level': self.constantes.niveau_ctx_categorie,
+                                     'instanceid': self.constantes.id_instance_moodle})
         id_context_moodle = self.mark.fetchone()[0]
         return id_context_moodle
 
@@ -1033,7 +1007,7 @@ class Database:
         :return:
         """
         # Construction de la liste des shortnames
-        ids_list, ids_list_params = self.array_to_safe_sql_list(allowed_forums_shortnames, 'ids_list')
+        ids_list, ids_list_params = array_to_safe_sql_list(allowed_forums_shortnames, 'ids_list')
         s = "SELECT mra.id, mco.summary" \
             " FROM {entete}course mco, {entete}role_assignments mra, {entete}context mc" \
             " WHERE mco.shortname LIKE 'ZONE-PRIVEE-%%'" \
@@ -1061,7 +1035,7 @@ class Database:
         :return:
         """
         # Construction de la liste des themes
-        ids_list, ids_list_params = self.array_to_safe_sql_list(allowed_themes, 'ids_list')
+        ids_list, ids_list_params = array_to_safe_sql_list(allowed_themes, 'ids_list')
         # Recuperation des roles sur les etablissements qui ne devraient plus exister
         # (quand le prof n'est plus rattache aux etablissements)
         s = "SELECT mra.id, mcc.theme" \
@@ -1073,7 +1047,7 @@ class Database:
             " AND mc.id = mra.contextid" \
             " AND mra.userid = %(id_user)s" \
             .format(entete=self.entete, ids_list=ids_list)
-        self.mark.execute(s, params={**ids_list_params, 'NIVEAU_CTX_CATEGORIE': NIVEAU_CTX_CATEGORIE,
+        self.mark.execute(s, params={**ids_list_params, 'NIVEAU_CTX_CATEGORIE': self.constantes.niveau_ctx_categorie,
                                      'PROFONDEUR_CTX_ETAB': PROFONDEUR_CTX_ETAB, 'id_user': id_user})
         result_set = self.mark.fetchall()
         if not result_set:
@@ -1323,8 +1297,11 @@ class Database:
         # PARTIE CONTEXTE
         #########################
         # Insertion du contexte associe a la categorie de l'etablissement
-        self.insert_moodle_context(NIVEAU_CTX_CATEGORIE, PROFONDEUR_CTX_ETAB, id_categorie_etablissement)
-        id_contexte_etablissement = self.get_id_context(NIVEAU_CTX_CATEGORIE, PROFONDEUR_CTX_ETAB,
+        self.insert_moodle_context(self.constantes.niveau_ctx_categorie,
+                                   PROFONDEUR_CTX_ETAB,
+                                   id_categorie_etablissement)
+        id_contexte_etablissement = self.get_id_context(self.constantes.niveau_ctx_categorie,
+                                                        PROFONDEUR_CTX_ETAB,
                                                         id_categorie_etablissement)
 
         # Mise a jour du path de la categorie
@@ -1350,7 +1327,7 @@ class Database:
         # Ouverture du cours a l'inscription manuelle
         enrol = COURSE_ENROL_MANUAL
         status = COURSE_ENROL_ENROL
-        role_id = ID_ROLE_ELEVE
+        role_id = self.constantes.id_role_eleve
         self.insert_moodle_enrol_capability(enrol, status, id_zone_privee, role_id)
 
         #########################
@@ -1381,8 +1358,11 @@ class Database:
         id_course_module = self.get_id_course_module(course)
 
         # Insertion du contexte pour le module de cours (forum)
-        self.insert_moodle_context(NIVEAU_CTX_FORUM, PROFONDEUR_CTX_MODULE_ZONE_PRIVEE, id_course_module)
-        id_contexte_module = self.get_id_context(NIVEAU_CTX_FORUM, PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
+        self.insert_moodle_context(self.constantes.niveau_ctx_forum,
+                                   PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
+                                   id_course_module)
+        id_contexte_module = self.get_id_context(self.constantes.niveau_ctx_forum,
+                                                 PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
                                                  id_course_module)
 
         # Mise a jour du path du contexte
@@ -1406,8 +1386,10 @@ class Database:
         id_block = self.get_id_block(parent_context_id)
 
         # Insertion du contexte pour le bloc
-        self.insert_moodle_context(NIVEAU_CTX_BLOC, PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE, id_block)
-        id_contexte_bloc = self.get_id_context(NIVEAU_CTX_BLOC, PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE, id_block)
+        self.insert_moodle_context(self.constantes.niveau_ctx_bloc, PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE, id_block)
+        id_contexte_bloc = self.get_id_context(self.constantes.niveau_ctx_bloc,
+                                               PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
+                                               id_block)
 
         # Mise a jour du path du contexte
         path_contexte_bloc = "%s/%d" % (path_contexte_zone_privee, id_contexte_bloc)
@@ -1536,16 +1518,18 @@ class Database:
         :param id_zone_privee:
         :return:
         """
-        id_contexte_zone_privee = self.get_id_context(NIVEAU_CTX_COURS, PROFONDEUR_CTX_ZONE_PRIVEE, id_zone_privee)
+        id_contexte_zone_privee = self.get_id_context(self.constantes.niveau_ctx_cours, PROFONDEUR_CTX_ZONE_PRIVEE,
+                                                      id_zone_privee)
         if id_contexte_zone_privee:
             return id_contexte_zone_privee
 
-        id_contexte_zone_privee = self.get_id_context_no_depth(NIVEAU_CTX_COURS, id_zone_privee)
+        id_contexte_zone_privee = self.get_id_context_no_depth(self.constantes.niveau_ctx_cours, id_zone_privee)
         if id_contexte_zone_privee:
             return id_contexte_zone_privee
 
-        self.insert_moodle_context(NIVEAU_CTX_COURS, PROFONDEUR_CTX_ZONE_PRIVEE, id_zone_privee)
-        id_contexte_zone_privee = self.get_id_context(NIVEAU_CTX_COURS, PROFONDEUR_CTX_ZONE_PRIVEE, id_zone_privee)
+        self.insert_moodle_context(self.constantes.niveau_ctx_cours, PROFONDEUR_CTX_ZONE_PRIVEE, id_zone_privee)
+        id_contexte_zone_privee = self.get_id_context(self.constantes.niveau_ctx_cours, PROFONDEUR_CTX_ZONE_PRIVEE,
+                                                      id_zone_privee)
         return id_contexte_zone_privee
 
     def purge_cohorts(self, users_ids_by_cohorts_ids):
@@ -1558,7 +1542,7 @@ class Database:
         :return:
         """
         for cohort_id, users_ids in users_ids_by_cohorts_ids.iteritems():
-            ids_list, ids_list_params = self.array_to_safe_sql_list(users_ids, 'ids_list')
+            ids_list, ids_list_params = array_to_safe_sql_list(users_ids, 'ids_list')
             s = "DELETE FROM {entete}cohort_members" \
                 " WHERE cohortid = %(cohort_id)s" \
                 " AND userid NOT IN ({ids_list})" \
