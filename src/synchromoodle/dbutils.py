@@ -226,7 +226,7 @@ class Database:
         self.entete = config.entete
         self.__connect()
 
-    def __array_to_safe_sql_list(elements, name=None):
+    def __array_to_safe_sql_list(self, elements, name=None):
         if name:
             format_strings = []
             params = {}
