@@ -110,6 +110,16 @@ class Ldap:
         self.connection.simple_bind_s(self.config.username, self.config.password)
         return self.connection
 
+    def get_structure(self, uai: str) -> StructureLdap:
+        """
+        Recherche de structures.
+        :param uai:
+        :return:
+        """
+        structures = self.search_structure(uai)
+        if structures:
+            return structures[0]
+
     def search_structure(self, uai: str = None) -> List[StructureLdap]:
         """
         Recherche de structures.
