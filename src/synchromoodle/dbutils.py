@@ -305,7 +305,7 @@ class Database:
         """
         s = "SELECT id FROM {entete}role_assignments" \
             " WHERE roleid = %(role_id)s AND contextid = %(id_context)s AND userid = %(id_user)s".format(
-            entete=self.entete)
+                entete=self.entete)
         self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -559,7 +559,7 @@ class Database:
         """
         id_admin_local = self.get_id_role_by_shortname(SHORTNAME_ADMIN_LOCAL)
         if id_admin_local is None:
-            logging.error("Le role '%s' n'est pas defini" % (SHORTNAME_ADMIN_LOCAL))
+            logging.error("Le role '%s' n'est pas defini" % SHORTNAME_ADMIN_LOCAL)
             sys.exit(2)
         return id_admin_local
 
@@ -791,8 +791,8 @@ class Database:
         """
         s = "SELECT id" \
             " FROM {entete}block_instances" \
-            " WHERE parentcontextid = %(parent_context_id)s".format(
-            entete=self.entete)
+            " WHERE parentcontextid = %(parent_context_id)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'parent_context_id': parent_context_id})
         id_block = self.mark.fetchone()[0]
         return id_block
@@ -963,7 +963,7 @@ class Database:
         """
         id_extended_teacher = self.get_id_role_by_shortname(SHORTNAME_EXTENDED_TEACHER)
         if id_extended_teacher is None:
-            logging.error("Le role '%s' n'est pas defini" % (SHORTNAME_EXTENDED_TEACHER))
+            logging.error("Le role '%s' n'est pas defini" % SHORTNAME_EXTENDED_TEACHER)
             sys.exit(2)
         return id_extended_teacher
 
@@ -975,7 +975,7 @@ class Database:
         """
         id_advanced_teacher = self.get_id_role_by_shortname(SHORTNAME_ADVANCED_TEACHER)
         if id_advanced_teacher is None:
-            logging.error("Le role '%s' n'est pas defini" % (SHORTNAME_ADVANCED_TEACHER))
+            logging.error("Le role '%s' n'est pas defini" % SHORTNAME_ADVANCED_TEACHER)
             sys.exit(2)
         return id_advanced_teacher
 
@@ -1119,9 +1119,12 @@ class Database:
         :param default_weight:
         :return:
         """
-        s = "INSERT INTO {entete}block_instances ( blockname, parentcontextid, showinsubcontexts, pagetypepattern, subpagepattern, defaultregion, defaultweight ) " \
-            " VALUES ( %(block_name)s, %(parent_context_id)s, %(show_in_subcontexts)s, %(page_type_pattern)s, %(sub_page_pattern)s, %(default_region)s, %(default_weight)s )".format(
-            entete=self.entete)
+        s = "INSERT INTO {entete}block_instances " \
+            "( blockname, parentcontextid, showinsubcontexts, pagetypepattern, subpagepattern, defaultregion, " \
+            "defaultweight ) " \
+            " VALUES ( %(block_name)s, %(parent_context_id)s, %(show_in_subcontexts)s, %(page_type_pattern)s, " \
+            "%(sub_page_pattern)s, %(default_region)s, %(default_weight)s )" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'block_name': block_name,
                                      'parent_context_id': parent_context_id,
                                      'show_in_subcontexts': show_in_subcontexts,
@@ -1138,8 +1141,7 @@ class Database:
         :param instance_id:
         :return:
         """
-        s = "INSERT INTO {entete}context" \
-            " (contextlevel, instanceid, depth)" \
+        s = "INSERT INTO {entete}context (contextlevel, instanceid, depth)" \
             " VALUES (%(context_level)s, %(instance_id)s,  %(depth)s)" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': context_level, 'instance_id': instance_id, 'depth': depth})
@@ -1161,9 +1163,11 @@ class Database:
         :param time_modified:
         :return:
         """
-        s = "INSERT INTO {entete}course" \
-            " (category, fullname, idnumber, shortname, summary, format, visible, startdate, timecreated, timemodified) " \
-            " VALUES (%(id_category)s, %(full_name)s, %(id_number)s, %(short_name)s, %(summary)s, %(format)s, %(visible)s, %(start_date)s, %(time_created)s, %(time_modified)s)" \
+        s = "INSERT INTO {entete}course " \
+            "(category, fullname, idnumber, shortname, summary, " \
+            "format, visible, startdate, timecreated, timemodified) " \
+            " VALUES (%(id_category)s, %(full_name)s, %(id_number)s, %(short_name)s, %(summary)s, " \
+            "%(format)s, %(visible)s, %(start_date)s, %(time_created)s, %(time_modified)s)" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_category': id_category,
                                      'full_name': full_name,
@@ -1233,7 +1237,8 @@ class Database:
         :return:
         """
         s = "INSERT INTO {entete}forum (course, name, intro, introformat, maxbytes, maxattachments, timemodified) " \
-            " VALUES (%(course)s, %(name)s, %(intro)s, %(intro_format)s, %(max_bytes)s, %(max_attachements)s, %(time_modified)s)" \
+            "VALUES (%(course)s, %(name)s, %(intro)s, %(intro_format)s, %(max_bytes)s, %(max_attachements)s, " \
+            "%(time_modified)s)" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'course': course,
                                      'name': name,
@@ -1311,7 +1316,7 @@ class Database:
         id_categorie_etablissement = self.get_id_course_category_by_id_number(siren)
 
         # Mise a jour du path de la categorie
-        path_etablissement = "/%d" % (id_categorie_etablissement)
+        path_etablissement = "/%d" % id_categorie_etablissement
         self.update_course_category_path(id_categorie_etablissement, path_etablissement)
 
         #########################
@@ -1707,7 +1712,8 @@ class Database:
         :param user_domain:
         :return:
         """
-        # pour un utilisateur qui est déjà dans la table "user_info_data" mais sur un autre domaine que le domaine "user_domain",
+        # pour un utilisateur qui est déjà dans la table "user_info_data" mais sur un autre domaine que
+        # le domaine "user_domain",
         # le script va essayer de créer une nouvelle ligne (INSERT) avec le nouveau domaine => erreur !
         # la requête doit donc être modifiée :
         # sql = "SELECT id FROM %suser_info_data WHERE userid = %s AND fieldid = %s AND data = '%s'"
