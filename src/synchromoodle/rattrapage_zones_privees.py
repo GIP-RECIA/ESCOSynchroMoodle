@@ -1,11 +1,11 @@
 # coding: utf-8
 
 import logging
+import sys
 
 # System imports
 import ldap
 import mysql.connector
-import sys
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
@@ -234,7 +234,7 @@ def get_id_enrol(mark, enrol_method, role_id, id_course):
     s = s % (entete, id_course, role_id)
     mark.execute(s, [enrol_method])
     ligne = mark.fetchone()
-    if ligne == None:
+    if ligne is None:
         return None
     return ligne[0]
 

@@ -8,7 +8,7 @@ from synchromoodle.timestamp import TimestampStore
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
-from .utilsDB import *
+from .dbutils import Database
 from .config import EtablissementsConfig, Config
 from .ldaputils import Ldap
 
@@ -44,7 +44,7 @@ def mettre_a_jour_droits_enseignant(db, enseignant_infos, gereAdminLocal, id_ens
     #########################
     # Recuperation des ids des roles et les themes non autorises
     ids_roles_non_autorises, ids_themes_non_autorises = db.get_ids_and_themes_not_allowed_roles(id_enseignant,
-                                                                                             themes_autorises)
+                                                                                                themes_autorises)
 
     # Suppression des roles non autorises
     if ids_roles_non_autorises:
@@ -66,7 +66,8 @@ def mettre_a_jour_droits_enseignant(db, enseignant_infos, gereAdminLocal, id_ens
     shortnames_forums = [("ZONE-PRIVEE-%s" % str(siren.encode("utf-8"))) for siren in sirens]
 
     # Recuperation des roles sur les forums qui ne devraient plus exister
-    ids_roles_non_autorises, forums_summaries = db.get_ids_and_summaries_not_allowed_roles(id_enseignant, shortnames_forums)
+    ids_roles_non_autorises, forums_summaries = db.get_ids_and_summaries_not_allowed_roles(id_enseignant,
+                                                                                           shortnames_forums)
 
     # Suppression des roles non autorises
     if ids_roles_non_autorises:
@@ -171,8 +172,8 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 id_etab_categorie = db.get_id_course_category_by_theme(etablissement_theme)
                 if id_etab_categorie is None:
                     db.insert_moodle_structure(etablissement_regroupe, ldap_structure.nom,
-                                            etablissement_path,
-                                            etablissement_ou, ldap_structure.siren, etablissement_theme)
+                                               etablissement_path,
+                                               etablissement_ou, ldap_structure.siren, etablissement_theme)
                     id_etab_categorie = db.get_id_course_category_by_id_number(ldap_structure.siren)
 
                 # Mise a jour de la description dans la cas d'un groupement d'etablissement
@@ -190,7 +191,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 # Recreation de la zone privee si celle-ci n'existe plus
                 if id_zone_privee is None:
                     id_zone_privee = db.insert_zone_privee(id_etab_categorie, ldap_structure.siren,
-                                                        etablissement_ou, maintenant_sql)
+                                                           etablissement_ou, maintenant_sql)
 
                 id_context_course_forum = db.get_id_context(NIVEAU_CTX_COURS, 3, id_zone_privee)
                 if id_context_course_forum is None:
@@ -229,22 +230,22 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 eleve_id = db.get_user_id(ldap_student.uid)
                 if not eleve_id:
                     db.insert_moodle_user(ldap_student.uid, ldap_student.given_name,
-                                       ldap_student.given_name, ldap_student.mail,
-                                       mail_display,
-                                       etablissement_theme)
+                                          ldap_student.given_name, ldap_student.mail,
+                                          mail_display,
+                                          etablissement_theme)
                     eleve_id = db.get_user_id(ldap_student.uid)
                 else:
                     db.update_moodle_user(eleve_id, ldap_student.given_name,
-                                       ldap_student.given_name, ldap_student.mail,
-                                       mail_display,
-                                       etablissement_theme)
+                                          ldap_student.given_name, ldap_student.mail,
+                                          mail_display,
+                                          etablissement_theme)
 
                 # Ajout du role d'utilisateur avec droits limites
                 # Pour les eleves de college
                 if ldap_structure.type == config.constantes.type_structure_clg:
                     db.add_role_to_user(config.constantes.id_role_utilisateur_limite,
-                                     config.constantes.id_instance_moodle,
-                                     eleve_id)
+                                        config.constantes.id_instance_moodle,
+                                        eleve_id)
                     logging.info(
                         "      |_ Ajout du role d'utilisateur avec des droits limites à l'utilisateur %s %s %s (id = %s)" % (
                             ldap_student.given_name, ldap_student.sn, ldap_student.uid, str(eleve_id)))
@@ -253,15 +254,16 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 eleve_cohorts = []
                 if ldap_student.classes:
                     ids_classes_cohorts = db.create_classes_cohorts(id_context_categorie, ldap_student.classes,
-                                                                 maintenant_sql)
+                                                                    maintenant_sql)
                     db.enroll_user_in_cohorts(id_context_categorie, ids_classes_cohorts,
-                                           eleve_id,
-                                           eleve_infos, maintenant_sql)
+                                              eleve_id,
+                                              eleve_infos, maintenant_sql)
                     eleve_cohorts.extend(ids_classes_cohorts)
 
                 # Inscription dans la cohorte associee au niveau de formation
                 if ldap_student.niveau_formation:
-                    id_formation_cohort = db.create_formation_cohort(id_context_categorie, ldap_student.niveau_formation, maintenant_sql)
+                    id_formation_cohort = db.create_formation_cohort(id_context_categorie,
+                                                                     ldap_student.niveau_formation, maintenant_sql)
                     db.enroll_user_in_cohort(id_formation_cohort, eleve_id, eleve_infos, maintenant_sql)
                     eleve_cohorts.append(id_formation_cohort)
 
@@ -328,11 +330,12 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 id_user = db.get_user_id(ldap_teacher.uid)
                 if not id_user:
                     db.insert_moodle_user(ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn, ldap_teacher.mail,
-                                       mail_display, etablissement_theme)
+                                          mail_display, etablissement_theme)
                     id_user = db.get_user_id(ldap_teacher.uid)
                 else:
-                    db.update_moodle_user(id_user, ldap_teacher.given_name, ldap_teacher.sn, ldap_teacher.mail, mail_display,
-                                       etablissement_theme)
+                    db.update_moodle_user(id_user, ldap_teacher.given_name, ldap_teacher.sn, ldap_teacher.mail,
+                                          mail_display,
+                                          etablissement_theme)
 
                 # Mise ajour des droits sur les anciens etablissement
                 if ldap_teacher.uais is not None and not etablissement_regroupe:
@@ -343,15 +346,15 @@ def miseAJour(config: Config, purge_cohortes: bool):
 
                 # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
                 db.add_role_to_user(config.constantes.id_role_createur_cours,
-                                 id_context_categorie_inter_etabs,
-                                 id_user)
+                                    id_context_categorie_inter_etabs,
+                                    id_user)
                 logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
 
                 # Si l'enseignant fait partie d'un CFA
                 # Ajout du role createur de cours au niveau de la categorie inter-cfa
                 if ldap_structure.type == config.constantes.type_structure_cfa:
                     db.add_role_to_user(config.constantes.id_role_createur_cours,
-                                     id_context_categorie_inter_cfa, id_user)
+                                        id_context_categorie_inter_cfa, id_user)
                     logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-cfa")
 
                 # ajout du role de createur de cours dans l'etablissement
@@ -404,7 +407,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
             # On recupere tous les eleves sans prendre en compte le timestamp
             time_stamp = None
         # CREATION DES COHORTES DE PROFS
-        db.create_profs_etabs_cohorts(id_context_categorie, uai,maintenant_sql, time_stamp, ldap)
+        db.create_profs_etabs_cohorts(id_context_categorie, uai, maintenant_sql, time_stamp, ldap)
 
         db.connection.commit()
 
@@ -475,11 +478,11 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
             id_user = db.get_user_id(ldap_people.uid)
             if not id_user:
                 db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
-                                   config.constantes.default_mail_display, config.constantes.default_moodle_theme)
+                                      config.constantes.default_mail_display, config.constantes.default_moodle_theme)
                 id_user = db.get_user_id(ldap_people.uid)
             else:
                 db.update_moodle_user(id_user, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
-                                   config.constantes.default_mail_display, config.constantes.default_moodle_theme)
+                                      config.constantes.default_mail_display, config.constantes.default_moodle_theme)
 
             # Ajout du role de createur de cours 
             db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_categorie_inter_etabs, id_user)
@@ -610,15 +613,15 @@ def miseAJourInspecteurs(config: Config):
 
             # Creation de l'utilisateur
             db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
-                               config.constantes.default_mail_display, config.constantes.default_moodle_theme)
+                                  config.constantes.default_mail_display, config.constantes.default_moodle_theme)
             id_user = db.get_user_id(ldap_people.uid)
             if not id_user:
                 db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
-                                   config.constantes.default_mail_display, config.constantes.default_moodle_theme)
+                                      config.constantes.default_mail_display, config.constantes.default_moodle_theme)
                 id_user = db.get_user_id(ldap_people.uid)
             else:
                 db.update_moodle_user(id_user, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
-                                   config.constantes.default_mail_display, config.constantes.default_moodle_theme)
+                                      config.constantes.default_mail_display, config.constantes.default_moodle_theme)
 
             # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
             db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_categorie_inter_etabs, id_user)

@@ -214,20 +214,17 @@ USER_LANG = "fr"
 # Here "3" stands for the ID of lycees.netocentre.fr
 USER_MNET_HOST_ID = 3
 
+
 class Database:
-    config = None # type: DatabaseConfig
-    connection = None # type: MySQLConnection
-    mark = None # type: MySQLCursor
-    entete = None # type: str
+    config = None  # type: DatabaseConfig
+    connection = None  # type: MySQLConnection
+    mark = None  # type: MySQLCursor
+    entete = None  # type: str
 
     def __init__(self, config: DatabaseConfig):
         self.config = config
         self.entete = config.entete
         self.__connect()
-
-    """
-    Private Methods
-    """
 
     def __array_to_safe_sql_list(elements, name=None):
         if name:
@@ -248,11 +245,11 @@ class Database:
         :return:
         """
         self.connection = mysql.connector.connect(host=self.config.host,
-                                       user=self.config.user,
-                                       passwd=self.config.password,
-                                       db=self.config.database,
-                                       charset=self.config.charset,
-                                       port=self.config.port)
+                                                  user=self.config.user,
+                                                  passwd=self.config.password,
+                                                  db=self.config.database,
+                                                  charset=self.config.charset,
+                                                  port=self.config.port)
         self.mark = self.connection.cursor()
 
     """
@@ -320,7 +317,8 @@ class Database:
         :return:
         """
         s = "SELECT id FROM {entete}role_assignments" \
-            " WHERE roleid = %(role_id)s AND contextid = %(id_context)s AND userid = %(id_user)s".format(entete=self.entete)
+            " WHERE roleid = %(role_id)s AND contextid = %(id_context)s AND userid = %(id_user)s".format(
+            entete=self.entete)
         self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -352,27 +350,30 @@ class Database:
         id_enrol = self.get_id_enrol(ENROL_METHOD_MANUAL, role_id, id_course)
         if not id_enrol:
             # Ajout de la methode d'enrolment dans le cours
-            s = "INSERT INTO {entete}enrol( enrol, courseid, roleid )" \
-                " VALUES ( %(ENROL_METHOD_MANUAL)s, %(id_course)s, %(role_id)s )".format(entete=self.entete)
+            s = "INSERT INTO {entete}enrol(enrol, courseid, roleid)" \
+                " VALUES (%(ENROL_METHOD_MANUAL)s, %(id_course)s, %(role_id)s)" \
+                .format(entete=self.entete)
             self.mark.execute(s, params={'ENROL_METHOD_MANUAL': ENROL_METHOD_MANUAL, 'id_course': id_course,
-                                    'role_id': role_id})
+                                         'role_id': role_id})
             id_enrol = self.get_id_enrol_max()
         if id_enrol:
             # Enrolement de l'utilisateur dans le cours
-            s = "INSERT IGNORE INTO {entete}user_enrolments( enrolid, userid )" \
-                " VALUES ( %(id_enrol)s, %(id_user)s )".format(entete=self.entete)
+            s = "INSERT IGNORE INTO {entete}user_enrolments(enrolid, userid)" \
+                " VALUES (%(id_enrol)s, %(id_user)s)" \
+                .format(entete=self.entete)
             self.mark.execute(s, params={'id_enrol': id_enrol, 'id_user': id_user})
 
     def get_id_enrol_max(self):
         """
-        Fonction permettant de recuperer l'id maximum present
-        dans la table permettant les enrolments
+        Récupère l'id maximum present dans la table permettant les enrolments
         :return:
         """
-        s = "SELECT id FROM {entete}enrol ORDER BY id DESC LIMIT 1".format(entete=self.entete)
+        s = "SELECT id FROM {entete}enrol" \
+            " ORDER BY id DESC LIMIT 1" \
+            .format(entete=self.entete)
         self.mark.execute(s)
         ligne = self.mark.fetchone()
-        if ligne == None:
+        if ligne is None:
             return None
         return ligne[0]
 
@@ -387,10 +388,9 @@ class Database:
         """
         ids_cohorts = []
         for class_name in classes_names:
-            cohort_name = COHORT_NAME_FOR_CLASS % (class_name)
-            cohort_description = COHORT_DESC_FOR_CLASS % (class_name)
-            id_cohort = self.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description,
-                                      time_created)
+            cohort_name = COHORT_NAME_FOR_CLASS % class_name
+            cohort_description = COHORT_DESC_FOR_CLASS % class_name
+            id_cohort = self.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
             ids_cohorts.append(id_cohort)
         return ids_cohorts
 
@@ -408,11 +408,13 @@ class Database:
         # Si la cohorte n'existe pas encore
         id_cohort = self.get_id_cohort(id_context, name)
         if id_cohort is None:
-            s = "INSERT INTO {entete}cohort( contextid, name, idnumber, description, descriptionformat, timecreated, timemodified )" \
-                " VALUES ( %(id_context)s, %(name)s, %(id_number)s, %(description)s, 0, %(time_created)s, %(time_created)s )".format(
-                entete=self.entete)
+            s = "INSERT INTO {entete}cohort(contextid, name, idnumber, description, descriptionformat, timecreated," \
+                " timemodified)" \
+                " VALUES (%(id_context)s, %(name)s, %(id_number)s, %(description)s, 0, %(time_created)s," \
+                " %(time_created)s)" \
+                .format(entete=self.entete)
             self.mark.execute(s, params={'id_context': id_context, 'name': name, 'id_number': id_number,
-                                    'description': description, 'time_created': time_created})
+                                         'description': description, 'time_created': time_created})
             logging.info("      |_ Creation de la cohorte '%s'" % (name))
         return self.get_id_cohort(id_context, name)
 
@@ -424,16 +426,18 @@ class Database:
         :param cohort_name:
         :return:
         """
-        s = "SELECT id FROM {entete}cohort WHERE contextid = %(id_context)s AND name = %(cohort_name)s".format(
-            entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}cohort" \
+            " WHERE contextid = %(id_context)s" \
+            " AND name = %(cohort_name)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_context': id_context, 'cohort_name': cohort_name})
         ligne = self.mark.fetchone()
-        if ligne == None:
+        if ligne is None:
             return None
         return ligne[0]
 
-    def create_profs_etabs_cohorts(self, id_context_etab, etab_name, time_created, time_stamp,
-                                   ldap: Ldap):
+    def create_profs_etabs_cohorts(self, id_context_etab, etab_name, time_created, time_stamp, ldap: Ldap):
         """
         Fonction permettant de creer des cohortes a partir de
         etablissement.
@@ -470,7 +474,8 @@ class Database:
         :return:
         """
         s = "SELECT id FROM {entete}user " \
-            "WHERE username = %(username)s".format(entete=self.entete)
+            "WHERE username = %(username)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'username': username.lower()})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -487,11 +492,14 @@ class Database:
         :param time_added:
         :return:
         """
-        s = "INSERT IGNORE INTO {entete}cohort_members( cohortid, userid, timeadded ) VALUES ( %(id_cohort)s, %(id_user)s, %(time_added)s )".format(
-            entete=self.entete)
+        s = "INSERT IGNORE" \
+            " INTO {entete}cohort_members(cohortid, userid, timeadded)" \
+            " VALUES (%(id_cohort)s, %(id_user)s, %(time_added)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user, 'time_added': time_added})
         cohort_name = self.get_cohort_name(id_cohort)
-        logging.info("      |_ Inscription de l'utilisateur (id = %s) dans la cohorte '%s'" % (str(id_user), cohort_name))
+        logging.info(
+            "      |_ Inscription de l'utilisateur (id = %s) dans la cohorte '%s'" % (str(id_user), cohort_name))
 
     def purge_cohort_profs(self, id_cohort, list_profs):
         """
@@ -501,7 +509,10 @@ class Database:
         :return:
         """
         ids_list, ids_list_params = self.array_to_safe_sql_list(list_profs, 'ids_list')
-        s = "DELETE FROM {entete}cohort_members WHERE cohortid = %(id_cohort)s AND userid NOT IN ( {ids_list} )".format(entete=self.entete, ids_list=ids_list)
+        s = "DELETE FROM {entete}cohort_members" \
+            " WHERE cohortid = %(id_cohort)s" \
+            " AND userid NOT IN ({ids_list})" \
+            .format(entete=self.entete, ids_list=ids_list)
         self.mark.execute(s, params={'id_cohort': id_cohort, **ids_list_params})
 
     def create_formation_cohort(self, id_context_etab, formation_name, time_created):
@@ -513,8 +524,8 @@ class Database:
         :param time_created:
         :return:
         """
-        cohort_name = COHORT_NAME_FOR_FORMATION % (formation_name)
-        cohort_description = COHORT_DESC_FOR_FORMATION % (formation_name)
+        cohort_name = COHORT_NAME_FOR_FORMATION % formation_name
+        cohort_description = COHORT_DESC_FOR_FORMATION % formation_name
         id_cohort = self.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
         return id_cohort
 
@@ -524,7 +535,10 @@ class Database:
         d'utilisateur de Mahara
         :return:
         """
-        s = "DELETE FROM {entete}role_assignments WHERE roleid = %(ID_ROLE_MAHARA)s AND contextid = %(ID_CONTEXT_SYSTEM)s".format(entete=self.entete)
+        s = "DELETE FROM {entete}role_assignments" \
+            " WHERE roleid = %(ID_ROLE_MAHARA)s" \
+            " AND contextid = %(ID_CONTEXT_SYSTEM)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'ID_ROLE_MAHARA': ID_ROLE_MAHARA, 'ID_CONTEXT_SYSTEM': ID_CONTEXT_SYSTEM})
 
     def delete_moodle_local_admins(self, id_context_categorie, ids_not_admin):
@@ -542,8 +556,13 @@ class Database:
         # Recuperation de l'id pour le role d'admin local
         id_role_admin_local = self.get_id_role_admin_local()
         # Suppression des admins non presents dans la liste
-        s = "DELETE FROM {entete}role_assignments WHERE roleid = %(id_role_admin_local)s AND contextid = %(id_context_categorie)s AND userid IN ( {ids_list} )".format(entete=self.entete, ids_list=ids_list)
-        self.mark.execute(s, params={'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie, **ids_list_params})
+        s = "DELETE FROM {entete}role_assignments" \
+            " WHERE roleid = %(id_role_admin_local)s" \
+            " AND contextid = %(id_context_categorie)s" \
+            " AND userid IN ({ids_list})" \
+            .format(entete=self.entete, ids_list=ids_list)
+        self.mark.execute(s, params={'id_role_admin_local': id_role_admin_local,
+                                     'id_context_categorie': id_context_categorie, **ids_list_params})
 
     def get_id_role_admin_local(self):
         """
@@ -564,10 +583,12 @@ class Database:
         :param short_name:
         :return:
         """
-        s = "SELECT id FROM {entete}role WHERE shortname = %(short_name)s".format(entete=self.entete)
+        s = "SELECT id FROM {entete}role" \
+            " WHERE shortname = %(short_name)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'short_name': short_name})
         ligne = self.mark.fetchone()
-        if ligne == None:
+        if ligne is None:
             return None
         return ligne[0]
 
@@ -591,7 +612,11 @@ class Database:
         :param roleid:
         :return:
         """
-        s = "DELETE FROM {entete}role_assignments WHERE contextid = %(id_context_category)s AND roleid = %(roleid)s AND userid = %(userid)s".format(entete=self.entete)
+        s = "DELETE FROM {entete}role_assignments" \
+            " WHERE contextid = %(id_context_category)s" \
+            " AND roleid = %(roleid)" \
+            " AND userid = %(userid)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_context_category': id_context_category, 'roleid': roleid, 'userid': userid})
         return self.mark.rowcount > 0
 
@@ -613,12 +638,18 @@ class Database:
             # Suppression de l'enrolment associe
             id_user_enrolment = self.get_id_user_enrolment(id_enrol, id_user)
             if id_user_enrolment:
-                s = "DELETE FROM {entete}user_enrolments WHERE id = %(id_user_enrolment)s}".format(entete=self.entete)
+                s = "DELETE FROM {entete}user_enrolments" \
+                    " WHERE id = %(id_user_enrolment)s}" \
+                    .format(entete=self.entete)
                 self.mark.execute(s, params={'id_user_enrolment': id_user_enrolment})
 
         # Suppression des roles dans les contextes
         ids_list, ids_list_params = self.array_to_safe_sql_list(ids_contexts_by_courses.values(), 'ids_list')
-        s = "DELETE FROM {entete}role_assignments WHERE roleid = %(role_id)s AND contextid IN ( {ids_list} ) AND userid = %(id_user)s".format(entete=self.entete, ids_list=ids_list)
+        s = "DELETE FROM {entete}role_assignments" \
+            " WHERE roleid = %(role_id)s" \
+            " AND contextid IN ({ids_list})" \
+            " AND userid = %(id_user)s" \
+            .format(entete=self.entete, ids_list=ids_list)
         self.mark.execute(s, params={'role_id': role_id, 'id_user': id_user, **ids_list_params})
 
     def get_id_enrol(self, enrol_method, role_id, id_course):
@@ -633,10 +664,11 @@ class Database:
         s = "SELECT e.id FROM {entete}enrol e" \
             " WHERE e.enrol = %(enrol_method)s" \
             " AND e.courseid = %(id_course)s" \
-            " AND e.roleid = %(role_id)s".format(entete=self.entete)
+            " AND e.roleid = %(role_id)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'enrol_method': enrol_method, 'id_course': id_course, 'role_id': role_id})
         ligne = self.mark.fetchone()
-        if ligne == None:
+        if ligne is None:
             return None
         return ligne[0]
 
@@ -649,7 +681,9 @@ class Database:
         """
         s = "SELECT id" \
             " FROM {entete}user_enrolments " \
-            " WHERE userid = %(id_user)s AND enrolid = %(id_enrol)s".format(entete=self.entete)
+            " WHERE userid = %(id_user)s" \
+            " AND enrolid = %(id_enrol)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_user': id_user, 'id_enrol': id_enrol})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -664,7 +698,9 @@ class Database:
         """
         # Construction de la liste des ids des roles concernes
         ids_list, ids_list_params = self.array_to_safe_sql_list(ids_roles, 'ids_list')
-        s = "DELETE FROM {entete}role_assignments WHERE id IN ( {ids_list} )".format(entete=self.entete, ids_list=ids_list)
+        s = "DELETE FROM {entete}role_assignments" \
+            " WHERE id IN ({ids_list})" \
+            .format(entete=self.entete, ids_list=ids_list)
         self.mark.execute(s, params={**ids_list_params})
 
     def disenroll_user_from_cohorts(self, ids_cohorts_to_keep, id_user):
@@ -679,7 +715,10 @@ class Database:
         """
         # Construction de la liste des ids des cohortes concernes
         ids_list, ids_list_params = self.array_to_safe_sql_list(ids_cohorts_to_keep, 'ids_list')
-        s = "DELETE FROM {entete}cohort_members WHERE userid = %(id_user)s and cohortid NOT IN ( {ids_list} )".format(entete=self.entete, ids_list=ids_list)
+        s = "DELETE FROM {entete}cohort_members" \
+            " WHERE userid = %(id_user)s" \
+            " AND cohortid NOT IN ({ids_list})" \
+            .format(entete=self.entete, ids_list=ids_list)
         self.mark.execute(s, params={'id_user': id_user, **ids_list_params})
 
     def disenroll_user_from_cohort(self, id_cohort, id_user):
@@ -690,7 +729,10 @@ class Database:
         :param id_user:
         :return:
         """
-        s = "DELETE FROM {entete}cohort_members WHERE cohortid = %(id_cohort)s and userid = %(id_user)s".format(entete=self.entete)
+        s = "DELETE FROM {entete}cohort_members" \
+            " WHERE cohortid = %(id_cohort)s" \
+            " AND userid = %(id_user)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user})
 
     def enroll_user_in_cohorts(self, id_context_etab, ids_cohorts, id_user, user_infos, time_added):
@@ -713,7 +755,9 @@ class Database:
         :param id_cohort:
         :return:
         """
-        s = "SELECT name FROM {entete}cohort WHERE id = %(id_cohort)s".format(entete=self.entete)
+        s = "SELECT name FROM {entete}cohort" \
+            " WHERE id = %(id_cohort)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort})
         name = self.mark.fetchone()[0]
         logging.debug("Cohort : Name = %s" % name)
@@ -726,22 +770,25 @@ class Database:
         :param id_category:
         :return:
         """
-        s = "SELECT description FROM {entete}course_categories WHERE id = %(id_category)s".format(entete=self.entete)
+        s = "SELECT description" \
+            " FROM {entete}course_categories" \
+            " WHERE id = %(id_category)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_category': id_category})
         description = self.mark.fetchone()[0]
         return description
 
     def get_descriptions_course_categories_by_themes(self, themes):
         """
-        Fonction permettant de recuperer les descriptions de
-        categories.
+        Fonction permettant de recuperer les descriptions de categories.
         :param themes:
         :return:
         """
         ids_list, ids_list_params = self.array_to_safe_sql_list(themes, 'ids_list')
         s = "SELECT description" \
             " FROM {entete}course_categories" \
-            " WHERE theme IN ( {ids_list} )".format(entete=self.entete, ids_list=ids_list)
+            " WHERE theme IN ({ids_list})" \
+            .format(entete=self.entete, ids_list=ids_list)
         self.mark.execute(s, params={**ids_list_params})
         result_set = self.mark.fetchall()
         if not result_set:
@@ -755,7 +802,10 @@ class Database:
         :param parent_context_id:
         :return:
         """
-        s = "SELECT id FROM {entete}block_instances WHERE parentcontextid = %(parent_context_id)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}block_instances" \
+            " WHERE parentcontextid = %(parent_context_id)s".format(
+            entete=self.entete)
         self.mark.execute(s, params={'parent_context_id': parent_context_id})
         id_block = self.mark.fetchone()[0]
         return id_block
@@ -767,7 +817,10 @@ class Database:
         :param categorie_name:
         :return:
         """
-        s = "SELECT id FROM {entete}course_categories WHERE name LIKE %(categorie_name)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}course_categories" \
+            " WHERE name LIKE %(categorie_name)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'categorie_name': categorie_name})
         ligne = self.mark.fetchone()
         return ligne[0]
@@ -780,7 +833,11 @@ class Database:
         :param instance_id:
         :return:
         """
-        s = "SELECT id FROM {entete}context WHERE contextlevel = %(context_level)s and instanceid = %(instance_id)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}context" \
+            " WHERE contextlevel = %(context_level)s" \
+            " AND instanceid = %(instance_id)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': context_level, 'instance_id': instance_id})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -796,7 +853,12 @@ class Database:
         :param instance_id:
         :return:
         """
-        s = "SELECT id FROM {entete}context WHERE contextlevel = %(context_level)s and depth = %(depth)s and instanceid = %(instance_id)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}context" \
+            " WHERE contextlevel = %(context_level)s" \
+            " AND depth = %(depth)s" \
+            " AND instanceid = %(instance_id)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': context_level, 'depth': depth, 'instance_id': instance_id})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -818,8 +880,11 @@ class Database:
         de la categorie inter-etablissements
         :return:
         """
-        s = "SELECT id FROM {entete}context " \
-            "WHERE contextlevel = %(context_level)s AND instanceid = %(instanceid)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}context" \
+            " WHERE contextlevel = %(context_level)s" \
+            " AND instanceid = %(instanceid)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': NIVEAU_CTX_CATEGORIE, 'instanceid': ID_INSTANCE_INTER_ETABS})
         id_context_moodle = self.mark.fetchone()[0]
         return id_context_moodle
@@ -831,7 +896,10 @@ class Database:
         :param id_number:
         :return:
         """
-        s = "SELECT id FROM {entete}course WHERE idnumber = %(id)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}course" \
+            " WHERE idnumber = %(id)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id': id_number})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -840,13 +908,16 @@ class Database:
 
     def get_id_course_category_by_id_number(self, id_number):
         """
-        Fonction permettant de recuperer l'id d'une categorie
-        a partir de son idnumber.
+        Récupère l'id d'une categorie à partir de son idnumber.
         :param id_number:
         :return:
         """
-        s = "SELECT id FROM {entete}course_categories WHERE idnumber LIKE %%%(id)s%%".format(entete=self.entete)
-        self.mark.execute(s, params={'id': id_number})
+        s = "SELECT id" \
+            " FROM {entete}course_categories" \
+            " WHERE idnumber" \
+            " LIKE %(id)s" \
+            .format(entete=self.entete)
+        self.mark.execute(s, params={'id': '%' + str(id_number) + '%'})
         ligne = self.mark.fetchone()
         if ligne is None:
             return None
@@ -854,12 +925,14 @@ class Database:
 
     def get_id_course_category_by_theme(self, theme):
         """
-        Fonction permettant de recuperer l'id d'une categorie
-        a partir de son theme.
+        Récupère l'id d'une categorie à partir de son theme.
         :param theme:
         :return:
         """
-        s = "SELECT id FROM {entete}course_categories WHERE theme = %(theme)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}course_categories" \
+            " WHERE theme = %(theme)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'theme': theme})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -868,12 +941,14 @@ class Database:
 
     def get_id_course_module(self, course):
         """
-        Fonction permettant de recuperer l'id d'un module de
-        cours.
+        Récupère l'id d'un module de cours.
         :param course:
         :return:
         """
-        s = "SELECT id FROM {entete}course_modules WHERE course = %(course)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}course_modules" \
+            " WHERE course = %(course)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'course': course})
         id_course_module = self.mark.fetchone()[0]
         return id_course_module
@@ -885,7 +960,10 @@ class Database:
         :param course:
         :return:
         """
-        s = "SELECT id FROM {entete}forum WHERE course = %(course)s".format(entete=self.entete)
+        s = "SELECT id" \
+            " FROM {entete}forum" \
+            " WHERE course = %(course)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'course': course})
         id_forum = self.mark.fetchone()[0]
         return id_forum
@@ -924,7 +1002,9 @@ class Database:
         """
         s = "SELECT id" \
             " FROM {entete}user_info_data " \
-            " WHERE userid = %(id_user)s AND fieldid = %(id_field)s".format(entete=self.entete)
+            " WHERE userid = %(id_user)s" \
+            " AND fieldid = %(id_field)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_user': id_user, 'id_field': id_field})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -940,13 +1020,13 @@ class Database:
         """
         s = "SELECT id" \
             " FROM {entete}user_info_field" \
-            " WHERE shortname = %(short_name)s".format(entete=self.entete)
+            " WHERE shortname = %(short_name)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'short_name': short_name})
         ligne = self.mark.fetchone()
         if ligne is None:
             return None
         return ligne[0]
-
 
     def get_id_user_info_field_classe(self):
         """
@@ -999,12 +1079,15 @@ class Database:
         # (quand le prof n'est plus rattache aux etablissements)
         s = "SELECT mra.id, mcc.theme" \
             " FROM {entete}course_categories mcc, {entete}context mc, {entete}role_assignments mra" \
-            " WHERE mcc.theme NOT IN ({ids_list}) AND mcc.theme IS NOT NULL" \
+            " WHERE mcc.theme NOT IN ({ids_list})" \
+            " AND mcc.theme IS NOT NULL" \
             " AND mcc.id = mc.instanceid " \
             " AND mc.contextlevel = %(NIVEAU_CTX_CATEGORIE)s AND mc.depth = %(PROFONDEUR_CTX_ETAB)s" \
             " AND mc.id = mra.contextid" \
-            " AND mra.userid = %(id_user)s".format(entete=self.entete, ids_list=ids_list)
-        self.mark.execute(s, params={**ids_list_params, 'NIVEAU_CTX_CATEGORIE': NIVEAU_CTX_CATEGORIE, 'PROFONDEUR_CTX_ETAB': PROFONDEUR_CTX_ETAB, 'id_user': id_user})
+            " AND mra.userid = %(id_user)s" \
+            .format(entete=self.entete, ids_list=ids_list)
+        self.mark.execute(s, params={**ids_list_params, 'NIVEAU_CTX_CATEGORIE': NIVEAU_CTX_CATEGORIE,
+                                     'PROFONDEUR_CTX_ETAB': PROFONDEUR_CTX_ETAB, 'id_user': id_user})
         result_set = self.mark.fetchall()
         if not result_set:
             return [], []
@@ -1039,7 +1122,7 @@ class Database:
     def insert_moodle_block(self, block_name, parent_context_id, show_in_subcontexts, page_type_pattern,
                             sub_page_pattern, default_region, default_weight):
         """
-        Fonction permettant d'inserer un bloc.
+        Insère un bloc.
         :param block_name:
         :param parent_context_id:
         :param show_in_subcontexts:
@@ -1050,25 +1133,28 @@ class Database:
         :return:
         """
         s = "INSERT INTO {entete}block_instances ( blockname, parentcontextid, showinsubcontexts, pagetypepattern, subpagepattern, defaultregion, defaultweight ) " \
-            " VALUES ( %(block_name)s, %(parent_context_id)s, %(show_in_subcontexts)s, %(page_type_pattern)s, %(sub_page_pattern)s, %(default_region)s, %(default_weight)s )".format(entete=self.entete)
+            " VALUES ( %(block_name)s, %(parent_context_id)s, %(show_in_subcontexts)s, %(page_type_pattern)s, %(sub_page_pattern)s, %(default_region)s, %(default_weight)s )".format(
+            entete=self.entete)
         self.mark.execute(s, params={'block_name': block_name,
-                                'parent_context_id': parent_context_id,
-                                'show_in_subcontexts': show_in_subcontexts,
-                                'page_type_pattern': page_type_pattern,
-                                'sub_page_pattern': sub_page_pattern,
-                                'default_region': default_region,
-                                'default_weight': default_weight})
+                                     'parent_context_id': parent_context_id,
+                                     'show_in_subcontexts': show_in_subcontexts,
+                                     'page_type_pattern': page_type_pattern,
+                                     'sub_page_pattern': sub_page_pattern,
+                                     'default_region': default_region,
+                                     'default_weight': default_weight})
 
     def insert_moodle_context(self, context_level, depth, instance_id):
         """
-        Fonction permettant d'inserer un contexte.
+        Insère un contexte.
         :param context_level:
         :param depth:
         :param instance_id:
         :return:
         """
-        s = "INSERT INTO {entete}context ( contextlevel, instanceid, depth )" \
-            " VALUES ( %(context_level)s, %(instance_id)s,  %(depth)s )".format(entete=self.entete)
+        s = "INSERT INTO {entete}context" \
+            " (contextlevel, instanceid, depth)" \
+            " VALUES (%(context_level)s, %(instance_id)s,  %(depth)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': context_level, 'instance_id': instance_id, 'depth': depth})
 
     def insert_moodle_course(self, id_category, full_name, id_number, short_name, summary, format, visible,
@@ -1088,18 +1174,20 @@ class Database:
         :param time_modified:
         :return:
         """
-        s = "INSERT INTO {entete}course ( category, fullname, idnumber, shortname, summary, format, visible, startdate, timecreated, timemodified ) " \
-            " VALUES ( %(id_category)s, %(full_name)s, %(id_number)s, %(short_name)s, %(summary)s, %(format)s, %(visible)s, %(start_date)s, %(time_created)s, %(time_modified)s )".format(entete=self.entete)
+        s = "INSERT INTO {entete}course" \
+            " (category, fullname, idnumber, shortname, summary, format, visible, startdate, timecreated, timemodified) " \
+            " VALUES (%(id_category)s, %(full_name)s, %(id_number)s, %(short_name)s, %(summary)s, %(format)s, %(visible)s, %(start_date)s, %(time_created)s, %(time_modified)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_category': id_category,
-                                'full_name': full_name,
-                                'id_number': id_number,
-                                'short_name': short_name,
-                                'summary': summary,
-                                'format': format,
-                                'visible': visible,
-                                'start_date': start_date,
-                                'time_created': time_created,
-                                'time_modified': time_modified})
+                                     'full_name': full_name,
+                                     'id_number': id_number,
+                                     'short_name': short_name,
+                                     'summary': summary,
+                                     'format': format,
+                                     'visible': visible,
+                                     'start_date': start_date,
+                                     'time_created': time_created,
+                                     'time_modified': time_modified})
 
     def insert_moodle_course_category(self, name, id_number, description, theme):
         """
@@ -1110,8 +1198,10 @@ class Database:
         :param theme:
         :return:
         """
-        s = "INSERT INTO {entete}course_categories ( name, idnumber, description, parent, sortorder, coursecount, visible, depth,theme )" \
-            " VALUES( %(name)s, %(id_number)s, %(description)s, 0, 999,0, 1, 1, %(theme)s )".format(entete=self.entete)
+        s = "INSERT INTO {entete}course_categories" \
+            " (name, idnumber, description, parent, sortorder, coursecount, visible, depth,theme)" \
+            " VALUES(%(name)s, %(id_number)s, %(description)s, 0, 999,0, 1, 1, %(theme)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'name': name, 'id_number': id_number, 'description': description, 'theme': theme})
 
     def insert_moodle_course_module(self, course, module, instance, added):
@@ -1123,8 +1213,9 @@ class Database:
         :param added:
         :return:
         """
-        s = "INSERT INTO {entete}course_modules ( course, module, instance, added )" \
-            " VALUES ( %(course)s , %(module)s, %(instance)s , %(added)s )".format(entete=self.entete)
+        s = "INSERT INTO {entete}course_modules (course, module, instance, added)" \
+            " VALUES (%(course)s , %(module)s, %(instance)s , %(added)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'course': course, 'module': module, 'instance': instance, 'added': added})
 
     def insert_moodle_enrol_capability(self, enrol, status, course_id, role_id):
@@ -1137,8 +1228,9 @@ class Database:
         :param role_id:
         :return:
         """
-        s = "INSERT INTO {entete}enrol( enrol, status, courseid, roleid )" \
-            " VALUES( %(enrol)s, %(status)s, %(course_id)s, %(role_id)s )".format(entete=self.entete)
+        s = "INSERT INTO {entete}enrol(enrol, status, courseid, roleid)" \
+            " VALUES(%(enrol)s, %(status)s, %(course_id)s, %(role_id)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'enrol': enrol, 'status': status, 'course_id': course_id, 'role_id': role_id})
 
     def insert_moodle_forum(self, course, name, intro, intro_format, max_bytes, max_attachements, time_modified):
@@ -1153,15 +1245,16 @@ class Database:
         :param time_modified:
         :return:
         """
-        s = "INSERT INTO {entete}forum ( course, name, intro, introformat, maxbytes, maxattachments, timemodified ) " \
-            " VALUES ( %(course)s, %(name)s, %(intro)s, %(intro_format)s, %(max_bytes)s, %(max_attachements)s, %(time_modified)s )".format(entete=self.entete)
+        s = "INSERT INTO {entete}forum (course, name, intro, introformat, maxbytes, maxattachments, timemodified) " \
+            " VALUES (%(course)s, %(name)s, %(intro)s, %(intro_format)s, %(max_bytes)s, %(max_attachements)s, %(time_modified)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'course': course,
-                                'name': name,
-                                'intro': intro,
-                                'intro_format': intro_format,
-                                'max_bytes': max_bytes,
-                                'max_attachements': max_attachements,
-                                'time_modified': time_modified})
+                                     'name': name,
+                                     'intro': intro,
+                                     'intro_format': intro_format,
+                                     'max_bytes': max_bytes,
+                                     'max_attachements': max_attachements,
+                                     'time_modified': time_modified})
 
     def is_moodle_local_admin(self, id_context_categorie, id_user):
         """
@@ -1175,9 +1268,10 @@ class Database:
         sql = "SELECT id FROM {entete}role_assignments" \
               " WHERE roleid = %(id_role_admin_local)s" \
               " AND contextid = %(id_context_categorie)s" \
-              " AND userid = %(id_user)s".format(entete=self.entete)
-        sql = sql % (id_role_admin_local, id_context_categorie, id_user)
-        params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie, 'id_user': id_user}
+              " AND userid = %(id_user)s" \
+            .format(entete=self.entete)
+        params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie,
+                  'id_user': id_user}
         logging.info(sql % params)
         self.mark.execute(sql, params=params)
         return self.mark.rowcount > 0
@@ -1194,9 +1288,11 @@ class Database:
         if self.is_moodle_local_admin(id_context_categorie, id_user):
             return False
         id_role_admin_local = self.get_id_role_admin_local()
-        s = "INSERT ignore INTO {entete}role_assignments( roleid, contextid, userid )" \
-            " VALUES ( %(id_role_admin_local)s, %(id_context_categorie)s, %(id_user)s )".format(entete=self.entete)
-        params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie, 'id_user': id_user}
+        s = "INSERT ignore INTO {entete}role_assignments(roleid, contextid, userid)" \
+            " VALUES (%(id_role_admin_local)s, %(id_context_categorie)s, %(id_user)s)" \
+            .format(entete=self.entete)
+        params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie,
+                  'id_user': id_user}
         logging.info(s % params)
         self.mark.execute(s, params=params)
         return True
@@ -1237,7 +1333,7 @@ class Database:
         # Insertion du contexte associe a la categorie de l'etablissement
         self.insert_moodle_context(NIVEAU_CTX_CATEGORIE, PROFONDEUR_CTX_ETAB, id_categorie_etablissement)
         id_contexte_etablissement = self.get_id_context(NIVEAU_CTX_CATEGORIE, PROFONDEUR_CTX_ETAB,
-                                                   id_categorie_etablissement)
+                                                        id_categorie_etablissement)
 
         # Mise a jour du path de la categorie
         path_contexte_etablissement = "%s/%d" % (path, id_contexte_etablissement)
@@ -1295,7 +1391,7 @@ class Database:
         # Insertion du contexte pour le module de cours (forum)
         self.insert_moodle_context(NIVEAU_CTX_FORUM, PROFONDEUR_CTX_MODULE_ZONE_PRIVEE, id_course_module)
         id_contexte_module = self.get_id_context(NIVEAU_CTX_FORUM, PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
-                                            id_course_module)
+                                                 id_course_module)
 
         # Mise a jour du path du contexte
         path_contexte_module = "%s/%d" % (path_contexte_zone_privee, id_contexte_module)
@@ -1314,7 +1410,7 @@ class Database:
         default_weight = BLOCK_FORUM_SEARCH_DEFAULT_WEIGHT
 
         self.insert_moodle_block(block_name, parent_context_id, show_in_subcontexts, page_type_pattern,
-                            sub_page_pattern, default_region, default_weight)
+                                 sub_page_pattern, default_region, default_weight)
         id_block = self.get_id_block(parent_context_id)
 
         # Insertion du contexte pour le bloc
@@ -1341,20 +1437,25 @@ class Database:
         user_id = self.get_user_id(username)
         username = username.lower()
         if user_id is None:
-            s = "INSERT INTO {entete}user( auth, confirmed, username, firstname, lastname, email, maildisplay, city, country, lang, mnethostid, theme )" \
-                " VALUES ( %(USER_AUTH)s, 1, %(username)s, %(first_name)s, %(last_name)s, %(email)s, %(mail_display)s, %(USER_CITY)s, %(USER_COUNTRY)s, %(USER_LANG)s, %(USER_MNET_HOST_ID)s, %(theme)s )".format(entete=self.entete)
+            s = "INSERT INTO {entete}user" \
+                " (auth, confirmed, username, firstname, lastname, email, maildisplay, city, country, lang," \
+                " mnethostid, theme )" \
+                " VALUES (%(auth)s, %(confirmed)s, %(username)s, %(firstname)s, %(lastname)s, %(email)s," \
+                " %(maildisplay)s, %(city)s, %(country)s, %(lang)s, %(mnethostid)s, %(theme)s)" \
+                .format(entete=self.entete)
 
-            self.mark.execute(s, params={'USER_AUTH': USER_AUTH,
-                                    'username': username,
-                                    'first_name': first_name,
-                                    'last_name': last_name,
-                                    'email': email,
-                                    'mail_display': mail_display,
-                                    'USER_CITY': USER_CITY,
-                                    'USER_COUNTRY': USER_COUNTRY,
-                                    'USER_LANG': USER_LANG,
-                                    'USER_MNET_HOST_ID': USER_MNET_HOST_ID,
-                                    'theme': theme})
+            self.mark.execute(s, params={'auth': USER_AUTH,
+                                         'confirmed': 1,
+                                         'username': username,
+                                         'firstname': first_name,
+                                         'lastname': last_name,
+                                         'email': email,
+                                         'maildisplay': mail_display,
+                                         'city': USER_CITY,
+                                         'country': USER_COUNTRY,
+                                         'lang': USER_LANG,
+                                         'mnethostid': USER_MNET_HOST_ID,
+                                         'theme': theme})
             logging.info("      |_ Insertion de %s %s %s" % (username, first_name, last_name))
 
     def insert_moodle_user_info_data(self, id_user, id_field, data):
@@ -1365,8 +1466,9 @@ class Database:
         :param data:
         :return:
         """
-        s = "INSERT INTO {entete}user_info_data ( userid, fieldid, data )" \
-            " VALUES ( %(id_user)s, %(id_field)s, %(data)s)".format(entete=self.entete)
+        s = "INSERT INTO {entete}user_info_data (userid, fieldid, data)" \
+            " VALUES (%(id_user)s, %(id_field)s, %(data)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'id_user': id_user, 'id_field': id_field, 'data': data})
 
     def insert_moodle_user_info_field(self, short_name, name, data_type, id_category, param1, param2, locked, visible):
@@ -1382,16 +1484,19 @@ class Database:
         :param visible:
         :return:
         """
-        s = "INSERT INTO {entete}user_info_field ( shortname, name, datatype, categoryid, param1, param2, locked, visible )" \
-            " VALUES ( %(short_name)s, %(name)s, %(data_type)s, %(id_category)s, %(param1)s, %(param2)s, %(locked)s, %(visible)s )".format(entete=self.entete)
+        s = "INSERT INTO {entete}user_info_field" \
+            " (shortname, name, datatype, categoryid, param1, param2, locked, visible)" \
+            " VALUES (%(short_name)s, %(name)s, %(data_type)s, %(id_category)s, %(param1)s, %(param2)s, %(locked)s," \
+            " %(visible)s)" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'short_name': short_name,
-                                'name': name,
-                                'data_type': data_type,
-                                'id_category': id_category,
-                                'param1': param1,
-                                'param2': param2,
-                                'locked': locked,
-                                'visible': visible})
+                                     'name': name,
+                                     'data_type': data_type,
+                                     'id_category': id_category,
+                                     'param1': param1,
+                                     'param2': param2,
+                                     'locked': locked,
+                                     'visible': visible})
         logging.info("      |_ Insertion du user info field %s - %s" % (name, short_name))
 
     def insert_moodle_user_info_field_classe(self):
@@ -1427,7 +1532,7 @@ class Database:
         num_sections = COURSE_NUM_SECTIONS_ZONE_PRIVEE
         start_date = time_created = time_modified = time
         self.insert_moodle_course(id_categorie_etablissement, full_name, id_number, short_name, summary, format,
-                             visible, num_sections, start_date, time_created, time_modified)
+                                  visible, num_sections, start_date, time_created, time_modified)
         logging.info('    |_ Creation de la zone privee pour la structure %s' % siren)
         id_zone_privee = self.get_id_course_by_id_number(id_number)
         return id_zone_privee
@@ -1464,7 +1569,8 @@ class Database:
             ids_list, ids_list_params = self.array_to_safe_sql_list(users_ids, 'ids_list')
             s = "DELETE FROM {entete}cohort_members" \
                 " WHERE cohortid = %(cohort_id)s" \
-                " AND userid NOT IN ( {ids_list} )".format(entete=self.entete, ids_list=ids_list)
+                " AND userid NOT IN ({ids_list})" \
+                .format(entete=self.entete, ids_list=ids_list)
             self.mark.execute(s, params={'cohort_id': cohort_id, **ids_list_params})
 
     def update_context_path(self, id_context, new_path):
@@ -1477,7 +1583,8 @@ class Database:
         """
         s = "UPDATE {entete}context" \
             " SET path = %(new_path)s" \
-            " WHERE id = %(id_context)s".format(entete=self.entete)
+            " WHERE id = %(id_context)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'new_path': new_path, 'id_context': id_context})
 
     def update_course_category_description(self, id_category, new_description):
@@ -1490,7 +1597,8 @@ class Database:
         """
         s = "UPDATE {entete}course_categories" \
             " SET description = %(new_description)s" \
-            " WHERE id = %(id_category)s".format(entete=self.entete)
+            " WHERE id = %(id_category)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'new_description': new_description, 'id_category': id_category})
 
     def update_course_category_name(self, id_category, new_name):
@@ -1503,7 +1611,8 @@ class Database:
         """
         s = "UPDATE {entete}course_categories" \
             " SET name = %(new_name)s" \
-            " WHERE id = %(id_category)s".format(entete=self.entete)
+            " WHERE id = %(id_category)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'new_name': new_name, 'id_category': id_category})
 
     def update_course_category_path(self, id_category, new_path):
@@ -1514,7 +1623,10 @@ class Database:
         :param new_path:
         :return:
         """
-        s = "UPDATE {entete}course_categories SET path = %(new_path)s WHERE id = %(id_category)s".format(entete=self.entete)
+        s = "UPDATE {entete}course_categories" \
+            " SET path = %(new_path)s" \
+            " WHERE id = %(id_category)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'new_path': new_path, 'id_category': id_category})
 
     def update_moodle_user(self, id_user, first_name, last_name, email, mail_display, theme):
@@ -1528,19 +1640,23 @@ class Database:
         :param theme:
         :return:
         """
-        s = "UPDATE {entete}user SET auth = %(USER_AUTH)s, firstname = %(first_name)s, lastname = %(last_name)s, email = %(email)s, maildisplay = %(mail_display)s, city = %(USER_CITY)s, country = %(USER_COUNTRY)s, lang = %(USER_LANG)s, mnethostid = %(USER_MNET_HOST_ID)s, theme = %(theme)s" \
-            " WHERE id = %(id_user)s".format(entete=self.entete)
+        s = "UPDATE {entete}user" \
+            " SET auth = %(USER_AUTH)s, firstname = %(first_name)s, lastname = %(last_name)s, email = %(email)s," \
+            " maildisplay = %(mail_display)s, city = %(USER_CITY)s, country = %(USER_COUNTRY)s, lang = %(USER_LANG)s," \
+            " mnethostid = %(USER_MNET_HOST_ID)s, theme = %(theme)s" \
+            " WHERE id = %(id_user)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'USER_AUTH': USER_AUTH,
-                                'first_name': first_name,
-                                'last_name': last_name,
-                                'email': email,
-                                'mail_display': mail_display,
-                                'USER_CITY': USER_CITY,
-                                'USER_COUNTRY': USER_COUNTRY,
-                                'USER_LANG': USER_LANG,
-                                'USER_MNET_HOST_ID': USER_MNET_HOST_ID,
-                                'theme': theme,
-                                'id_user': id_user})
+                                     'first_name': first_name,
+                                     'last_name': last_name,
+                                     'email': email,
+                                     'mail_display': mail_display,
+                                     'USER_CITY': USER_CITY,
+                                     'USER_COUNTRY': USER_COUNTRY,
+                                     'USER_LANG': USER_LANG,
+                                     'USER_MNET_HOST_ID': USER_MNET_HOST_ID,
+                                     'theme': theme,
+                                     'id_user': id_user})
         logging.info("      |_ Mise a jour de %s %s ( id : %s )" % (first_name, last_name, id_user))
 
     def update_user_info_data(self, id_user, id_field, new_data):
@@ -1552,8 +1668,11 @@ class Database:
         :param new_data:
         :return:
         """
-        s = "UPDATE {entete}user_info_data SET data = %(new_data)s " \
-            " WHERE userid = %(id_user)s AND fieldid = %(id_field)s".format(entete=self.entete)
+        s = "UPDATE {entete}user_info_data" \
+            " SET data = %(new_data)s " \
+            " WHERE userid = %(id_user)s" \
+            " AND fieldid = %(id_field)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'new_data': new_data, 'id_user': id_user, 'id_field': id_field})
 
     def get_field_domaine(self):
@@ -1562,7 +1681,11 @@ class Database:
         :return:
         """
         id_field_domaine = []
-        sql = "SELECT id FROM {entete}user_info_field WHERE shortname = 'Domaine' AND name ='Domaine'".format(entete=self.entete)
+        sql = "SELECT id" \
+              " FROM {entete}user_info_field" \
+              " WHERE shortname = 'Domaine'" \
+              " AND name ='Domaine'" \
+            .format(entete=self.entete)
         self.mark.execute(sql)
         row = self.mark.fetchall()
 
@@ -1574,7 +1697,6 @@ class Database:
 
         return id_field_domaine
 
-
     def is_enseignant_avance(self, id_user, id_role_enseignant_avance):
         """
         :param id_user:
@@ -1582,12 +1704,13 @@ class Database:
         :return:
         """
         if id_user != 0:
-            sql = "Select id from {entete}role_assignments where userid = %(id_user)s and roleid = %(id_role_enseignant_avance)s".format(entete=self.entete)
+            sql = "SELECT id" \
+                  " FROM {entete}role_assignments" \
+                  " WHERE userid = %(id_user)s" \
+                  " AND roleid = %(id_role_enseignant_avance)s" \
+                .format(entete=self.entete)
             self.mark.execute(sql, params={'id_user': id_user, 'id_role_enseignant_avance': id_role_enseignant_avance})
-            if self.mark.rowcount > 0:
-                return True
-            else:
-                return False
+            return self.mark.rowcount > 0
 
     def set_user_domain(self, id_user, id_field_domaine, user_domain):
         """
@@ -1601,26 +1724,29 @@ class Database:
         # le script va essayer de créer une nouvelle ligne (INSERT) avec le nouveau domaine => erreur !
         # la requête doit donc être modifiée :
         # sql = "SELECT id FROM %suser_info_data WHERE userid = %s AND fieldid = %s AND data = '%s'"
-        sql = "SELECT id FROM {entete}user_info_data " \
-              "WHERE userid = %(id_user)s AND fieldid = %(id_field_domaine)s LIMIT 1" \
+        sql = "SELECT id" \
+              " FROM {entete}user_info_data" \
+              " WHERE userid = %(id_user)s" \
+              " AND fieldid = %(id_field_domaine)s" \
+              " LIMIT 1" \
             .format(entete=self.entete)
         self.mark.execute(sql, params={'id_user': id_user, 'id_field_domaine': id_field_domaine})
 
         result = self.mark.fetchone()
         if result:
             sql = "REPLACE INTO {entete}user_info_data " \
-                  "(id, userid, fieldid, data) VALUES " \
-                  "(%(id)s, %(id_user)s, %(id_field_domaine)s, %(user_domain)s)" \
+                  "(id, userid, fieldid, data)" \
+                  " VALUES (%(id)s, %(id_user)s, %(id_field_domaine)s, %(user_domain)s)" \
                 .format(entete=self.entete)
             self.mark.execute(sql, params={'id': result[0],
-                                      'id_user': id_user,
-                                      'id_field_domaine': id_field_domaine,
-                                      'user_domain': user_domain})
+                                           'id_user': id_user,
+                                           'id_field_domaine': id_field_domaine,
+                                           'user_domain': user_domain})
         else:
             sql = "INSERT INTO {entete}user_info_data " \
-                  "(userid, fieldid, data) VALUES " \
-                  "(%(id_user)s, %(id_field_domaine)s, %(user_domain)s)" \
+                  "(userid, fieldid, data)" \
+                  " VALUES (%(id_user)s, %(id_field_domaine)s, %(user_domain)s)" \
                 .format(entete=self.entete)
             self.mark.execute(sql, params={'id_user': id_user,
-                                      'id_field_domaine': id_field_domaine,
-                                      'user_domain': user_domain})
+                                           'id_field_domaine': id_field_domaine,
+                                           'user_domain': user_domain})
