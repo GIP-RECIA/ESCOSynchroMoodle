@@ -226,19 +226,6 @@ class Database:
         self.entete = config.entete
         self.__connect()
 
-    def __array_to_safe_sql_list(self, elements, name=None):
-        if name:
-            format_strings = []
-            params = {}
-            for i, element in enumerate(elements):
-                format_strings.append('%({name}_{i})s'.format(name=name, i=i))
-                params['{name}_{i}'.format(name=name, i=i)] = element
-            return ','.join(format_strings), params
-        else:
-            format_strings = ['%s'] * len(elements)
-            params = tuple(elements)
-            return ','.join(format_strings), params
-
     def __connect(self):
         """
         Etablit la connexion à la base de données Moodle
