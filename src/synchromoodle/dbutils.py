@@ -574,7 +574,7 @@ class Database:
         """
         s = "DELETE FROM {entete}role_assignments" \
             " WHERE contextid = %(id_context_category)s" \
-            " AND roleid = %(roleid)" \
+            " AND roleid = %(roleid)s" \
             " AND userid = %(userid)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_context_category': id_context_category, 'roleid': roleid, 'userid': userid})
