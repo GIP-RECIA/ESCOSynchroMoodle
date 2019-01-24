@@ -27,58 +27,6 @@ def estGrpEtab(rne: str, etablissements_config: EtablissementsConfig):
     return False
 
 
-######################################################################
-# Fonction permettant de mettre a jour les droits d'un enseignant.
-# Cette mise a jour consiste a :
-#   - Supprimer les roles non autorises
-#   - ajouter les roles
-######################################################################
-def mettre_a_jour_droits_enseignant(db, enseignant_infos, gereAdminLocal, id_enseignant, id_context_categorie,
-                                    id_context_course_forum, uais_autorises):
-    # Recuperation des themes autorises pour l'enseignant
-    themes_autorises = [uai_autorise.lower() for uai_autorise in uais_autorises]
-    logging.debug(
-        "      |_ Etablissements autorises pour l'enseignant pour %s : %s" % (enseignant_infos, str(themes_autorises)))
-
-    #########################
-    # ZONES PRIVEES
-    #########################
-    # Recuperation des ids des roles et les themes non autorises
-    ids_roles_non_autorises, ids_themes_non_autorises = db.get_ids_and_themes_not_allowed_roles(id_enseignant,
-                                                                                                themes_autorises)
-
-    # Suppression des roles non autorises
-    if ids_roles_non_autorises:
-        db.delete_roles(ids_roles_non_autorises)
-        logging.info("      |_ Suppression des rôles d'enseignant pour %s dans les établissements %s" % (
-            enseignant_infos, str(ids_themes_non_autorises)))
-        logging.info("         Les seuls établissements autorisés pour cet enseignant sont %s" % str(themes_autorises))
-
-    #########################
-    # FORUMS
-    #########################
-    # Recuperation des SIREN des etablissements dans lequel l'enseignant travaille
-    sirens = db.get_descriptions_course_categories_by_themes(themes_autorises)
-
-    # Shortname des forums associes
-    # Modification RECIA pour erreur d'encodage : "UnicodeEncodeError: 'ascii' codec can't encode character u'\xe9' in position 41: ordinal not in range(128)"
-    # CD - 18/09/2015
-    # Ancien code : shortnames_forums = [ ( "ZONE-PRIVEE-%s" % str( siren ) ) for siren in sirens ]
-    shortnames_forums = [("ZONE-PRIVEE-%s" % str(siren.encode("utf-8"))) for siren in sirens]
-
-    # Recuperation des roles sur les forums qui ne devraient plus exister
-    ids_roles_non_autorises, forums_summaries = db.get_ids_and_summaries_not_allowed_roles(id_enseignant,
-                                                                                           shortnames_forums)
-
-    # Suppression des roles non autorises
-    if ids_roles_non_autorises:
-        # Suppression des roles
-        db.delete_roles(ids_roles_non_autorises)
-        logging.info("      |_ Suppression des rôles d'enseignant pour %s sur les forum '%s' " % (
-            enseignant_infos, str(forums_summaries)))
-        logging.info("         Les seuls établissements autorisés pour cet enseignant sont '%s'" % themes_autorises)
-
-
 def miseAJour(config: Config, purge_cohortes: bool):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
@@ -100,14 +48,14 @@ def miseAJour(config: Config, purge_cohortes: bool):
         synchronizer.context.map_etab_domaine = ldap.get_domaines_etabs()
 
         # Ids des categories inter etablissements
-        id_context_categorie_inter_etabs = db.get_id_context_inter_etabs()
+        synchronizer.context.id_context_categorie_inter_etabs = db.get_id_context_inter_etabs()
 
         id_categorie_inter_cfa = db.get_id_categorie_inter_etabs(config.etablissements.inter_etab_categorie_name_cfa)
-        id_context_categorie_inter_cfa = db.get_id_context_categorie(id_categorie_inter_cfa)
+        synchronizer.context.id_context_categorie_inter_cfa = db.get_id_context_categorie(id_categorie_inter_cfa)
 
         # Recuperation des ids des roles admin local et extended teacher
         id_role_admin_local = db.get_id_role_admin_local()
-        id_role_extended_teacher = db.get_id_role_extended_teacher()
+        synchronizer.context.id_role_extended_teacher = db.get_id_role_extended_teacher()
 
         # Recuperation des ids du role d'utilisateur avancé
         id_role_advanced_teacher = db.get_id_role_advanced_teacher()
@@ -169,99 +117,8 @@ def miseAJour(config: Config, purge_cohortes: bool):
 
             # Traitement des enseignants
             for ldap_teacher in ldap.search_teacher(since_timestamp=time_stamp, uai=uai):
-                enseignant_infos = "%s %s %s" % (ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn)
+                synchronizer.mise_a_jour_enseignant(etablissement_context, ldap_teacher)
 
-                if ldap_teacher.uai_courant and not etablissement_context.etablissement_regroupe:
-                    etablissement_context.etablissement_theme = ldap_teacher.uai_courant.lower()
-
-                if not ldap_teacher.mail:
-                    ldap_teacher.mail = config.constantes.default_mail
-
-                # Affichage du mail reserve aux membres de cours
-                mail_display = config.constantes.default_mail_display
-                if etablissement_context.ldap_structure.uai in config.etablissements.listeEtabSansMail:
-                    # Desactivation de l'affichage du mail
-                    mail_display = 0
-
-                # Insertion de l'enseignant
-                id_user = db.get_user_id(ldap_teacher.uid)
-                if not id_user:
-                    db.insert_moodle_user(ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn, ldap_teacher.mail,
-                                          mail_display, etablissement_context.etablissement_theme)
-                    id_user = db.get_user_id(ldap_teacher.uid)
-                else:
-                    db.update_moodle_user(id_user, ldap_teacher.given_name, ldap_teacher.sn, ldap_teacher.mail,
-                                          mail_display,
-                                          etablissement_context.etablissement_theme)
-
-                # Mise ajour des droits sur les anciens etablissement
-                if ldap_teacher.uais is not None and not etablissement_context.etablissement_regroupe:
-                    # Recuperation des uais des etablissements dans lesquels l'enseignant est autorise
-                    mettre_a_jour_droits_enseignant(db, enseignant_infos,
-                                                    etablissement_context.gereAdminLocal,
-                                                    etablissement_context.id_context_categorie,
-                                                    etablissement_context.id_context_course_forum,
-                                                    id_user,
-                                                    ldap_teacher.uais)
-
-                # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
-                db.add_role_to_user(config.constantes.id_role_createur_cours,
-                                    id_context_categorie_inter_etabs,
-                                    id_user)
-                logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
-
-                # Si l'enseignant fait partie d'un CFA
-                # Ajout du role createur de cours au niveau de la categorie inter-cfa
-                if etablissement_context.ldap_structure.type == config.constantes.type_structure_cfa:
-                    db.add_role_to_user(config.constantes.id_role_createur_cours,
-                                        id_context_categorie_inter_cfa, id_user)
-                    logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-cfa")
-
-                # ajout du role de createur de cours dans l'etablissement
-                db.add_role_to_user(config.constantes.id_role_createur_cours, etablissement_context.id_context_categorie, id_user)
-
-                # Ajouts des autres roles pour le personnel établissement
-                if 'National_3' in ldap_teacher.profils or 'National_5' in ldap_teacher.profils or 'National_6' in ldap_teacher.profils or 'National_4' in ldap_teacher.profils:
-                    # Ajout des roles sur le contexte forum
-                    db.add_role_to_user(config.constantes.id_role_eleve, etablissement_context.id_context_course_forum, id_user)
-                    # Inscription à la Zone Privée
-                    db.enroll_user_in_course(config.constantes.id_role_eleve, etablissement_context.id_zone_privee, id_user)
-
-                    if 'National_3' in ldap_teacher.profils or 'National_5' in ldap_teacher.profils or 'National_6' in ldap_teacher.profils:
-                        if not etablissement_context.gereAdminLocal:
-                            db.add_role_to_user(id_role_extended_teacher, etablissement_context.id_context_categorie, id_user)
-                    elif 'National_4' in ldap_teacher.profils:
-                        db.add_role_to_user(config.constantes.id_role_directeur, etablissement_context.id_context_categorie, id_user)
-
-                # Ajout des droits d'administration locale pour l'etablissement
-                if etablissement_context.gereAdminLocal:
-                    for member in ldap_teacher.is_member_of:
-                        # L'enseignant est il administrateur Moodle ?
-                        adminMoodle = re.match(etablissement_context.regexpAdminMoodle, member, flags=re.IGNORECASE)
-                        if adminMoodle:
-                            insert = db.insert_moodle_local_admin(etablissement_context.id_context_categorie, id_user)
-                            if insert:
-                                logging.info("      |_ Insertion d'un admin  local %s %s %s" % (
-                                    ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn))
-                            # Si il est adminin local on en fait un utilisateur avancé par default
-                            if not db.is_enseignant_avance(id_user, id_role_advanced_teacher):
-                                db.add_role_to_user(id_role_advanced_teacher, 1, id_user)
-                            break
-                        else:
-                            delete = db.delete_moodle_local_admin(id_context_categorie_inter_etabs, id_user)
-                            if delete:
-                                logging.info("      |_ Suppression d'un admin local %s %s %s" % (
-                                    ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn))
-
-                # Mise a jour du Domaine
-                user_domain = config.constantes.default_domain
-                if len(ldap_teacher.domaines) == 1:
-                    user_domain = ldap_teacher.domaines[0]
-                else:
-                    if ldap_teacher.uai_courant and ldap_teacher.uai_courant in synchronizer.context.map_etab_domaine:
-                        user_domain = synchronizer.context.map_etab_domaine[ldap_teacher.uai_courant][0]
-                logging.debug("Insertion du Domaine")
-                db.set_user_domain(id_user, synchronizer.context.id_field_domaine, user_domain)
         if purge_cohortes:
             # Si la purge des cohortes a ete demandee
             # On recupere tous les eleves sans prendre en compte le timestamp
