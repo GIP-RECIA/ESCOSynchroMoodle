@@ -196,7 +196,7 @@ class Ldap:
         return result_entries
 
 
-def _get_filtre_eleves(since_timestamp, uai: str):
+def _get_filtre_eleves(since_timestamp: str = None, uai: str = None):
     """
     Construit le filtre pour récupérer les élèves au sein du LDAP
 
