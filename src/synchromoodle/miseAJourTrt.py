@@ -6,25 +6,11 @@ import sys
 
 from synchromoodle.majutils import Synchronizer
 from synchromoodle.timestamp import TimestampStore
-
-logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
-
 from .dbutils import Database
-from .config import EtablissementsConfig, Config
+from .config import Config
 from .ldaputils import Ldap
 
-
-def estGrpEtab(rne: str, etablissements_config: EtablissementsConfig):
-    """
-    Indique si un établissement fait partie d'un regroupement d'établissement ou non
-    :param rne: code de l'établissement
-    :param etablissements_config: EtablissementsConfig
-    :return: True si l'établissement fait partie d'un regroupement d'établissement
-    """
-    for regroupement in etablissements_config.etabRgp:
-        if rne in regroupement.UaiRgp:
-            return regroupement
-    return False
+logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 def miseAJour(config: Config, purge_cohortes: bool):
@@ -53,12 +39,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         id_categorie_inter_cfa = db.get_id_categorie_inter_etabs(config.etablissements.inter_etab_categorie_name_cfa)
         synchronizer.context.id_context_categorie_inter_cfa = db.get_id_context_categorie(id_categorie_inter_cfa)
 
-        # Recuperation des ids des roles admin local et extended teacher
-        id_role_admin_local = db.get_id_role_admin_local()
         synchronizer.context.id_role_extended_teacher = db.get_id_role_extended_teacher()
-
-        # Recuperation des ids du role d'utilisateur avancé
-        id_role_advanced_teacher = db.get_id_role_advanced_teacher()
 
         # Recuperation du timestamp actuel
         maintenant_sql = db.get_timestamp_now()
@@ -135,7 +116,6 @@ def miseAJour(config: Config, purge_cohortes: bool):
         logging.info('============================================')
     except Exception as err:
         logging.exception("An exception has been thrown")
-        # logging.exception("Something went bad during the connection:\n", err)
         sys.exit(2)
 
     db.disconnect()
@@ -178,8 +158,6 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         # Mise a jour des utilisateurs inter-etabs
         ###################################################
         logging.info('    |_ Mise à jour des utilisateurs inter-etablissements')
-
-        list_moodle_not_admin = []
 
         id_categorie_inter_etabs = db.get_id_categorie_inter_etabs(config.inter_etablissements.categorie_name)
         id_context_categorie_inter_etabs = db.get_id_context_categorie(id_categorie_inter_etabs)
@@ -343,22 +321,6 @@ def miseAJourInspecteurs(config: Config):
             # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
             db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_categorie_inter_etabs, id_user)
             logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
-
-            # if 'ESCOUAICourant' in ldap_entry_infos:
-            # people_structure_uai  = ldap_entry_infos['ESCOUAICourant'][0].lower()
-
-            # Recuperation de l'id du contexte correspondant à l'etablissement de l'inspecteur
-            # id_etab_categorie = get_id_course_category_by_theme( mark, entete, people_structure_uai )
-
-            # if id_etab_categorie is not None : 
-            # id_context_categorie  = get_id_context_categorie( mark, entete, id_etab_categorie )
-            # Ajout du role de createur de cours dans l'etablissement
-            # add_role_to_user( mark, entete, ID_ROLE_CREATEUR_COURS, id_context_categorie, id_user )
-            # logging.info( "        |_ Ajout du role de createur de cours dans l'etablissement de l'inspecteur" )
-
-            # Ajout du role de personnel de direction dans l'etablissement
-            # add_role_to_user( mark, entete, ID_ROLE_INSPECTEUR, id_context_categorie, id_user )
-            # logging.info( "        |_ Ajout du role de personnel de direction dans l'établissement de l'inspecteur" )
 
             # Mise a jour du Domaine
             user_domain = config.constantes.default_domain
