@@ -6,8 +6,8 @@ import sys
 
 from synchromoodle.majutils import Synchronizer
 from synchromoodle.timestamp import TimestampStore
-from .dbutils import Database
 from .config import Config
+from .dbutils import Database
 from .ldaputils import Ldap
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
@@ -97,7 +97,6 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         synchronizer.load_context()
         maintenant_sql = db.get_timestamp_now()
 
-
         ###################################################
         # Recuperation de la date de dernier traitement
         ###################################################
@@ -111,7 +110,8 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         id_categorie_inter_etabs = db.get_id_categorie_inter_etabs(config.inter_etablissements.categorie_name)
         id_context_categorie_inter_etabs = db.get_id_context_categorie(id_categorie_inter_etabs)
 
-        people_filter = {config.users.ldap_attribut_user: config.users.ldap_valeur_attribut_user}
+        people_filter = {
+            config.inter_etablissements.ldap_attribut_user: config.inter_etablissements.ldap_valeur_attribut_user}
 
         # Traitement des eleves
         for ldap_people in ldap.search_people(since_timestamp=timestamp_store.current_timestamp, **people_filter):
@@ -246,7 +246,8 @@ def miseAJourInspecteurs(config: Config):
         # Recuperation de l'id du contexte correspondant à la categorie inter_etabs
         id_context_categorie_inter_etabs = db.get_id_context_inter_etabs()
 
-        people_filter = {config.users.ldap_attribut_user: config.users.ldap_valeur_attribut_user}
+        people_filter = {
+            config.inspecteurs_config.ldap_attribut_user: config.inspecteurs_config.ldap_valeur_attribut_user}
 
         # Traitement des inspecteurs
         for ldap_people in ldap.search_people(time_stamp, **people_filter):

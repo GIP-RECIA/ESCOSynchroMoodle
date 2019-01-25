@@ -186,15 +186,6 @@ class UsersConfig(_BaseConfig):
     prefixAdminLocal = "(esco|clg37):admin:local:"  # type: str
     """Prefix de l'attribut "isMemberOf" indiquant que l'utilisateur est un administrateur local"""
 
-    ldap_attribut_user = "isMemberOf"  # type: str
-    """Attribut utilisé pour determiner les utilisateurs"""
-
-    ldap_valeur_attribut_user = ["cfa:Applications:Espace_Moodle:Inter_etablissements"]  # type: str
-    """Utilisateurs speciaux de la section inter-etablissement"""
-
-    ldap_valeur_attribut_admin = "cfa:admin:Moodle:local:Inter_etablissements"  # type: str
-    """Utilisateurs administrateurs de la section inter-etablissement"""
-
 
 class InterEtablissementsConfig(_BaseConfig):
     def __init__(self, **entries):
@@ -206,8 +197,28 @@ class InterEtablissementsConfig(_BaseConfig):
     categorie_name = '%%Cat%%gorie inter%%tablissements'  # type: str
     """Nom de la catégorie inter-etablissement"""
 
+    ldap_attribut_user = "isMemberOf"  # type: str
+    """Attribut utilisé pour determiner les utilisateurs inter-établissement"""
+
+    ldap_valeur_attribut_user = ["cfa:Applications:Espace_Moodle:Inter_etablissements"]  # type: str
+    """Valeurs possibles de l'attribut pour déterminer si l'utilisateur est un utilisateur inter-établissement"""
+
+    ldap_valeur_attribut_admin = "cfa:admin:Moodle:local:Inter_etablissements"  # type: str
+    """Utilisateurs administrateurs de la section inter-etablissement"""
+
     cle_timestamp = "INTER_ETAB"  # type: str
     """Clé pour stocker le timestamp du dernier traitement inter-etablissements"""
+
+
+class InspecteursConfig(_BaseConfig):
+    def __init__(self, **entries):
+        super().__init__(**entries)
+
+    ldap_attribut_user = "ESCOPersonProfils"  # type: str
+    """Attribut utilisé pour determiner les inspecteurs"""
+
+    ldap_valeur_attribut_user = ["INS"]  # type: str
+    """Valeur de l'attribute pour déterminer les inspecteurs"""
 
 
 class TimestampStoreConfig(_BaseConfig):
@@ -229,7 +240,7 @@ class Config:
     timestamp_store = TimestampStoreConfig()  # type: TimestampStoreConfig
     etablissements = EtablissementsConfig()  # type: EtablissementsConfig
     inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
-    actions = ["default"]  # type: List[str]
+    inspecteurs_config = InspecteursConfig()  # type: InspecteursConfig
     actions = ["default"]  # type: List[str]
 
 
@@ -252,6 +263,8 @@ class ConfigLoader:
                         loaded_config.users.update(**data['users'])
                     if 'interEtablissements' in data:
                         loaded_config.inter_etablissements.update(**data['interEtablissements'])
+                    if 'inspecteurs' in data:
+                        loaded_config.inspecteurs.update(**data['inspecteurs'])
                     if 'timestampStore' in data:
                         loaded_config.timestamp_store.update(**data['timestampStore'])
                     if 'inspecteurs' in data:
