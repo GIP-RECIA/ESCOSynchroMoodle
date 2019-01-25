@@ -1,6 +1,3 @@
-users:
-  prefixAdminMoodleLocal: "(esco|clg37):admin:Moodle:local:"
-  prefixAdminLocal: "(esco|clg37):admin:local:"
 timestampStore:
   file: "trtAcademique_precedent.txt"
 etablissements:

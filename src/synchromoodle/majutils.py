@@ -104,9 +104,9 @@ class Synchronizer:
         context.gereAdminLocal = uai not in self.__config.etablissements.listeEtabSansAdmin
         context.etablissement_regroupe = est_grp_etab(uai, self.__config.etablissements)
         # Regex pour savoir si l'utilisateur est administrateur moodle
-        context.regexpAdminMoodle = self.__config.users.prefixAdminMoodleLocal + ".*_%s$" % uai
+        context.regexpAdminMoodle = self.__config.etablissements.prefixAdminMoodleLocal + ".*_%s$" % uai
         # Regex pour savoir si l'utilisateur est administrateur local
-        context.regexpAdminLocal = self.__config.users.prefixAdminLocal + ".*_%s$" % uai
+        context.regexpAdminLocal = self.__config.etablissements.prefixAdminLocal + ".*_%s$" % uai
 
         ldap_structure = self.__ldap.get_structure(uai)
         if ldap_structure:

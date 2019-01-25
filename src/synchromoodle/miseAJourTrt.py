@@ -133,7 +133,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
 
             # Attribution du role admin local si necessaire
             for member in ldap_people.is_member_of:
-                admin = re.match(config.users.ldap_valeur_attribut_admin, member, flags=re.IGNORECASE)
+                admin = re.match(config.etablissements.ldap_valeur_attribut_admin, member, flags=re.IGNORECASE)
                 if admin:
                     insert = db.insert_moodle_local_admin(id_context_categorie_inter_etabs, id_user)
                     if insert:

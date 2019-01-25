@@ -1,8 +1,7 @@
-users:
-  prefixAdminMoodleLocal: "agri:admin:Moodle:local:"
-  prefixAdminLocal: "agri:admin:local:"
 timestampStore:
   file: "trtAgricole_precedent.txt"
 etablissements:
+  prefixAdminMoodleLocal: "agri:admin:Moodle:local:"
+  prefixAdminLocal: "agri:admin:local:"
   listeEtab: ["0410018X", "0180585N", "0280706R", "0370878D", "0450094H", "0451535Z", "0450027K", "0410629L", "0370781Y",
               "0360017Y", "0370794M", "0410626H"]

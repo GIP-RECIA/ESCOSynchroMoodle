@@ -175,11 +175,6 @@ class EtablissementsConfig(_BaseConfig):
     listeEtabSansMail = []  # type: List[str]
     """Etablissements dont le mail des professeurs n'est pas synchronise"""
 
-
-class UsersConfig(_BaseConfig):
-    def __init__(self, **entries):
-        super().__init__(**entries)
-
     prefixAdminMoodleLocal = "(esco|clg37):admin:Moodle:local:"  # type: str
     """Préfixe de l'attribut "isMemberOf" indiquant que l'utilisateur est un administrateur local de Moodle"""
 
@@ -236,7 +231,6 @@ class Config:
     constantes = ConstantesConfig()  # type: ConstantesConfig
     database = DatabaseConfig()  # type: DatabaseConfig
     ldap = LdapConfig()  # type: LdapConfig
-    users = UsersConfig()  # type: UsersConfig
     timestamp_store = TimestampStoreConfig()  # type: TimestampStoreConfig
     etablissements = EtablissementsConfig()  # type: EtablissementsConfig
     inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
@@ -259,16 +253,12 @@ class ConfigLoader:
                         loaded_config.ldap.update(**data['ldap'])
                     if 'etablissements' in data:
                         loaded_config.etablissements.update(**data['etablissements'])
-                    if 'users' in data:
-                        loaded_config.users.update(**data['users'])
                     if 'interEtablissements' in data:
                         loaded_config.inter_etablissements.update(**data['interEtablissements'])
                     if 'inspecteurs' in data:
                         loaded_config.inspecteurs.update(**data['inspecteurs'])
                     if 'timestampStore' in data:
                         loaded_config.timestamp_store.update(**data['timestampStore'])
-                    if 'inspecteurs' in data:
-                        loaded_config.inspecteurs.update(**data['inspecteurs'])
             except FileNotFoundError as e:
                 message = "Le fichier de configuration n'a pas été chargé: " + str(e)
                 if silent:

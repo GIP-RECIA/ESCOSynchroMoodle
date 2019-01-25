@@ -1,8 +1,7 @@
-users:
-  prefixAdminMoodleLocal: "ef2s:admin:Moodle:local:"
-  prefixAdminLocal: "ef2s:admin:local:"
 timestampStore:
   file: "trtSanitaire_precedent.txt"
 etablissements:
+  prefixAdminMoodleLocal: "ef2s:admin:Moodle:local:"
+  prefixAdminLocal: "ef2s:admin:local:"
   file: "trtSanitaire_precedent.txt"
   listeEtab:  ["0370074E"]
