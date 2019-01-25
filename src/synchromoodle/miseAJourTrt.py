@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import logging
-import re
 import sys
 
 from synchromoodle.majutils import Synchronizer
@@ -19,12 +18,15 @@ def miseAJour(config: Config, purge_cohortes: bool):
     :param config: Configuration d'execution
     :param purge_cohortes: True si la purge des cohortes doit etre effectuée
     """
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
     try:
         logging.info('============================================')
         logging.info('Synchronisation établissements : DEBUT')
 
-        db = Database(config.database, config.constantes)
-        ldap = Ldap(config.ldap)
+        db.connect()
+        ldap.connect()
+
         synchronizer = Synchronizer(ldap, db, config, purge_cohortes)
         synchronizer.load_context()
 
@@ -69,12 +71,9 @@ def miseAJour(config: Config, purge_cohortes: bool):
 
         logging.info('Synchronisation établissements : FIN')
         logging.info('============================================')
-    except Exception as err:
-        logging.exception("An exception has been thrown")
-        logging.exception("Something went bad during the connection:\n", err)
-        sys.exit(2)
-
-    db.disconnect()
+    finally:
+        db.disconnect()
+        ldap.disconnect()
 
 
 def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
@@ -85,12 +84,13 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
     :param purge_cohortes: 
     :return: 
     """
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
     try:
         logging.info("  |_ Traitement de l'inter-établissements")
 
-        db = Database(config.database, config.constantes)
-
-        ldap = Ldap(config.ldap)
+        db.connect()
+        ldap.connect()
 
         synchronizer = Synchronizer(ldap, db, config, purge_cohortes)
         synchronizer.load_context()
@@ -138,11 +138,9 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         # Mise a jour de la date de dernier traitement
         timestamp_store.mark(config.inter_etablissements.cle_timestamp)
         timestamp_store.write()
-
-    except Exception as err:
-        logging.exception("An exception has been thrown")
-        logging.exception("Something went bad during the connection:\n", err)
-        sys.exit(2)
+    finally:
+        db.disconnect()
+        ldap.disconnect()
 
 
 def miseAJourInspecteurs(config: Config):
@@ -152,13 +150,16 @@ def miseAJourInspecteurs(config: Config):
     Cette mise a jour concerne les inspecteurs
     :param config: Configuration d'execution
     """
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
     try:
         logging.info('============================================')
         logging.info('Synchronisation des inspecteurs : DEBUT')
         logging.info("  |_ Traitement des inspecteurs")
 
-        db = Database(config.database, config.constantes)
-        ldap = Ldap(config.ldap)
+        db.connect()
+        ldap.connect()
+
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.load_context()
 
@@ -181,10 +182,6 @@ def miseAJourInspecteurs(config: Config):
 
         logging.info('Synchronisation des inspecteurs : FIN')
         logging.info('============================================')
-
-    except Exception as err:
-        logging.exception("An exception has been thrown")
-        logging.exception("Something went bad during the connection:\n", err)
-        sys.exit(2)
-
-    db.disconnect()
+    finally:
+        db.disconnect()
+        ldap.disconnect()

@@ -214,9 +214,8 @@ class Database:
         self.config = config
         self.constantes = constantes
         self.entete = config.entete
-        self.__connect()
 
-    def __connect(self):
+    def connect(self):
         """
         Etablit la connexion à la base de données Moodle
         :return:
@@ -238,8 +237,12 @@ class Database:
         Ferme la connexion à la base de données Moodle
         :return:
         """
-        self.mark.close()
-        self.connection.close()
+        if self.mark:
+            self.mark.close()
+            self.mark = None
+        if self.connection:
+            self.connection.close()
+            self.connection = None
 
     def add_role_to_user(self, role_id, id_context, id_user):
         """
@@ -268,7 +271,7 @@ class Database:
         """
         s = "SELECT id FROM {entete}role_assignments" \
             " WHERE roleid = %(role_id)s AND contextid = %(id_context)s AND userid = %(id_user)s".format(
-                entete=self.entete)
+            entete=self.entete)
         self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
         ligne = self.mark.fetchone()
         if ligne is None:

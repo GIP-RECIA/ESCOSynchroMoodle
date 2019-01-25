@@ -110,6 +110,11 @@ class Ldap:
         self.connection.simple_bind_s(self.config.username, self.config.password)
         return self.connection
 
+    def disconnect(self):
+        if self.connection:
+            self.connection.unbind()
+            self.connection = None
+
     def get_structure(self, uai: str) -> StructureLdap:
         """
         Recherche de structures.
