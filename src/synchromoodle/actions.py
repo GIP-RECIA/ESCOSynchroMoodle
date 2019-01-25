@@ -144,7 +144,7 @@ def interetab(config: Config, options):
         ldap.disconnect()
 
 
-def inspecteurs(config: Config):
+def inspecteurs(config: Config, options):
     """
     Effectue la mise a jour de la BD
     Moodle via les infos issues du LDAP
