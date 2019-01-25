@@ -3,7 +3,7 @@
 import logging
 import sys
 
-from synchromoodle.majutils import Synchronizer
+from synchromoodle.synchronizer import Synchronizer
 
 from synchromoodle.timestamp import TimestampStore
 from .config import Config
