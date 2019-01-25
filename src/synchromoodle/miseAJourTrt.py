@@ -157,67 +157,25 @@ def miseAJourInspecteurs(config: Config):
         logging.info('Synchronisation des inspecteurs : DEBUT')
         logging.info("  |_ Traitement des inspecteurs")
 
-        ###################################################
-        # Connexion a la BD Moodle et recuperation 
-        # d'informations
-        ###################################################
         db = Database(config.database, config.constantes)
-
-        ###################################################
-        # Connexion au LDAP
-        ###################################################
         ldap = Ldap(config.ldap)
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.load_context()
 
         ###################################################
         # Mise a jour des inspecteurs
         ###################################################
         logging.info('    |_ Mise à jour des inspecteurs')
 
-        # Recuperation de l'id du champ personnalisé Domaine
-        id_field_domaine = db.get_field_domaine()
-
-        # Récupération de la liste UAI-Domaine des établissements
-        map_etab_domaine = ldap.get_domaines_etabs()
-
         # TODO : gerer le time_stamp
         time_stamp = None
-
-        # Recuperation de l'id du contexte correspondant à la categorie inter_etabs
-        id_context_categorie_inter_etabs = db.get_id_context_inter_etabs()
 
         people_filter = {
             config.inspecteurs_config.ldap_attribut_user: config.inspecteurs_config.ldap_valeur_attribut_user}
 
         # Traitement des inspecteurs
         for ldap_people in ldap.search_people(time_stamp, **people_filter):
-            if not ldap_people.mail:
-                ldap_people.mail = config.constantes.default_mail
-
-            # Creation de l'utilisateur
-            db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
-                                  config.constantes.default_mail_display, config.constantes.default_moodle_theme)
-            id_user = db.get_user_id(ldap_people.uid)
-            if not id_user:
-                db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
-                                      config.constantes.default_mail_display, config.constantes.default_moodle_theme)
-                id_user = db.get_user_id(ldap_people.uid)
-            else:
-                db.update_moodle_user(id_user, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
-                                      config.constantes.default_mail_display, config.constantes.default_moodle_theme)
-
-            # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
-            db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_categorie_inter_etabs, id_user)
-            logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
-
-            # Mise a jour du Domaine
-            user_domain = config.constantes.default_domain
-            if len(ldap_people.domaines) == 1:
-                user_domain = ldap_people.domaines[0]
-            else:
-                if ldap_people.uai_courant and ldap_people.uai_courant in map_etab_domaine:
-                    user_domain = map_etab_domaine[ldap_people.uai_courant][0]
-            logging.debug("Insertion du Domaine")
-            db.set_user_domain(id_user, id_field_domaine, user_domain)
+            synchronizer.mise_a_jour_inspecteur(ldap_people)
 
         db.connection.commit()
 

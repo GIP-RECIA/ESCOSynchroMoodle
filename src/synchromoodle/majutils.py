@@ -6,7 +6,7 @@ import sys
 
 from .dbutils import Database
 from .config import EtablissementsConfig, Config
-from .ldaputils import Ldap, StudentLdap, TeacherLdap
+from .ldaputils import Ldap, StudentLdap, TeacherLdap, PeopleLdap
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
@@ -63,7 +63,7 @@ class Synchronizer:
     context = None  # type: SyncContext
     purge_cohortes = None  # type: bool
 
-    def __init__(self, ldap: Ldap, db: Database, config: Config, purge_cohortes: bool):
+    def __init__(self, ldap: Ldap, db: Database, config: Config, purge_cohortes: bool = False):
         self.__ldap = ldap
         self.__db = db
         self.__config = config
@@ -335,7 +335,7 @@ class Synchronizer:
         logging.debug("Insertion du Domaine")
         self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
 
-    def mise_a_jour_user_interetab(self, ldap_people):
+    def mise_a_jour_user_interetab(self, ldap_people: PeopleLdap):
         if not ldap_people.mail:
             ldap_people.mail = self.__config.constantes.default_mail
 
@@ -370,6 +370,41 @@ class Synchronizer:
                 if delete:
                     logging.info("      |_ Suppression d'un admin local %s %s %s" % (
                         ldap_people.uid, ldap_people.given_name, ldap_people.sn))
+
+    def mise_a_jour_inspecteur(self, ldap_people: PeopleLdap):
+        if not ldap_people.mail:
+            ldap_people.mail = self.__config.constantes.default_mail
+
+        # Creation de l'utilisateur
+            self.__db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
+                                         self.__config.constantes.default_mail_display,
+                                         self.__config.constantes.default_moodle_theme)
+        id_user = self.__db.get_user_id(ldap_people.uid)
+        if not id_user:
+            self.__db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
+                                         self.__config.constantes.default_mail_display,
+                                         self.__config.constantes.default_moodle_theme)
+            id_user = self.__db.get_user_id(ldap_people.uid)
+        else:
+            self.__db.update_moodle_user(id_user, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
+                                         self.__config.constantes.default_mail_display,
+                                         self.__config.constantes.default_moodle_theme)
+
+        # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
+            self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
+                                       self.context.id_context_categorie_inter_etabs,
+                                       id_user)
+        logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
+
+        # Mise a jour du Domaine
+        user_domain = self.__config.constantes.default_domain
+        if len(ldap_people.domaines) == 1:
+            user_domain = ldap_people.domaines[0]
+        else:
+            if ldap_people.uai_courant and ldap_people.uai_courant in self.context.map_etab_domaine:
+                user_domain = self.context.map_etab_domaine[ldap_people.uai_courant][0]
+        logging.debug("Insertion du Domaine")
+        self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
 
     def mettre_a_jour_droits_enseignant(self, enseignant_infos, gereAdminLocal, id_enseignant, id_context_categorie,
                                         id_context_course_forum, uais_autorises):
