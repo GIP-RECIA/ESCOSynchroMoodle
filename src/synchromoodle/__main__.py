@@ -3,10 +3,10 @@
 
 import logging
 import sys
-
-from synchromoodle.config import ConfigLoader
-from synchromoodle.miseAJourTrt import miseAJour, miseAJourInterEtabs, miseAJourInspecteurs
 from optparse import OptionParser
+
+from synchromoodle import actions
+from synchromoodle.config import ConfigLoader
 
 logging.basicConfig(format="%(levelname)s:%(message)s", stream=sys.stdout, level=logging.INFO)
 
@@ -15,8 +15,8 @@ def main():
     parser = OptionParser()
     parser.add_option("-c", "--config", action="append", dest="config", default=[],
                       help="Chemin vers un fichier de configuration.")
-    parser.add_option("-p", "--purge", action="store_true", dest="purge", default=False,
-                      help="Active la purge.")
+    parser.add_option("--purge-cohortes", action="store_true", dest="purge_cohortes", default=False,
+                      help="Active la purge des cohortes.")
 
     options, _ = parser.parse_args()
 
@@ -26,12 +26,12 @@ def main():
     config = config_loader.update(config, options.config)
 
     for action in config.actions:
-        if action == 'default':
-            miseAJour(config, options.purge)
-        if action == 'interetab':
-            miseAJourInterEtabs(config, options.purge)
-        if action == 'inspecteurs':
-            miseAJourInspecteurs(config)
+        try:
+            action_func = getattr(actions, action)
+        except AttributeError:
+            logging.error("Action invalide: %s" % action)
+            continue
+        action_func(config, options)
 
 
 if __name__ == "__main__":

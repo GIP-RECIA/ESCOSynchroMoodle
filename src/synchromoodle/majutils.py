@@ -4,8 +4,8 @@ import logging
 import re
 import sys
 
-from .dbutils import Database
 from .config import EtablissementsConfig, Config
+from .dbutils import Database
 from .ldaputils import Ldap, StudentLdap, TeacherLdap, PeopleLdap
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
@@ -60,14 +60,14 @@ class Synchronizer:
     __ldap = None  # type: Ldap
     __db = None  # type: Database
     __config = None  # type: Config
+    __options = None
     context = None  # type: SyncContext
-    purge_cohortes = None  # type: bool
 
-    def __init__(self, ldap: Ldap, db: Database, config: Config, purge_cohortes: bool = False):
+    def __init__(self, ldap: Ldap, db: Database, config: Config, options):
         self.__ldap = ldap
         self.__db = db
         self.__config = config
-        self.purge_cohortes = purge_cohortes
+        self.__options = options
         self.context = SyncContext()
 
     def load_context(self):
@@ -351,7 +351,7 @@ class Synchronizer:
                                          self.__config.constantes.default_mail_display,
                                          self.__config.constantes.default_moodle_theme)
 
-        # Ajout du role de createur de cours
+            # Ajout du role de createur de cours
             self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                        self.context.id_context_categorie_inter_etabs, id_user)
 
@@ -375,7 +375,7 @@ class Synchronizer:
         if not ldap_people.mail:
             ldap_people.mail = self.__config.constantes.default_mail
 
-        # Creation de l'utilisateur
+            # Creation de l'utilisateur
             self.__db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
                                          self.__config.constantes.default_mail_display,
                                          self.__config.constantes.default_moodle_theme)
@@ -390,7 +390,7 @@ class Synchronizer:
                                          self.__config.constantes.default_mail_display,
                                          self.__config.constantes.default_moodle_theme)
 
-        # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
+            # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
             self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                        self.context.id_context_categorie_inter_etabs,
                                        id_user)
@@ -488,7 +488,8 @@ class Synchronizer:
 
         # Ajout des utilisateurs dans la cohorte
         for ldap_people in self.__ldap.search_people(
-                since_timestamp=since_timestamp if not self.purge_cohortes else None, isMemberOf=is_member_of_list):
+                since_timestamp=since_timestamp if not self.__options.purge_cohortes else None,
+                isMemberOf=is_member_of_list):
             people_infos = "%s %s %s" % (ldap_people.uid, ldap_people.given_name, ldap_people.sn)
 
             people_id = self.__db.get_user_id(ldap_people.uid)

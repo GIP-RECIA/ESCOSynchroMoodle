@@ -4,6 +4,7 @@ import logging
 import sys
 
 from synchromoodle.majutils import Synchronizer
+
 from synchromoodle.timestamp import TimestampStore
 from .config import Config
 from .dbutils import Database
@@ -12,11 +13,11 @@ from .ldaputils import Ldap
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
-def miseAJour(config: Config, purge_cohortes: bool):
+def default(config: Config, options):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
     :param config: Configuration d'execution
-    :param purge_cohortes: True si la purge des cohortes doit etre effectuée
+    :param options: True si la purge des cohortes doit etre effectuée
     """
     db = Database(config.database, config.constantes)
     ldap = Ldap(config.ldap)
@@ -27,7 +28,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, purge_cohortes)
+        synchronizer = Synchronizer(ldap, db, config, options)
         synchronizer.load_context()
 
         ###################################################
@@ -50,10 +51,10 @@ def miseAJour(config: Config, purge_cohortes: bool):
 
             # Si la purge des cohortes a ete demandee, on recupere tous les eleves sans prendre en compte le timestamp
             # du dernier traitement
-            for ldap_student in ldap.search_student(since_timestamp if not purge_cohortes else None, uai):
+            for ldap_student in ldap.search_student(since_timestamp if not options.purge_cohortes else None, uai):
                 synchronizer.mise_a_jour_eleve(etablissement_context, ldap_student)
 
-            if purge_cohortes:
+            if options.purge_cohortes:
                 logging.info('    |_ Purge des cohortes des élèves')
                 synchronizer.purge_eleve_cohorts(etablissement_context)
 
@@ -62,7 +63,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
                 synchronizer.mise_a_jour_enseignant(etablissement_context, ldap_teacher)
 
             synchronizer.create_profs_etabs_cohorts(etablissement_context,
-                                                    since_timestamp if not purge_cohortes else None)
+                                                    since_timestamp if not options.purge_cohortes else None)
 
             db.connection.commit()
 
@@ -76,12 +77,12 @@ def miseAJour(config: Config, purge_cohortes: bool):
         ldap.disconnect()
 
 
-def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
+def interetab(config: Config, options):
     """
     Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
     Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
     :param config: Configuration d'execution
-    :param purge_cohortes: 
+    :param options: 
     :return: 
     """
     db = Database(config.database, config.constantes)
@@ -92,7 +93,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, purge_cohortes)
+        synchronizer = Synchronizer(ldap, db, config, options)
         synchronizer.load_context()
 
         ###################################################
@@ -128,7 +129,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
             synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, since_timestamp)
 
         # Purge des cohortes des eleves
-        if purge_cohortes:
+        if options.purge_cohortes:
             logging.info('    |_ Purge des cohortes de la catégorie inter-établissements')
             db.purge_cohorts(utilisateurs_by_cohortes)
 
@@ -143,7 +144,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         ldap.disconnect()
 
 
-def miseAJourInspecteurs(config: Config):
+def inspecteurs(config: Config):
     """
     Effectue la mise a jour de la BD
     Moodle via les infos issues du LDAP
