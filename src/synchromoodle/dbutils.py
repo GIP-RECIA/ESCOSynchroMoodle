@@ -241,15 +241,6 @@ class Database:
         self.mark.close()
         self.connection.close()
 
-    def add_role_mahara_to_user(self, id_user):
-        """
-        Fonction permettant d'ajouter un role a un utilisateur
-        Mahaea pour un contexte donne
-        :param id_user: int
-        :return:
-        """
-        self.add_role_to_user(self.constantes.id_role_mahara, ID_CONTEXT_SYSTEM, id_user)
-
     def add_role_to_user(self, role_id, id_context, id_user):
         """
         Fonction permettant d'ajouter un role a un utilisateur
@@ -487,19 +478,6 @@ class Database:
         cohort_description = COHORT_DESC_FOR_FORMATION % formation_name
         id_cohort = self.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
         return id_cohort
-
-    def delete_all_mahara_roles(self):
-        """
-        Fonction permettant de supprimer tous les roles
-        d'utilisateur de Mahara
-        :return:
-        """
-        s = "DELETE FROM {entete}role_assignments" \
-            " WHERE roleid = %(ID_ROLE_MAHARA)s" \
-            " AND contextid = %(ID_CONTEXT_SYSTEM)s" \
-            .format(entete=self.entete)
-        self.mark.execute(s, params={'ID_ROLE_MAHARA': self.constantes.id_role_mahara,
-                                     'ID_CONTEXT_SYSTEM': ID_CONTEXT_SYSTEM})
 
     def delete_moodle_local_admins(self, id_context_categorie, ids_not_admin):
         """

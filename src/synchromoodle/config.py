@@ -61,9 +61,6 @@ class ConstantesConfig(_BaseConfig):
     id_role_inspecteur = 9  # type: int
     """Id pour le role inspecteur"""
 
-    id_role_mahara = 16  # type: int
-    """Id pour le role utilisateur Mahara"""
-
     id_role_directeur = 18  # type: int
     """Id pour le role directeur"""
 
@@ -224,16 +221,6 @@ class TimestampStoreConfig(_BaseConfig):
     """Séparateur utilisé dans le fichier de traitement pour séparer l'etablissement des date de traitement précedent"""
 
 
-class MaharaConfig(_BaseConfig):
-    def __init__(self, **entries):
-        super().__init__(**entries)
-
-    cle_timestamp = "MAHARA"  # type: str
-
-
-"""Clé pour stocker le timestamp du dernier traitement mahara"""
-
-
 class Config:
     constantes = ConstantesConfig()  # type: ConstantesConfig
     database = DatabaseConfig()  # type: DatabaseConfig
@@ -242,7 +229,7 @@ class Config:
     timestamp_store = TimestampStoreConfig()  # type: TimestampStoreConfig
     etablissements = EtablissementsConfig()  # type: EtablissementsConfig
     inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
-    mahara = MaharaConfig()  # type: MaharaConfig
+    actions = ["default"]  # type: List[str]
     actions = ["default"]  # type: List[str]
 
 
@@ -269,8 +256,6 @@ class ConfigLoader:
                         loaded_config.timestamp_store.update(**data['timestampStore'])
                     if 'inspecteurs' in data:
                         loaded_config.inspecteurs.update(**data['inspecteurs'])
-                    if 'mahara' in data:
-                        loaded_config.mahara.update(**data['mahara'])
             except FileNotFoundError as e:
                 message = "Le fichier de configuration n'a pas été chargé: " + str(e)
                 if silent:

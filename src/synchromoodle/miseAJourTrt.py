@@ -95,18 +95,12 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
 
         db = Database(config.database, config.constantes)
 
-        ###################################################
-        # Connexion a la BD Moodle et recuperation 
-        # d'informations
-        ###################################################
+        ldap = Ldap(config.ldap)
 
-        # Recuperation du timestamp actuel
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.load_context()
         maintenant_sql = db.get_timestamp_now()
 
-        ###################################################
-        # Connexion au LDAP
-        ###################################################
-        ldap = Ldap(config.ldap)
 
         ###################################################
         # Recuperation de la date de dernier traitement

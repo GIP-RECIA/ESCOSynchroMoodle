@@ -4,8 +4,8 @@ import logging
 import re
 import sys
 
-from .config import EtablissementsConfig, Config
 from .dbutils import Database
+from .config import EtablissementsConfig, Config
 from .ldaputils import Ldap, StudentLdap, TeacherLdap
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)

@@ -25,6 +25,4 @@ python3 -m synchromoodle -c config/sanitaire.yml* >>$SYNC_LOG 2>>$SYNC_ERR
 echo "Inter établissements :" >>$SYNC_LOG 2>>$SYNC_ERR
 python3 -m synchromoodle -c config/intererab-all.yml* >>$SYNC_LOG 2>>$SYNC_ERR
 python3 -m synchromoodle -c config/intererab-cfa.yml* >>$SYNC_LOG 2>>$SYNC_ERR
-echo "Utilisateurs Mahara :" >>$SYNC_LOG 2>>$SYNC_ERR
-python3 -m synchromoodle -c config/mahara.yml* >>$SYNC_LOG 2>>$SYNC_ERR
 echo "================================" >>$SYNC_LOG 2>>$SYNC_ERR

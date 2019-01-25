@@ -6,10 +6,9 @@ import sys
 
 from synchromoodle.config import ConfigLoader
 from synchromoodle.miseAJourTrt import miseAJour, miseAJourInterEtabs, miseAJourInspecteurs
+from optparse import OptionParser
 
 logging.basicConfig(format="%(levelname)s:%(message)s", stream=sys.stdout, level=logging.INFO)
-
-from optparse import OptionParser
 
 
 def main():
