@@ -1,8 +1,0 @@
-actions: ['mahara']
-timestampStore:
-  file: "trtMahara_precedent.txt"
-users:
-  ldap_attribut_user: "isMemberOf"
-  ldap_valeur_attribut_user:
-    - "clg37:Etablissements:*:groupes_locaux:Mahara:Moodle-Mahara"
-    - "esco:Etablissements:*:groupes_locaux:Mahara:Moodle-Mahara"
