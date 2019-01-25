@@ -32,6 +32,7 @@ class SyncContext:
     id_context_categorie_inter_cfa = None
     id_role_extended_teacher = None
     timestamp_now_sql = None
+    utilisateurs_by_cohortes = {}
 
 
 class EtablissementContext:
@@ -60,11 +61,13 @@ class Synchronizer:
     __db = None  # type: Database
     __config = None  # type: Config
     context = None  # type: SyncContext
+    purge_cohortes = None  # type: bool
 
-    def __init__(self, ldap: Ldap, db: Database, config: Config):
+    def __init__(self, ldap: Ldap, db: Database, config: Config, purge_cohortes: bool):
         self.__ldap = ldap
         self.__db = db
         self.__config = config
+        self.purge_cohortes = purge_cohortes
         self.context = SyncContext()
 
     def load_context(self):
@@ -332,6 +335,42 @@ class Synchronizer:
         logging.debug("Insertion du Domaine")
         self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
 
+    def mise_a_jour_user_interetab(self, ldap_people):
+        if not ldap_people.mail:
+            ldap_people.mail = self.__config.constantes.default_mail
+
+        # Creation de l'utilisateur
+        id_user = self.__db.get_user_id(ldap_people.uid)
+        if not id_user:
+            self.__db.insert_moodle_user(ldap_people.uid, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
+                                         self.__config.constantes.default_mail_display,
+                                         self.__config.constantes.default_moodle_theme)
+            id_user = self.__db.get_user_id(ldap_people.uid)
+        else:
+            self.__db.update_moodle_user(id_user, ldap_people.given_name, ldap_people.sn, ldap_people.mail,
+                                         self.__config.constantes.default_mail_display,
+                                         self.__config.constantes.default_moodle_theme)
+
+        # Ajout du role de createur de cours
+            self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
+                                       self.context.id_context_categorie_inter_etabs, id_user)
+
+        # Attribution du role admin local si necessaire
+        for member in ldap_people.is_member_of:
+            admin = re.match(self.__config.inter_etablissements.ldap_valeur_attribut_admin, member, flags=re.IGNORECASE)
+            if admin:
+                insert = self.__db.insert_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
+                if insert:
+                    logging.info(
+                        "      |_ Insertion d'un admin local %s %s %s" % (
+                            ldap_people.uid, ldap_people.given_name, ldap_people.sn))
+                break
+            else:
+                delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
+                if delete:
+                    logging.info("      |_ Suppression d'un admin local %s %s %s" % (
+                        ldap_people.uid, ldap_people.given_name, ldap_people.sn))
+
     def mettre_a_jour_droits_enseignant(self, enseignant_infos, gereAdminLocal, id_enseignant, id_context_categorie,
                                         id_context_course_forum, uais_autorises):
         """
@@ -399,3 +438,31 @@ class Synchronizer:
                                              self.context.timestamp_now_sql,
                                              since_timestamp,
                                              self.__ldap)
+
+    def mise_a_jour_cohorte_interetab(self, is_member_of, cohort_name, since_timestamp):
+        # Creation de la cohort si necessaire
+        self.__db.create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name, cohort_name,
+                                self.context.timestamp_now_sql)
+        id_cohort = self.__db.get_id_cohort(self.context.id_context_categorie_inter_etabs, cohort_name)
+
+        # Liste permettant de sauvegarder les utilisateurs de la cohorte
+        self.context.utilisateurs_by_cohortes[id_cohort] = []
+
+        # Recuperation des utilisateurs
+        is_member_of_list = [is_member_of]
+
+        # Ajout des utilisateurs dans la cohorte
+        for ldap_people in self.__ldap.search_people(
+                since_timestamp=since_timestamp if not self.purge_cohortes else None, isMemberOf=is_member_of_list):
+            people_infos = "%s %s %s" % (ldap_people.uid, ldap_people.given_name, ldap_people.sn)
+
+            people_id = self.__db.get_user_id(ldap_people.uid)
+            if people_id:
+                self.__db.enroll_user_in_cohort(id_cohort, people_id, people_infos, self.context.timestamp_now_sql)
+                # Mise a jour des utilisateurs de la cohorte
+                self.context.utilisateurs_by_cohortes[id_cohort].append(people_id)
+            else:
+                message = "      |_ Impossible d'inserer l'utilisateur %s dans la cohorte %s, " \
+                          "car il n'est pas connu dans Moodle"
+                message = message % (people_infos, cohort_name.decode("utf-8"))
+                logging.warning(message)
