@@ -16,7 +16,6 @@ logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level
 def miseAJour(config: Config, purge_cohortes: bool):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
-
     :param config: Configuration d'execution
     :param purge_cohortes: True si la purge des cohortes doit etre effectuée
     """
@@ -25,9 +24,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         logging.info('Synchronisation établissements : DEBUT')
 
         db = Database(config.database, config.constantes)
-
         ldap = Ldap(config.ldap)
-
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.load_context()
 
@@ -75,6 +72,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         logging.info('============================================')
     except Exception as err:
         logging.exception("An exception has been thrown")
+        logging.exception("Something went bad during the connection:\n", err)
         sys.exit(2)
 
     db.disconnect()
@@ -83,9 +81,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
 def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
     """
     Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
-
     Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
-
     :param config: Configuration d'execution
     :param purge_cohortes: 
     :return: 
@@ -187,7 +183,8 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
                     # Mise a jour des utilisateurs de la cohorte
                     utilisateurs_by_cohortes[id_cohort].append(people_id)
                 else:
-                    message = "      |_ Impossible d'inserer l'utilisateur %s dans la cohorte %s, car il n'est pas connu dans Moodle"
+                    message = "      |_ Impossible d'inserer l'utilisateur %s dans la cohorte %s, " \
+                              "car il n'est pas connu dans Moodle"
                     message = message % (people_infos, cohort_name.decode("utf-8"))
                     logging.warning(message)
 
@@ -204,7 +201,7 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
         timestamp_store.write()
 
     except Exception as err:
-        logging.exception("An exception has been thrown");
+        logging.exception("An exception has been thrown")
         logging.exception("Something went bad during the connection:\n", err)
         sys.exit(2)
 
@@ -212,11 +209,8 @@ def miseAJourInterEtabs(config: Config, purge_cohortes: bool):
 def miseAJourInspecteurs(config: Config):
     """
     Effectue la mise a jour de la BD
-
     Moodle via les infos issues du LDAP
-
     Cette mise a jour concerne les inspecteurs
-
     :param config: Configuration d'execution
     """
     try:
@@ -292,7 +286,7 @@ def miseAJourInspecteurs(config: Config):
 
     except Exception as err:
         logging.exception("An exception has been thrown")
-        # logging.exception("Something went bad during the connection:\n", err)
+        logging.exception("Something went bad during the connection:\n", err)
         sys.exit(2)
 
     db.disconnect()
