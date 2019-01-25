@@ -4,10 +4,8 @@ import logging
 import re
 import sys
 
-from synchromoodle.timestamp import TimestampStore
-
-from .dbutils import Database
 from .config import EtablissementsConfig, Config
+from .dbutils import Database
 from .ldaputils import Ldap, StudentLdap, TeacherLdap
 
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
@@ -33,9 +31,11 @@ class SyncContext:
     id_context_categorie_inter_etabs = None
     id_context_categorie_inter_cfa = None
     id_role_extended_teacher = None
+    timestamp_now_sql = None
 
 
 class EtablissementContext:
+    uai = None  # type: str
     id_context_categorie = None
     id_context_course_forum = None
     etablissement_regroupe = None
@@ -45,10 +45,10 @@ class EtablissementContext:
     regexpAdminLocal = None
     id_zone_privee = None
     etablissement_theme = None
-    eleves_by_cohortes = None
+    eleves_by_cohortes = {}
 
-    def __init__(self):
-        self.eleves_by_cohortes = {}
+    def __init__(self, uai: str):
+        self.uai = uai
 
 
 class EleveContext:
@@ -59,16 +59,39 @@ class Synchronizer:
     __ldap = None  # type: Ldap
     __db = None  # type: Database
     __config = None  # type: Config
-
     context = None  # type: SyncContext
-    maintenant_sql = None
 
     def __init__(self, ldap: Ldap, db: Database, config: Config):
         self.__ldap = ldap
         self.__db = db
         self.__config = config
         self.context = SyncContext()
-        self.maintenant_sql = db.get_timestamp_now()
+
+    def load_context(self):
+        # Récupération de la liste UAI-Domaine des établissements
+        self.context.map_etab_domaine = self.__ldap.get_domaines_etabs()
+
+        # Ids des categories inter etablissements
+        self.context.id_context_categorie_inter_etabs = self.__db.get_id_context_inter_etabs()
+
+        id_categorie_inter_cfa = self.__db.get_id_categorie_inter_etabs(
+            self.__config.etablissements.inter_etab_categorie_name_cfa)
+        self.context.id_context_categorie_inter_cfa = self.__db.get_id_context_categorie(id_categorie_inter_cfa)
+
+        # Recuperation des ids des roles admin local et extended teacher
+        self.context.id_role_extended_teacher = self.__db.get_id_role_extended_teacher()
+
+        # Recuperation du timestamp actuel
+        self.context.timestamp_now_sql = self.__db.get_timestamp_now()
+
+        # Recuperation de l'id du user info field pour la classe
+        self.context.id_user_info_field_classe = self.__db.get_id_user_info_field_classe()
+        if self.context.id_user_info_field_classe is None:
+            self.__db.insert_moodle_user_info_field_classe()
+            self.context.id_user_info_field_classe = self.__db.get_id_user_info_field_classe()
+
+        # Recuperation de l'id du champ personnalisé Domaine
+        self.context.id_field_domaine = self.__db.get_field_domaine()
 
     def mise_a_jour_etab(self, uai) -> EtablissementContext:
         """
@@ -77,7 +100,7 @@ class Synchronizer:
         :return: EtabContext
         """
         logging.info("  |_ Traitement de l'établissement %s" % uai)
-        context = EtablissementContext()
+        context = EtablissementContext(uai)
         context.gereAdminLocal = uai not in self.__config.etablissements.listeEtabSansAdmin
         context.etablissement_regroupe = est_grp_etab(uai, self.__config.etablissements)
         # Regex pour savoir si l'utilisateur est administrateur moodle
@@ -122,7 +145,7 @@ class Synchronizer:
             # Recreation de la zone privee si celle-ci n'existe plus
             if context.id_zone_privee is None:
                 context.id_zone_privee = self.__db.insert_zone_privee(id_etab_categorie, ldap_structure.siren,
-                                                                      etablissement_ou, self.maintenant_sql)
+                                                                      etablissement_ou, self.context.timestamp_now_sql)
 
                 context.id_context_course_forum = self.__db.get_id_context(self.__config.constantes.niveau_ctx_cours, 3,
                                                                            context.id_zone_privee)
@@ -153,8 +176,7 @@ class Synchronizer:
                                          ldap_student.given_name, ldap_student.mail, mail_display,
                                          etablissement_context.etablissement_theme)
 
-        # Ajout du role d'utilisateur avec droits limites
-        # Pour les eleves de college
+        # Ajout du role d'utilisateur avec droits limités Pour les eleves de college
         if etablissement_context.ldap_structure.type == self.__config.constantes.type_structure_clg:
             self.__db.add_role_to_user(self.__config.constantes.id_role_utilisateur_limite,
                                        self.__config.constantes.id_instance_moodle, eleve_id)
@@ -166,20 +188,20 @@ class Synchronizer:
         eleve_cohorts = []
         if ldap_student.classes:
             ids_classes_cohorts = self.__db.create_classes_cohorts(etablissement_context.id_context_categorie,
-                                                                   ldap_student.classes, self.maintenant_sql)
+                                                                   ldap_student.classes, self.context.timestamp_now_sql)
             self.__db.enroll_user_in_cohorts(etablissement_context.id_context_categorie, ids_classes_cohorts,
-                                             eleve_id, eleve_infos, self.maintenant_sql)
+                                             eleve_id, eleve_infos, self.context.timestamp_now_sql)
             eleve_cohorts.extend(ids_classes_cohorts)
 
         # Inscription dans la cohorte associee au niveau de formation
         if ldap_student.niveau_formation:
             id_formation_cohort = self.__db.create_formation_cohort(etablissement_context.id_context_categorie,
                                                                     ldap_student.niveau_formation,
-                                                                    self.maintenant_sql)
-            self.__db.enroll_user_in_cohort(id_formation_cohort, eleve_id, eleve_infos, self.maintenant_sql)
+                                                                    self.context.timestamp_now_sql)
+            self.__db.enroll_user_in_cohort(id_formation_cohort, eleve_id, eleve_infos, self.context.timestamp_now_sql)
             eleve_cohorts.append(id_formation_cohort)
 
-        # Desinscription des anciennes cohortes
+            # Desinscription des anciennes cohortes
             self.__db.disenroll_user_from_cohorts(eleve_cohorts, eleve_id)
 
         # Mise a jour des dictionnaires concernant les cohortes
@@ -197,7 +219,8 @@ class Synchronizer:
             self.__db.update_user_info_data(eleve_id, self.context.id_user_info_field_classe, ldap_student.classe)
             logging.debug("Mise à jour user_info_data")
         else:
-            self.__db.insert_moodle_user_info_data(eleve_id, self.context.id_user_info_field_classe, ldap_student.classe)
+            self.__db.insert_moodle_user_info_data(eleve_id, self.context.id_user_info_field_classe,
+                                                   ldap_student.classe)
             logging.debug("Insertion user_info_data")
 
         # Mise a jour du Domaine
@@ -243,7 +266,7 @@ class Synchronizer:
                                                  etablissement_context.id_context_course_forum,
                                                  id_user, ldap_teacher.uais)
 
-        # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
+            # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
             self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                        self.context.id_context_categorie_inter_etabs, id_user)
         logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
@@ -255,7 +278,7 @@ class Synchronizer:
                                        self.context.id_context_categorie_inter_cfa, id_user)
             logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-cfa")
 
-        # ajout du role de createur de cours dans l'etablissement
+            # ajout du role de createur de cours dans l'etablissement
             self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                        etablissement_context.id_context_categorie, id_user)
 
@@ -366,3 +389,13 @@ class Synchronizer:
             logging.info("      |_ Suppression des rôles d'enseignant pour %s sur les forum '%s' " % (
                 enseignant_infos, str(forums_summaries)))
             logging.info("         Les seuls établissements autorisés pour cet enseignant sont '%s'" % themes_autorises)
+
+    def purge_eleve_cohorts(self, etablissement_context):
+        self.__db.purge_cohorts(etablissement_context.eleves_by_cohortes)
+
+    def create_profs_etabs_cohorts(self, etablissement_context: EtablissementContext, since_timestamp):
+        self.__db.create_profs_etabs_cohorts(etablissement_context.id_context_categorie,
+                                             etablissement_context.uai,
+                                             self.context.timestamp_now_sql,
+                                             since_timestamp,
+                                             self.__ldap)

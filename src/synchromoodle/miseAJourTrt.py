@@ -29,29 +29,7 @@ def miseAJour(config: Config, purge_cohortes: bool):
         ldap = Ldap(config.ldap)
 
         synchronizer = Synchronizer(ldap, db, config)
-
-        # Récupération de la liste UAI-Domaine des établissements
-        synchronizer.context.map_etab_domaine = ldap.get_domaines_etabs()
-
-        # Ids des categories inter etablissements
-        synchronizer.context.id_context_categorie_inter_etabs = db.get_id_context_inter_etabs()
-
-        id_categorie_inter_cfa = db.get_id_categorie_inter_etabs(config.etablissements.inter_etab_categorie_name_cfa)
-        synchronizer.context.id_context_categorie_inter_cfa = db.get_id_context_categorie(id_categorie_inter_cfa)
-
-        synchronizer.context.id_role_extended_teacher = db.get_id_role_extended_teacher()
-
-        # Recuperation du timestamp actuel
-        maintenant_sql = db.get_timestamp_now()
-
-        # Recuperation de l'id du user info field pour la classe
-        synchronizer.context.id_user_info_field_classe = db.get_id_user_info_field_classe()
-        if synchronizer.context.id_user_info_field_classe is None:
-            db.insert_moodle_user_info_field_classe()
-            synchronizer.context.id_user_info_field_classe = db.get_id_user_info_field_classe()
-
-        # Recuperation de l'id du champ personnalisé Domaine
-        synchronizer.context.id_field_domaine = db.get_field_domaine()
+        synchronizer.load_context()
 
         ###################################################
         # On ne va traiter, dans la suite du programme, 
@@ -68,49 +46,30 @@ def miseAJour(config: Config, purge_cohortes: bool):
         for uai in config.etablissements.listeEtab:
             etablissement_context = synchronizer.mise_a_jour_etab(uai)
 
-            ####################################
-            # Mise a jour des eleves 
-            ####################################
             logging.info('    |_ Mise à jour des eleves')
 
-            # Date du dernier traitement effectue
-            time_stamp = timestamp_store.get_timestamp(uai)
-            if purge_cohortes:
-                # Si la purge des cohortes a ete demandee
-                # On recupere tous les eleves sans prendre en compte le timestamp
-                time_stamp = None
+            # Si la purge des cohortes a ete demandee, on recupere tous les eleves sans prendre en compte le timestamp
+            # du dernier traitement
+            since_timestamp = timestamp_store.get_timestamp(uai)
+            time_stamp = since_timestamp if not purge_cohortes else None
 
-            # Traitement des eleves
             for ldap_student in ldap.search_student(time_stamp, uai):
                 synchronizer.mise_a_jour_eleve(etablissement_context, ldap_student)
 
-            # Purge des cohortes des eleves
             if purge_cohortes:
                 logging.info('    |_ Purge des cohortes des élèves')
-                db.purge_cohorts(etablissement_context.eleves_by_cohortes)
+                synchronizer.purge_eleve_cohorts(etablissement_context)
 
-            ####################################
-            # Mise a jour des enseignants
-            ####################################
             logging.info('    |_ Mise à jour du personnel enseignant')
-
-            time_stamp = timestamp_store.get_timestamp(uai)
-
-            # Traitement des enseignants
-            for ldap_teacher in ldap.search_teacher(since_timestamp=time_stamp, uai=uai):
+            for ldap_teacher in ldap.search_teacher(since_timestamp=since_timestamp, uai=uai):
                 synchronizer.mise_a_jour_enseignant(etablissement_context, ldap_teacher)
 
-        if purge_cohortes:
-            # Si la purge des cohortes a ete demandee
-            # On recupere tous les eleves sans prendre en compte le timestamp
-            time_stamp = None
-        # CREATION DES COHORTES DE PROFS
-        db.create_profs_etabs_cohorts(etablissement_context.id_context_categorie, uai, maintenant_sql, time_stamp, ldap)
+            synchronizer.create_profs_etabs_cohorts(etablissement_context, time_stamp)
 
-        db.connection.commit()
+            db.connection.commit()
 
-        timestamp_store.mark(uai)
-        timestamp_store.write()
+            timestamp_store.mark(uai)
+            timestamp_store.write()
 
         logging.info('Synchronisation établissements : FIN')
         logging.info('============================================')
