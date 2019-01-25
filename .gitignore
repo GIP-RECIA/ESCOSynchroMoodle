@@ -8,8 +8,5 @@
 trtPrecedent*.txt
 /logs
 
-*.pyc
-__pycache__/
-
 *.sql
 *_precedent.txt
