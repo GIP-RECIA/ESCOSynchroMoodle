@@ -1,12 +1,34 @@
 # coding: utf-8
-from typing import List
+"""
+Accès LDAP
+"""
+from typing import List, Dict
 
 import ldap
 
 from synchromoodle.config import LdapConfig
 
 
+def extraire_classes_ldap(classes_ldap: List[str]):
+    """
+    Extrait le nom des classes à partir de l'entrée issue de l'annuaire ldap.
+
+    :param classes_ldap:  entrée issue du LDAP.
+    :return
+    """
+    classes = []
+    for classe_ldap in classes_ldap:
+        split = classe_ldap.rsplit("$")
+        if len(split) > 1:
+            classes.append(split[1])
+    return classes
+
+
 class StructureLdap:
+    """
+    Représente une structure issu du LDAP.
+    """
+
     def __init__(self, data):
         # TODO: Replace devrait supporter toutes les acamédies ?
         self.nom = data['ou'][0].decode("utf-8").replace("-ac-ORL._TOURS", "")
@@ -18,6 +40,10 @@ class StructureLdap:
 
 
 class PeopleLdap:
+    """
+    Représente une personne issu du LDAP.
+    """
+
     def __init__(self, data):
         self.uid = data['uid'][0].decode('utf8')
         self.sn = data['sn'][0].decode('utf8')
@@ -34,34 +60,28 @@ class PeopleLdap:
 
 
 class StudentLdap(PeopleLdap):
+    """
+    Représente un élève issu du LDAP.
+    """
+
     def __init__(self, data):
         super().__init__(data)
         self.niveau_formation = data['ENTEleveNivFormation'][0].decode('utf8')
 
-        self.classes = None
-        self.classe = None
+        self.classes = None  # type: List[str]
+        self.classe = None  # type: str
 
         if 'ENTEleveClasses' in data:
-            self.classes = self._extraire_casses_ldap([x.decode('utf8') for x in data['ENTEleveClasses']])
+            self.classes = extraire_classes_ldap([x.decode('utf8') for x in data['ENTEleveClasses']])
             if len(self.classes) > 1:
                 self.classe = self.classes[0]
 
-    def _extraire_casses_ldap(self, classes_ldap):
-        """
-        Extrait le nom des classes à partir de l'entrée issue de l'annuaire ldap.
-
-        :param classesLdap:  entrée issue du LDAP.
-        :return
-        """
-        classes = []
-        for classe_ldap in classes_ldap:
-            split = classe_ldap.rsplit("$")
-            if len(split) > 1:
-                classes.append(split[1])
-        return classes
-
 
 class TeacherLdap(PeopleLdap):
+    """
+    Représente un enseignant.
+    """
+
     def __init__(self, data):
         super().__init__(data)
         self.structure_rattachement = data['ENTPersonStructRattach'][0].decode('utf8')
@@ -93,6 +113,9 @@ ATTRIBUTES_TEACHER = ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI'
 
 
 class Ldap:
+    """
+    Couche d'accès aux données du LDAP.
+    """
     config = None  # type: LdapConfig
     connection = None  # type: ldap.ldapobject.SimpleLDAPObject
 
@@ -103,14 +126,14 @@ class Ldap:
     def connect(self):
         """
         Etablit la connection au LDAP.
-        :return: 
         """
         self.connection = ldap.initialize(self.config.uri)
-        self.connection.protocol_version = ldap.VERSION3
         self.connection.simple_bind_s(self.config.username, self.config.password)
-        return self.connection
 
     def disconnect(self):
+        """
+        Ferme la connection au LDAP.
+        """
         if self.connection:
             self.connection.unbind()
             self.connection = None
@@ -118,18 +141,17 @@ class Ldap:
     def get_structure(self, uai: str) -> StructureLdap:
         """
         Recherche de structures.
-        :param uai:
-        :return:
+        :param uai: code établissement
+        :return: L'établissement trouvé, ou None si non trouvé.
         """
         structures = self.search_structure(uai)
-        if structures:
-            return structures[0]
+        return structures[0] if structures else None
 
     def search_structure(self, uai: str = None) -> List[StructureLdap]:
         """
         Recherche de structures.
-        :param uai: 
-        :return: 
+        :param uai: code établissement
+        :return: Liste des structures trouvées
         """
         ldap_filter = _get_filtre_etablissement(uai)
         search_id = self.connection.search(self.config.structuresDN, ldap.SCOPE_ONELEVEL, ldap_filter,
@@ -139,9 +161,9 @@ class Ldap:
     def search_people(self, since_timestamp, **filters) -> List[PeopleLdap]:
         """
         Recherche de personnes.
-        :param since_timestamp: 
-        :param filters: 
-        :return: 
+        :param since_timestamp: Timestamp
+        :param filters: Filtres à appliquer
+        :return: Liste des personnes
         """
         ldap_filter = _get_filtre_personnes(since_timestamp, **filters)
         search_id = self.connection.search(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter, ATTRIBUTES_PEOPLE)
@@ -150,9 +172,9 @@ class Ldap:
     def search_student(self, since_timestamp, uai) -> List[StudentLdap]:
         """
         Recherche d'étudiants.
-        :param since_timestamp: 
-        :param uai: 
-        :return: 
+        :param since_timestamp: Timestamp
+        :param uai: code établissement
+        :return: Liste des étudiants correspondant
         """
         ldap_filter = _get_filtre_eleves(since_timestamp, uai)
         search_id = self.connection.search(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
@@ -162,21 +184,20 @@ class Ldap:
     def search_teacher(self, since_timestamp=None, uai=None, tous=False) -> List[TeacherLdap]:
         """
         Recherche d'enseignants.
-        :param since_timestamp: 
-        :param uai: 
-        :param tous: 
-        :return: 
+        :param since_timestamp: Timestamp
+        :param uai: code etablissement
+        :param tous: Si True, retourne également le personnel non enseignant
+        :return: Liste des enseignants
         """
         ldap_filter = get_filtre_enseignants(since_timestamp, uai, tous)
         search_id = self.connection.search(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
                                            ATTRIBUTES_TEACHER)
         return [TeacherLdap(entry[0][1]) for entry in self._get_result(search_id)]
 
-    def get_domaines_etabs(self):
+    def get_domaines_etabs(self) -> Dict[str, List[str]]:
         """
         Obtient la liste des "ESCOUAICourant : Domaine" des établissements
-        :param structuresDN: 
-        :return: 
+        :return: Dictionnaire uai/list de domaines
         """
         ldap_structures = self.search_structure()
 
@@ -186,11 +207,11 @@ class Ldap:
             etabs_ldap[ldap_structure.uai] = ldap_structure.domaines
         return etabs_ldap
 
-    def _get_result(self, result_id):
+    def _get_result(self, result_id) -> list:
         """
         Retourne le résultat d'une recherche.
-        :param result_id: 
-        :return: 
+        :param result_id: identifiant de la recherche
+        :return: résultats
         """
         result_entries = []
         result_data = [0]
@@ -201,13 +222,13 @@ class Ldap:
         return result_entries
 
 
-def _get_filtre_eleves(since_timestamp: str = None, uai: str = None):
+def _get_filtre_eleves(since_timestamp: str = None, uai: str = None) -> str:
     """
     Construit le filtre pour récupérer les élèves au sein du LDAP
 
-    :param since_timestamp: 
-    :param uai: 
-    :return: 
+    :param since_timestamp:
+    :param uai: code établissement
+    :return: Le filtre
     """
     filtre = "(&(objectClass=ENTEleve)"
     if uai:
@@ -218,14 +239,14 @@ def _get_filtre_eleves(since_timestamp: str = None, uai: str = None):
     return filtre
 
 
-def get_filtre_enseignants(since_timestamp=None, uai=None, tous=False):
+def get_filtre_enseignants(since_timestamp=None, uai=None, tous=False) -> str:
     """
     Construit le filtre pour récupérer les enseignants au sein du LDAP.
 
-    :param since_timestamp: 
-    :param uai: 
-    :param personnel: 
-    :return: 
+    :param since_timestamp:
+    :param uai: code établissement
+    :param tous:
+    :return: Le filtre
     """
     filtre = "(&"
     if tous:
@@ -249,20 +270,19 @@ def get_filtre_enseignants(since_timestamp=None, uai=None, tous=False):
     return filtre
 
 
-def _get_filtre_personnes(since_timestamp=None, **filters):
+def _get_filtre_personnes(since_timestamp=None, **filters: Dict[str, str]) -> str:
     """
     Construit le filtre pour récupérer les personnes
-    :param modify_time_stamp: 
-    :param attribute: 
-    :param attribute_values: 
-    :return: 
+    :param modify_time_stamp:
+    :param filters: Filtres spécifiques à appliquer
+    :return: Le filtre
     """
     filtre = "(&(|" \
              + "(objectClass=ENTPerson)" \
              + ")" \
              + "(!(uid=ADM00000))"
     filtre = filtre + "(|"
-    for k, v in filter.items:
+    for k, v in filters.items():
         attribute_filtre = "(%s=%s)" % (k, v)
         filtre = filtre + attribute_filtre
     filtre = filtre + ")"

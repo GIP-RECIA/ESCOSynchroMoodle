@@ -1,14 +1,33 @@
+"""
+Gestion des timestamps
+"""
+
 import datetime
 import logging
 
 from synchromoodle.config import TimestampStoreConfig
 
 
+def format_date(date: datetime.datetime):
+    """
+    Formate une date au format LDAP.
+
+    :param date: Date à formatter
+    :return: Date formatée
+    """
+    return date.strftime('%Y%m%d%H%M%S') + 'Z'
+
+
 class TimestampStore:
     """
     Stocker les timestamp de dernière modification pour les établissements.
 
-    Permet de ne traiter que les utilisateurs ayant subi une modification depuis le dernier traitement
+    Permet de ne traiter que les utilisateurs ayant subi une modification depuis le dernier traitement.
+
+    Exemple de contenu de fichier:
+    045678A-20110101121345Z
+    036783R-20121101121354Z
+    018654B-20110405134523Z
     """
 
     def __init__(self, config: TimestampStoreConfig):
@@ -19,26 +38,23 @@ class TimestampStore:
 
     @property
     def current_timestamp(self):
-        return self.format_date(self.now)
+        """
+        Timestamp courant.
+        :return: Le timestamp courant
+        """
+        return format_date(self.now)
 
     def get_timestamp(self, uai: str):
+        """
+        Obtient le timestamp d'un établissement
+        :param uai: code établissement
+        :return: timestamp
+        """
         return self.timestamps.get(uai.upper())
-
-    def format_date(self, date: datetime.datetime):
-        """
-        Formate une date au format LDAP.
-
-        :param date: Date à formatter
-        :return: Date formatée
-        """
-        return date.strftime('%Y%m%d%H%M%S') + 'Z'
 
     def read(self):
         """
-        Recupère la dernière date de traitement pour chaque établissement.
-        :param file_location: 
-        :param separator: 
-        :return: 
+        Charge le fichier contenant la date des derniers traitement
         """
         self.timestamps.clear()
 
@@ -55,21 +71,16 @@ class TimestampStore:
 
     def write(self):
         """
-        Ecrit le fichier contenant les informations sur les établissements et leur dernière date de traitement.
-
-        Exemple de contenu de fichier:
-        045678A-20110101121345Z
-        036783R-20121101121354Z
-        018654B-20110405134523Z
-        :param time_stamp_by_etab: 
-        :param file_location: 
-        :param separator: 
-        :return: 
+        Ecrit le fichier contenant la date de derniers traitement des établissements.
         """
 
         with open(self.config.file, 'w') as time_stamp_file:
             time_stamp_file.writelines(
                 map(lambda item: item[0].upper() + self.config.separator + item[1], self.timestamps.items()))
 
-    def mark(self, uai):
+    def mark(self, uai: str):
+        """
+        Ajoute le timestamp courant pour l'établissement donné.
+        :param uai: code établissement
+        """
         self.timestamps[uai.upper()] = self.current_timestamp

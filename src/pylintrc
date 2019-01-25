@@ -138,7 +138,9 @@ disable=print-statement,
         xreadlines-attribute,
         deprecated-sys-function,
         exception-escape,
-        comprehension-escape
+        comprehension-escape,
+        too-few-public-methods,
+        fixme
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -201,12 +203,7 @@ attr-naming-style=snake_case
 #attr-rgx=
 
 # Bad variable names which should always be refused, separated by a comma.
-bad-names=foo,
-          bar,
-          baz,
-          toto,
-          tutu,
-          tata
+bad-names=
 
 # Naming style matching correct class attribute names.
 class-attribute-naming-style=any
@@ -244,9 +241,12 @@ function-naming-style=snake_case
 good-names=i,
            j,
            k,
+           v,
            ex,
            Run,
-           _
+           _,
+           s,
+           sn
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=no

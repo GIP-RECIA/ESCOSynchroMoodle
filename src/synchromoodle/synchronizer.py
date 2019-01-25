@@ -41,9 +41,9 @@ class EtablissementContext:
     id_context_course_forum = None
     etablissement_regroupe = None
     ldap_structure = None
-    gereAdminLocal = None
-    regexpAdminMoodle = None
-    regexpAdminLocal = None
+    gere_admin_local = None
+    regexp_admin_moodle = None
+    regexp_admin_local = None
     id_zone_privee = None
     etablissement_theme = None
     eleves_by_cohortes = {}
@@ -60,14 +60,14 @@ class Synchronizer:
     __ldap = None  # type: Ldap
     __db = None  # type: Database
     __config = None  # type: Config
-    __options = None
+    __arguments = None
     context = None  # type: SyncContext
 
-    def __init__(self, ldap: Ldap, db: Database, config: Config, options):
+    def __init__(self, ldap: Ldap, db: Database, config: Config, arguments):
         self.__ldap = ldap
         self.__db = db
         self.__config = config
-        self.__options = options
+        self.__arguments = arguments
         self.context = SyncContext()
 
     def load_context(self):
@@ -104,12 +104,12 @@ class Synchronizer:
         """
         logging.info("  |_ Traitement de l'établissement %s" % uai)
         context = EtablissementContext(uai)
-        context.gereAdminLocal = uai not in self.__config.etablissements.listeEtabSansAdmin
+        context.gere_admin_local = uai not in self.__config.etablissements.listeEtabSansAdmin
         context.etablissement_regroupe = est_grp_etab(uai, self.__config.etablissements)
         # Regex pour savoir si l'utilisateur est administrateur moodle
-        context.regexpAdminMoodle = self.__config.etablissements.prefixAdminMoodleLocal + ".*_%s$" % uai
+        context.regexp_admin_moodle = self.__config.etablissements.prefixAdminMoodleLocal + ".*_%s$" % uai
         # Regex pour savoir si l'utilisateur est administrateur local
-        context.regexpAdminLocal = self.__config.etablissements.prefixAdminLocal + ".*_%s$" % uai
+        context.regexp_admin_local = self.__config.etablissements.prefixAdminLocal + ".*_%s$" % uai
 
         ldap_structure = self.__ldap.get_structure(uai)
         if ldap_structure:
@@ -264,7 +264,7 @@ class Synchronizer:
         # Mise ajour des droits sur les anciens etablissement
         if ldap_teacher.uais is not None and not etablissement_context.etablissement_regroupe:
             # Recuperation des uais des etablissements dans lesquels l'enseignant est autorise
-            self.mettre_a_jour_droits_enseignant(enseignant_infos, etablissement_context.gereAdminLocal,
+            self.mettre_a_jour_droits_enseignant(enseignant_infos, etablissement_context.gere_admin_local,
                                                  etablissement_context.id_context_categorie,
                                                  etablissement_context.id_context_course_forum,
                                                  id_user, ldap_teacher.uais)
@@ -297,7 +297,7 @@ class Synchronizer:
 
             if 'National_3' in ldap_teacher.profils or 'National_5' in \
                     ldap_teacher.profils or 'National_6' in ldap_teacher.profils:
-                if not etablissement_context.gereAdminLocal:
+                if not etablissement_context.gere_admin_local:
                     self.__db.add_role_to_user(self.context.id_role_extended_teacher,
                                                etablissement_context.id_context_categorie,
                                                id_user)
@@ -306,10 +306,10 @@ class Synchronizer:
                                            etablissement_context.id_context_categorie, id_user)
 
         # Ajout des droits d'administration locale pour l'etablissement
-        if etablissement_context.gereAdminLocal:
+        if etablissement_context.gere_admin_local:
             for member in ldap_teacher.is_member_of:
                 # L'enseignant est il administrateur Moodle ?
-                adminMoodle = re.match(etablissement_context.regexpAdminMoodle, member, flags=re.IGNORECASE)
+                adminMoodle = re.match(etablissement_context.regexp_admin_moodle, member, flags=re.IGNORECASE)
                 if adminMoodle:
                     insert = self.__db.insert_moodle_local_admin(etablissement_context.id_context_categorie, id_user)
                     if insert:
@@ -488,7 +488,7 @@ class Synchronizer:
 
         # Ajout des utilisateurs dans la cohorte
         for ldap_people in self.__ldap.search_people(
-                since_timestamp=since_timestamp if not self.__options.purge_cohortes else None,
+                since_timestamp=since_timestamp if not self.__arguments.purge_cohortes else None,
                 isMemberOf=is_member_of_list):
             people_infos = "%s %s %s" % (ldap_people.uid, ldap_people.given_name, ldap_people.sn)
 

@@ -215,6 +215,9 @@ class InspecteursConfig(_BaseConfig):
     ldap_valeur_attribut_user = ["INS"]  # type: str
     """Valeur de l'attribute pour déterminer les inspecteurs"""
 
+    cle_timestamp = "INSPECTEURS"  # type: str
+    """Clé pour stocker le timestamp du dernier traitement inter-etablissements"""
+
 
 class TimestampStoreConfig(_BaseConfig):
     def __init__(self, **entries):

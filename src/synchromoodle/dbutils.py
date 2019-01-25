@@ -1,8 +1,8 @@
 # coding: utf-8
-
-###############################################################################
-# IMPORTS
-###############################################################################
+# pylint: disable=too-many-lines
+"""
+Accès à la base de données Moodle
+"""
 import logging
 import sys
 

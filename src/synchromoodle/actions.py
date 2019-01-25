@@ -13,11 +13,11 @@ from .ldaputils import Ldap
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
-def default(config: Config, options):
+def default(config: Config, arguments):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
     :param config: Configuration d'execution
-    :param options: True si la purge des cohortes doit etre effectuée
+    :param arguments: Arguments de ligne de commande
     """
     db = Database(config.database, config.constantes)
     ldap = Ldap(config.ldap)
@@ -28,7 +28,7 @@ def default(config: Config, options):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, options)
+        synchronizer = Synchronizer(ldap, db, config, arguments)
         synchronizer.load_context()
 
         ###################################################
@@ -51,10 +51,10 @@ def default(config: Config, options):
 
             # Si la purge des cohortes a ete demandee, on recupere tous les eleves sans prendre en compte le timestamp
             # du dernier traitement
-            for ldap_student in ldap.search_student(since_timestamp if not options.purge_cohortes else None, uai):
+            for ldap_student in ldap.search_student(since_timestamp if not arguments.purge_cohortes else None, uai):
                 synchronizer.mise_a_jour_eleve(etablissement_context, ldap_student)
 
-            if options.purge_cohortes:
+            if arguments.purge_cohortes:
                 logging.info('    |_ Purge des cohortes des élèves')
                 synchronizer.purge_eleve_cohorts(etablissement_context)
 
@@ -63,7 +63,7 @@ def default(config: Config, options):
                 synchronizer.mise_a_jour_enseignant(etablissement_context, ldap_teacher)
 
             synchronizer.create_profs_etabs_cohorts(etablissement_context,
-                                                    since_timestamp if not options.purge_cohortes else None)
+                                                    since_timestamp if not arguments.purge_cohortes else None)
 
             db.connection.commit()
 
@@ -77,12 +77,12 @@ def default(config: Config, options):
         ldap.disconnect()
 
 
-def interetab(config: Config, options):
+def interetab(config: Config, arguments):
     """
     Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
     Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
     :param config: Configuration d'execution
-    :param options: 
+    :param arguments: 
     :return: 
     """
     db = Database(config.database, config.constantes)
@@ -93,7 +93,7 @@ def interetab(config: Config, options):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, options)
+        synchronizer = Synchronizer(ldap, db, config, arguments)
         synchronizer.load_context()
 
         ###################################################
@@ -129,12 +129,11 @@ def interetab(config: Config, options):
             synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, since_timestamp)
 
         # Purge des cohortes des eleves
-        if options.purge_cohortes:
+        if arguments.purge_cohortes:
             logging.info('    |_ Purge des cohortes de la catégorie inter-établissements')
             db.purge_cohorts(utilisateurs_by_cohortes)
 
         db.connection.commit()
-        db.disconnect()
 
         # Mise a jour de la date de dernier traitement
         timestamp_store.mark(config.inter_etablissements.cle_timestamp)
@@ -144,7 +143,7 @@ def interetab(config: Config, options):
         ldap.disconnect()
 
 
-def inspecteurs(config: Config, options):
+def inspecteurs(config: Config, arguments):
     """
     Effectue la mise a jour de la BD
     Moodle via les infos issues du LDAP
@@ -161,7 +160,7 @@ def inspecteurs(config: Config, options):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer = Synchronizer(ldap, db, config, arguments)
         synchronizer.load_context()
 
         ###################################################
@@ -169,17 +168,20 @@ def inspecteurs(config: Config, options):
         ###################################################
         logging.info('    |_ Mise à jour des inspecteurs')
 
-        # TODO : gerer le time_stamp
-        time_stamp = None
+        timestamp_store = TimestampStore(config.timestamp_store)
 
         people_filter = {
             config.inspecteurs_config.ldap_attribut_user: config.inspecteurs_config.ldap_valeur_attribut_user}
 
         # Traitement des inspecteurs
-        for ldap_people in ldap.search_people(time_stamp, **people_filter):
+        for ldap_people in ldap.search_people(timestamp_store.get_timestamp(config.inspecteurs_config.cle_timestamp), **people_filter):
             synchronizer.mise_a_jour_inspecteur(ldap_people)
 
         db.connection.commit()
+
+        # Mise a jour de la date de dernier traitement
+        timestamp_store.mark(config.inspecteurs_config.cle_timestamp)
+        timestamp_store.write()
 
         logging.info('Synchronisation des inspecteurs : FIN')
         logging.info('============================================')
