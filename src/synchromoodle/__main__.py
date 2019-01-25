@@ -5,7 +5,7 @@ import logging
 import sys
 
 from synchromoodle.config import ConfigLoader
-from synchromoodle.miseAJourTrt import miseAJour, miseAJourInterEtabs, miseAJourInspecteurs, miseAJourMahara
+from synchromoodle.miseAJourTrt import miseAJour, miseAJourInterEtabs, miseAJourInspecteurs
 
 logging.basicConfig(format="%(levelname)s:%(message)s", stream=sys.stdout, level=logging.INFO)
 
@@ -33,8 +33,6 @@ def main():
             miseAJourInterEtabs(config, options.purge)
         if action == 'inspecteurs':
             miseAJourInspecteurs(config)
-        if action == 'mahara':
-            miseAJourMahara(config, options.purge)
 
 
 if __name__ == "__main__":
