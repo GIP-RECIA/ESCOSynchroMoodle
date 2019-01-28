@@ -1,5 +1,5 @@
 # coding: utf-8
-
+import datetime
 import logging
 import re
 import sys
@@ -467,14 +467,15 @@ class Synchronizer:
     def purge_eleve_cohorts(self, etablissement_context):
         self.__db.purge_cohorts(etablissement_context.eleves_by_cohortes)
 
-    def create_profs_etabs_cohorts(self, etablissement_context: EtablissementContext, since_timestamp):
+    def create_profs_etabs_cohorts(self, etablissement_context: EtablissementContext,
+                                   since_timestamp: datetime.datetime):
         self.__db.create_profs_etabs_cohorts(etablissement_context.id_context_categorie,
                                              etablissement_context.uai,
                                              self.context.timestamp_now_sql,
                                              since_timestamp,
                                              self.__ldap)
 
-    def mise_a_jour_cohorte_interetab(self, is_member_of, cohort_name, since_timestamp):
+    def mise_a_jour_cohorte_interetab(self, is_member_of, cohort_name, since_timestamp: datetime.datetime):
         # Creation de la cohort si necessaire
         self.__db.create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name, cohort_name,
                                 self.context.timestamp_now_sql)

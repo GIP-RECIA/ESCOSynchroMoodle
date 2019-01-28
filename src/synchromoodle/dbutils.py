@@ -3,6 +3,7 @@
 """
 Accès à la base de données Moodle
 """
+import datetime
 import logging
 import sys
 
@@ -390,7 +391,7 @@ class Database:
             return None
         return ligne[0]
 
-    def create_profs_etabs_cohorts(self, id_context_etab, etab_name, time_created, time_stamp, ldap: Ldap):
+    def create_profs_etabs_cohorts(self, id_context_etab, etab_name, time_created, time_stamp: datetime.datetime, ldap: Ldap):
         """
         Fonction permettant de creer des cohortes a partir de
         etablissement.

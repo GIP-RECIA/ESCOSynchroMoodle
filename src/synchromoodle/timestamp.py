@@ -4,47 +4,31 @@ Gestion des timestamps
 
 import datetime
 import logging
+import re
+from typing import Dict
 
 from synchromoodle.config import TimestampStoreConfig
 
+date_format = '%Y%m%d%H%M%S'
 
-def format_date(date: datetime.datetime):
-    """
-    Formate une date au format LDAP.
 
-    :param date: Date à formatter
-    :return: Date formatée
-    """
-    return date.strftime('%Y%m%d%H%M%S') + 'Z'
+def fromisoformat(iso: str) -> datetime.datetime:
+    return datetime.datetime(*map(int, re.split(r'[^\d]', iso)))
 
 
 class TimestampStore:
     """
     Stocker les timestamp de dernière modification pour les établissements.
-
     Permet de ne traiter que les utilisateurs ayant subi une modification depuis le dernier traitement.
-
-    Exemple de contenu de fichier:
-    045678A-20110101121345Z
-    036783R-20121101121354Z
-    018654B-20110405134523Z
     """
 
     def __init__(self, config: TimestampStoreConfig):
         self.config = config
         self.now = datetime.datetime.now()
-        self.timestamps = {}
+        self.timestamps = {}  # type: Dict[str, datetime.datetime]
         self.read()
 
-    @property
-    def current_timestamp(self):
-        """
-        Timestamp courant.
-        :return: Le timestamp courant
-        """
-        return format_date(self.now)
-
-    def get_timestamp(self, uai: str):
+    def get_timestamp(self, uai: str) -> datetime.datetime:
         """
         Obtient le timestamp d'un établissement
         :param uai: code établissement
@@ -61,10 +45,10 @@ class TimestampStore:
         try:
             with open(self.config.file, 'r') as time_stamp_file:
                 for line in time_stamp_file:
-                    etab_and_time = line.split(self.config.separator)
+                    etab_and_time = line.split(self.config.separator, 1)
                     etab = etab_and_time[0]
                     time_stamp = etab_and_time[1]
-                    self.timestamps[etab] = time_stamp[:-1]
+                    self.timestamps[etab] = fromisoformat(time_stamp)
         except IOError:
             logging.warning("Impossible d'ouvrir le fichier : %s" % self.config.file)
             return {}
@@ -76,11 +60,12 @@ class TimestampStore:
 
         with open(self.config.file, 'w') as time_stamp_file:
             time_stamp_file.writelines(
-                map(lambda item: item[0].upper() + self.config.separator + item[1], self.timestamps.items()))
+                map(lambda item: item[0].upper() + self.config.separator + item[1].isoformat(),
+                    self.timestamps.items()))
 
     def mark(self, uai: str):
         """
         Ajoute le timestamp courant pour l'établissement donné.
         :param uai: code établissement
         """
-        self.timestamps[uai.upper()] = self.current_timestamp
+        self.timestamps[uai.upper()] = self.now

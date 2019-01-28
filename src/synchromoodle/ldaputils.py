@@ -2,6 +2,7 @@
 """
 Accès LDAP
 """
+import datetime
 from typing import List, Dict, Union
 
 import ldap
@@ -160,10 +161,10 @@ class Ldap:
                                            ATTRIBUTES_STRUCTURE)
         return [StructureLdap(entry[0][1]) for entry in self._get_result(search_id)]
 
-    def search_people(self, since_timestamp, **filters) -> List[PeopleLdap]:
+    def search_people(self, since_timestamp: datetime.datetime, **filters) -> List[PeopleLdap]:
         """
         Recherche de personnes.
-        :param since_timestamp: Timestamp
+        :param since_timestamp: datetime.datetime
         :param filters: Filtres à appliquer
         :return: Liste des personnes
         """
@@ -171,10 +172,10 @@ class Ldap:
         search_id = self.connection.search(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter, ATTRIBUTES_PEOPLE)
         return [PeopleLdap(entry[0][1]) for entry in self._get_result(search_id)]
 
-    def search_student(self, since_timestamp, uai) -> List[StudentLdap]:
+    def search_student(self, since_timestamp: datetime.datetime, uai: str) -> List[StudentLdap]:
         """
         Recherche d'étudiants.
-        :param since_timestamp: Timestamp
+        :param since_timestamp: datetime.datetime
         :param uai: code établissement
         :return: Liste des étudiants correspondant
         """
@@ -183,10 +184,10 @@ class Ldap:
                                            ATTRIBUTES_STUDENT)
         return [StudentLdap(entry[0][1]) for entry in self._get_result(search_id)]
 
-    def search_teacher(self, since_timestamp=None, uai=None, tous=False) -> List[TeacherLdap]:
+    def search_teacher(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) -> List[TeacherLdap]:
         """
         Recherche d'enseignants.
-        :param since_timestamp: Timestamp
+        :param since_timestamp: datetime.datetime
         :param uai: code etablissement
         :param tous: Si True, retourne également le personnel non enseignant
         :return: Liste des enseignants
@@ -224,7 +225,7 @@ class Ldap:
         return result_entries
 
 
-def _get_filtre_eleves(since_timestamp: str = None, uai: str = None) -> str:
+def _get_filtre_eleves(since_timestamp: datetime.datetime = None, uai: str = None) -> str:
     """
     Construit le filtre pour récupérer les élèves au sein du LDAP
 
@@ -236,12 +237,12 @@ def _get_filtre_eleves(since_timestamp: str = None, uai: str = None) -> str:
     if uai:
         filtre += "(ESCOUAI={uai})".format(uai=uai)
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp)
+        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp.isoformat())
     filtre = filtre + ")"
     return filtre
 
 
-def get_filtre_enseignants(since_timestamp=None, uai=None, tous=False) -> str:
+def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, tous=False) -> str:
     """
     Construit le filtre pour récupérer les enseignants au sein du LDAP.
 
@@ -265,14 +266,14 @@ def get_filtre_enseignants(since_timestamp=None, uai=None, tous=False) -> str:
     if uai:
         filtre += "(ESCOUAI={uai})".format(uai=uai)
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp)
+        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp.isoformat())
 
     filtre = filtre + ")"
 
     return filtre
 
 
-def _get_filtre_personnes(since_timestamp=None, **filters: Union[str, List[str]]) -> str:
+def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: Union[str, List[str]]) -> str:
     """
     Construit le filtre pour récupérer les personnes
     :param modify_time_stamp:
@@ -293,7 +294,7 @@ def _get_filtre_personnes(since_timestamp=None, **filters: Union[str, List[str]]
     filtre = filtre + ")"
     if since_timestamp:
         filtre = filtre + "(modifyTimeStamp>=%s)"
-        filtre = filtre % since_timestamp
+        filtre = filtre % since_timestamp.isoformat()
     filtre = filtre + ")"
     return filtre
 
