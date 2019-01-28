@@ -7,7 +7,12 @@ matrix:
     - python: 3.7
       dist: xenial
       sudo: true
-before_install: cd src
+env:
+  - SYNCHROMOODLE_TEST_CONFIG=docker-localhost.yml
+before_install: 
+  - .travis/docker-install.sh
+  - source .bash_enter && dc -f docker-compose.travis.yml up -d
+  - cd src
 install:
   - pip install -e .[dev,test]
   - pip install coveralls

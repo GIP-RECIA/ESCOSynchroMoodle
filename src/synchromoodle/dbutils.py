@@ -137,32 +137,6 @@ SHORTNAME_EXTENDED_TEACHER = "extendedteacher"
 
 # Shortname du role advanced teacher
 SHORTNAME_ADVANCED_TEACHER = "advancedteacher"
-#######################################
-# USER INFO FIELD
-#######################################
-# Category id du user info field utilise pour la classe
-USER_INFO_FIELD_CATEGORY_ID_CLASSE = 1
-
-# Data type du user info field utilise pour la classe
-USER_INFO_FIELD_DATATYPE_CLASSE = "text"
-
-# Locked option du user info field utilise pour la classe
-USER_INFO_FIELD_LOCKED_CLASSE = 1
-
-# Name du user info field utilise pour la classe
-USER_INFO_FIELD_NAME_CLASSE = "Classe"
-
-# Param1 du user info field utilise pour la classe
-USER_INFO_FIELD_PARAM1_CLASSE = 30
-
-# Param2 du user info field utilise pour la classe
-USER_INFO_FIELD_PARAM2_CLASSE = 512
-
-# Shortname du user info field utilise pour la classe
-USER_INFO_FIELD_SHORTNAME_CLASSE = "classe"
-
-# Visibile option du user info field utilise pour la classe
-USER_INFO_FIELD_VISIBLE_CLASSE = 2
 
 #######################################
 # USER
@@ -752,7 +726,7 @@ class Database:
         id_block = self.mark.fetchone()[0]
         return id_block
 
-    def get_id_categorie_inter_etabs(self, categorie_name):
+    def get_id_categorie(self, categorie_name):
         """
         Fonction permettant de recuperer l'id correspondant a la
         categorie inter-etablissements.
@@ -761,7 +735,7 @@ class Database:
         """
         s = "SELECT id" \
             " FROM {entete}course_categories" \
-            " WHERE name LIKE %(categorie_name)s" \
+            " WHERE name = %(categorie_name)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'categorie_name': categorie_name})
         ligne = self.mark.fetchone()
@@ -818,8 +792,7 @@ class Database:
 
     def get_id_context_inter_etabs(self):
         """
-        Fonction permettant de recuperer l'id du contexte
-        de la categorie inter-etablissements
+        Fonction permettant de recuperer l'id du contexte de la categorie inter-etablissements
         :return:
         """
         s = "SELECT id" \
@@ -834,8 +807,7 @@ class Database:
 
     def get_id_course_by_id_number(self, id_number):
         """
-        Fonction permettant de recuperer l'id d'un cours
-        a partir de son idnumber.
+        Fonction permettant de recuperer l'id d'un cours a partir de son idnumber.
         :param id_number:
         :return:
         """
@@ -911,29 +883,6 @@ class Database:
         id_forum = self.mark.fetchone()[0]
         return id_forum
 
-    def get_id_role_extended_teacher(self):
-        """
-        Fonction permettant de recuperer l'id du role extended
-        teacher.
-        :return:
-        """
-        id_extended_teacher = self.get_id_role_by_shortname(SHORTNAME_EXTENDED_TEACHER)
-        if id_extended_teacher is None:
-            logging.error("Le role '%s' n'est pas defini" % SHORTNAME_EXTENDED_TEACHER)
-            sys.exit(2)
-        return id_extended_teacher
-
-    def get_id_role_advanced_teacher(self):
-        """
-        Fonction permettant de recuperer l'id du role advanced
-        teacher.
-        :return:
-        """
-        id_advanced_teacher = self.get_id_role_by_shortname(SHORTNAME_ADVANCED_TEACHER)
-        if id_advanced_teacher is None:
-            logging.error("Le role '%s' n'est pas defini" % SHORTNAME_ADVANCED_TEACHER)
-            sys.exit(2)
-        return id_advanced_teacher
 
     def get_id_user_info_data(self, id_user, id_field):
         """
@@ -970,14 +919,6 @@ class Database:
         if ligne is None:
             return None
         return ligne[0]
-
-    def get_id_user_info_field_classe(self):
-        """
-        Fonction permettant de recuperer un info field via son
-        shortname.
-        :return:
-        """
-        return self.get_id_user_info_field_by_shortname(USER_INFO_FIELD_SHORTNAME_CLASSE)
 
     def get_ids_and_summaries_not_allowed_roles(self, id_user, allowed_forums_shortnames):
         """
@@ -1454,21 +1395,6 @@ class Database:
                                      'locked': locked,
                                      'visible': visible})
         logging.info("      |_ Insertion du user info field %s - %s" % (name, short_name))
-
-    def insert_moodle_user_info_field_classe(self):
-        """
-        Fonction permettant d'inserer le user info field utilise
-        pour la classe.
-        :return:
-        """
-        self.insert_moodle_user_info_field(USER_INFO_FIELD_SHORTNAME_CLASSE,
-                                           USER_INFO_FIELD_NAME_CLASSE,
-                                           USER_INFO_FIELD_DATATYPE_CLASSE,
-                                           USER_INFO_FIELD_CATEGORY_ID_CLASSE,
-                                           USER_INFO_FIELD_PARAM1_CLASSE,
-                                           USER_INFO_FIELD_PARAM2_CLASSE,
-                                           USER_INFO_FIELD_LOCKED_CLASSE,
-                                           USER_INFO_FIELD_VISIBLE_CLASSE)
 
     def insert_zone_privee(self, id_categorie_etablissement, siren, ou, time):
         """

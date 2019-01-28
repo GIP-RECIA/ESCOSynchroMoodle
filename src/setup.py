@@ -14,7 +14,7 @@ setup_requires = ['pytest-runner']
 
 dev_require = ['pylint', 'tox']
 
-tests_require = ['pytest']
+tests_require = ['pytest', 'sqlparse', 'cachetools']
 
 entry_points = {
     'console_scripts': [

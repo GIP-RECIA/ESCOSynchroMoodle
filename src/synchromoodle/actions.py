@@ -4,8 +4,8 @@ import logging
 import sys
 
 from synchromoodle.synchronizer import Synchronizer
-
 from synchromoodle.timestamp import TimestampStore
+from .arguments import default_args
 from .config import Config
 from .dbutils import Database
 from .ldaputils import Ldap
@@ -13,7 +13,7 @@ from .ldaputils import Ldap
 logging.basicConfig(format='%(levelname)s:%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
-def default(config: Config, arguments):
+def default(config: Config, arguments=default_args):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
     :param config: Configuration d'execution
@@ -77,13 +77,13 @@ def default(config: Config, arguments):
         ldap.disconnect()
 
 
-def interetab(config: Config, arguments):
+def interetab(config: Config, arguments=default_args):
     """
     Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
     Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
     :param config: Configuration d'execution
-    :param arguments: 
-    :return: 
+    :param arguments: Arguments de ligne de commande
+    :return:
     """
     db = Database(config.database, config.constantes)
     ldap = Ldap(config.ldap)
@@ -143,12 +143,13 @@ def interetab(config: Config, arguments):
         ldap.disconnect()
 
 
-def inspecteurs(config: Config, arguments):
+def inspecteurs(config: Config, arguments=default_args):
     """
     Effectue la mise a jour de la BD
     Moodle via les infos issues du LDAP
     Cette mise a jour concerne les inspecteurs
     :param config: Configuration d'execution
+    :param arguments: Arguments de ligne de commande
     """
     db = Database(config.database, config.constantes)
     ldap = Ldap(config.ldap)
@@ -174,7 +175,8 @@ def inspecteurs(config: Config, arguments):
             config.inspecteurs_config.ldap_attribut_user: config.inspecteurs_config.ldap_valeur_attribut_user}
 
         # Traitement des inspecteurs
-        for ldap_people in ldap.search_people(timestamp_store.get_timestamp(config.inspecteurs_config.cle_timestamp), **people_filter):
+        for ldap_people in ldap.search_people(timestamp_store.get_timestamp(config.inspecteurs_config.cle_timestamp),
+                                              **people_filter):
             synchronizer.mise_a_jour_inspecteur(ldap_people)
 
         db.connection.commit()

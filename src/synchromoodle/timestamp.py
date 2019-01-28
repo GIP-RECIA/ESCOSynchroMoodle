@@ -22,9 +22,9 @@ class TimestampStore:
     Permet de ne traiter que les utilisateurs ayant subi une modification depuis le dernier traitement.
     """
 
-    def __init__(self, config: TimestampStoreConfig):
+    def __init__(self, config: TimestampStoreConfig, now: datetime.datetime = None):
         self.config = config
-        self.now = datetime.datetime.now()
+        self.now = now if now else datetime.datetime.now()
         self.timestamps = {}  # type: Dict[str, datetime.datetime]
         self.read()
 

@@ -123,6 +123,9 @@ class LdapConfig(_BaseConfig):
     personnesRDN = "ou=people"  # type: str
     """OU pour les personnes"""
 
+    groupsRND = "ou=groups"  # type: str
+    """OU pour les groupes"""
+
     adminRDN = "ou=administrateurs"  # type: str
     """OU pour les administrateurs"""
 
@@ -139,6 +142,13 @@ class LdapConfig(_BaseConfig):
         DN pour les personnes
         """
         return self.personnesRDN + ',' + self.baseDN
+
+    @property
+    def groupsDN(self) -> str:
+        """
+        DN pour les personnes
+        """
+        return self.groupsRND + ',' + self.baseDN
 
     @property
     def adminDN(self) -> str:
@@ -163,7 +173,10 @@ class EtablissementsConfig(_BaseConfig):
     etabRgp = []  # type: List[EtablissementRegroupement]
     """Regroupement d'etablissements"""
 
-    inter_etab_categorie_name_cfa = 'Cat%%gorie Inter-CFA'  # type: str
+    inter_etab_categorie_name = 'Catégorie Inter-Établissements'  # type: str
+    """Nom de la catégorie inter-etablissement"""
+
+    inter_etab_categorie_name_cfa = 'Catégorie Inter-CFA'  # type: str
     """Nom de la catégorie inter-etablissement pour les CFA"""
 
     listeEtab = []  # type: List[str]
@@ -240,35 +253,37 @@ class Config:
     inspecteurs_config = InspecteursConfig()  # type: InspecteursConfig
     actions = ["default"]  # type: List[str]
 
+    def update(self, data):
+        if 'constantes' in data:
+            self.constantes.update(**data['constantes'])
+        if 'database' in data:
+            self.database.update(**data['database'])
+        if 'ldap' in data:
+            self.ldap.update(**data['ldap'])
+        if 'etablissements' in data:
+            self.etablissements.update(**data['etablissements'])
+        if 'interEtablissements' in data:
+            self.inter_etablissements.update(**data['interEtablissements'])
+        if 'inspecteurs' in data:
+            self.inspecteurs.update(**data['inspecteurs'])
+        if 'timestampStore' in data:
+            self.timestamp_store.update(**data['timestampStore'])
+
 
 class ConfigLoader:
-    def update(self, loaded_config, config: List[str], silent=False) -> Config:
-        for config_item in config:
+    def update(self, config: Config, config_fp: List[str], silent=False) -> Config:
+        for config_item in config_fp:
             try:
                 with open(config_item) as fp:
                     data = yaml.safe_load(fp)
-
-                    if 'constantes' in data:
-                        loaded_config.constantes.update(**data['constantes'])
-                    if 'database' in data:
-                        loaded_config.database.update(**data['database'])
-                    if 'ldap' in data:
-                        loaded_config.ldap.update(**data['ldap'])
-                    if 'etablissements' in data:
-                        loaded_config.etablissements.update(**data['etablissements'])
-                    if 'interEtablissements' in data:
-                        loaded_config.inter_etablissements.update(**data['interEtablissements'])
-                    if 'inspecteurs' in data:
-                        loaded_config.inspecteurs.update(**data['inspecteurs'])
-                    if 'timestampStore' in data:
-                        loaded_config.timestamp_store.update(**data['timestampStore'])
+                    config.update(data)
             except FileNotFoundError as e:
                 message = "Le fichier de configuration n'a pas été chargé: " + str(e)
                 if silent:
                     log.debug(message)
                 else:
                     log.warning(message)
-        return loaded_config
+        return config
 
     def load(self, config: List[str], silent=False) -> Config:
         loaded_config = Config()

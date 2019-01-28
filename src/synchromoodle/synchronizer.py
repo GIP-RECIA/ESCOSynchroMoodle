@@ -3,7 +3,9 @@ import datetime
 import logging
 import re
 import sys
+from typing import Dict, List
 
+from .arguments import default_args
 from .config import EtablissementsConfig, Config
 from .dbutils import Database
 from .ldaputils import Ldap, StudentLdap, TeacherLdap, PeopleLdap
@@ -25,13 +27,14 @@ def est_grp_etab(rne: str, etablissements_config: EtablissementsConfig):
 
 
 class SyncContext:
-    id_user_info_field_classe = None
-    map_etab_domaine = None
-    id_field_domaine = None
-    id_context_categorie_inter_etabs = None
-    id_context_categorie_inter_cfa = None
-    id_role_extended_teacher = None
     timestamp_now_sql = None
+    map_etab_domaine = None  # type: Dict[str, List[str]]
+    id_context_categorie_inter_etabs = None  # type: int
+    id_context_categorie_inter_cfa = None  # type: int
+    id_role_extended_teacher = None  # type: int
+    id_role_advanced_teacher = None  # type: int
+    id_field_classe = None  # type: int
+    id_field_domaine = None  # type: int
     utilisateurs_by_cohortes = {}
 
 
@@ -63,38 +66,37 @@ class Synchronizer:
     __arguments = None
     context = None  # type: SyncContext
 
-    def __init__(self, ldap: Ldap, db: Database, config: Config, arguments):
+    def __init__(self, ldap: Ldap, db: Database, config: Config, arguments=default_args):
         self.__ldap = ldap
         self.__db = db
         self.__config = config
         self.__arguments = arguments
-        self.context = SyncContext()
 
     def load_context(self):
-        # Récupération de la liste UAI-Domaine des établissements
-        self.context.map_etab_domaine = self.__ldap.get_domaines_etabs()
-
-        # Ids des categories inter etablissements
-        self.context.id_context_categorie_inter_etabs = self.__db.get_id_context_inter_etabs()
-
-        id_categorie_inter_cfa = self.__db.get_id_categorie_inter_etabs(
-            self.__config.etablissements.inter_etab_categorie_name_cfa)
-        self.context.id_context_categorie_inter_cfa = self.__db.get_id_context_categorie(id_categorie_inter_cfa)
-
-        # Recuperation des ids des roles admin local et extended teacher
-        self.context.id_role_extended_teacher = self.__db.get_id_role_extended_teacher()
+        self.context = SyncContext()
 
         # Recuperation du timestamp actuel
         self.context.timestamp_now_sql = self.__db.get_timestamp_now()
 
+        # Récupération de la liste UAI-Domaine des établissements
+        self.context.map_etab_domaine = self.__ldap.get_domaines_etabs()
+
+        # Ids des categories inter etablissements
+        id_categorie_inter_etabs = self.__db.get_id_categorie(self.__config.etablissements.inter_etab_categorie_name)
+        self.context.id_context_categorie_inter_etabs = self.__db.get_id_context_categorie(id_categorie_inter_etabs)
+
+        id_categorie_inter_cfa = self.__db.get_id_categorie(self.__config.etablissements.inter_etab_categorie_name_cfa)
+        self.context.id_context_categorie_inter_cfa = self.__db.get_id_context_categorie(id_categorie_inter_cfa)
+
+        # Recuperation des ids des roles
+        self.context.id_role_extended_teacher = self.__db.get_id_role_by_shortname('extendedteacher')
+        self.context.id_role_advanced_teacher = self.__db.get_id_role_by_shortname('advancedteacher')
+
         # Recuperation de l'id du user info field pour la classe
-        self.context.id_user_info_field_classe = self.__db.get_id_user_info_field_classe()
-        if self.context.id_user_info_field_classe is None:
-            self.__db.insert_moodle_user_info_field_classe()
-            self.context.id_user_info_field_classe = self.__db.get_id_user_info_field_classe()
+        self.context.id_field_classe = self.__db.get_id_user_info_field_by_shortname('classe')
 
         # Recuperation de l'id du champ personnalisé Domaine
-        self.context.id_field_domaine = self.__db.get_field_domaine()
+        self.context.id_field_domaine = self.__db.get_id_user_info_field_by_shortname('Domaine')
 
     def mise_a_jour_etab(self, uai) -> EtablissementContext:
         """
@@ -217,12 +219,12 @@ class Synchronizer:
                 etablissement_context.eleves_by_cohortes[cohort_id] = [eleve_id]
 
         # Mise a jour de la classe
-        id_user_info_data = self.__db.get_id_user_info_data(eleve_id, self.context.id_user_info_field_classe)
+        id_user_info_data = self.__db.get_id_user_info_data(eleve_id, self.context.id_field_classe)
         if id_user_info_data is not None:
-            self.__db.update_user_info_data(eleve_id, self.context.id_user_info_field_classe, ldap_student.classe)
+            self.__db.update_user_info_data(eleve_id, self.context.id_field_classe, ldap_student.classe)
             logging.debug("Mise à jour user_info_data")
         else:
-            self.__db.insert_moodle_user_info_data(eleve_id, self.context.id_user_info_field_classe,
+            self.__db.insert_moodle_user_info_data(eleve_id, self.context.id_field_classe,
                                                    ldap_student.classe)
             logging.debug("Insertion user_info_data")
 

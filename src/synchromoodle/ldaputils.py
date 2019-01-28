@@ -124,7 +124,6 @@ class Ldap:
 
     def __init__(self, config: LdapConfig):
         self.config = config
-        self.connect()
 
     def connect(self):
         """
@@ -157,9 +156,9 @@ class Ldap:
         :return: Liste des structures trouvées
         """
         ldap_filter = _get_filtre_etablissement(uai)
-        search_id = self.connection.search(self.config.structuresDN, ldap.SCOPE_ONELEVEL, ldap_filter,
-                                           ATTRIBUTES_STRUCTURE)
-        return [StructureLdap(entry[0][1]) for entry in self._get_result(search_id)]
+        result = self.connection.search_ext_s(self.config.structuresDN, ldap.SCOPE_ONELEVEL, ldap_filter,
+                                              ATTRIBUTES_STRUCTURE)
+        return [StructureLdap(entry[1]) for entry in result]
 
     def search_people(self, since_timestamp: datetime.datetime, **filters) -> List[PeopleLdap]:
         """
@@ -169,8 +168,9 @@ class Ldap:
         :return: Liste des personnes
         """
         ldap_filter = _get_filtre_personnes(since_timestamp, **filters)
-        search_id = self.connection.search(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter, ATTRIBUTES_PEOPLE)
-        return [PeopleLdap(entry[0][1]) for entry in self._get_result(search_id)]
+        result = self.connection.search_ext_s(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
+                                              ATTRIBUTES_PEOPLE)
+        return [PeopleLdap(entry[1]) for entry in result]
 
     def search_student(self, since_timestamp: datetime.datetime, uai: str) -> List[StudentLdap]:
         """
@@ -180,9 +180,9 @@ class Ldap:
         :return: Liste des étudiants correspondant
         """
         ldap_filter = _get_filtre_eleves(since_timestamp, uai)
-        search_id = self.connection.search(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
-                                           ATTRIBUTES_STUDENT)
-        return [StudentLdap(entry[0][1]) for entry in self._get_result(search_id)]
+        result = self.connection.search_ext_s(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
+                                              ATTRIBUTES_STUDENT)
+        return [StudentLdap(entry[1]) for entry in result]
 
     def search_teacher(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) -> List[TeacherLdap]:
         """
@@ -193,9 +193,9 @@ class Ldap:
         :return: Liste des enseignants
         """
         ldap_filter = get_filtre_enseignants(since_timestamp, uai, tous)
-        search_id = self.connection.search(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
-                                           ATTRIBUTES_TEACHER)
-        return [TeacherLdap(entry[0][1]) for entry in self._get_result(search_id)]
+        result = self.connection.search_ext_s(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
+                                              ATTRIBUTES_TEACHER)
+        return [TeacherLdap(entry[1]) for entry in result]
 
     def get_domaines_etabs(self) -> Dict[str, List[str]]:
         """

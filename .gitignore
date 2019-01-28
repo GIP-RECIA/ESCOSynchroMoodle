@@ -4,9 +4,6 @@
 /.init/
 /.bash_enter.env
 /.bin/jq
-
-trtPrecedent*.txt
 /logs
-
-*.sql
+/*.sql
 *_precedent.txt

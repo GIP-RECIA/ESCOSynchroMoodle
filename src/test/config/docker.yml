@@ -1,0 +1,5 @@
+database:
+  host: "moodle-db-test"
+  port: "3306"
+ldap:
+  uri: "ldap://ldap-test:439"
