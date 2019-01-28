@@ -2,9 +2,10 @@
 """
 Accès LDAP
 """
-from typing import List, Dict
+from typing import List, Dict, Union
 
 import ldap
+from collections.abc import Iterable
 
 from synchromoodle.config import LdapConfig
 
@@ -30,6 +31,7 @@ class StructureLdap:
     """
 
     def __init__(self, data):
+
         # TODO: Replace devrait supporter toutes les acamédies ?
         self.nom = data['ou'][0].decode("utf-8").replace("-ac-ORL._TOURS", "")
         self.type = data['ENTStructureTypeStruct'][0].decode("utf-8")
@@ -270,7 +272,7 @@ def get_filtre_enseignants(since_timestamp=None, uai=None, tous=False) -> str:
     return filtre
 
 
-def _get_filtre_personnes(since_timestamp=None, **filters: Dict[str, str]) -> str:
+def _get_filtre_personnes(since_timestamp=None, **filters: Union[str, List[str]]) -> str:
     """
     Construit le filtre pour récupérer les personnes
     :param modify_time_stamp:
@@ -283,8 +285,11 @@ def _get_filtre_personnes(since_timestamp=None, **filters: Dict[str, str]) -> st
              + "(!(uid=ADM00000))"
     filtre = filtre + "(|"
     for k, v in filters.items():
-        attribute_filtre = "(%s=%s)" % (k, v)
-        filtre = filtre + attribute_filtre
+        if not isinstance(v, Iterable) or isinstance(v, str):
+            v = [v]
+        for item in v:
+            attribute_filtre = "(%s=%s)" % (k, item)
+            filtre = filtre + attribute_filtre
     filtre = filtre + ")"
     if since_timestamp:
         filtre = filtre + "(modifyTimeStamp>=%s)"
