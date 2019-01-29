@@ -76,7 +76,7 @@ class StudentLdap(PeopleLdap):
 
         if 'ENTEleveClasses' in data:
             self.classes = extraire_classes_ldap([x.decode('utf8') for x in data['ENTEleveClasses']])
-            if len(self.classes) > 1:
+            if len(self.classes) > 0:
                 self.classe = self.classes[0]
 
 
