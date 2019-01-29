@@ -160,7 +160,7 @@ class Ldap:
                                               ATTRIBUTES_STRUCTURE)
         return [StructureLdap(entry[1]) for entry in result]
 
-    def search_people(self, since_timestamp: datetime.datetime, **filters) -> List[PeopleLdap]:
+    def search_people(self, since_timestamp: datetime.datetime = None, **filters) -> List[PeopleLdap]:
         """
         Recherche de personnes.
         :param since_timestamp: datetime.datetime
@@ -172,7 +172,7 @@ class Ldap:
                                               ATTRIBUTES_PEOPLE)
         return [PeopleLdap(entry[1]) for entry in result]
 
-    def search_student(self, since_timestamp: datetime.datetime, uai: str) -> List[StudentLdap]:
+    def search_student(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[StudentLdap]:
         """
         Recherche d'étudiants.
         :param since_timestamp: datetime.datetime
@@ -284,14 +284,15 @@ def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: 
              + "(objectClass=ENTPerson)" \
              + ")" \
              + "(!(uid=ADM00000))"
-    filtre = filtre + "(|"
-    for k, v in filters.items():
-        if not isinstance(v, Iterable) or isinstance(v, str):
-            v = [v]
-        for item in v:
-            attribute_filtre = "(%s=%s)" % (k, item)
-            filtre = filtre + attribute_filtre
-    filtre = filtre + ")"
+    if filters:
+        filtre = filtre + "(|"
+        for k, v in filters.items():
+            if not isinstance(v, Iterable) or isinstance(v, str):
+                v = [v]
+            for item in v:
+                attribute_filtre = "(%s=%s)" % (k, item)
+                filtre = filtre + attribute_filtre
+        filtre = filtre + ")"
     if since_timestamp:
         filtre = filtre + "(modifyTimeStamp>=%s)"
         filtre = filtre % since_timestamp.isoformat()
