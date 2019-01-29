@@ -37,7 +37,6 @@ def run_ldif(path: str, l: Ldap):
         dn = record[0]
         data = record[1]
         changetype = data.pop('changetype', 'add')
-        change_method = getattr(l.connection, changetype + '_s')
         if changetype == 'add':
             l.connection.add_s(dn, modlist.addModlist(data))
         elif changetype == 'modify':

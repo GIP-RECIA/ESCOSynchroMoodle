@@ -210,20 +210,6 @@ class Ldap:
             etabs_ldap[ldap_structure.uai] = ldap_structure.domaines
         return etabs_ldap
 
-    def _get_result(self, result_id) -> list:
-        """
-        Retourne le résultat d'une recherche.
-        :param result_id: identifiant de la recherche
-        :return: résultats
-        """
-        result_entries = []
-        result_data = [0]
-        while result_data:
-            result_type, result_data = self.connection.result(result_id, 0)
-            if result_data and result_type == ldap.RES_SEARCH_ENTRY:
-                result_entries.append(result_data)
-        return result_entries
-
 
 def _get_filtre_eleves(since_timestamp: datetime.datetime = None, uai: str = None) -> str:
     """
