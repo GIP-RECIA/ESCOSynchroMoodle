@@ -2,9 +2,67 @@
 
 from datetime import datetime
 
+import pytest
+from ldap.ldapobject import SimpleLDAPObject
+
 from synchromoodle import ldaputils
+from synchromoodle.config import Config
+from synchromoodle.ldaputils import Ldap, StructureLdap, PeopleLdap, StudentLdap, TeacherLdap
+from test.utils import ldap_utils
 
 datetime_value = datetime(2019, 4, 9, 21, 42, 1)
+
+
+@pytest.fixture(scope='function', name='ldap')
+def ldap(config: Config):
+    ldap = Ldap(config.ldap)
+    ldap_utils.reset(ldap)
+    return ldap
+
+
+def test_connection(ldap: Ldap):
+    ldap.connect()
+    assert isinstance(ldap.connection, SimpleLDAPObject)
+    ldap.disconnect()
+    assert ldap.connection is None
+
+
+def test_structures(ldap: Ldap):
+    ldap.connect()
+    ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+    structures = ldap.search_structure()
+    for structure in structures:
+        assert isinstance(structure, StructureLdap)
+        getted_structure = ldap.get_structure(structure.uai)
+        assert isinstance(getted_structure, StructureLdap)
+    ldap.disconnect()
+
+
+def test_people(ldap: Ldap):
+    ldap.connect()
+    ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
+    people = ldap.search_people()
+    for person in people:
+        assert isinstance(person, PeopleLdap)
+    ldap.disconnect()
+
+
+def test_students(ldap: Ldap):
+    ldap.connect()
+    ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
+    students = ldap.search_student()
+    for student in students:
+        assert isinstance(student, StudentLdap)
+    ldap.disconnect()
+
+
+def test_teachers(ldap: Ldap):
+    ldap.connect()
+    ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
+    teachers = ldap.search_teacher()
+    for teacher in teachers:
+        assert isinstance(teacher, TeacherLdap)
+    ldap.disconnect()
 
 
 def test_get_filtre_eleves():
@@ -28,7 +86,6 @@ def test_get_filtre_etablissement():
 def test_get_filtre_personnes():
     assert ldaputils._get_filtre_personnes(datetime_value) == \
            "(&(|(objectClass=ENTPerson))(!(uid=ADM00000))" \
-           "(|)" \
            "(modifyTimeStamp>=2019-04-09T21:42:01))"
     assert ldaputils._get_filtre_personnes(datetime_value, foo="bar", hello=["world", "dude"]) in \
         ["(&(|(objectClass=ENTPerson))"
