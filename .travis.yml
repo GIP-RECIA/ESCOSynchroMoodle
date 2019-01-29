@@ -7,14 +7,11 @@ matrix:
     - python: 3.7
       dist: xenial
       sudo: true
-env:
-  - SYNCHROMOODLE_TEST_CONFIG=docker-localhost.yml
-before_install: 
+before_install:
+  - sudo apt-get install -y -o Dpkg::Options::="--force-confnew" build-essential python3-dev libldap2-dev libsasl2-dev
   - .travis/docker-install.sh
-  - source .bash_enter && dc -f docker-compose.travis.yml up -d
   - cd src
 install:
-  - pip install -e .[dev,test]
   - pip install coveralls
 script:
 #  - pylint synchromoodle

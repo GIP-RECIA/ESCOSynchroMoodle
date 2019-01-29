@@ -8,19 +8,27 @@ from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-install_requires = ['mysql-connector-python', 'python-ldap', 'ruamel.yaml']
+install_requires = ['mysql-connector-python',
+                    'python-ldap',
+                    'ruamel.yaml']
 
 setup_requires = ['pytest-runner']
 
-dev_require = ['pylint', 'tox']
+dev_require = ['pylint',
+               'tox']
 
-tests_require = ['pytest', 'sqlparse', 'cachetools']
+tests_require = ['pytest>=4',
+                 'pytest-docker',
+                 'sqlparse',
+                 'cachetools']
 
 entry_points = {
     'console_scripts': [
         'synchromoodle = synchromoodle.__main__:main'
     ],
 }
+
+dependency_links = ['https://github.com/Toilal/pytest-docker/tarball/master#egg=pytest-docker']
 
 with open('synchromoodle/__version__.py', 'r') as f:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]$', f.read(), re.MULTILINE).group(1)
@@ -37,6 +45,7 @@ args = dict(name='synchromoodle',
                          'Programming Language :: Python :: 3.7'
                          ],
             packages=find_packages(),
+            dependency_links=dependency_links,
             install_requires=install_requires,
             setup_requires=setup_requires,
             tests_require=tests_require,

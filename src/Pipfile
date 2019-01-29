@@ -5,7 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
-pytest = "*"
+pytest = ">=4"
 coverage = "*"
 sqlparse = "*"
 cachetools = "*"
@@ -15,6 +15,7 @@ mysql-connector-python = "*"
 python-ldap-win32 = {name = "python-ldap",version = "*",sys_platform = "== 'win32'",file = "https://download.lfd.uci.edu/pythonlibs/r5uhg2lo/python_ldap-3.1.0-cp35-cp35m-win_amd64.whl"}
 python-ldap = {version = "*",sys_platform = "!= 'win32'"}
 ruamel-yaml = "*"
+pytest-docker = {editable = true,git = "https://github.com/Toilal/pytest-docker.git"}
 
 [requires]
 python_version = "3.5"

@@ -1,5 +1,0 @@
-database:
-  host: "localhost"
-  port: "9816"
-ldap:
-  uri: "ldap://localhost:9899"

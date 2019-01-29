@@ -25,7 +25,7 @@ py -m pipenv install --dev --python=3.5
 Voir http://www.python-ldap.org/en/latest/installing.html#build-prerequisites
 
 ```bash
-sudo apt-get install build-essential python3-dev python2.7-dev libldap2-dev libsasl2-dev
+sudo apt-get install build-essential python3-dev libldap2-dev libsasl2-dev
 ```
 
 - Installer l'environnement virtuel avec les dépendances

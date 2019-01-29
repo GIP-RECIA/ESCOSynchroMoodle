@@ -1,0 +1,21 @@
+version: '2.2'
+services:
+  moodle-db-test:
+    image: 'bitnami/mariadb:10.1'
+    environment:
+      - MARIADB_USER=moodle
+      - MARIADB_DATABASE=moodle
+      - MARIADB_PASSWORD=moodle
+      - MARIADB_ROOT_PASSWORD=moodle
+    ports:
+      - 3306
+  ldap-test:
+      build:
+        context: .docker
+        dockerfile: ldap/Dockerfile.pytest
+      environment:
+        - 'LDAP_BACKEND=bdb'
+        - 'LDAP_DOMAIN=esco-centre.fr'
+        - 'LDAP_BASE_DN=dc=esco-centre,dc=fr'
+      ports:
+        - 389

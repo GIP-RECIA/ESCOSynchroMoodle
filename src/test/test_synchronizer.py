@@ -10,15 +10,15 @@ from test.utils import db_utils, ldap_utils
 
 
 @pytest.fixture(scope='function', name='db')
-def db(config: Config):
-    db = Database(config.database, config.constantes)
+def db(docker_config: Config):
+    db = Database(docker_config.database, docker_config.constantes)
     db_utils.init(db)
     return db
 
 
 @pytest.fixture(scope='function', name='ldap')
-def ldap(config: Config):
-    ldap = Ldap(config.ldap)
+def ldap(docker_config: Config):
+    ldap = Ldap(docker_config.ldap)
     ldap_utils.reset(ldap)
     return ldap
 
@@ -40,11 +40,11 @@ class TestEtablissement:
         finally:
             db.disconnect()
 
-    def test_should_load_context(self, ldap: Ldap, db: Database, config: Config):
+    def test_should_load_context(self, ldap: Ldap, db: Database, docker_config: Config):
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
-        synchroniser = Synchronizer(ldap, db, config)
+        synchroniser = Synchronizer(ldap, db, docker_config)
         synchroniser.load_context()
 
         assert synchroniser.context

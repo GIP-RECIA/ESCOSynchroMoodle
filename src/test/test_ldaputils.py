@@ -14,8 +14,8 @@ datetime_value = datetime(2019, 4, 9, 21, 42, 1)
 
 
 @pytest.fixture(scope='function', name='ldap')
-def ldap(config: Config):
-    ldap = Ldap(config.ldap)
+def ldap(docker_config: Config):
+    ldap = Ldap(docker_config.ldap)
     ldap_utils.reset(ldap)
     return ldap
 

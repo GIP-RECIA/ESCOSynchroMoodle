@@ -6,4 +6,5 @@
 /.bin/jq
 /logs
 /*.sql
+/.env
 *_precedent.txt
