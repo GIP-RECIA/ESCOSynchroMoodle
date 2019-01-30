@@ -42,23 +42,17 @@ def docker_config(config, docker_ip, docker_services):
     """
     docker_config = Config()
     docker_config.update(config.__dict__)
-    """"
-    raw_data = get_data(__package__,
-                        os.path.join('config', os.environ.get('SYNCHROMOODLE_TEST_CONFIG', 'docker-vagrant.yml')))
-    data = yaml.safe_load(raw_data)
-    config.update(data)
-    """
-    docker_config.database.host = docker_ip
-    docker_config.database.port = docker_services.port_for('moodle-db-test', 3306)
 
-    docker_config.ldap.uri = "ldap://%s:%s" % (docker_ip, docker_services.port_for('ldap-test', 389))
+    docker_config.database.host = docker_ip
 
     now = datetime.datetime.now()
     timeout = 60
 
-    # Ensure ldap is available
-    ldap = Ldap(docker_config.ldap)
     while True:
+        docker_config.ldap.uri = "ldap://%s:%s" % (docker_ip, docker_services.port_for('ldap-test', 389))
+        # Ensure ldap is available
+        ldap = Ldap(docker_config.ldap)
+
         try:
             ldap.connect()
         except Exception as e:
@@ -70,12 +64,16 @@ def docker_config(config, docker_ip, docker_services):
         break
 
     # Ensure database is available
-    db = Database(docker_config.database, docker_config.constantes)
     while True:
+        docker_config.database.port = docker_services.port_for('moodle-db-test', 3306)
+        db = Database(docker_config.database, docker_config.constantes)
+
         try:
             db.connect()
         except Exception as e:
             time.sleep(1)
+            docker_config.database.host = docker_ip
+            docker_config.database.port = docker_services.port_for('moodle-db-test', 3306)
             if (datetime.datetime.now() - now).seconds > timeout:
                 raise e
             continue
