@@ -3,10 +3,10 @@
 Accès LDAP
 """
 import datetime
+from collections.abc import Iterable
 from typing import List, Dict, Union
 
-import ldap
-from collections.abc import Iterable
+from ldap3 import Server, Connection, LEVEL
 
 from synchromoodle.config import LdapConfig
 
@@ -32,14 +32,13 @@ class StructureLdap:
     """
 
     def __init__(self, data):
-
         # TODO: Replace devrait supporter toutes les acamédies ?
-        self.nom = data['ou'][0].decode("utf-8").replace("-ac-ORL._TOURS", "")
-        self.type = data['ENTStructureTypeStruct'][0].decode("utf-8")
-        self.code_postal = data['postalCode'][0][:2].decode("utf-8")
-        self.siren = data['ENTStructureSIREN'][0].decode("utf-8")
-        self.uai = data['ENTStructureUAI'][0].decode("utf-8")
-        self.domaines = [x.decode('utf8') for x in data["ESCODomaines"]]
+        self.nom = data.ou.value.replace("-ac-ORL._TOURS", "")
+        self.type = data.ENTStructureTypeStruct.value
+        self.code_postal = data.postalCode.value[:2]
+        self.siren = data.ENTStructureSIREN.value
+        self.uai = data.ENTStructureUAI.value
+        self.domaines = data.ESCODomaines.values
 
 
 class PeopleLdap:
@@ -48,18 +47,18 @@ class PeopleLdap:
     """
 
     def __init__(self, data):
-        self.uid = data['uid'][0].decode('utf8')
-        self.sn = data['sn'][0].decode('utf8')
-        self.given_name = data['givenName'][0].decode('utf8')
-        self.domaines = [x.decode('utf8') for x in data['ESCODomaines']]
-        self.uai_courant = data['ESCOUAICourant'][0].decode('utf8')
+        self.uid = data.uid.value
+        self.sn = data.sn.value
+        self.given_name = data.givenName.value
+        self.domaines = data.ESCODomaines.values
+        self.uai_courant = data.ESCOUAICourant.value
         self.mail = None
         if 'mail' in data:
-            self.mail = data['mail'][0].decode('utf8')
+            self.mail = data.mail.value
 
         self.is_member_of = None
         if 'isMemberOf' in data:
-            self.is_member_of = [x.decode('utf8') for x in data['isMemberOf']]
+            self.is_member_of = data.isMemberOf.values
 
 
 class StudentLdap(PeopleLdap):
@@ -69,13 +68,13 @@ class StudentLdap(PeopleLdap):
 
     def __init__(self, data):
         super().__init__(data)
-        self.niveau_formation = data['ENTEleveNivFormation'][0].decode('utf8')
+        self.niveau_formation = data.ENTEleveNivFormation.value
 
         self.classes = None  # type: List[str]
         self.classe = None  # type: str
 
         if 'ENTEleveClasses' in data:
-            self.classes = extraire_classes_ldap([x.decode('utf8') for x in data['ENTEleveClasses']])
+            self.classes = extraire_classes_ldap(data.ENTEleveClasses.values)
             if len(self.classes) > 0:
                 self.classe = self.classes[0]
 
@@ -87,16 +86,16 @@ class TeacherLdap(PeopleLdap):
 
     def __init__(self, data):
         super().__init__(data)
-        self.structure_rattachement = data['ENTPersonStructRattach'][0].decode('utf8')
+        self.structure_rattachement = data.ENTPersonStructRattach.value
 
         self.profils = None
         if 'ENTPersonProfils' in data:
-            self.profils = [x.decode('utf8') for x in data['ENTPersonProfils']]
+            self.profils = data.ENTPersonProfils.values
 
         # Mise ajour des droits sur les anciens etablissement
         self.uais = None
         if 'ESCOUAI' in data:
-            self.uais = [x.decode('utf8') for x in data['ESCOUAI']]
+            self.uais = data.ESCOUAI.values
 
 
 ATTRIBUTES_STRUCTURE = ['ou', 'ENTStructureSIREN', 'ENTStructureTypeStruct', 'postalCode', 'ENTStructureUAI',
@@ -120,7 +119,7 @@ class Ldap:
     Couche d'accès aux données du LDAP.
     """
     config = None  # type: LdapConfig
-    connection = None  # type: ldap.ldapobject.SimpleLDAPObject
+    connection = None  # type: Connection
 
     def __init__(self, config: LdapConfig):
         self.config = config
@@ -129,8 +128,12 @@ class Ldap:
         """
         Etablit la connection au LDAP.
         """
-        self.connection = ldap.initialize(self.config.uri)
-        self.connection.simple_bind_s(self.config.username, self.config.password)
+        server = Server(host=self.config.uri)
+        self.connection = Connection(server,
+                                     user=self.config.username,
+                                     password=self.config.password,
+                                     auto_bind=True,
+                                     raise_exceptions=True)
 
     def disconnect(self):
         """
@@ -156,9 +159,9 @@ class Ldap:
         :return: Liste des structures trouvées
         """
         ldap_filter = _get_filtre_etablissement(uai)
-        result = self.connection.search_ext_s(self.config.structuresDN, ldap.SCOPE_ONELEVEL, ldap_filter,
-                                              ATTRIBUTES_STRUCTURE)
-        return [StructureLdap(entry[1]) for entry in result]
+        self.connection.search(self.config.structuresDN, ldap_filter,
+                               search_scope=LEVEL, attributes=ATTRIBUTES_STRUCTURE)
+        return [StructureLdap(entry) for entry in self.connection.entries]
 
     def search_people(self, since_timestamp: datetime.datetime = None, **filters) -> List[PeopleLdap]:
         """
@@ -168,9 +171,9 @@ class Ldap:
         :return: Liste des personnes
         """
         ldap_filter = _get_filtre_personnes(since_timestamp, **filters)
-        result = self.connection.search_ext_s(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
-                                              ATTRIBUTES_PEOPLE)
-        return [PeopleLdap(entry[1]) for entry in result]
+        self.connection.search(self.config.personnesDN, ldap_filter,
+                               search_scope=LEVEL, attributes=ATTRIBUTES_PEOPLE)
+        return [PeopleLdap(entry) for entry in self.connection.entries]
 
     def search_student(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[StudentLdap]:
         """
@@ -180,9 +183,9 @@ class Ldap:
         :return: Liste des étudiants correspondant
         """
         ldap_filter = _get_filtre_eleves(since_timestamp, uai)
-        result = self.connection.search_ext_s(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
-                                              ATTRIBUTES_STUDENT)
-        return [StudentLdap(entry[1]) for entry in result]
+        self.connection.search(self.config.personnesDN, ldap_filter,
+                               search_scope=LEVEL, attributes=ATTRIBUTES_STUDENT)
+        return [StudentLdap(entry) for entry in self.connection.entries]
 
     def search_teacher(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) -> List[TeacherLdap]:
         """
@@ -193,9 +196,9 @@ class Ldap:
         :return: Liste des enseignants
         """
         ldap_filter = get_filtre_enseignants(since_timestamp, uai, tous)
-        result = self.connection.search_ext_s(self.config.personnesDN, ldap.SCOPE_ONELEVEL, ldap_filter,
-                                              ATTRIBUTES_TEACHER)
-        return [TeacherLdap(entry[1]) for entry in result]
+        self.connection.search(self.config.personnesDN,
+                               ldap_filter, LEVEL, attributes=ATTRIBUTES_TEACHER)
+        return [TeacherLdap(entry) for entry in self.connection.entries]
 
     def get_domaines_etabs(self) -> Dict[str, List[str]]:
         """

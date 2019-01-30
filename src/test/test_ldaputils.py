@@ -3,7 +3,7 @@
 from datetime import datetime
 
 import pytest
-from ldap.ldapobject import SimpleLDAPObject
+from ldap3 import Connection
 
 from synchromoodle import ldaputils
 from synchromoodle.config import Config
@@ -13,7 +13,7 @@ from test.utils import ldap_utils
 datetime_value = datetime(2019, 4, 9, 21, 42, 1)
 
 
-@pytest.fixture(scope='function', name='ldap')
+@pytest.fixture(scope='function')
 def ldap(docker_config: Config):
     ldap = Ldap(docker_config.ldap)
     ldap_utils.reset(ldap)
@@ -22,7 +22,7 @@ def ldap(docker_config: Config):
 
 def test_connection(ldap: Ldap):
     ldap.connect()
-    assert isinstance(ldap.connection, SimpleLDAPObject)
+    assert isinstance(ldap.connection, Connection)
     ldap.disconnect()
     assert ldap.connection is None
 
@@ -31,6 +31,7 @@ def test_structures(ldap: Ldap):
     ldap.connect()
     ldap_utils.run_ldif('data/default-structures.ldif', ldap)
     structures = ldap.search_structure()
+    assert len(structures) == 2
     for structure in structures:
         assert isinstance(structure, StructureLdap)
         getted_structure = ldap.get_structure(structure.uai)
@@ -38,12 +39,27 @@ def test_structures(ldap: Ldap):
     ldap.disconnect()
 
 
+def test_structures_empty(ldap: Ldap):
+    ldap.connect()
+    structures = ldap.search_structure()
+    assert len(structures) == 0
+    ldap.disconnect()
+
+
 def test_people(ldap: Ldap):
     ldap.connect()
     ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
     people = ldap.search_people()
+    assert len(people) == 74
     for person in people:
         assert isinstance(person, PeopleLdap)
+    ldap.disconnect()
+
+
+def test_people_empty(ldap: Ldap):
+    ldap.connect()
+    people = ldap.search_people()
+    assert len(people) == 0
     ldap.disconnect()
 
 
@@ -51,8 +67,16 @@ def test_students(ldap: Ldap):
     ldap.connect()
     ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
     students = ldap.search_student()
+    assert len(students) > 0
     for student in students:
         assert isinstance(student, StudentLdap)
+    ldap.disconnect()
+
+
+def test_students_empty(ldap: Ldap):
+    ldap.connect()
+    students = ldap.search_student()
+    assert len(students) == 0
     ldap.disconnect()
 
 
@@ -60,8 +84,16 @@ def test_teachers(ldap: Ldap):
     ldap.connect()
     ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
     teachers = ldap.search_teacher()
+    assert len(teachers) > 0
     for teacher in teachers:
         assert isinstance(teacher, TeacherLdap)
+    ldap.disconnect()
+
+
+def test_teachers_empty(ldap: Ldap):
+    ldap.connect()
+    teachers = ldap.search_teacher()
+    assert len(teachers) == 0
     ldap.disconnect()
 
 

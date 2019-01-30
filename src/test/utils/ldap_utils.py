@@ -2,19 +2,21 @@
 from io import StringIO
 from pkgutil import get_data
 
-import ldap
-import ldif
-from ldap import modlist
-from ldap.ldapobject import SimpleLDAPObject
+from ldap3 import Connection, LEVEL
+from ldap3.core.exceptions import LDAPNoSuchObjectResult
 
+import ldif
 from synchromoodle.ldaputils import Ldap
 
 
-def _remove_all_in(connection: SimpleLDAPObject, dn: str):
-    result = connection.search_ext_s(dn, ldap.SCOPE_ONELEVEL, None, [])
-    for item in result:
-        dn, data = item
-        connection.delete_s(dn)
+def _remove_all_in(connection: Connection, dn: str):
+    try:
+        connection.search(dn, '(objectClass=*)', search_scope=LEVEL)
+    except LDAPNoSuchObjectResult:
+        return
+
+    for entry in connection.entries:
+        connection.delete(entry.entry_dn)
 
 
 def reset(l: Ldap):
@@ -28,34 +30,27 @@ def reset(l: Ldap):
         l.disconnect()
 
 
-def run_ldif(path: str, l: Ldap):
+class LDIFLoader(ldif.LDIFRecordList):
+    def __init__(self, connection: Connection,
+                 input_file, ignored_attr_types=None, max_entries=0, process_url_schemes=None):
+        super().__init__(input_file, ignored_attr_types, max_entries, process_url_schemes)
+        self.connection = connection
+
+    def handle_modify(self, dn, modops, controls=None):
+        pass
+
+    def handle(self, dn, entry):
+        self.connection.add(dn, attributes=entry)
+
+
+def run_ldif(path: str, ldap: Ldap):
+    """
+    Load file from ldif format.
+
+    :param path: path to ldif file
+    :param ldap: ldap adapter
+    """
     ldif_data = str(get_data('test', path), 'utf8')
     with StringIO(ldif_data) as ldif_file:
-        recordlist = ldif.LDIFRecordList(ldif_file)
-        recordlist.parse()
-    for record in recordlist.all_records:
-        dn = record[0]
-        data = record[1]
-        changetype = data.pop('changetype', 'add')
-        if changetype == 'add':
-            l.connection.add_s(dn, modlist.addModlist(data))
-        elif changetype == 'modify':
-            raise Exception("modify changetype is not supported.")
-        elif changetype == 'delete':
-            l.connection.delete_s(dn)
-        elif changetype == 'modrdn':
-            l.connection.modrdn(dn, data.get('newrdn'), data.get('deleteoldrdn', 1))
-        else:
-            raise Exception("Invalid changetype: " + changetype)
-
-
-def add_personne(l: Ldap, rdn: str, entry: dict):
-    l.connection.add_s(rdn + ',' + l.config.personnesDN, modlist.addModlist(entry))
-
-
-def add_group(l: Ldap, rdn: str, entry: dict):
-    l.connection.add_s(rdn + ',' + l.config.groupsDN, modlist.addModlist(entry))
-
-
-def add_structure(l: Ldap, rdn: str, entry: dict):
-    l.connection.add_s(rdn + ',' + l.config.structuresDN, modlist.addModlist(entry))
+        loader = LDIFLoader(ldap.connection, ldif_file)
+        loader.parse()

@@ -123,7 +123,7 @@ class LdapConfig(_BaseConfig):
     personnesRDN = "ou=people"  # type: str
     """OU pour les personnes"""
 
-    groupsRND = "ou=groups"  # type: str
+    groupsRDN = "ou=groups"  # type: str
     """OU pour les groupes"""
 
     adminRDN = "ou=administrateurs"  # type: str
@@ -148,7 +148,7 @@ class LdapConfig(_BaseConfig):
         """
         DN pour les personnes
         """
-        return self.groupsRND + ',' + self.baseDN
+        return self.groupsRDN + ',' + self.baseDN
 
     @property
     def adminDN(self) -> str:
