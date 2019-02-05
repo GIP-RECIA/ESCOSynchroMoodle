@@ -7,7 +7,7 @@ from ldap3 import Connection
 
 from synchromoodle import ldaputils
 from synchromoodle.config import Config
-from synchromoodle.ldaputils import Ldap, StructureLdap, PeopleLdap, StudentLdap, TeacherLdap
+from synchromoodle.ldaputils import Ldap, StructureLdap, PersonneLdap, EleveLdap, EnseignantLdap
 from test.utils import ldap_utils
 
 datetime_value = datetime(2019, 4, 9, 21, 42, 1)
@@ -46,54 +46,54 @@ def test_structures_empty(ldap: Ldap):
     ldap.disconnect()
 
 
-def test_people(ldap: Ldap):
+def test_personnes(ldap: Ldap):
     ldap.connect()
-    ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
-    people = ldap.search_people()
-    assert len(people) == 74
-    for person in people:
-        assert isinstance(person, PeopleLdap)
+    ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+    personnes = ldap.search_personne()
+    assert len(personnes) == 74
+    for person in personnes:
+        assert isinstance(person, PersonneLdap)
     ldap.disconnect()
 
 
-def test_people_empty(ldap: Ldap):
+def test_personnes_empty(ldap: Ldap):
     ldap.connect()
-    people = ldap.search_people()
-    assert len(people) == 0
+    personnes = ldap.search_personne()
+    assert len(personnes) == 0
     ldap.disconnect()
 
 
-def test_students(ldap: Ldap):
+def test_eleves(ldap: Ldap):
     ldap.connect()
-    ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
-    students = ldap.search_student()
-    assert len(students) > 0
-    for student in students:
-        assert isinstance(student, StudentLdap)
+    ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+    eleves = ldap.search_eleve()
+    assert len(eleves) > 0
+    for student in eleves:
+        assert isinstance(student, EleveLdap)
     ldap.disconnect()
 
 
-def test_students_empty(ldap: Ldap):
+def test_eleves_empty(ldap: Ldap):
     ldap.connect()
-    students = ldap.search_student()
-    assert len(students) == 0
+    eleves = ldap.search_eleve()
+    assert len(eleves) == 0
     ldap.disconnect()
 
 
 def test_teachers(ldap: Ldap):
     ldap.connect()
-    ldap_utils.run_ldif('data/default-people-short.ldif', ldap)
-    teachers = ldap.search_teacher()
-    assert len(teachers) > 0
-    for teacher in teachers:
-        assert isinstance(teacher, TeacherLdap)
+    ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+    enseignants = ldap.search_enseignant()
+    assert len(enseignants) > 0
+    for enseignant in enseignants:
+        assert isinstance(enseignant, EnseignantLdap)
     ldap.disconnect()
 
 
 def test_teachers_empty(ldap: Ldap):
     ldap.connect()
-    teachers = ldap.search_teacher()
-    assert len(teachers) == 0
+    enseignants = ldap.search_enseignant()
+    assert len(enseignants) == 0
     ldap.disconnect()
 
 

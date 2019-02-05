@@ -250,7 +250,7 @@ class Config:
     timestamp_store = TimestampStoreConfig()  # type: TimestampStoreConfig
     etablissements = EtablissementsConfig()  # type: EtablissementsConfig
     inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
-    inspecteurs_config = InspecteursConfig()  # type: InspecteursConfig
+    inspecteurs = InspecteursConfig()  # type: InspecteursConfig
     actions = ["default"]  # type: List[str]
 
     def update(self, data):

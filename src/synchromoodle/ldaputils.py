@@ -28,7 +28,7 @@ def extraire_classes_ldap(classes_ldap: List[str]):
 
 class StructureLdap:
     """
-    Représente une structure issu du LDAP.
+    Représente une structure issue du LDAP.
     """
 
     def __init__(self, data):
@@ -38,18 +38,20 @@ class StructureLdap:
         self.code_postal = data.postalCode.value[:2]
         self.siren = data.ENTStructureSIREN.value
         self.uai = data.ENTStructureUAI.value
+        self.domaine = data.ESCODomaines.value
         self.domaines = data.ESCODomaines.values
 
 
-class PeopleLdap:
+class PersonneLdap:
     """
-    Représente une personne issu du LDAP.
+    Représente une personne issue du LDAP.
     """
 
     def __init__(self, data):
         self.uid = data.uid.value
         self.sn = data.sn.value
         self.given_name = data.givenName.value
+        self.domaine = data.ESCODomaines.value
         self.domaines = data.ESCODomaines.values
         self.uai_courant = data.ESCOUAICourant.value
         self.mail = None
@@ -61,7 +63,7 @@ class PeopleLdap:
             self.is_member_of = data.isMemberOf.values
 
 
-class StudentLdap(PeopleLdap):
+class EleveLdap(PersonneLdap):
     """
     Représente un élève issu du LDAP.
     """
@@ -79,9 +81,9 @@ class StudentLdap(PeopleLdap):
                 self.classe = self.classes[0]
 
 
-class TeacherLdap(PeopleLdap):
+class EnseignantLdap(PersonneLdap):
     """
-    Représente un enseignant.
+    Représente un enseignant issu du LDAP.
     """
 
     def __init__(self, data):
@@ -92,26 +94,9 @@ class TeacherLdap(PeopleLdap):
         if 'ENTPersonProfils' in data:
             self.profils = data.ENTPersonProfils.values
 
-        # Mise ajour des droits sur les anciens etablissement
         self.uais = None
         if 'ESCOUAI' in data:
             self.uais = data.ESCOUAI.values
-
-
-ATTRIBUTES_STRUCTURE = ['ou', 'ENTStructureSIREN', 'ENTStructureTypeStruct', 'postalCode', 'ENTStructureUAI',
-                        'ESCODomaines', '+']
-
-# Attributs retournes pour une personne
-ATTRIBUTES_PEOPLE = ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCODomaines', 'ESCOUAICourant',
-                     'ENTPersonStructRattach', 'isMemberOf', '+']
-
-# Attributs retournes pour un eleve
-ATTRIBUTES_STUDENT = ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation', 'ESCODomaines',
-                      'ESCOUAICourant', '+']
-
-# Attributs retournes pour un enseignant
-ATTRIBUTES_TEACHER = ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines', 'ESCOUAICourant',
-                      'ENTPersonStructRattach', 'ENTPersonProfils', 'isMemberOf', '+']
 
 
 class Ldap:
@@ -160,10 +145,12 @@ class Ldap:
         """
         ldap_filter = _get_filtre_etablissement(uai)
         self.connection.search(self.config.structuresDN, ldap_filter,
-                               search_scope=LEVEL, attributes=ATTRIBUTES_STRUCTURE)
+                               search_scope=LEVEL, attributes=
+                               ['ou', 'ENTStructureSIREN', 'ENTStructureTypeStruct', 'postalCode', 'ENTStructureUAI',
+                                'ESCODomaines', '+'])
         return [StructureLdap(entry) for entry in self.connection.entries]
 
-    def search_people(self, since_timestamp: datetime.datetime = None, **filters) -> List[PeopleLdap]:
+    def search_personne(self, since_timestamp: datetime.datetime = None, **filters) -> List[PersonneLdap]:
         """
         Recherche de personnes.
         :param since_timestamp: datetime.datetime
@@ -172,10 +159,12 @@ class Ldap:
         """
         ldap_filter = _get_filtre_personnes(since_timestamp, **filters)
         self.connection.search(self.config.personnesDN, ldap_filter,
-                               search_scope=LEVEL, attributes=ATTRIBUTES_PEOPLE)
-        return [PeopleLdap(entry) for entry in self.connection.entries]
+                               search_scope=LEVEL, attributes=
+                               ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCODomaines', 'ESCOUAICourant',
+                                'ENTPersonStructRattach', 'isMemberOf', '+'])
+        return [PersonneLdap(entry) for entry in self.connection.entries]
 
-    def search_student(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[StudentLdap]:
+    def search_eleve(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[EleveLdap]:
         """
         Recherche d'étudiants.
         :param since_timestamp: datetime.datetime
@@ -184,10 +173,13 @@ class Ldap:
         """
         ldap_filter = _get_filtre_eleves(since_timestamp, uai)
         self.connection.search(self.config.personnesDN, ldap_filter,
-                               search_scope=LEVEL, attributes=ATTRIBUTES_STUDENT)
-        return [StudentLdap(entry) for entry in self.connection.entries]
+                               search_scope=LEVEL, attributes=
+                               ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',
+                                'ESCODomaines', 'ESCOUAICourant', '+'])
+        return [EleveLdap(entry) for entry in self.connection.entries]
 
-    def search_teacher(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) -> List[TeacherLdap]:
+    def search_enseignant(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) -> List[
+        EnseignantLdap]:
         """
         Recherche d'enseignants.
         :param since_timestamp: datetime.datetime
@@ -197,20 +189,22 @@ class Ldap:
         """
         ldap_filter = get_filtre_enseignants(since_timestamp, uai, tous)
         self.connection.search(self.config.personnesDN,
-                               ldap_filter, LEVEL, attributes=ATTRIBUTES_TEACHER)
-        return [TeacherLdap(entry) for entry in self.connection.entries]
+                               ldap_filter, LEVEL, attributes=
+                               ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',
+                                'ESCOUAICourant', 'ENTPersonStructRattach', 'ENTPersonProfils', 'isMemberOf', '+'])
+        return [EnseignantLdap(entry) for entry in self.connection.entries]
 
     def get_domaines_etabs(self) -> Dict[str, List[str]]:
         """
         Obtient la liste des "ESCOUAICourant : Domaine" des établissements
         :return: Dictionnaire uai/list de domaines
         """
-        ldap_structures = self.search_structure()
+        structures = self.search_structure()
 
         etabs_ldap = {}
 
-        for ldap_structure in ldap_structures:
-            etabs_ldap[ldap_structure.uai] = ldap_structure.domaines
+        for structure in structures:
+            etabs_ldap[structure.uai] = structure.domaines
         return etabs_ldap
 
 

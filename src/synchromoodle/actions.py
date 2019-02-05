@@ -29,7 +29,7 @@ def default(config: Config, arguments=default_args):
         ldap.connect()
 
         synchronizer = Synchronizer(ldap, db, config, arguments)
-        synchronizer.load_context()
+        synchronizer.initialize()
 
         ###################################################
         # On ne va traiter, dans la suite du programme, 
@@ -44,24 +44,25 @@ def default(config: Config, arguments=default_args):
         # d'éviter la remontée de trop d'occurences du LDAP
         ###################################################
         for uai in config.etablissements.listeEtab:
-            etablissement_context = synchronizer.mise_a_jour_etab(uai)
+            etablissement_context = synchronizer.handle_etablissement(uai)
 
             logging.info('    |_ Mise à jour des eleves')
             since_timestamp = timestamp_store.get_timestamp(uai)
 
             # Si la purge des cohortes a ete demandee, on recupere tous les eleves sans prendre en compte le timestamp
             # du dernier traitement
-            for ldap_student in ldap.search_student(since_timestamp if not arguments.purge_cohortes else None, uai):
-                synchronizer.mise_a_jour_eleve(etablissement_context, ldap_student)
+            for eleve in ldap.search_eleve(since_timestamp if not arguments.purge_cohortes else None, uai):
+                synchronizer.handle_eleve(etablissement_context, eleve)
 
             if arguments.purge_cohortes:
                 logging.info('    |_ Purge des cohortes des élèves')
                 synchronizer.purge_eleve_cohorts(etablissement_context)
 
             logging.info('    |_ Mise à jour du personnel enseignant')
-            for ldap_teacher in ldap.search_teacher(since_timestamp=since_timestamp, uai=uai):
-                synchronizer.mise_a_jour_enseignant(etablissement_context, ldap_teacher)
+            for enseignant in ldap.search_enseignant(since_timestamp=since_timestamp, uai=uai):
+                synchronizer.handle_enseignant(etablissement_context, enseignant)
 
+            # TODO: Merger cette fonction dans mise_a_jour_enseignant
             synchronizer.create_profs_etabs_cohorts(etablissement_context,
                                                     since_timestamp if not arguments.purge_cohortes else None)
 
@@ -94,7 +95,7 @@ def interetab(config: Config, arguments=default_args):
         ldap.connect()
 
         synchronizer = Synchronizer(ldap, db, config, arguments)
-        synchronizer.load_context()
+        synchronizer.initialize()
 
         ###################################################
         # Recuperation de la date de dernier traitement
@@ -106,14 +107,14 @@ def interetab(config: Config, arguments=default_args):
         ###################################################
         logging.info('    |_ Mise à jour des utilisateurs inter-etablissements')
 
-        people_filter = {
+        personne_filter = {
             config.inter_etablissements.ldap_attribut_user: config.inter_etablissements.ldap_valeur_attribut_user}
 
         since_timestamp = timestamp_store.get_timestamp(config.inter_etablissements.cle_timestamp)
 
         # Traitement des eleves
-        for ldap_people in ldap.search_people(since_timestamp=since_timestamp, **people_filter):
-            synchronizer.mise_a_jour_user_interetab(ldap_people)
+        for personne_ldap in ldap.search_personne(since_timestamp=since_timestamp, **personne_filter):
+            synchronizer.handle_user_interetab(personne_ldap)
 
         ###################################################
         # Mise a jour des cohortes inter-etabs
@@ -162,7 +163,7 @@ def inspecteurs(config: Config, arguments=default_args):
         ldap.connect()
 
         synchronizer = Synchronizer(ldap, db, config, arguments)
-        synchronizer.load_context()
+        synchronizer.initialize()
 
         ###################################################
         # Mise a jour des inspecteurs
@@ -171,18 +172,18 @@ def inspecteurs(config: Config, arguments=default_args):
 
         timestamp_store = TimestampStore(config.timestamp_store)
 
-        people_filter = {
-            config.inspecteurs_config.ldap_attribut_user: config.inspecteurs_config.ldap_valeur_attribut_user}
+        personne_filter = {
+            config.inspecteurs.ldap_attribut_user: config.inspecteurs.ldap_valeur_attribut_user}
 
         # Traitement des inspecteurs
-        for ldap_people in ldap.search_people(timestamp_store.get_timestamp(config.inspecteurs_config.cle_timestamp),
-                                              **people_filter):
-            synchronizer.mise_a_jour_inspecteur(ldap_people)
+        for personne_ldap in ldap.search_personne(timestamp_store.get_timestamp(config.inspecteurs.cle_timestamp),
+                                                  **personne_filter):
+            synchronizer.handle_inspecteur(personne_ldap)
 
         db.connection.commit()
 
         # Mise a jour de la date de dernier traitement
-        timestamp_store.mark(config.inspecteurs_config.cle_timestamp)
+        timestamp_store.mark(config.inspecteurs.cle_timestamp)
         timestamp_store.write()
 
         logging.info('Synchronisation des inspecteurs : FIN')

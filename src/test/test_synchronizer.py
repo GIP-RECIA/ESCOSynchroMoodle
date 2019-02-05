@@ -45,7 +45,7 @@ class TestEtablissement:
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
         synchroniser = Synchronizer(ldap, db, docker_config)
-        synchroniser.load_context()
+        synchroniser.initialize()
 
         assert synchroniser.context
         assert synchroniser.context.timestamp_now_sql is not None

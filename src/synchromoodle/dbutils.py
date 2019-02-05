@@ -187,6 +187,7 @@ class Database:
 
     def __init__(self, config: DatabaseConfig, constantes: ConstantesConfig):
         self.config = config
+        # TODO: Déplacer les constantes database dans DatabaseConfig
         self.constantes = constantes
         self.entete = config.entete
 
@@ -365,7 +366,8 @@ class Database:
             return None
         return ligne[0]
 
-    def create_profs_etabs_cohorts(self, id_context_etab, etab_name, time_created, time_stamp: datetime.datetime, ldap: Ldap):
+    def create_profs_etabs_cohorts(self, id_context_etab, etab_name, time_created, time_stamp: datetime.datetime,
+                                   ldap: Ldap):
         """
         Fonction permettant de creer des cohortes a partir de
         etablissement.
@@ -382,12 +384,12 @@ class Database:
         cohort_description = P_COHORT_DESC_FOR_ETAB % (etab_name)
         id_cohort = self.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
 
-        ldap_teachers = ldap.search_teacher(since_timestamp=time_stamp, uai=etab_name, tous=True)
+        enseignants = ldap.search_enseignant(since_timestamp=time_stamp, uai=etab_name, tous=True)
 
         maintenant_sql = self.get_timestamp_now()
-        for ldap_teacher in ldap_teachers:
-            enseignant_infos = "%s %s %s" % (ldap_teacher.uid, ldap_teacher.given_name, ldap_teacher.sn)
-            id_user = self.get_user_id(ldap_teacher.uid)
+        for enseignant in enseignants:
+            enseignant_infos = "%s %s %s" % (enseignant.uid, enseignant.given_name, enseignant.sn)
+            id_user = self.get_user_id(enseignant.uid)
             self.enroll_user_in_cohort(id_cohort, id_user, enseignant_infos, maintenant_sql)
             liste_professeurs_insere.append(id_user)
         if time_stamp is None:
@@ -883,7 +885,6 @@ class Database:
         id_forum = self.mark.fetchone()[0]
         return id_forum
 
-
     def get_id_user_info_data(self, id_user, id_field):
         """
         Fonction permettant de recuperer l'id d'un info data via
@@ -951,8 +952,7 @@ class Database:
 
     def get_ids_and_themes_not_allowed_roles(self, id_user, allowed_themes):
         """
-        Fonction permettant de recuperer les ids des roles qui
-        ne sont pas autorises pour l'utilisateur.
+        Fonction permettant de recuperer les ids des roles qui ne sont pas autorises pour l'utilisateur.
         :param id_user:
         :param allowed_themes:
         :return:
