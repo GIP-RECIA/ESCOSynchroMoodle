@@ -6488,3 +6488,103 @@ mail: noreply@ac-rennes.fr
 personalTitle: Mme
 uid: F1700jyj
 userPassword:: e3NzaGF9WkY4bWExS3YzY2c2NFQ2U0JNTzRnWTVkSHVKSXEvQ0VmakwyRVE9PQ==
+
+dn: uid=F1700j9a,ou=people,dc=esco-centre,dc=fr
+objectClass: eduMember
+objectClass: ESCOEleveAddons
+objectClass: ESCOAddons
+objectClass: ENTPerson
+objectClass: ENTEleve
+cn: DURAND RAYAN
+ENTEleveClasses: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-cent
+ re,dc=fr$3EME2
+ENTEleveFiliere: 3EME
+ENTEleveLibelleMEF: 3EME BILINGUE
+ENTEleveMajeur: N
+ENTEleveMEF: 10310019113
+ENTEleveNivFormation: 3EME
+ENTEleveStatutEleve: SCOLAIRE
+ENTPersonJointure: AC-RENNES$1439189
+ENTPersonLogin: rayan.durand
+sn: DURAND
+displayName: Rayan DURAND
+ENTEleveBoursier: N
+ENTEleveCodeEnseignements: 043800
+ENTEleveCodeEnseignements: 043700
+ENTEleveCodeEnseignements: 020700
+ENTEleveCodeEnseignements: 100100
+ENTEleveCodeEnseignements: 030602
+ENTEleveCodeEnseignements: 062300
+ENTEleveCodeEnseignements: 070800
+ENTEleveCodeEnseignements: 090100
+ENTEleveCodeEnseignements: 081300
+ENTEleveCodeEnseignements: 008400
+ENTEleveCodeEnseignements: 030E07
+ENTEleveCodeEnseignements: 061300
+ENTEleveCodeEnseignements: 030201
+ENTEleveCodeEnseignements: 062900
+ENTEleveEnseignements: ENSEIGNEMENT MORAL ET CIVIQUE
+ENTEleveEnseignements: HISTOIRE-GEOGRAPHIE
+ENTEleveEnseignements: FRANCAIS
+ENTEleveEnseignements: EDUCATION PHYSIQUE ET SPORTIVE
+ENTEleveEnseignements: ESPAGNOL LV2
+ENTEleveEnseignements: PHYSIQUE-CHIMIE
+ENTEleveEnseignements: TECHNOLOGIE
+ENTEleveEnseignements: ARTS PLASTIQUES
+ENTEleveEnseignements: EDUCATION MUSICALE
+ENTEleveEnseignements: VIE DE CLASSE
+ENTEleveEnseignements: BRETON LV1 BIS (SECTION BILINGUE)
+ENTEleveEnseignements: MATHEMATIQUES
+ENTEleveEnseignements: ANGLAIS LV1
+ENTEleveEnseignements: SCIENCES DE LA VIE ET DE LA TERRE
+ENTEleveGroupes: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-cent
+ re,dc=fr$32ESP2P1
+ENTEleveGroupes: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-cent
+ re,dc=fr$32L1BIP1
+ENTEleveRegime: EXTERNE LIBRE
+ENTEleveStructRattachId: 1354118
+ENTEleveTransport: N
+ENTPersonAutresPrenoms: Rayan
+ENTPersonDateNaissance: 03/05/2001
+ENTPersonGARIdentifiant:: Yzc2ZWNlOWQtMzAyOS00Mzk1LWE5NTItNWYwYTU0N2M3ZjUw
+ENTPersonNomPatro: DURAND
+ENTPersonProfils: National_ELV
+ENTPersonProfils: National_1
+ENTPersonSexe: M
+ENTPersonStructRattach: ENTStructureSIREN=19291595700018,ou=structures,dc=es
+ co-centre,dc=fr
+ESCODomaines: lycees.netocentre.fr
+ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
+ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
+ESCOEleveCodeEnseignements: 020700$FRANCAIS
+ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
+ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
+ESCOEleveCodeEnseignements: 062300$PHYSIQUE-CHIMIE
+ESCOEleveCodeEnseignements: 070800$TECHNOLOGIE
+ESCOEleveCodeEnseignements: 090100$ARTS PLASTIQUES
+ESCOEleveCodeEnseignements: 081300$EDUCATION MUSICALE
+ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
+ESCOEleveCodeEnseignements: 030E07$BRETON LV1 BIS (SECTION BILINGUE)
+ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
+ESCOEleveCodeEnseignements: 030201$ANGLAIS LV1
+ESCOEleveCodeEnseignements: 062900$SCIENCES DE LA VIE ET DE LA TERRE
+ESCOEleveVecteurIdentite: 4|||1354118|0291595B
+ESCOPersonEtatCompte: INVALIDE
+ESCOPersonListeRouge: FALSE
+ESCOPersonProfils: ELEVE
+ESCOSIREN: 19291595700018
+ESCOSIRENCourant: 19291595700018
+ESCOUAI: 0291595B
+ESCOUAICourant: 0291595B
+ESCOUAIRattachement: 0291595B
+givenName: Rayan
+isMemberOf: esco:Applications:Folios:DE L IROISE_0291595B
+isMemberOf: esco:Etablissements:DE L IROISE_0291595B:Tous_DE L IROISE
+isMemberOf: esco:Etablissements:DE L IROISE_0291595B:Eleves
+isMemberOf: esco:Etablissements:DE L IROISE_0291595B:3EME:Eleves_3EME2
+isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0291595B
+isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0291595B
+mail: rayan.durand@netocentre.fr
+personalTitle: M
+uid: F1700j9a
+userPassword:: e3NzaGF9WkY4bWExS3YzY2c2NFQ2U0JNTzRnWTVkSHVKSXEvQ0VmakwyRVE9PQ==

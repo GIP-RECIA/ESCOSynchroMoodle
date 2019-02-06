@@ -108,7 +108,8 @@ def interetab(config: Config, arguments=default_args):
         logging.info('    |_ Mise à jour des utilisateurs inter-etablissements')
 
         personne_filter = {
-            config.inter_etablissements.ldap_attribut_user: config.inter_etablissements.ldap_valeur_attribut_user}
+            config.inter_etablissements.ldap_attribut_user: config.inter_etablissements.ldap_valeur_attribut_user
+        }
 
         since_timestamp = timestamp_store.get_timestamp(config.inter_etablissements.cle_timestamp)
 
@@ -173,7 +174,8 @@ def inspecteurs(config: Config, arguments=default_args):
         timestamp_store = TimestampStore(config.timestamp_store)
 
         personne_filter = {
-            config.inspecteurs.ldap_attribut_user: config.inspecteurs.ldap_valeur_attribut_user}
+            config.inspecteurs.ldap_attribut_user: config.inspecteurs.ldap_valeur_attribut_user
+        }
 
         # Traitement des inspecteurs
         for personne_ldap in ldap.search_personne(timestamp_store.get_timestamp(config.inspecteurs.cle_timestamp),

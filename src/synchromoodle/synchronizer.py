@@ -56,10 +56,6 @@ class EtablissementContext:
         self.uai = uai
 
 
-class EleveContext:
-    pass
-
-
 class Synchronizer:
     __ldap = None  # type: Ldap
     __db = None  # type: Database
