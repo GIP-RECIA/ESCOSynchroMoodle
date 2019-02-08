@@ -3,9 +3,9 @@
 import pytest
 
 from synchromoodle.config import Config
-from synchromoodle.dbutils import Database, COHORT_NAME_FOR_CLASS
+from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
-from synchromoodle.synchronizer import Synchronizer
+from synchromoodle.synchronizer import Synchronizer, COHORT_NAME_FOR_CLASS
 from test.utils import db_utils, ldap_utils
 
 

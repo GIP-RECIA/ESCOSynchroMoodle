@@ -19,41 +19,6 @@ from .ldaputils import Ldap
 ###############################################################################
 
 #######################################
-# COHORTS
-#######################################
-# Nom et description des cohortes crees pour les classes
-COHORT_NAME_FOR_CLASS = 'Élèves de la Classe %s'
-COHORT_DESC_FOR_CLASS = 'Élèves de la classe %s'
-
-# Nom et description des cohortes crees pour les niveaux de formation
-COHORT_NAME_FOR_FORMATION = 'Élèves du Niveau de formation %s'
-COHORT_DESC_FOR_FORMATION = 'Eleves avec le niveau de formation %s'
-
-# Nom et description des cohortes crees pour les profs des etablissements
-P_COHORT_NAME_FOR_ETAB = 'Profs de l\'établissement (%s)'
-P_COHORT_DESC_FOR_ETAB = 'Enseignants de l\'établissement %s'
-#######################################
-# BLOCKS
-#######################################
-# Default region pour le bloc de recherche sur le forum de la zone privee
-BLOCK_FORUM_SEARCH_DEFAULT_REGION = "side-pre"
-
-# Default weight pour le bloc de recherche sur le forum de la zone privee
-BLOCK_FORUM_SEARCH_DEFAULT_WEIGHT = 2
-
-# Nom pour le bloc de recherche sur le forum de la zone privee
-BLOCK_FORUM_SEARCH_NAME = "searches_forums"
-
-# Page type pattern pour le bloc de recherche sur le forum de la zone privee
-BLOCK_FORUM_SEARCH_PAGE_TYPE_PATTERN = "course-view-*"
-
-# Show in sub context option pour le bloc de recherche sur le forum de la zone privee
-BLOCK_FORUM_SEARCH_SHOW_IN_SUB_CTX = 0
-
-# Sub page pattern pour le bloc de recherche sur le forum de la zone privee
-BLOCK_FORUM_SEARCH_SUB_PAGE_PATTERN = ""
-
-#######################################
 # CONTEXTES
 #######################################
 # Id du contexte systeme
@@ -74,9 +39,6 @@ PROFONDEUR_CTX_ZONE_PRIVEE = 3
 #######################################
 # COURS
 #######################################
-# Statut pour ouvrir l'inscription manuelle a un cours
-COURSE_ENROL_MANUAL = "manual"
-COURSE_ENROL_ENROL = 0
 
 # Format pour la zone privee d'un etablissement
 COURSE_FORMAT_ZONE_PRIVEE = "topics"
@@ -103,25 +65,6 @@ COURSE_VISIBLE_ZONE_PRIVEE = 0
 #######################################
 # Nombre pour le module du forum dans la zone privee
 COURSE_MODULES_MODULE = 5
-
-#######################################
-# FORUM
-#######################################
-# Nom du forum pour la zone privee 
-# Le (%s) est reserve a l'organisation unit de l'etablissement
-FORUM_NAME_ZONE_PRIVEE = "Forum réservé au personnel éducatif de l'établissement %s"
-
-# Format d'intro. pour le forum de la zone privee
-FORUM_INTRO_FORMAT_ZONE_PRIVEE = 1
-
-# Introduction pour le forum de la zone privee
-FORUM_INTRO_ZONE_PRIVEE = "<p></p>"
-
-# Max attachements pour le forum de la zone privee
-FORUM_MAX_ATTACHEMENTS_ZONE_PRIVEE = 2
-
-# Max bytes pour le forum de la zone privee
-FORUM_MAX_BYTES_ZONE_PRIVEE = 512000
 
 #######################################
 # ROLES
@@ -324,23 +267,6 @@ class Database:
             return None
         return ligne[0]
 
-    def create_classes_cohorts(self, id_context_etab, classes_names, time_created):
-        """
-        Fonction permettant de creer des cohortes a partir de
-        classes liees a un etablissement.
-        :param id_context_etab:
-        :param classes_names:
-        :param time_created:
-        :return:
-        """
-        ids_cohorts = []
-        for class_name in classes_names:
-            cohort_name = COHORT_NAME_FOR_CLASS % class_name
-            cohort_description = COHORT_DESC_FOR_CLASS % class_name
-            id_cohort = self.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
-            ids_cohorts.append(id_cohort)
-        return ids_cohorts
-
     def create_cohort(self, id_context, name, id_number, description, time_created):
         """
         Fonction permettant de creer une nouvelle cohorte pour
@@ -384,35 +310,6 @@ class Database:
             return None
         return ligne[0]
 
-    def create_profs_etabs_cohorts(self, id_context_etab, etab_name, time_created, time_stamp: datetime.datetime,
-                                   ldap: Ldap):
-        """
-        Fonction permettant de creer des cohortes a partir de
-        etablissement.
-        Puis de remplir la cohorte avec les enseignants de l'etablissement
-        :param id_context_etab:
-        :param etab_name:
-        :param time_created:
-        :param time_stamp:
-        :param ldap:
-        :return:
-        """
-        liste_professeurs_insere = []
-        cohort_name = P_COHORT_NAME_FOR_ETAB % (etab_name)
-        cohort_description = P_COHORT_DESC_FOR_ETAB % (etab_name)
-        id_cohort = self.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
-
-        enseignants = ldap.search_enseignant(since_timestamp=time_stamp, uai=etab_name, tous=True)
-
-        maintenant_sql = self.get_timestamp_now()
-        for enseignant in enseignants:
-            enseignant_infos = "%s %s %s" % (enseignant.uid, enseignant.given_name, enseignant.sn)
-            id_user = self.get_user_id(enseignant.uid)
-            self.enroll_user_in_cohort(id_cohort, id_user, enseignant_infos, maintenant_sql)
-            liste_professeurs_insere.append(id_user)
-        if time_stamp is None:
-            # Si la purge à été definie ou si pas de trt precedent on purge la cohorte
-            self.purge_cohort_profs(id_cohort, liste_professeurs_insere)
 
     def get_user_id(self, username):
         """
@@ -430,13 +327,12 @@ class Database:
             return None
         return ligne[0]
 
-    def enroll_user_in_cohort(self, id_cohort, id_user, user_infos, time_added):
+    def enroll_user_in_cohort(self, id_cohort, id_user, time_added):
         """
         Fonction permettant d'ajouter un utilisateur a une
         cohorte.
         :param id_cohort:
         :param id_user:
-        :param user_infos:
         :param time_added:
         :return:
         """
@@ -463,19 +359,6 @@ class Database:
             .format(entete=self.entete, ids_list=ids_list)
         self.mark.execute(s, params={'id_cohort': id_cohort, **ids_list_params})
 
-    def create_formation_cohort(self, id_context_etab, formation_name, time_created):
-        """
-        Fonction permettant de creer une cohorte a partir d'un
-        niveau de formation lie a un etablissement.
-        :param id_context_etab:
-        :param formation_name:
-        :param time_created:
-        :return:
-        """
-        cohort_name = COHORT_NAME_FOR_FORMATION % formation_name
-        cohort_description = COHORT_DESC_FOR_FORMATION % formation_name
-        id_cohort = self.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description, time_created)
-        return id_cohort
 
     def delete_moodle_local_admins(self, id_context_categorie, ids_not_admin):
         """
@@ -671,19 +554,6 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user})
 
-    def enroll_user_in_cohorts(self, id_context_etab, ids_cohorts, id_user, user_infos, time_added):
-        """
-        Fonction permettant d'ajouter un utilisateur a une ou
-        plusieurs cohorte(s) au sein d'un etablissement.
-        :param id_context_etab:
-        :param ids_cohorts:
-        :param id_user:
-        :param user_infos:
-        :param time_added:
-        :return:
-        """
-        for id_cohort in ids_cohorts:
-            self.enroll_user_in_cohort(id_cohort, id_user, user_infos, time_added)
 
     def get_cohort_name(self, id_cohort):
         """
@@ -1179,7 +1049,6 @@ class Database:
             .format(entete=self.entete)
         params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie,
                   'id_user': id_user}
-        logging.info(sql % params)
         self.mark.execute(sql, params=params)
         is_local_admin = self.mark.rowcount > 0
         self.mark.fetchall()
@@ -1202,143 +1071,8 @@ class Database:
             .format(entete=self.entete)
         params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie,
                   'id_user': id_user}
-        logging.info(s % params)
         self.mark.execute(s, params=params)
         return True
-
-    def insert_moodle_structure(self, grp, nom_structure, path, ou, siren, uai):
-        """
-        Fonction permettant d'inserer une structure dans Moodle.
-        :param grp:
-        :param nom_structure:
-        :param path:
-        :param ou:
-        :param siren:
-        :param uai:
-        :return:
-        """
-        # Recuperation du timestamp
-        now = self.get_timestamp_now()
-
-        # Creation de la description pour la structure
-        description = siren
-        if grp:
-            description = siren + "@" + nom_structure
-
-        #########################
-        # PARTIE CATEGORIE
-        #########################
-        # Insertion de la categorie correspondant a l'etablissement
-        self.insert_moodle_course_category(ou, description, description, uai)
-        id_categorie_etablissement = self.get_id_course_category_by_id_number(siren)
-
-        # Mise a jour du path de la categorie
-        path_etablissement = "/%d" % id_categorie_etablissement
-        self.update_course_category_path(id_categorie_etablissement, path_etablissement)
-
-        #########################
-        # PARTIE CONTEXTE
-        #########################
-        # Insertion du contexte associe a la categorie de l'etablissement
-        self.insert_moodle_context(self.constantes.niveau_ctx_categorie,
-                                   PROFONDEUR_CTX_ETAB,
-                                   id_categorie_etablissement)
-        id_contexte_etablissement = self.get_id_context(self.constantes.niveau_ctx_categorie,
-                                                        PROFONDEUR_CTX_ETAB,
-                                                        id_categorie_etablissement)
-
-        # Mise a jour du path de la categorie
-        path_contexte_etablissement = "%s/%d" % (path, id_contexte_etablissement)
-        self.update_context_path(id_contexte_etablissement, path_contexte_etablissement)
-
-        #########################
-        # PARTIE ZONE PRIVEE
-        #########################
-        # Insertion du cours pour le forum de discussion
-        id_zone_privee = self.insert_zone_privee(id_categorie_etablissement, siren, ou, now)
-
-        # Insertion du contexte associe
-        id_contexte_zone_privee = self.insert_zone_privee_context(id_zone_privee)
-
-        # Mise a jour du path du contexte
-        path_contexte_zone_privee = "%s/%d" % (path_contexte_etablissement, id_contexte_zone_privee)
-        self.update_context_path(id_contexte_zone_privee, path_contexte_zone_privee)
-
-        #########################
-        # PARTIE INSCRIPTIONS
-        #########################
-        # Ouverture du cours a l'inscription manuelle
-        enrol = COURSE_ENROL_MANUAL
-        status = COURSE_ENROL_ENROL
-        role_id = self.constantes.id_role_eleve
-        self.insert_moodle_enrol_capability(enrol, status, id_zone_privee, role_id)
-
-        #########################
-        # PARTIE FORUM
-        #########################
-        # Insertion du forum au sein de la zone privee
-        course = id_zone_privee
-        name = FORUM_NAME_ZONE_PRIVEE % ou.encode("utf-8")
-        intro = FORUM_INTRO_ZONE_PRIVEE
-        intro_format = FORUM_INTRO_FORMAT_ZONE_PRIVEE
-        max_bytes = FORUM_MAX_BYTES_ZONE_PRIVEE
-        max_attachements = FORUM_MAX_ATTACHEMENTS_ZONE_PRIVEE
-        time_modified = now
-
-        self.insert_moodle_forum(course, name, intro, intro_format, max_bytes, max_attachements, time_modified)
-        id_forum = self.get_id_forum(course)
-
-        #########################
-        # PARTIE MODULE
-        #########################
-        # Insertion du module forum dans la zone privee
-        course = id_zone_privee
-        module = COURSE_MODULES_MODULE
-        instance = id_forum
-        added = now
-
-        self.insert_moodle_course_module(course, module, instance, added)
-        id_course_module = self.get_id_course_module(course)
-
-        # Insertion du contexte pour le module de cours (forum)
-        self.insert_moodle_context(self.constantes.niveau_ctx_forum,
-                                   PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
-                                   id_course_module)
-        id_contexte_module = self.get_id_context(self.constantes.niveau_ctx_forum,
-                                                 PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
-                                                 id_course_module)
-
-        # Mise a jour du path du contexte
-        path_contexte_module = "%s/%d" % (path_contexte_zone_privee, id_contexte_module)
-        self.update_context_path(id_contexte_module, path_contexte_module)
-
-        #########################
-        # PARTIE BLOC
-        #########################
-        # Insertion du bloc de recherche forum
-        parent_context_id = id_contexte_zone_privee
-        block_name = BLOCK_FORUM_SEARCH_NAME
-        show_in_subcontexts = BLOCK_FORUM_SEARCH_SHOW_IN_SUB_CTX
-        page_type_pattern = BLOCK_FORUM_SEARCH_PAGE_TYPE_PATTERN
-        sub_page_pattern = BLOCK_FORUM_SEARCH_SUB_PAGE_PATTERN
-        default_region = BLOCK_FORUM_SEARCH_DEFAULT_REGION
-        default_weight = BLOCK_FORUM_SEARCH_DEFAULT_WEIGHT
-
-        self.insert_moodle_block(block_name, parent_context_id, show_in_subcontexts, page_type_pattern,
-                                 sub_page_pattern, default_region, default_weight)
-        id_block = self.get_id_block(parent_context_id)
-
-        # Insertion du contexte pour le bloc
-        self.insert_moodle_context(self.constantes.niveau_ctx_bloc, PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE, id_block)
-        id_contexte_bloc = self.get_id_context(self.constantes.niveau_ctx_bloc,
-                                               PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
-                                               id_block)
-
-        # Mise a jour du path du contexte
-        path_contexte_bloc = "%s/%d" % (path_contexte_zone_privee, id_contexte_bloc)
-        self.update_context_path(id_contexte_bloc, path_contexte_module)
-
-        logging.info('  |_ Insertion de %s %s' % (siren, ou.encode("utf-8")))
 
     def insert_moodle_user(self, username, first_name, last_name, email, mail_display, theme):
         """
@@ -1373,7 +1107,6 @@ class Database:
                                          'lang': USER_LANG,
                                          'mnethostid': USER_MNET_HOST_ID,
                                          'theme': theme})
-            logging.info("      |_ Insertion de %s %s %s" % (username, first_name, last_name))
 
     def insert_moodle_user_info_data(self, id_user, id_field, data):
         """
@@ -1414,7 +1147,6 @@ class Database:
                                      'param2': param2,
                                      'locked': locked,
                                      'visible': visible})
-        logging.info("      |_ Insertion du user info field %s - %s" % (name, short_name))
 
     def insert_zone_privee(self, id_categorie_etablissement, siren, ou, time):
         """
@@ -1607,14 +1339,13 @@ class Database:
         :param id_role_enseignant_avance:
         :return:
         """
-        if id_user != 0:
-            sql = "SELECT id" \
-                  " FROM {entete}role_assignments" \
-                  " WHERE userid = %(id_user)s" \
-                  " AND roleid = %(id_role_enseignant_avance)s" \
-                .format(entete=self.entete)
-            self.mark.execute(sql, params={'id_user': id_user, 'id_role_enseignant_avance': id_role_enseignant_avance})
-            return self.mark.rowcount > 0
+        sql = "SELECT id" \
+              " FROM {entete}role_assignments" \
+              " WHERE userid = %(id_user)s" \
+              " AND roleid = %(id_role_enseignant_avance)s" \
+            .format(entete=self.entete)
+        self.mark.execute(sql, params={'id_user': id_user, 'id_role_enseignant_avance': id_role_enseignant_avance})
+        return self.mark.rowcount > 0
 
     def set_user_domain(self, id_user, id_field_domaine, user_domain):
         """

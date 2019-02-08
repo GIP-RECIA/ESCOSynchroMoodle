@@ -41,6 +41,12 @@ class StructureLdap:
         self.domaine = data.ESCODomaines.value
         self.domaines = data.ESCODomaines.values
 
+    def __str__(self):
+        return "uai=%s, siren=%s, nom=%s" % (self.uai, self.siren, self.nom)
+
+    def __repr__(self):
+        return "[%s] %s" % (self.__class__.__name__, str(self))
+
 
 class PersonneLdap:
     """
@@ -61,6 +67,12 @@ class PersonneLdap:
         self.is_member_of = None
         if 'isMemberOf' in data:
             self.is_member_of = data.isMemberOf.values
+
+    def __str__(self):
+        return "uid=%s, given_name=%s, sn=%s" % (self.uid, self.given_name, self.sn)
+
+    def __repr__(self):
+        return "[%s] %s" % (self.__class__.__name__, str(self))
 
 
 class EleveLdap(PersonneLdap):
