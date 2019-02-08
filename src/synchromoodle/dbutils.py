@@ -236,6 +236,24 @@ class Database:
                 " VALUES ( %(role_id)s, %(id_context)s, %(id_user)s )".format(entete=self.entete)
             self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
 
+    def remove_role_to_user(self, role_id, id_context, id_user):
+        """
+        Fonction permettant de supprimer un role a un utilisateur
+        pour un contexte donne
+        :param role_id: int
+        :param id_context: int
+        :param id_user: int
+        :return:
+        """
+        id_role_assignment = self.get_id_role_assignment(role_id, id_context, id_user)
+        if id_role_assignment:
+            # Ajout du role dans le contexte
+            s = "DELETE FROM {entete}role_assignments" \
+                " WHERE roleid = %(role_id)s," \
+                " AND contextid = %(id_context)s," \
+                " AND userid = %(id_user)s".format(entete=self.entete)
+            self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
+
     def get_id_role_assignment(self, role_id, id_context, id_user):
         """
         Fonction permettant de recuperer l'id d'un role
