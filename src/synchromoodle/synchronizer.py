@@ -178,13 +178,19 @@ class Synchronizer:
                                          eleve_ldap.given_name, eleve_ldap.mail, mail_display,
                                          etablissement_context.etablissement_theme)
 
-        # Ajout du role d'utilisateur avec droits limités Pour les eleves de college
+        # Ajout ou suppression du role d'utilisateur avec droits limités Pour les eleves de college
         if etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_clg:
             self.__db.add_role_to_user(self.__config.constantes.id_role_utilisateur_limite,
                                        self.__config.constantes.id_instance_moodle, eleve_id)
             logging.info(
                 "      |_ Ajout du role d'utilisateur avec des droits limites à l'utilisateur %s %s %s (id = %s)" % (
                     eleve_ldap.given_name, eleve_ldap.sn, eleve_ldap.uid, str(eleve_id)))
+        else:
+            self.__db.remove_role_to_user(self.__config.constantes.id_role_utilisateur_limite,
+                                          self.__config.constantes.id_instance_moodle, eleve_id)
+            logging.info(
+                "      |_ Suppression du role d'utilisateur avec des droits limites à l'utilisateur %s %s %s (id = %s)"
+                % (eleve_ldap.given_name, eleve_ldap.sn, eleve_ldap.uid, str(eleve_id)))
 
         # Inscription dans les cohortes associees aux classes
         eleve_cohorts = []
