@@ -1163,7 +1163,9 @@ class Database:
                   'id_user': id_user}
         logging.info(sql % params)
         self.mark.execute(sql, params=params)
-        return self.mark.rowcount > 0
+        is_local_admin = self.mark.rowcount > 0
+        self.mark.fetchall()
+        return is_local_admin
 
     def insert_moodle_local_admin(self, id_context_categorie, id_user):
         """
