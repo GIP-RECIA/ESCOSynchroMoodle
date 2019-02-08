@@ -9,6 +9,7 @@ services:
       - MARIADB_DATABASE=moodle
       - MARIADB_PASSWORD=moodle
       - MARIADB_ROOT_PASSWORD=moodle
+      - MARIADB_EXTRA_FLAGS=--character-set-server=utf8 --collation-server=utf8_unicode_ci
     ports:
       - ${DOCKER_DEVBOX_PORT_PREFIX}06:3306
     volumes:
