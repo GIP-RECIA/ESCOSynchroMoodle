@@ -57,15 +57,15 @@ BLOCK_FORUM_SEARCH_SHOW_IN_SUB_CTX = 0
 BLOCK_FORUM_SEARCH_SUB_PAGE_PATTERN = ""
 
 
-def est_grp_etab(rne: str, etablissements_config: EtablissementsConfig):
+def est_grp_etab(uai: str, etablissements_config: EtablissementsConfig):
     """
     Indique si un établissement fait partie d'un regroupement d'établissement ou non
-    :param rne: code de l'établissement
+    :param uai: code de l'établissement
     :param etablissements_config: EtablissementsConfig
     :return: True si l'établissement fait partie d'un regroupement d'établissement
     """
     for regroupement in etablissements_config.etabRgp:
-        if rne in regroupement.UaiRgp:
+        if uai in regroupement.uais:
             return regroupement
     return False
 
