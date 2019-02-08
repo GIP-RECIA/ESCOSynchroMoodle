@@ -138,27 +138,6 @@ class TestEtablissement:
             assert result_cohort_enrollment is not None
             assert result_cohort_enrollment[2] == eleve_id
 
-        # Test sur un eleve de college
-        structure_college = ldap.get_structure("0291595B")
-        eleves_college = ldap.search_eleve(None, "0291595B")
-        eleve_college = eleves_college[0]
-        college_context = synchroniser.handle_etablissement(structure_college.uai)
-        synchroniser.handle_eleve(college_context, eleve_college)
-
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
-                        params={
-                            'username': str(eleve_college.uid).lower()
-                        })
-        result_college = db.mark.fetchone()
-        eleve_college_id = result_college[0]
-        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
-                        params={
-                            'userid': eleve_college_id
-                        })
-        roles_results = db.mark.fetchall()
-        assert len(roles_results) == 1
-        assert roles_results[0][1] == 14
-
     def test_maj_enseignant(self, ldap: Ldap, db: Database, config: Config):
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -285,3 +264,42 @@ class TestEtablissement:
                         })
         infos_result = db.mark.fetchone()
         assert infos_result[3] == "lycees.netocentre.fr"
+
+    def test_eleve_passage_lycee(self, ldap: Ldap, db: Database, config: Config):
+        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        synchroniser = Synchronizer(ldap, db, config)
+        synchroniser.initialize()
+        college = ldap.get_structure("0291595B")
+        lycee = ldap.get_structure("0290009C")
+        eleves = ldap.search_eleve(None, "0291595B")
+        eleve = eleves[0]
+        college_context = synchroniser.handle_etablissement(college.uai)
+        lycee_context = synchroniser.handle_etablissement(lycee.uai)
+        synchroniser.handle_eleve(college_context, eleve)
+
+        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+                        params={
+                            'username': str(eleve.uid).lower()
+                        })
+        result = db.mark.fetchone()
+        eleve_id = result[0]
+        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+                        params={
+                            'userid': eleve_id
+                        })
+        roles_results = db.mark.fetchall()
+        assert len(roles_results) == 1
+        assert roles_results[0][1] == 14
+
+        eleve.uai_courant = "0290009C"
+        synchroniser.handle_eleve(lycee_context, eleve)
+        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+                        params={
+                            'userid': eleve_id
+                        })
+        roles_results = db.mark.fetchall()
+        assert len(roles_results) == 0
