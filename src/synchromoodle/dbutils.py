@@ -249,8 +249,8 @@ class Database:
         if id_role_assignment:
             # Ajout du role dans le contexte
             s = "DELETE FROM {entete}role_assignments" \
-                " WHERE roleid = %(role_id)s," \
-                " AND contextid = %(id_context)s," \
+                " WHERE roleid = %(role_id)s" \
+                " AND contextid = %(id_context)s" \
                 " AND userid = %(id_user)s".format(entete=self.entete)
             self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
 
