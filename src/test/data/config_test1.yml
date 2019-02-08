@@ -1,0 +1,17 @@
+timestampStore:
+  file: "config_test1_precedent.txt"
+constantes:
+    foo: "constante test foo 1"
+    bar: "constante test bar 1"
+etablissements:
+  prefixAdminMoodleLocal: "config_test1:admin:Moodle:local:"
+  prefixAdminLocal: "config_test1:admin:local:"
+  listeEtab: ["0180755y", "0180939y", "0180865t"]
+  etabRgp:
+    - nom: "ETAB RGP DE TEST 1"
+      uais: ["0180755y", "0180939y", "0410892y"]
+    - nom: "ETAB RGP DE TEST 2"
+      uais: ["0451583b", "0281155d", "0411064j"]
+    - nom: "ETAB RGP DE TEST 3"
+      uais: ["0451715v", "0370983t", "0371686g", "0371710h", "0371711j", "0371723x", "0411059d", "0451691u",
+               "0451693w", "0451694x"]

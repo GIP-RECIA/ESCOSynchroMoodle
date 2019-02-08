@@ -158,7 +158,10 @@ class LdapConfig(_BaseConfig):
         return self.adminRDN + ',' + self.baseDN
 
 
-class EtablissementRegroupement:
+class EtablissementRegroupement(_BaseConfig):
+    def __init__(self, **entries):
+        super().__init__(**entries)
+
     nom = ""  # type: str
     """Nom du regroupement d'etablissements"""
 
@@ -169,6 +172,11 @@ class EtablissementRegroupement:
 class EtablissementsConfig(_BaseConfig):
     def __init__(self, **entries):
         super().__init__(**entries)
+
+    def update(self, **entries):
+        if 'etabRgp' in entries:
+            entries['etabRgp'] = list(map(lambda d: EtablissementRegroupement(**d), entries['etabRgp']))
+        self.__dict__.update(entries)
 
     etabRgp = []  # type: List[EtablissementRegroupement]
     """Regroupement d'etablissements"""
