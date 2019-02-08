@@ -197,3 +197,91 @@ class TestEtablissement:
         assert roles_results[1][2] == 1184277
         assert roles_results[2][1] == 5
         assert roles_results[2][2] == 1184278
+
+    def test_maj_user_interetab(self, ldap: Ldap, db: Database, config: Config):
+        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        synchroniser = Synchronizer(ldap, db, config)
+        synchroniser.initialize()
+        users = ldap.search_personne()
+        user = users[0]
+        synchroniser.handle_user_interetab(user)
+
+        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+                        params={
+                            'username': str(user.uid).lower()
+                        })
+        result = db.mark.fetchone()
+        user_id = result[0]
+
+        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+                        params={
+                            'userid': user_id
+                        })
+        roles_results = db.mark.fetchall()
+        assert len(roles_results) == 1
+
+    def test_maj_usercfa_interetab(self, ldap: Ldap, db: Database, config: Config):
+        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        synchroniser = Synchronizer(ldap, db, config)
+        synchroniser.initialize()
+        users = ldap.search_personne()
+        user = users[0]
+        user.is_member_of = [config.inter_etablissements.ldap_valeur_attribut_admin]
+        synchroniser.handle_user_interetab(user)
+
+        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+                        params={
+                            'username': str(user.uid).lower()
+                        })
+        result = db.mark.fetchone()
+        user_id = result[0]
+        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+                        params={
+                            'userid': user_id
+                        })
+        roles_results = db.mark.fetchall()
+        assert len(roles_results) == 2
+        assert roles_results[1][1] == db.get_id_role_admin_local()
+
+    def test_maj_inspecteur(self, ldap: Ldap, db: Database, config: Config):
+        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        synchroniser = Synchronizer(ldap, db, config)
+        synchroniser.initialize()
+        users = ldap.search_personne()
+        user = users[0]
+        synchroniser.handle_inspecteur(user)
+
+        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+                        params={
+                            'username': str(user.uid).lower()
+                        })
+        result = db.mark.fetchone()
+        user_id = result[0]
+        assert result is not None
+
+        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+                        params={
+                            'userid': user_id
+                        })
+        roles_results = db.mark.fetchall()
+        assert len(roles_results) == 1
+        assert roles_results[0][1] == 2
+
+        db.mark.execute("SELECT * FROM {entete}user_info_data WHERE userid = %(userid)s".format(entete=db.entete),
+                        params={
+                            'userid': user_id
+                        })
+        infos_result = db.mark.fetchone()
+        assert infos_result[3] == "lycees.netocentre.fr"

@@ -50,7 +50,7 @@ def test_personnes(ldap: Ldap):
     ldap.connect()
     ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
     personnes = ldap.search_personne()
-    assert len(personnes) == 74
+    assert len(personnes) == 75
     for person in personnes:
         assert isinstance(person, PersonneLdap)
     ldap.disconnect()
