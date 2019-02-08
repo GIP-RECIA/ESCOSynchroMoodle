@@ -18,3 +18,5 @@ script:
   - coverage run --source=synchromoodle setup.py test
 after_success:
   - coveralls
+notifications:
+  slack: gfisemoy:Kf0RBB353oo4fEkpJXH9LEZ9
