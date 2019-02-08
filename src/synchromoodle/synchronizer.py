@@ -351,9 +351,9 @@ class Synchronizer:
                                          self.__config.constantes.default_mail_display,
                                          self.__config.constantes.default_moodle_theme)
 
-            # Ajout du role de createur de cours
-            self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
-                                       self.context.id_context_categorie_inter_etabs, id_user)
+        # Ajout du role de createur de cours
+        self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
+                                   self.context.id_context_categorie_inter_etabs, id_user)
 
         # Attribution du role admin local si necessaire
         for member in personne_ldap.is_member_of:
@@ -392,10 +392,9 @@ class Synchronizer:
                                          self.__config.constantes.default_mail_display,
                                          self.__config.constantes.default_moodle_theme)
 
-            # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
-            self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
-                                       self.context.id_context_categorie_inter_etabs,
-                                       id_user)
+        # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
+        self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
+                                   self.context.id_context_categorie_inter_etabs, id_user)
         logging.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
 
         # Mise a jour du Domaine
