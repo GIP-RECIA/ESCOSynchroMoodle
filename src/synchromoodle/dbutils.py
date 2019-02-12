@@ -288,8 +288,21 @@ class Database:
                 .format(entete=self.entete)
             self.mark.execute(s, params={'id_context': id_context, 'name': name, 'id_number': id_number,
                                          'description': description, 'time_created': time_created})
-            logging.info("      |_ Creation de la cohorte '%s'" % (name))
+            logging.info("      |_ Creation de la cohorte '%s'" % name)
         return self.get_id_cohort(id_context, name)
+
+    def delete_empty_cohorts_from_list(self, cohort_ids):
+        """
+        Supprime les cohortes de la liste qui n'ont aucun membre
+        :param cohort_ids: list of int
+        :return:
+        """
+        ids_list, ids_list_params = array_to_safe_sql_list(cohort_ids, 'ids_list')
+        s = "DELETE FROM {entete}cohort WHERE id NOT IN (SELECT cohortid FROM {entete}cohort_members)" \
+            " AND id IN ({ids_list}) ".format(entete=self.entete, ids_list=ids_list)
+        self.mark.execute(s, params={
+            **ids_list_params
+        })
 
     def get_id_cohort(self, id_context, cohort_name):
         """
@@ -309,7 +322,6 @@ class Database:
         if ligne is None:
             return None
         return ligne[0]
-
 
     def get_user_id(self, username):
         """
@@ -1201,7 +1213,7 @@ class Database:
         :param users_ids_by_cohorts_ids:
         :return:
         """
-        for cohort_id, users_ids in users_ids_by_cohorts_ids.iteritems():
+        for cohort_id, users_ids in users_ids_by_cohorts_ids.items():
             ids_list, ids_list_params = array_to_safe_sql_list(users_ids, 'ids_list')
             s = "DELETE FROM {entete}cohort_members" \
                 " WHERE cohortid = %(cohort_id)s" \

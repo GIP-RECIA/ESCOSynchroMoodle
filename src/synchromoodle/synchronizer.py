@@ -528,6 +528,8 @@ class Synchronizer:
 
     def purge_eleve_cohorts(self, etablissement_context):
         self.__db.purge_cohorts(etablissement_context.eleves_by_cohortes)
+        cohort_ids = list(map(lambda x: x[0], etablissement_context.eleves_by_cohortes.items()))
+        self.__db.delete_empty_cohorts_from_list(cohort_ids)
 
     def create_profs_etabs_cohorts(self, etablissement_context: EtablissementContext,
                                    since_timestamp: datetime.datetime):

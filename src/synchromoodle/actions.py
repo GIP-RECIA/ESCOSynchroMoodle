@@ -114,6 +114,8 @@ def interetab(config: Config, arguments=default_args):
         if arguments.purge_cohortes:
             log.info('Purge des cohortes de la catégorie inter-établissements')
             db.purge_cohorts(utilisateurs_by_cohortes)
+            cohort_ids = list(map(lambda x: x[0], utilisateurs_by_cohortes.iteritems()))
+            db.delete_empty_cohorts_from_list(cohort_ids)
 
         db.connection.commit()
 
