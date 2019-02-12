@@ -3,7 +3,7 @@
 import pytest
 
 from synchromoodle.config import Config
-from synchromoodle.dbutils import Database
+from synchromoodle.dbutils import Database, array_to_safe_sql_list
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer, COHORT_NAME_FOR_CLASS
 from test.utils import db_utils, ldap_utils
@@ -303,3 +303,36 @@ class TestEtablissement:
                         })
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 0
+
+    def test_purge_eleves_cohorts(self, ldap: Ldap, db: Database, config: Config):
+        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        synchroniser = Synchronizer(ldap, db, config)
+        synchroniser.initialize()
+        etab_context = synchroniser.handle_etablissement("0290009C")
+        eleves = ldap.search_eleve(None, "0290009C")
+        for eleve in eleves:
+            synchroniser.handle_eleve(etab_context, eleve)
+
+        ids_classes_cohorts = synchroniser.create_classes_cohorts(etab_context.id_context_categorie,
+                                                                  ["fake", "fake2"],
+                                                                  synchroniser.context.timestamp_now_sql)
+        for cohort_id in ids_classes_cohorts:
+            if cohort_id not in etab_context.eleves_by_cohortes:
+                etab_context.eleves_by_cohortes[cohort_id] = []
+            etab_context.eleves_by_cohortes[cohort_id].append(eleve.uid)
+
+        ids_list, ids_list_params = array_to_safe_sql_list(ids_classes_cohorts, 'ids_list')
+        s = "SELECT COUNT(id) FROM {entete}cohort WHERE id IN ({ids_list})".format(entete=db.entete, ids_list=ids_list)
+        db.mark.execute(s, params={**ids_list_params})
+        count_before = db.mark.fetchone()[0]
+        assert count_before == 2
+
+        synchroniser.purge_eleve_cohorts(etab_context)
+
+        db.mark.execute(s, params={**ids_list_params})
+        count = db.mark.fetchone()[0]
+        assert count == 0
