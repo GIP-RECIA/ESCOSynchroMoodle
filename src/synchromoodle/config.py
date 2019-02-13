@@ -82,7 +82,6 @@ class DatabaseConfig(_BaseConfig):
     """Nom de la base de données"""
 
     user = "moodle"  # type: str
-
     """Nom de l'utilisateur moodle"""
 
     password = "moodle"  # type: str
@@ -98,7 +97,7 @@ class DatabaseConfig(_BaseConfig):
     """Entêtes des tables"""
 
     charset = "utf8"  # type: str
-    """Charset à utiliser pour la connection"""
+    """Charset à utiliser pour la connexion"""
 
 
 class LdapConfig(_BaseConfig):
@@ -216,7 +215,7 @@ class InterEtablissementsConfig(_BaseConfig):
     ldap_attribut_user = "isMemberOf"  # type: str
     """Attribut utilisé pour determiner les utilisateurs inter-établissement"""
 
-    ldap_valeur_attribut_user = ["cfa:Applications:Espace_Moodle:Inter_etablissements"]  # type: str
+    ldap_valeur_attribut_user = ["cfa:Applications:Espace_Moodle:Inter_etablissements"]  # type: List[str]
     """Valeurs possibles de l'attribut pour déterminer si l'utilisateur est un utilisateur inter-établissement"""
 
     ldap_valeur_attribut_admin = "cfa:admin:Moodle:local:Inter_etablissements"  # type: str
@@ -233,7 +232,7 @@ class InspecteursConfig(_BaseConfig):
     ldap_attribut_user = "ESCOPersonProfils"  # type: str
     """Attribut utilisé pour determiner les inspecteurs"""
 
-    ldap_valeur_attribut_user = ["INS"]  # type: str
+    ldap_valeur_attribut_user = ["INS"]  # type: List[str]
     """Valeur de l'attribute pour déterminer les inspecteurs"""
 
     cle_timestamp = "INSPECTEURS"  # type: str
