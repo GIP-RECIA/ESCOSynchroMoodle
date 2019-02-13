@@ -3,14 +3,14 @@ Gestion des timestamps
 """
 
 import datetime
-import logging
+from logging import getLogger
 import re
 from typing import Dict
 
 from synchromoodle.config import TimestampStoreConfig
 
 date_format = '%Y%m%d%H%M%S'
-
+log = getLogger('timestamp')
 
 def fromisoformat(iso: str) -> datetime.datetime:
     return datetime.datetime(*map(int, re.split(r'[^\d]', iso)))
@@ -50,7 +50,7 @@ class TimestampStore:
                     time_stamp = etab_and_time[1]
                     self.timestamps[etab] = fromisoformat(time_stamp)
         except IOError:
-            logging.warning("Impossible d'ouvrir le fichier : %s" % self.config.file)
+            log.warning("Impossible d'ouvrir le fichier : %s" % self.config.file)
             return {}
 
     def write(self):

@@ -1,10 +1,10 @@
 # coding: utf-8
-import logging
+from logging import getLogger
 from typing import List, Dict
 
 import ruamel.yaml as yaml
 
-log = logging.getLogger('config')
+log = getLogger('config')
 
 
 class _BaseConfig:
