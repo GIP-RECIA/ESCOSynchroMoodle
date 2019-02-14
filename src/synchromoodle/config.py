@@ -79,6 +79,18 @@ class ConstantesConfig(_BaseConfig):
     cohort_desc_for_class_eleve = "Élèves de la classe %s"  # type: str
     """Description des cohortes pour les classes d'élèves"""
 
+    cohort_name_for_class_professeurs = "Profs de la Classe %s"  # type: str
+    """Nom des cohortes de classes pour les enseignants"""
+
+    cohort_desc_for_class_professeurs = "Profs de la classe %s"  # type: str
+    """Description des cohortes de classes pour les enseignants"""
+
+    cohort_name_for_niveau_formation_professeurs = "Profs du niveau de formation %s"  # type: str
+    """Nom des cohortes de niveaux de formation pour les enseignants"""
+
+    cohort_desc_for_niveau_formation_professeurs = "Profs du niveau de formation %s"  # type: str
+    """Description des cohortes de niveaux de formation pour les enseignants"""
+
 
 class DatabaseConfig(_BaseConfig):
     def __init__(self, **entries):
