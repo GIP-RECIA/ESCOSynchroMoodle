@@ -5,7 +5,7 @@ import pytest
 from synchromoodle.config import Config, ActionConfig
 from synchromoodle.dbutils import Database, array_to_safe_sql_list
 from synchromoodle.ldaputils import Ldap
-from synchromoodle.synchronizer import Synchronizer, COHORT_NAME_FOR_CLASS
+from synchromoodle.synchronizer import Synchronizer
 from test.utils import db_utils, ldap_utils
 
 
@@ -121,7 +121,7 @@ class TestEtablissement:
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 0
         for classe in eleve.classes:
-            cohort_name = COHORT_NAME_FOR_CLASS % classe
+            cohort_name = config.constantes.cohort_name_for_class_eleve % classe
             db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
                             params={
                                 'name': cohort_name

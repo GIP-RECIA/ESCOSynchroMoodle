@@ -11,10 +11,6 @@ from .dbutils import Database, PROFONDEUR_CTX_ETAB, COURSE_MODULES_MODULE, PROFO
     PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE
 from .ldaputils import Ldap, EleveLdap, EnseignantLdap, PersonneLdap
 
-# TODO: A extraire dans un fichier de configuration
-COHORT_NAME_FOR_CLASS = 'Élèves de la Classe %s'
-COHORT_DESC_FOR_CLASS = 'Élèves de la classe %s'
-
 #######################################
 # FORUM
 #######################################
@@ -576,8 +572,8 @@ class Synchronizer:
         """
         ids_cohorts = []
         for class_name in classes_names:
-            cohort_name = COHORT_NAME_FOR_CLASS % class_name
-            cohort_description = COHORT_DESC_FOR_CLASS % class_name
+            cohort_name = self.__config.constantes.cohort_name_for_class_eleve % class_name
+            cohort_description = self.__config.constantes.cohort_desc_for_class_eleve % class_name
             id_cohort = self.__db.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description,
                                                 time_created)
             ids_cohorts.append(id_cohort)

@@ -73,6 +73,12 @@ class ConstantesConfig(_BaseConfig):
 
         super().__init__(**entries)
 
+    cohort_name_for_class_eleve = "Élèves de la Classe %s"  # type: str
+    """Nom des cohortes pour les classes d'élèves"""
+
+    cohort_desc_for_class_eleve = "Élèves de la classe %s"  # type: str
+    """Description des cohortes pour les classes d'élèves"""
+
 
 class DatabaseConfig(_BaseConfig):
     def __init__(self, **entries):
