@@ -200,7 +200,7 @@ class EtablissementsConfig(_BaseConfig):
         if 'etabRgp' in entries:
             entries['etabRgp'] = list(map(lambda d: EtablissementRegroupement(**d), entries['etabRgp']))
 
-        self.__dict__.update(entries)
+        super().update(**entries)
 
 
 class InterEtablissementsConfig(_BaseConfig):
@@ -252,16 +252,40 @@ class TimestampStoreConfig(_BaseConfig):
         super().__init__(**entries)
 
 
+class ActionConfig(_BaseConfig):
+    def __init__(self, **entries):
+        self.id = None
+        self.type = "default"
+        self.timestamp_store = TimestampStoreConfig()  # type: TimestampStoreConfig
+        self.etablissements = EtablissementsConfig()  # type: EtablissementsConfig
+        self.inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
+        self.inspecteurs = InspecteursConfig()  # type: InspecteursConfig
+
+        super().__init__(**entries)
+
+    def update(self, **entries):
+        if 'etablissements' in entries:
+            self.etablissements.update(**entries['etablissements'])
+            entries['etablissements'] = self.etablissements
+        if 'interEtablissements' in entries:
+            self.inter_etablissements.update(**entries['interEtablissements'])
+            entries['interEtablissements'] = self.inter_etablissements
+        if 'inspecteurs' in entries:
+            self.inspecteurs.update(**entries['inspecteurs'])
+            entries['inspecteurs'] = self.inspecteurs
+        if 'timestampStore' in entries:
+            self.timestamp_store.update(**entries['timestampStore'])
+            entries['timestampStore'] = self.timestamp_store
+
+        super().update(**entries)
+
+
 class Config:
     def __init__(self):
         self.constantes = ConstantesConfig()  # type: ConstantesConfig
         self.database = DatabaseConfig()  # type: DatabaseConfig
         self.ldap = LdapConfig()  # type: LdapConfig
-        self.timestamp_store = TimestampStoreConfig()  # type: TimestampStoreConfig
-        self.etablissements = EtablissementsConfig()  # type: EtablissementsConfig
-        self.inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
-        self.inspecteurs = InspecteursConfig()  # type: InspecteursConfig
-        self.actions = ["default"]  # type: List[str]
+        self.actions = []  # type: List[ActionConfig]
 
     def update(self, data):
         if 'constantes' in data:
@@ -270,14 +294,14 @@ class Config:
             self.database.update(**data['database'])
         if 'ldap' in data:
             self.ldap.update(**data['ldap'])
-        if 'etablissements' in data:
-            self.etablissements.update(**data['etablissements'])
-        if 'interEtablissements' in data:
-            self.inter_etablissements.update(**data['interEtablissements'])
-        if 'inspecteurs' in data:
-            self.inspecteurs.update(**data['inspecteurs'])
-        if 'timestampStore' in data:
-            self.timestamp_store.update(**data['timestampStore'])
+        if 'actions' in data:
+            actions = data['actions']
+            for action in actions:
+                existing_action = next((x for x in self.actions if 'id' in action and x.id == action['id']), None)
+                if not existing_action:
+                    self.actions.append(ActionConfig(**action))
+                else:
+                    existing_action.update(**action)
 
 
 class ConfigLoader:

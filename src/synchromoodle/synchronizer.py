@@ -6,7 +6,7 @@ from typing import Dict, List
 
 from synchromoodle.ldaputils import StructureLdap
 from .arguments import default_args
-from .config import EtablissementsConfig, Config
+from .config import EtablissementsConfig, Config, ActionConfig
 from .dbutils import Database, PROFONDEUR_CTX_ETAB, COURSE_MODULES_MODULE, PROFONDEUR_CTX_MODULE_ZONE_PRIVEE, \
     PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE
 from .ldaputils import Ldap, EleveLdap, EnseignantLdap, PersonneLdap
@@ -33,7 +33,6 @@ FORUM_MAX_ATTACHEMENTS_ZONE_PRIVEE = 2
 
 # Max bytes pour le forum de la zone privee
 FORUM_MAX_BYTES_ZONE_PRIVEE = 512000
-
 
 #######################################
 # BLOCKS
@@ -100,17 +99,14 @@ class EtablissementContext:
 
 
 class Synchronizer:
-    __ldap = None  # type: Ldap
-    __db = None  # type: Database
-    __config = None  # type: Config
-    __arguments = None
-    context = None  # type: SyncContext
-
-    def __init__(self, ldap: Ldap, db: Database, config: Config, arguments=default_args):
-        self.__ldap = ldap
-        self.__db = db
-        self.__config = config
+    def __init__(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig = None,
+                 arguments=default_args):
+        self.__ldap = ldap  # type: Ldap
+        self.__db = db  # type: Database
+        self.__config = config  # type: Config
+        self.__action_config = action_config if action_config else next(iter(config.actions), ActionConfig())  # type: ActionConfig
         self.__arguments = arguments
+        self.context = None  # type: SyncContext
 
     def initialize(self):
 
@@ -123,10 +119,12 @@ class Synchronizer:
         self.context.map_etab_domaine = self.__ldap.get_domaines_etabs()
 
         # Ids des categories inter etablissements
-        id_categorie_inter_etabs = self.__db.get_id_categorie(self.__config.etablissements.inter_etab_categorie_name)
+        id_categorie_inter_etabs = self.__db.get_id_categorie(
+            self.__action_config.etablissements.inter_etab_categorie_name)
         self.context.id_context_categorie_inter_etabs = self.__db.get_id_context_categorie(id_categorie_inter_etabs)
 
-        id_categorie_inter_cfa = self.__db.get_id_categorie(self.__config.etablissements.inter_etab_categorie_name_cfa)
+        id_categorie_inter_cfa = self.__db.get_id_categorie(
+            self.__action_config.etablissements.inter_etab_categorie_name_cfa)
         self.context.id_context_categorie_inter_cfa = self.__db.get_id_context_categorie(id_categorie_inter_cfa)
 
         # Recuperation des ids des roles
@@ -146,12 +144,12 @@ class Synchronizer:
         :return: EtabContext
         """
         context = EtablissementContext(uai)
-        context.gere_admin_local = uai not in self.__config.etablissements.listeEtabSansAdmin
-        context.etablissement_regroupe = est_grp_etab(uai, self.__config.etablissements)
+        context.gere_admin_local = uai not in self.__action_config.etablissements.listeEtabSansAdmin
+        context.etablissement_regroupe = est_grp_etab(uai, self.__action_config.etablissements)
         # Regex pour savoir si l'utilisateur est administrateur moodle
-        context.regexp_admin_moodle = self.__config.etablissements.prefixAdminMoodleLocal + ".*_%s$" % uai
+        context.regexp_admin_moodle = self.__action_config.etablissements.prefixAdminMoodleLocal + ".*_%s$" % uai
         # Regex pour savoir si l'utilisateur est administrateur local
-        context.regexp_admin_local = self.__config.etablissements.prefixAdminLocal + ".*_%s$" % uai
+        context.regexp_admin_local = self.__action_config.etablissements.prefixAdminLocal + ".*_%s$" % uai
 
         log.debug("Recherche de la structure dans l'annuaire")
         structure_ldap = self.__ldap.get_structure(uai)
@@ -177,8 +175,8 @@ class Synchronizer:
             if id_etab_categorie is None:
                 log.info("Création de la structure dans Moodle")
                 self.insert_moodle_structure(context.etablissement_regroupe, structure_ldap.nom,
-                                                  etablissement_path, etablissement_ou,
-                                                  structure_ldap.siren, context.etablissement_theme)
+                                             etablissement_path, etablissement_ou,
+                                             structure_ldap.siren, context.etablissement_theme)
                 id_etab_categorie = self.__db.get_id_course_category_by_id_number(structure_ldap.siren)
 
             # Mise a jour de la description dans la cas d'un groupement d'etablissement
@@ -307,7 +305,7 @@ class Synchronizer:
 
         # Affichage du mail reserve aux membres de cours
         mail_display = self.__config.constantes.default_mail_display
-        if etablissement_context.structure_ldap.uai in self.__config.etablissements.listeEtabSansMail:
+        if etablissement_context.structure_ldap.uai in self.__action_config.etablissements.listeEtabSansMail:
             # Desactivation de l'affichage du mail
             mail_display = 0
 
@@ -418,7 +416,8 @@ class Synchronizer:
 
         # Attribution du role admin local si necessaire
         for member in personne_ldap.is_member_of:
-            admin = re.match(self.__config.inter_etablissements.ldap_valeur_attribut_admin, member, flags=re.IGNORECASE)
+            admin = re.match(self.__action_config.inter_etablissements.ldap_valeur_attribut_admin, member,
+                             flags=re.IGNORECASE)
             if admin:
                 insert = self.__db.insert_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
                 if insert:
@@ -645,11 +644,11 @@ class Synchronizer:
         #########################
         # Insertion du contexte associe a la categorie de l'etablissement
         self.__db.insert_moodle_context(self.__config.constantes.niveau_ctx_categorie,
-                                   PROFONDEUR_CTX_ETAB,
-                                   id_categorie_etablissement)
+                                        PROFONDEUR_CTX_ETAB,
+                                        id_categorie_etablissement)
         id_contexte_etablissement = self.__db.get_id_context(self.__config.constantes.niveau_ctx_categorie,
-                                                        PROFONDEUR_CTX_ETAB,
-                                                        id_categorie_etablissement)
+                                                             PROFONDEUR_CTX_ETAB,
+                                                             id_categorie_etablissement)
 
         # Mise a jour du path de la categorie
         path_contexte_etablissement = "%s/%d" % (path, id_contexte_etablissement)
@@ -704,11 +703,11 @@ class Synchronizer:
 
         # Insertion du contexte pour le module de cours (forum)
         self.__db.insert_moodle_context(self.__config.constantes.niveau_ctx_forum,
-                                   PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
-                                   id_course_module)
+                                        PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
+                                        id_course_module)
         id_contexte_module = self.__db.get_id_context(self.__config.constantes.niveau_ctx_forum,
-                                                 PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
-                                                 id_course_module)
+                                                      PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
+                                                      id_course_module)
 
         # Mise a jour du path du contexte
         path_contexte_module = "%s/%d" % (path_contexte_zone_privee, id_contexte_module)
@@ -727,14 +726,15 @@ class Synchronizer:
         default_weight = BLOCK_FORUM_SEARCH_DEFAULT_WEIGHT
 
         self.__db.insert_moodle_block(block_name, parent_context_id, show_in_subcontexts, page_type_pattern,
-                                 sub_page_pattern, default_region, default_weight)
+                                      sub_page_pattern, default_region, default_weight)
         id_block = self.__db.get_id_block(parent_context_id)
 
         # Insertion du contexte pour le bloc
-        self.__db.insert_moodle_context(self.__config.constantes.niveau_ctx_bloc, PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE, id_block)
+        self.__db.insert_moodle_context(self.__config.constantes.niveau_ctx_bloc, PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
+                                        id_block)
         id_contexte_bloc = self.__db.get_id_context(self.__config.constantes.niveau_ctx_bloc,
-                                               PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
-                                               id_block)
+                                                    PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
+                                                    id_block)
 
         # Mise a jour du path du contexte
         path_contexte_bloc = "%s/%d" % (path_contexte_zone_privee, id_contexte_bloc)

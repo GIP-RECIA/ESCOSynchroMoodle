@@ -26,13 +26,13 @@ def main():
 
     for action in config.actions:
         try:
-            action_func = getattr(actions, action)
+            action_func = getattr(actions, action.type)
         except AttributeError:
             log.error("Action invalide: %s", action)
             continue
         log.info('Démarrage de l\'action "%s"' % action)
         try:
-            action_func(config, arguments)
+            action_func(config, action, arguments)
         except Exception as e:
             log.exception("Une erreur inattendue s'est produite")
         log.info('Fin de l\'action "%s"' % action)

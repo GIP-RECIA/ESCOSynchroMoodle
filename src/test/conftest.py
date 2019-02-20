@@ -6,7 +6,7 @@ import time
 
 import pytest
 
-from synchromoodle.config import Config
+from synchromoodle.config import Config, ActionConfig
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 
@@ -23,9 +23,16 @@ def docker_compose_subprocess_kwargs():
     return {'cwd': '..'}
 
 
-@pytest.fixture(scope="session", name="config")
-def config():
+@pytest.fixture(scope="session")
+def action_config():
+    action_config = ActionConfig()
+    return action_config
+
+
+@pytest.fixture(scope="session")
+def config(action_config: ActionConfig):
     config = Config()
+    config.actions.append(action_config)
     return config
 
 

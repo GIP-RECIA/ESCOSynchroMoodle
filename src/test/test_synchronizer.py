@@ -2,7 +2,7 @@
 
 import pytest
 
-from synchromoodle.config import Config
+from synchromoodle.config import Config, ActionConfig
 from synchromoodle.dbutils import Database, array_to_safe_sql_list
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer, COHORT_NAME_FOR_CLASS
@@ -203,7 +203,7 @@ class TestEtablissement:
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 1
 
-    def test_maj_usercfa_interetab(self, ldap: Ldap, db: Database, config: Config):
+    def test_maj_usercfa_interetab(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig):
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -213,7 +213,7 @@ class TestEtablissement:
         synchroniser.initialize()
         users = ldap.search_personne()
         user = users[0]
-        user.is_member_of = [config.inter_etablissements.ldap_valeur_attribut_admin]
+        user.is_member_of = [action_config.inter_etablissements.ldap_valeur_attribut_admin]
         synchroniser.handle_user_interetab(user)
 
         db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),

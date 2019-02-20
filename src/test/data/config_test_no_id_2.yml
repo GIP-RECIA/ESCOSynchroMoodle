@@ -1,0 +1,5 @@
+constantes:
+  foo: "constante test foo 2"
+actions:
+- timestampStore:
+    file: "config_test2_precedent.txt"

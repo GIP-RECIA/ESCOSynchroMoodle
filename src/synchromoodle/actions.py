@@ -5,12 +5,12 @@ from logging import getLogger
 from synchromoodle.synchronizer import Synchronizer
 from synchromoodle.timestamp import TimestampStore
 from .arguments import default_args
-from .config import Config
+from .config import Config, ActionConfig
 from .dbutils import Database
 from .ldaputils import Ldap
 
 
-def default(config: Config, arguments=default_args):
+def default(config: Config, action: ActionConfig, arguments=default_args):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
     :param config: Configuration d'execution
@@ -24,7 +24,7 @@ def default(config: Config, arguments=default_args):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, arguments)
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
 
         timestamp_store = TimestampStore(config.timestamp_store)
@@ -70,11 +70,12 @@ def default(config: Config, arguments=default_args):
         ldap.disconnect()
 
 
-def interetab(config: Config, arguments=default_args):
+def interetab(config: Config, action: ActionConfig, arguments=default_args):
     """
     Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
     Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
-    :param config: Configuration d'execution
+    :param config: Configuration globale
+    :param action: Configuration de l'action
     :param arguments: Arguments de ligne de commande
     :return:
     """
@@ -86,7 +87,7 @@ def interetab(config: Config, arguments=default_args):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, arguments)
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
 
         timestamp_store = TimestampStore(config.timestamp_store)
@@ -128,12 +129,13 @@ def interetab(config: Config, arguments=default_args):
         ldap.disconnect()
 
 
-def inspecteurs(config: Config, arguments=default_args):
+def inspecteurs(config: Config, action: ActionConfig, arguments=default_args):
     """
     Effectue la mise a jour de la BD
     Moodle via les infos issues du LDAP
     Cette mise a jour concerne les inspecteurs
-    :param config: Configuration d'execution
+    :param config: Configuration globale
+    :param action: Configuration de l'action
     :param arguments: Arguments de ligne de commande
     """
     log = getLogger()
@@ -144,7 +146,7 @@ def inspecteurs(config: Config, arguments=default_args):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, arguments)
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
 
         log.info('Traitement des inspecteurs')

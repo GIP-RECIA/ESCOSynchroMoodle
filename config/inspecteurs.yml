@@ -1,3 +1,0 @@
-actions: ['inspecteurs']
-timestampStore:
-  file: "trtInspecteurs_precedent.txt"
