@@ -135,8 +135,7 @@ def test_get_filtre_enseignants():
                                                  "(!(uid=ADM00000)))"
     assert ldaputils.get_filtre_enseignants(datetime_value, "UAI00000", True) == \
         "(&" \
-        "(|(objectClass=ENTDirecteur)" \
-        "(objectClass=ENTAuxEnseignant)" \
+        "(|(objectClass=ENTAuxEnseignant)" \
         "(objectClass=ENTAuxNonEnsEtab)" \
         "(objectClass=ENTAuxNonEnsCollLoc)" \
         ")" \

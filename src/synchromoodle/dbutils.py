@@ -122,6 +122,26 @@ def array_to_safe_sql_list(elements, name=None):
         return ','.join(format_strings), params
 
 
+class Cohort:
+    def __init__(self, cohortid=None, contextid=None,
+                 name=None, idnumber=None,
+                 description=None, descriptionformat=None,
+                 visible=None, component=None,
+                 timecreated=None, timemodified=None,
+                 theme=None):
+        self.id = cohortid
+        self.contextid = contextid
+        self.name = name
+        self.idnumber = idnumber
+        self.description = description
+        self.descriptionformat = descriptionformat
+        self.visible = visible
+        self.component = component
+        self.timecreated = timecreated
+        self.timemodified = timemodified
+        self.theme = theme
+
+
 class Database:
     config = None  # type: DatabaseConfig
     constantes = None  # type: ConstantesConfig
@@ -292,18 +312,27 @@ class Database:
             log.info("      |_ Creation de la cohorte '%s'" % name)
         return self.get_id_cohort(id_context, name)
 
-    def delete_empty_cohorts_from_list(self, cohort_ids):
+    def disenroll_user_from_username_and_cohortname(self, username, cohortname):
+        self.mark.execute("DELETE {entete}cohort_members FROM {entete}cohort_members"
+                          " INNER JOIN {entete}cohort"
+                          " ON {entete}cohort_members.cohortid = {entete}cohort.id"
+                          " INNER JOIN {entete}user"
+                          " ON {entete}cohort_members.userid = {entete}user.id"
+                          " WHERE {entete}user.username = %(username)s"
+                          " AND {entete}cohort.name = %(cohortname)s".format(entete=self.entete),
+                          params={
+                              'username': username,
+                              'cohortname': cohortname
+                          })
+
+    def delete_empty_cohorts(self):
         """
         Supprime les cohortes de la liste qui n'ont aucun membre
-        :param cohort_ids: list of int
         :return:
         """
-        ids_list, ids_list_params = array_to_safe_sql_list(cohort_ids, 'ids_list')
         s = "DELETE FROM {entete}cohort WHERE id NOT IN (SELECT cohortid FROM {entete}cohort_members)" \
-            " AND id IN ({ids_list}) ".format(entete=self.entete, ids_list=ids_list)
-        self.mark.execute(s, params={
-            **ids_list_params
-        })
+            .format(entete=self.entete)
+        self.mark.execute(s)
 
     def get_id_cohort(self, id_context, cohort_name):
         """
@@ -1222,10 +1251,30 @@ class Database:
                 .format(entete=self.entete, ids_list=ids_list)
             self.mark.execute(s, params={'cohort_id': cohort_id, **ids_list_params})
 
+    def get_eleve_classe_cohorts(self, contextid):
+        like = "Élèves de la Classe %"
+        self.mark.execute("SELECT id, contextid, name FROM {entete}cohort"
+                          " WHERE contextid = %(contextid)s AND name LIKE %(like)s"
+                          .format(entete=self.entete),
+                          params={
+                              'contextid': contextid,
+                              'like': like
+                          })
+        return [Cohort(cohortid=result[0], contextid=result[1], name=result[2]) for result in self.mark.fetchall()]
+
+    def get_cohort_members(self, cohortid):
+        self.mark.execute("SELECT {entete}user.id, {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                          " INNER JOIN {entete}user ON cohort_members.userid = {entete}user.id"
+                          " WHERE cohortid = %(cohortid)s"
+                          .format(entete=self.entete),
+                          params={
+                              'cohortid': cohortid
+                          })
+        return self.mark.fetchall()
+
     def update_context_path(self, id_context, new_path):
         """
-        Fonction permettant de mettre a jour le path d'un
-        contexte.
+        Fonction permettant de mettre a jour le path d'un contexte.
         :param id_context:
         :param new_path:
         :return:

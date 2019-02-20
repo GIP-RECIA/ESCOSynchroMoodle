@@ -6588,3 +6588,116 @@ mail: rayan.durand@netocentre.fr
 personalTitle: M
 uid: F1700j9a
 userPassword:: e3NzaGF9WkY4bWExS3YzY2c2NFQ2U0JNTzRnWTVkSHVKSXEvQ0VmakwyRVE9PQ==
+
+dn: uid=F1700jym,ou=people,dc=esco-centre,dc=fr
+objectClass: eduMember
+objectClass: ESCOAddons
+objectClass: ENTPerson
+objectClass: ENTAuxEnseignant
+cn: JEAN DIANE
+ENTPersonJointure: AC-RENNES$225
+ENTPersonLogin: diane.jean
+sn: JEAN
+displayName: Diane JEAN
+ENTAuxEnsCategoDiscipline: 11$SCIENCES ECONOMIQUES ET SOCIALES
+ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
+ tre,dc=fr$TES1
+ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
+ tre,dc=fr$1ERE ES2
+ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
+ esco-centre,dc=fr$TES1$050700
+ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
+ esco-centre,dc=fr$TES1$006600
+ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
+ esco-centre,dc=fr$1ERE ES2$006600
+ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
+ esco-centre,dc=fr$1ERE ES2$050700
+ENTAuxEnsClassesPrincipal: ENTStructureSIREN=19290009000015,ou=structures,dc
+ =esco-centre,dc=fr$TES1
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
+ tre,dc=fr$-1ERE EA
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
+ tre,dc=fr$TES1_SES
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
+ tre,dc=fr$2NDE1_SE
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
+ tre,dc=fr$TEMCGR1
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
+ esco-centre,dc=fr$-1ERE EA$002300
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
+ esco-centre,dc=fr$TES1_SES$050700
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
+ esco-centre,dc=fr$2NDE1_SE$050700
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
+ esco-centre,dc=fr$TEMCGR1$050700
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,
+ dc=esco-centre,dc=fr$SCIENCES ECONOMIQUES ET SOCIALES
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,
+ dc=esco-centre,dc=fr$ACCOMPAGNEMENT PERSONNALISE
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,
+ dc=esco-centre,dc=fr$TRAVAUX PERSONNELS ENCADRES
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
+ dc=fr$20112005110$PREMIERE ECONOMIQUE ET SOCIALE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
+ dc=fr$20010015110$2DEGT2 (CAS GENERAL 2 ENS.EXPLO)
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
+ dc=fr$20112005112$PREMIERE ES EUROPEENNE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
+ dc=fr$20212005110$TERMINALE ECONOMIQUE ET SOCIALE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
+ dc=fr$20212005112$TERMINALE ES EUROPEENNE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
+ dc=fr$20212005113$TERMINALE ES BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
+ dc=fr$20010015112$2NDE EURO / ORIENTALE (2 ENS.EXPLO)
+ENTPersonDateNaissance: 05/03/1970
+ENTPersonFonctions: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-c
+ entre,dc=fr$ENS$ENSEIGNEMENT$L1100$SCIENCES ECONOMIQUES ET SOCIALES
+ENTPersonGARIdentifiant:: YTFiNzIzZGItNjQxNy00ZWQ5LWI0MDktMDk3MWNmMzkxNDE1
+ENTPersonNomPatro: JEAN
+ENTPersonProfils: National_ENS
+ENTPersonProfils: National_3
+ENTPersonSexe: F
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
+ co-centre,dc=fr
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=struct
+ ures,dc=esco-centre,dc=fr$050700$SCIENCES ECONOMIQUES ET SOCIALES
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=struct
+ ures,dc=esco-centre,dc=fr$006600$ACCOMPAGNEMENT PERSONNALISE
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=struct
+ ures,dc=esco-centre,dc=fr$002300$TRAVAUX PERSONNELS ENCADRES
+ESCODomaines: lycees.netocentre.fr
+ESCOPersonEtatCompte: INVALIDE
+ESCOPersonListeRouge: FALSE
+ESCOPersonProfils: ENS
+ESCOSIREN: 19290009000015
+ESCOSIRENCourant: 19290009000015
+ESCOUAI: 0290009C
+ESCOUAICourant: 0290009C
+ESCOUAIRattachement: 0290009C
+givenName: Diane
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
+ ECHNO YC BT:Profs_TES1
+isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:SECONDE GENERALE et TEC
+ HNO YC BT:Profs_2NDE1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:Autre
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Profs Principaux
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:ACCOMPAGN
+ EMENT PERSONNALISE
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:TRAVAUX P
+ ERSONNELS ENCADRES
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:SCIENCES
+ ECONOMIQUES ET SOCIALES
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TE
+ CHNO YC BT:Profs_1ERE ES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Profs
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
+ ECHNO YC BT:Profs Principaux
+isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
+isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
+mail: noreply@ac-rennes.fr
+personalTitle: Mme
+uid: F1700jym
+userPassword:: e3NzaGF9WkY4bWExS3YzY2c2NFQ2U0JNTzRnWTVkSHVKSXEvQ0VmakwyRVE9PQ==

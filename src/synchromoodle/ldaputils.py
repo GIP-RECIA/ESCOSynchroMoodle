@@ -20,9 +20,9 @@ def extraire_classes_ldap(classes_ldap: List[str]):
     """
     classes = []
     for classe_ldap in classes_ldap:
-        split = classe_ldap.rsplit("$")
+        split = classe_ldap.split("$")
         if len(split) > 1:
-            classes.append(split[1])
+            classes.append(split[-1])
     return classes
 
 
@@ -61,6 +61,8 @@ class PersonneLdap:
         self.domaines = data.ESCODomaines.values
         self.uai_courant = data.ESCOUAICourant.value
         self.mail = None
+        self.classes = None  # type: List[str]
+        self.niveau_formation = None
         if 'mail' in data:
             self.mail = data.mail.value
 
@@ -84,7 +86,6 @@ class EleveLdap(PersonneLdap):
         super().__init__(data)
         self.niveau_formation = data.ENTEleveNivFormation.value
 
-        self.classes = None  # type: List[str]
         self.classe = None  # type: str
 
         if 'ENTEleveClasses' in data:
@@ -109,6 +110,9 @@ class EnseignantLdap(PersonneLdap):
         self.uais = None
         if 'ESCOUAI' in data:
             self.uais = data.ESCOUAI.values
+
+        if 'ENTAuxEnsClasses' in data:
+            self.classes = extraire_classes_ldap(data.ENTAuxEnsClasses.values)
 
 
 class Ldap:
@@ -190,8 +194,15 @@ class Ldap:
                                 'ESCODomaines', 'ESCOUAICourant', '+'])
         return [EleveLdap(entry) for entry in self.connection.entries]
 
-    def search_enseignant(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) -> List[
-        EnseignantLdap]:
+    def search_eleves_in_classe(self, classe, uai):
+        ldap_filter = '(&(ENTEleveClasses=*$%s)(ESCOUAI=%s))' % (classe, uai)
+        self.connection.search(self.config.personnesDN, ldap_filter,
+                               search_scope=LEVEL, attributes=
+                               ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',
+                                'ESCODomaines', 'ESCOUAICourant', '+'])
+        return [EleveLdap(entry) for entry in self.connection.entries]
+
+    def search_enseignant(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) -> List[EnseignantLdap]:
         """
         Recherche d'enseignants.
         :param since_timestamp: datetime.datetime
@@ -203,7 +214,8 @@ class Ldap:
         self.connection.search(self.config.personnesDN,
                                ldap_filter, LEVEL, attributes=
                                ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',
-                                'ESCOUAICourant', 'ENTPersonStructRattach', 'ENTPersonProfils', 'isMemberOf', '+'])
+                                'ESCOUAICourant', 'ENTPersonStructRattach', 'ENTPersonProfils', 'isMemberOf', '+',
+                                'ENTAuxEnsClasses'])
         return [EnseignantLdap(entry) for entry in self.connection.entries]
 
     def get_domaines_etabs(self) -> Dict[str, List[str]]:
@@ -248,8 +260,7 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
     """
     filtre = "(&"
     if tous:
-        filtre += "(|(objectClass=ENTDirecteur)" \
-                  "(objectClass=ENTAuxEnseignant)" \
+        filtre += "(|(objectClass=ENTAuxEnseignant)" \
                   "(objectClass=ENTAuxNonEnsEtab)" \
                   "(objectClass=ENTAuxNonEnsCollLoc)" \
                   ")"
