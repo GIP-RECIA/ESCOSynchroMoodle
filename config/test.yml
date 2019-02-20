@@ -1,95 +1,31 @@
+logging:
+  formatters:
+    console:
+      format: '[%(name)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s'
+    file:
+      format: '[%(asctime)s] [%(name)s] %(levelname)s %(message)s'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      formatter: console
+      stream: ext://sys.stdout
+    file:
+      class: logging.handlers.TimedRotatingFileHandler
+      formatter: file
+      when: 'D'
+      filename: 'logs/synchromoodle.log'
+    file-error:
+      class: logging.handlers.TimedRotatingFileHandler
+      level: ERROR
+      formatter: file
+      when: 'D'
+      filename: 'logs/synchromoodle.error.log'
+  root:
+    level: INFO
+    handlers: [console, file, file-error]
 actions:
 - id: academique
   timestampStore:
     file: "trtAcademique_precedent.txt"
   etablissements:
-    listeEtab: ["0450822X", "0410031L", "0371122U", "0450066C", "0451483T", "0410593X", "0410030K", "0370001A", "0360003H",
-                "0370040T", "0370036N", "0451304Y", "0450051L", "0180008L", "0360011S", "0280657M", "0280036M", "0450062Y",
-                "0280021W", "0360024F", "0410959V", "0371417P", "0280864M", "0450042B", "0370009J", "0360002G", "0370039S",
-                "0180006J", "0410017W", "0450790P", "0451442Y", "0281047L", "0450064A", "0280925D", "0180007K", "0180042Y",
-                "0371418R", "0360008N", "0180024D", "0180026F", "0280044W", "0360009P", "0281077U", "0410832G", "0180823X",
-                "0180777X", "0360658V", "0180036S", "0180010N", "0180005H", "0180009M", "0280009H", "0280015P", "0280957N",
-                "0280022X", "0360026H", "0360019A", "0360005K", "0371211R", "0370037P", "0370038R", "0370053G", "0370054H",
-                "0371100V", "0410002E", "0410899E", "0410718H", "0410036S", "0451484U", "0451526P", "0450750W", "0450050K",
-                "0450782F", "0451067R", "0280659P", "0360050J", "0451104F", "0180025E", "0180035R", "0280007F", "0280019U",
-                "0280700J", "0281021H", "0360043B", "0370016S", "0370032J", "0370035M", "0370771M", "0370888P", "0371099U",
-                "0371123V", "0371258S", "0410001D", "0450029M", "0450040Z", "0450043C", "0450049J", "0450786K", "0451037H",
-                "0451462V", "0410860M", "0371159J", "0371204H", "0371316E", "0370011L", "0370991B", "0370041U", "0377777U",
-                "0370006F", "0370015R", "0370768J", "0370791J", "0370792K", "0370799T", "0370886M", "0370887N", "0370994E",
-                "0371101W", "0371158H", "0371191U", "0371248F", "0371391L", "0371397T", "0371403Z", "0371124W", "0370995F",
-                "0370007G", "0370010K", "0371098T", "0370013N", "0371378X", "0370993D", "0370022Y", "0370034L", "0370766G",
-                "0370044X", "0370045Y", "0370769K", "0370886M", "0370884K", "0371189S", "0370024A"]
-    listeEtabSansMail: ["0371204H", "0371159J", "0370011L", "0370041U", "0370991B", "0371316E"]
-- id: agricole
-  timestampStore:
-    file: "trtAgricole_precedent.txt"
-  etablissements:
-    prefixAdminMoodleLocal: "agri:admin:Moodle:local:"
-    prefixAdminLocal: "agri:admin:local:"
-    listeEtab: ["0410018X", "0180585N", "0280706R", "0370878D", "0450094H", "0451535Z", "0450027K", "0410629L", "0370781Y",
-                "0360017Y", "0370794M", "0410626H"]
-- id: cfa
-  timestampStore:
-    file: "trtCfa_precedent.txt"
-  etablissements:
-    prefixAdminMoodleLocal: "cfa:admin:Moodle:local:"
-    prefixAdminLocal: "cfa:admin:local:"
-    listeEtab: ["0180755y", "0180939y", "0180865t", "0180877f", "0280738a", "0280904f", "0281155d", "0333333y", "0360548a",
-                "0360777z", "0360709a", "0370811f", "0370983t", "0370984u", "0371686g", "0371710h", "0371711j", "0371723x",
-                "0410590u", "0410592w", "0410892y", "0411059d", "0411064j", "0450807h", "0450808j", "0450809k", "0450810l",
-                "0450810q", "0451583b", "0451691u", "0451693w", "0451694x", "0451715v"]
-    etabRgp:
-      - nom: "CFA DU CHER"
-        uais: ["0180755y", "0180939y", "0410892y"]
-      - nom: "FORMASAT CFA Sport Animation Tourisme"
-        uais: ["0451583b", "0281155d", "0411064j"]
-      - nom: "CFA MFR Centre et Île-de-France"
-        uais: ["0451715v", "0370983t", "0371686g", "0371710h", "0371711j", "0371723x", "0411059d", "0451691u",
-                 "0451693w", "0451694x"]
-- id: interetab-cfa
-  type: interetab
-  timestampStore:
-    file: "trtInteretabCfa_precedent.txt"
-  interEtablissements:
-    categorie_name: 'Catégorie Inter-CFA'
-    cohorts:
-      "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs"
-      "cfa:Inter_etablissements:Tous_Direction": "CFA : Tout le personnel de direction"
-      "cfa:Inter_etablissements:Tous_Mediateur": "CFA : Tous les mediateurs"
-      "cfa:Inter_etablissements:Tous_Documentation": "CFA : Tous les documentalistes"
-      "cfa:Inter_etablissements:Tous_Profs": "CFA : Tous les formateurs"
-      "cfa:Inter_etablissements:Tous_Responsable_Pedagogique": "CFA : Tous les responsables pedagogiques"
-      "cfa:Inter_etablissements:Tous_Referent_DIMA": "CFA : Tous les referents DIMA"
-      "cfa:Inter_etablissements:Tous_Referent_SCB": "CFA : Tous les referents savoirs et competences de base"
-      "cfa:admin:local:*": "CFA : Tous les administrateurs ENT"
-- id: interetab-all
-  type: interetab
-  timestampStore:
-    file: "trtInteretabAll_precedent.txt"
-  inter_etablissements:
-    cohorts:
-      "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs"
-      "cfa:Inter_etablissements:Tous_Direction": "CFA : Tout le personnel de direction"
-      "cfa:Inter_etablissements:Tous_Mediateur": "CFA : Tous les mediateurs"
-      "cfa:Inter_etablissements:Tous_Documentation": "CFA : Tous les documentalistes"
-      "cfa:Inter_etablissements:Tous_Profs": "CFA : Tous les formateurs"
-      "cfa:Inter_etablissements:Tous_Responsable_Pedagogique": "CFA : Tous les responsables pedagogiques"
-      "cfa:Inter_etablissements:Tous_Referent_DIMA": "CFA : Tous les referents DIMA"
-      "cfa:Inter_etablissements:Tous_Referent_SCB": "CFA : Tous les referents savoirs et competences de base"
-      "cfa:admin:local:*": "CFA : Tous les administrateurs ENT"
-      "esco:Etablissements:*:Profs": "LYC : Tous les profs"
-      "esco:admin:local:*": "LYC : Tous les administrateurs ENT"
-      "esco:*:DIRECTION": "LYC : Tous les chefs d'établissement"
-      "esco:*:EDUCATION": "LYC : Tous les CPE"
-      "agri:Etablissements:*:Profs": "LA : Tous les profs"
-      "agri:admin:local:*": "LA : Tous les administrateurs ENT"
-      "clg37:Etablissements:*:Profs": "CLG37 : Tous les profs"
-      "clg37:admin:local:*": "CLG37 : Tous les administrateurs ENT"
-      "clg37:*:DIRECTION": "CLG37 : Tous les chefs d'établissement"
-      "clg37:*:EDUCATION": "CLG37 : Tous les CPE"
-- id: inspecteurs
-  type: inspecteurs
-  timestampStore:
-    file: "trtInspecteurs_precedent.txt"
-- id: nettoyage
-  type: nettoyage
+    listeEtab: ["0290009C", "0291595B"]

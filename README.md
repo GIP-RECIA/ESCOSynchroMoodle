@@ -55,6 +55,7 @@ Le script fonctionne à l'aide d'un (ou plusieurs) fichier de configuration au f
 | constantes           | Constantes utilisées par le script                                   | Dictionnaire |
 | database             | Informations de connexion à la bdd                                   | Dictionnaire |
 | ldap                 | Informations de connexion au LDAP                                    | Dictionnaire |
+| logging              | Configuration de logging (module standard logging, voir dictConfig)  | Dictionnaire |
 | actions              | Liste des actions a exécuter avec la configuration associée          | Tableau      |
 
 #### actions

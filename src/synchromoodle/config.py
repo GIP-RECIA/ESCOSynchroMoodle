@@ -279,29 +279,39 @@ class ActionConfig(_BaseConfig):
 
         super().update(**entries)
 
+    def __str__(self):
+        return self.type + " (id=%s)" % self.id if self.id else ""
 
-class Config:
+
+class Config(_BaseConfig):
     def __init__(self):
         self.constantes = ConstantesConfig()  # type: ConstantesConfig
         self.database = DatabaseConfig()  # type: DatabaseConfig
         self.ldap = LdapConfig()  # type: LdapConfig
         self.actions = []  # type: List[ActionConfig]
+        self.logging = {}  # type: dict
 
-    def update(self, data):
-        if 'constantes' in data:
-            self.constantes.update(**data['constantes'])
-        if 'database' in data:
-            self.database.update(**data['database'])
-        if 'ldap' in data:
-            self.ldap.update(**data['ldap'])
-        if 'actions' in data:
-            actions = data['actions']
+    def update(self, **entries):
+        if 'constantes' in entries:
+            self.constantes.update(**entries['constantes'])
+            entries['constantes'] = self.constantes
+        if 'database' in entries:
+            self.database.update(**entries['database'])
+            entries['database'] = self.database
+        if 'ldap' in entries:
+            self.ldap.update(**entries['ldap'])
+            entries['ldap'] = self.ldap
+        if 'actions' in entries:
+            actions = entries['actions']
             for action in actions:
                 existing_action = next((x for x in self.actions if 'id' in action and x.id == action['id']), None)
-                if not existing_action:
-                    self.actions.append(ActionConfig(**action))
-                else:
+                if existing_action:
                     existing_action.update(**action)
+                else:
+                    self.actions.append(ActionConfig(**action))
+            entries['actions'] = self.actions
+
+        super().update(**entries)
 
 
 class ConfigLoader:
@@ -310,7 +320,7 @@ class ConfigLoader:
             try:
                 with open(config_item) as fp:
                     data = yaml.safe_load(fp)
-                    config.update(data)
+                    config.update(**data)
             except FileNotFoundError as e:
                 message = "Le fichier de configuration n'a pas été chargé: " + str(e)
                 if silent:

@@ -30,3 +30,8 @@ def test_read_write(tmp_file):
     ts1.write()
     ts2.read()
     assert ts2.get_timestamp("UAI") == ts1.now
+
+    ts1.mark("UAI2")
+    ts1.write()
+    ts2.read()
+    assert ts2.get_timestamp("UAI2") == ts1.now

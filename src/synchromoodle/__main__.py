@@ -4,8 +4,8 @@
 Entrypoint
 """
 
-from logging import getLogger
-import sys
+from logging import getLogger, basicConfig
+from logging.config import dictConfig
 
 from synchromoodle import actions
 from synchromoodle.arguments import parse_args
@@ -22,7 +22,21 @@ def main():
     config = config_loader.load(['config.yml', 'config.yaml'], True)
 
     config = config_loader.update(config, arguments.config)
+    if config.logging is not False:
+        if isinstance(config.logging, dict):
+            if config.logging.pop('basic', None):
+                basicConfig(**config.logging)
+            else:
+                if 'version' not in config.logging:
+                    config.logging['version'] = 1
+                dictConfig(config.logging)
+        elif isinstance(config.logging, str):
+            basicConfig(level=config.logging)
+        else:
+            basicConfig(level='INFO')
+
     log = getLogger()
+    log.info("Démarrage")
 
     for action in config.actions:
         try:
@@ -33,9 +47,11 @@ def main():
         log.info('Démarrage de l\'action "%s"' % action)
         try:
             action_func(config, action, arguments)
-        except Exception as e:
+        except Exception:
             log.exception("Une erreur inattendue s'est produite")
         log.info('Fin de l\'action "%s"' % action)
+
+    log.info("Terminé")
 
 
 if __name__ == "__main__":

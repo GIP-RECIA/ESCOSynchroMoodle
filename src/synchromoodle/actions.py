@@ -27,10 +27,10 @@ def default(config: Config, action: ActionConfig, arguments=default_args):
         synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
 
-        timestamp_store = TimestampStore(config.timestamp_store)
+        timestamp_store = TimestampStore(action.timestamp_store)
 
         log.info('Traitement des établissements')
-        for uai in config.etablissements.listeEtab:
+        for uai in action.etablissements.listeEtab:
             etablissement_log = log.getChild('etablissement.%s' % uai)
 
             etablissement_log.info('Traitement de l\'établissement (uai=%s)' % uai)
@@ -85,14 +85,14 @@ def interetab(config: Config, action: ActionConfig, arguments=default_args):
         synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
 
-        timestamp_store = TimestampStore(config.timestamp_store)
+        timestamp_store = TimestampStore(action.timestamp_store)
 
         log.info('Traitement des utilisateurs inter-établissements')
         personne_filter = {
-            config.inter_etablissements.ldap_attribut_user: config.inter_etablissements.ldap_valeur_attribut_user
+            action.inter_etablissements.ldap_attribut_user: action.inter_etablissements.ldap_valeur_attribut_user
         }
 
-        since_timestamp = timestamp_store.get_timestamp(config.inter_etablissements.cle_timestamp)
+        since_timestamp = timestamp_store.get_timestamp(action.inter_etablissements.cle_timestamp)
 
         for personne_ldap in ldap.search_personne(since_timestamp=since_timestamp, **personne_filter):
             utilisateur_log = log.getChild("utilisateur.%s" % personne_ldap.uid)
@@ -104,12 +104,12 @@ def interetab(config: Config, action: ActionConfig, arguments=default_args):
         # TODO: Cette variable ne semble plus alimentée
         utilisateurs_by_cohortes = {}
 
-        for is_member_of, cohort_name in config.inter_etablissements.cohorts.items():
+        for is_member_of, cohort_name in action.inter_etablissements.cohorts.items():
             synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, since_timestamp, log=log)
 
         db.connection.commit()
 
-        timestamp_store.mark(config.inter_etablissements.cle_timestamp)
+        timestamp_store.mark(action.inter_etablissements.cle_timestamp)
         timestamp_store.write()
 
         log.info("Fin du traitement des utilisateurs inter-établissements")
@@ -139,14 +139,14 @@ def inspecteurs(config: Config, action: ActionConfig, arguments=default_args):
         synchronizer.initialize()
 
         log.info('Traitement des inspecteurs')
-        timestamp_store = TimestampStore(config.timestamp_store)
+        timestamp_store = TimestampStore(action.timestamp_store)
 
         personne_filter = {
-            config.inspecteurs.ldap_attribut_user: config.inspecteurs.ldap_valeur_attribut_user
+            action.inspecteurs.ldap_attribut_user: action.inspecteurs.ldap_valeur_attribut_user
         }
 
         # Traitement des inspecteurs
-        for personne_ldap in ldap.search_personne(timestamp_store.get_timestamp(config.inspecteurs.cle_timestamp),
+        for personne_ldap in ldap.search_personne(timestamp_store.get_timestamp(action.inspecteurs.cle_timestamp),
                                                   **personne_filter):
             utilisateur_log = log.getChild("utilisateur.%s" % personne_ldap.uid)
             utilisateur_log.info("Traitement de l'inspecteur (uid=%s)" % personne_ldap.uid)
@@ -155,7 +155,7 @@ def inspecteurs(config: Config, action: ActionConfig, arguments=default_args):
         db.connection.commit()
 
         # Mise a jour de la date de dernier traitement
-        timestamp_store.mark(config.inspecteurs.cle_timestamp)
+        timestamp_store.mark(action.inspecteurs.cle_timestamp)
         timestamp_store.write()
 
         log.info('Fin du traitement des inspecteurs')

@@ -3,6 +3,7 @@ Gestion des timestamps
 """
 
 import datetime
+import os
 from logging import getLogger
 import re
 from typing import Dict
@@ -44,11 +45,13 @@ class TimestampStore:
 
         try:
             with open(self.config.file, 'r') as time_stamp_file:
-                for line in time_stamp_file:
-                    etab_and_time = line.split(self.config.separator, 1)
-                    etab = etab_and_time[0]
-                    time_stamp = etab_and_time[1]
-                    self.timestamps[etab] = fromisoformat(time_stamp)
+                for line in time_stamp_file.readlines():
+                    line = line.strip(os.linesep)
+                    if line:
+                        etab_and_time = line.split(self.config.separator, 1)
+                        etab = etab_and_time[0]
+                        time_stamp = etab_and_time[1]
+                        self.timestamps[etab] = fromisoformat(time_stamp)
         except IOError:
             log.warning("Impossible d'ouvrir le fichier : %s" % self.config.file)
             return {}
@@ -60,7 +63,7 @@ class TimestampStore:
 
         with open(self.config.file, 'w') as time_stamp_file:
             time_stamp_file.writelines(
-                map(lambda item: item[0].upper() + self.config.separator + item[1].isoformat(),
+                map(lambda item: item[0].upper() + self.config.separator + item[1].isoformat() + os.linesep,
                     self.timestamps.items()))
 
     def mark(self, uai: str):

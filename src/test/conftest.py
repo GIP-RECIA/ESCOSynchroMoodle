@@ -49,7 +49,7 @@ def docker_config(config, docker_ip, docker_services):
     :return: 
     """
     docker_config = Config()
-    docker_config.update(json.loads(json.dumps(config, default=lambda o: getattr(o, '__dict__', str(o)))))
+    docker_config.update(**json.loads(json.dumps(config, default=lambda o: getattr(o, '__dict__', str(o)))))
 
     docker_config.database.host = docker_ip
 
