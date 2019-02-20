@@ -1,5 +1,6 @@
 # coding: utf-8
 import datetime
+import json
 import os
 import time
 
@@ -41,7 +42,7 @@ def docker_config(config, docker_ip, docker_services):
     :return: 
     """
     docker_config = Config()
-    docker_config.update(config.__dict__)
+    docker_config.update(json.loads(json.dumps(config, default=lambda o: getattr(o, '__dict__', str(o)))))
 
     docker_config.database.host = docker_ip
 
@@ -80,4 +81,4 @@ def docker_config(config, docker_ip, docker_services):
         db.disconnect()
         break
 
-    return config
+    return docker_config
