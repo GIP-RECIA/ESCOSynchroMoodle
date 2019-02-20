@@ -1,10 +1,9 @@
 # coding: utf-8
 
 import pytest
-import re
 
 from synchromoodle.config import Config, ActionConfig
-from synchromoodle.dbutils import Database, array_to_safe_sql_list
+from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer
 from test.utils import db_utils, ldap_utils
@@ -304,51 +303,6 @@ class TestEtablissement:
                         })
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 0
-
-    def test_cohorts_enseignant(self, ldap: Ldap, db: Database, config: Config):
-        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
-        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
-        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
-        db_utils.run_script('data/default-context.sql', db, connect=False)
-
-        synchronizer = Synchronizer(ldap, db, config)
-        synchronizer.initialize()
-        etab_context = synchronizer.handle_etablissement("0290009C")
-        enseignants = ldap.search_enseignant(None, "0290009C")
-        enseignant = enseignants[0]
-        assert len(enseignant.classes) == 2
-        assert enseignant.classes[0] == 'TES1'
-        assert enseignant.classes[1] == '1ERE ES2'
-
-        synchronizer.handle_enseignant(etab_context, enseignant)
-        db.mark.execute("SELECT user.id FROM {entete}user AS user WHERE username = %(username)s"
-                        .format(entete=db.entete),
-                        params={
-                            'username': str(enseignant.uid).lower()
-                        })
-        result = db.mark.fetchone()
-        enseignant_id = result[0]
-
-        select_user_cohorts_query = "SELECT cohort.id, cohort.name, cohort.description FROM {entete}cohort AS cohort" \
-                                    " INNER JOIN {entete}cohort_members AS cohort_members" \
-                                    " ON cohort.id = cohort_members.cohortid" \
-                                    " WHERE cohort_members.userid = %(userid)s".format(entete=db.entete)
-
-        db.mark.execute(select_user_cohorts_query,  params={'userid': enseignant_id})
-        enseignant_cohorts = db.mark.fetchall()
-        assert len(enseignant_cohorts) == 2
-        assert enseignant_cohorts[0][1] == 'Profs de la Classe TES1'
-        assert enseignant_cohorts[1][1] == 'Profs de la Classe 1ERE ES2'
-
-        etab_context = synchronizer.handle_etablissement("0290009C")
-        enseignant.classes = ['TES1']
-        synchronizer.handle_enseignant(etab_context, enseignant)
-        synchronizer.purge_enseignants_cohorts(etab_context)
-
-        db.mark.execute(select_user_cohorts_query, params={'userid': enseignant_id})
-        enseignant_cohorts_after_purge = db.mark.fetchall()
-        assert len(enseignant_cohorts_after_purge) == 1
-        assert enseignant_cohorts_after_purge[0][1] == 'Profs de la Classe TES1'
 
     def test_nettoyage(self, ldap: Ldap, db: Database, config: Config):
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
