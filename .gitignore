@@ -15,5 +15,6 @@ __pycache__/
 .eggs/
 *.egg-info/
 build/
+dist/
 
 *_precedent.txt

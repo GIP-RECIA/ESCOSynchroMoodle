@@ -15,12 +15,12 @@ pytest_plugins = ["docker"]
 
 @pytest.fixture(scope='session')
 def docker_compose_file(pytestconfig):
-    return os.path.join(str(pytestconfig.rootdir), '..', 'docker-compose.pytest.yml')
+    return os.path.join(str(pytestconfig.rootdir), 'docker-compose.pytest.yml')
 
 
 @pytest.fixture(scope='session')
 def docker_compose_subprocess_kwargs():
-    return {'cwd': '..'}
+    return {}
 
 
 @pytest.fixture(scope="session")

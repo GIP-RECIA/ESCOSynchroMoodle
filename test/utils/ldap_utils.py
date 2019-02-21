@@ -5,7 +5,7 @@ from pkgutil import get_data
 from ldap3 import Connection, LEVEL
 from ldap3.core.exceptions import LDAPNoSuchObjectResult
 
-import ldif
+import test.utils.ldif as ldif
 from synchromoodle.ldaputils import Ldap
 
 
