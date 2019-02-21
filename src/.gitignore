@@ -1,7 +1,0 @@
-*.pyc
-__pycache__/
-.coverage
-.pytest_cache/
-.eggs/
-*.egg-info/
-build/

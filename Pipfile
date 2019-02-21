@@ -4,8 +4,17 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pylint = "*"
+pytest = ">=4"
+coverage = "*"
+sqlparse = "*"
+cachetools = "*"
 
 [packages]
+mysql-connector-python = "*"
+ruamel-yaml = "*"
+pytest-docker = {editable = true,git = "https://github.com/Toilal/pytest-docker.git"}
+ldap3 = "*"
 
 [requires]
 python_version = "3.5"

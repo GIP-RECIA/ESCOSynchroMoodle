@@ -28,19 +28,41 @@ pipenv install --dev --python=3.5
 
 # Utilisation
 
-## Exécution
+## Usage
+
 ```bash
-python __main__.py [ -c config-file-name ] [ --purge-cohortes ]
+usage: __main__.py [-h] [-c CONFIG]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Chemin vers un fichier de configuration.
 ```
+
+## Exécution à partir des sources
 ```bash
-options:
-    -c, --config config-file-name
-        Charge le fichier spécifié comme fichier de configuration.
-        L'option est cumulable pour fusionner plusieurs fichiers de configuration différents.
-        Par défaut, les fichiers chargés sont: "config.yml" et "config.yaml"
-        
-    --purge-cohortes
-        Active la purge des cohortes et la suppression de celles devenues inutiles (vides)
+pipenv run python -m synchromoodle -c config/test.yml
+```
+
+## Construction du binaire (wheel) à partir des sources
+```bash
+pipenv run python setup.py bdist_wheel
+```
+
+## Installation du package (wheel)
+
+La dernière version du package wheel est disponible dans l'onglet [Release du github](https://github.com/GIP-RECIA/ESCOSynchroMoodle/releases).
+
+```
+pip3 install synchromoodle-x.x.x-py3-none-any.whl
+```
+
+## Execution à partir du package installé
+
+(Après avoir créé le fichier de configuration)
+
+```bash
+python3 -m synchromoodle -c config/test.yml
 ```
 
 
