@@ -3,32 +3,9 @@
 [![Build Status](http://img.shields.io/travis/GIP-RECIA/ESCOSynchroMoodle.svg)](https://travis-ci.org/GIP-RECIA/ESCOSynchroMoodle)
 [![Coveralls](http://img.shields.io/coveralls/GIP-RECIA/ESCOSynchroMoodle.svg)](https://coveralls.io/github/GIP-RECIA/ESCOSynchroMoodle)
 
-# Installation de l'environnement python
+Ce script permet la synchronisation des données de l'annuaire LDAP avec Moodle. Il nécessite Python 3.5+.
 
-## Prérequis
-
- - Python 3.5
- - [Pipenv](https://github.com/pypa/pipenv)
-
-## Sous windows
-
-- Installer l'environnement virtuel avec les dépendances
-
-```bash
-py -m pipenv install --dev --python=3.5
-```
-
-## Sous linux
-
-- Installer l'environnement virtuel avec les dépendances
-
-```bash
-pipenv install --dev --python=3.5
-```
-
-# Utilisation
-
-## Usage
+# Usage
 
 ```bash
 usage: __main__.py [-h] [-c CONFIG]
@@ -36,20 +13,50 @@ usage: __main__.py [-h] [-c CONFIG]
 optional arguments:
   -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
-                        Chemin vers un fichier de configuration.
+                        Chemin vers un fichier de configuration. Lorsque cette
+                        option est utilisée plusieurs fois, les fichiers de
+                        configuration sont alors fusionnés.
 ```
 
-## Exécution à partir des sources
+# Environnement de développement
+
+### Prérequis
+
+ - Python 3.5+
+ - [Pipenv](https://github.com/pypa/pipenv)
+
+##### Note sous windows
+
+Il est possible d'installer l'environnement de développement et d'executer le script sous windows, via le wrapper `py`
+installé par défaut. Il est alors nécessaire de préfixer les commandes qui suivent par `py -m`.
+
+### Initialiser l'environnement virtuel et les dépendances
+
+Les dépendances et l'environnement virtuel sont gérées par [pipenv](https://github.com/pypa/pipenv).
+
+La commande suivante permet d'initialiser l'environnement et d'installer les dépendances.
+
+```bash
+pipenv install --dev --python=3.5
+```
+
+### Executer le script à partir des sources
+
 ```bash
 pipenv run python -m synchromoodle -c config/test.yml
 ```
 
-## Construction du binaire (wheel) à partir des sources
+## Construire le binaire à partir des sources
+
 ```bash
 pipenv run python setup.py bdist_wheel
 ```
 
-## Installation du package (wheel)
+# Déploiement
+
+Le déploiement peut se faire au sein d'un Python installé directement sur le système, ou dans un virtualenv. Il est 
+possible d'utiliser [pyenv](https://github.com/pyenv/pyenv) pour installer une version spécifique de Python sous Linux 
+et créer un virtualenv pour le script.
 
 La dernière version du package wheel est disponible dans l'onglet [Release du github](https://github.com/GIP-RECIA/ESCOSynchroMoodle/releases).
 
@@ -57,18 +64,19 @@ La dernière version du package wheel est disponible dans l'onglet [Release du g
 pip3 install synchromoodle-x.x.x-py3-none-any.whl
 ```
 
-## Execution à partir du package installé
+# Executer à partir du script installé
 
-(Après avoir créé le fichier de configuration)
+*Après avoir créé le fichier de configuration (voir section Configuration)*
 
 ```bash
 python3 -m synchromoodle -c config/test.yml
 ```
 
+# Configuration
 
-## Configuration
-
-Le script fonctionne à l'aide d'un (ou plusieurs) fichier de configuration au format YAML.
+Le script fonctionne à l'aide d'un fichier de configuration au format YAML. Il est possible de spécifier plusieurs 
+fichiers de configuration, en utilisant plusieurs fois le flag -c, les configuration de chaque fichier sont alors 
+fusionnées.
 
 #### Propriétés
 
@@ -186,7 +194,7 @@ Le script fonctionne à l'aide d'un (ou plusieurs) fichier de configuration au f
 | ldap_valeur_attribut_user | Valeur de l'attribute pour déterminer les inspecteurs                    | ["INS"]             | Liste de chaines de caractères |
 | cle_timestamp             | Clé pour stocker le timestamp du dernier traitement inter-etablissements | "INSPECTEURS"       |      Chaine de caractères      |
 
-#### Exemple
+#### Exemple de configuration
 
 ```yaml
 database:

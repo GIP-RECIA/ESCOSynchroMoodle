@@ -12,13 +12,13 @@ logging:
     file:
       class: logging.handlers.TimedRotatingFileHandler
       formatter: file
-      when: 'D'
+      when: midnight
       filename: 'logs/synchromoodle.log'
     file-error:
       class: logging.handlers.TimedRotatingFileHandler
       level: ERROR
       formatter: file
-      when: 'D'
+      when: midnight
       filename: 'logs/synchromoodle.error.log'
   root:
     level: INFO
