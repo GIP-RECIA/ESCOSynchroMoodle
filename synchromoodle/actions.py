@@ -14,6 +14,7 @@ def default(config: Config, action: ActionConfig, arguments=default_args):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
     :param config: Configuration d'execution
+    :param action: Configuration de l'action
     :param arguments: Arguments de ligne de commande
     """
     log = getLogger()
@@ -164,7 +165,15 @@ def inspecteurs(config: Config, action: ActionConfig, arguments=default_args):
         ldap.disconnect()
 
 
-def nettoyage(config: Config, arguments=default_args):
+def nettoyage(config: Config, action: ActionConfig, arguments=default_args):
+    """
+    Effectue une purge des cohortes dans la base de données par rapport
+    au contenu du LDAP et supprime les cohortes inutiles (vides)
+    :param config: Configuration globale
+    :param action: Configuration de l'action
+    :param arguments: Arguments de ligne de commande
+    :return:
+    """
     log = getLogger()
 
     db = Database(config.database, config.constantes)
@@ -173,7 +182,7 @@ def nettoyage(config: Config, arguments=default_args):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, arguments)
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
 
         log.info("Début de l'action de nettoyage")

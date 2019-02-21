@@ -328,14 +328,14 @@ class Synchronizer:
         # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
         self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                    self.context.id_context_categorie_inter_etabs, id_user)
-        log.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
+        log.info("Ajout du role de createur de cours dans la categorie inter-etablissements")
 
         # Si l'enseignant fait partie d'un CFA
         # Ajout du role createur de cours au niveau de la categorie inter-cfa
         if etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_cfa:
             self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                        self.context.id_context_categorie_inter_cfa, id_user)
-            log.info("        |_ Ajout du role de createur de cours dans la categorie inter-cfa")
+            log.info("Ajout du role de createur de cours dans la categorie inter-cfa")
 
         # ajout du role de createur de cours dans l'etablissement
         self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
@@ -368,7 +368,7 @@ class Synchronizer:
                 adminMoodle = re.match(etablissement_context.regexp_admin_moodle, member, flags=re.IGNORECASE)
                 if adminMoodle:
                     self.__db.insert_moodle_local_admin(etablissement_context.id_context_categorie, id_user)
-                    log.info("      |_ Insertion d'un admin  local %s %s %s" % (
+                    log.info("Insertion d'un admin  local %s %s %s" % (
                         enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn))
                     # Si il est admin local on en fait un utilisateur avancé par default
                     if not self.__db.is_enseignant_avance(id_user, self.context.id_role_advanced_teacher):
@@ -377,7 +377,7 @@ class Synchronizer:
                 else:
                     delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
                     if delete:
-                        log.info("      |_ Suppression d'un admin local %s %s %s" % (
+                        log.info("Suppression d'un admin local %s %s %s" % (
                             enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn))
 
         # Inscription dans les cohortes associees aux classes
@@ -490,7 +490,7 @@ class Synchronizer:
         # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
         self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                    self.context.id_context_categorie_inter_etabs, id_user)
-        log.info("        |_ Ajout du role de createur de cours dans la categorie inter-etablissements")
+        log.info("Ajout du role de createur de cours dans la categorie inter-etablissements")
 
         # Mise a jour du Domaine
         user_domain = self.__config.constantes.default_domain
@@ -534,10 +534,9 @@ class Synchronizer:
         # Suppression des roles non autorises
         if ids_roles_non_autorises:
             self.__db.delete_roles(ids_roles_non_autorises)
-            log.info("      |_ Suppression des rôles d'enseignant pour %s dans les établissements %s" % (
-                enseignant_infos, str(ids_themes_non_autorises)))
-            log.info(
-                "         Les seuls établissements autorisés pour cet enseignant sont %s" % str(themes_autorises))
+            log.info("Suppression des rôles d'enseignant pour %s dans les établissements %s"
+                     % (enseignant_infos, str(ids_themes_non_autorises)))
+            log.info("Les seuls établissements autorisés pour cet enseignant sont %s" % str(themes_autorises))
 
         #########################
         # FORUMS
