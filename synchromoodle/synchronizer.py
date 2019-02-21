@@ -342,8 +342,7 @@ class Synchronizer:
                                    etablissement_context.id_context_categorie, id_user)
 
         # Ajouts des autres roles pour le personnel établissement
-        if 'National_3' in enseignant_ldap.profils or 'National_4' in enseignant_ldap.profils or 'National_5' in \
-                enseignant_ldap.profils or 'National_6' in enseignant_ldap.profils:
+        if set(enseignant_ldap.profils).intersection(['National_ENS', 'National_DIR', 'National_EVS', 'National_ETA']):
             # Ajout des roles sur le contexte forum
             self.__db.add_role_to_user(self.__config.constantes.id_role_eleve,
                                        etablissement_context.id_context_course_forum, id_user)
@@ -351,13 +350,12 @@ class Synchronizer:
             self.__db.enroll_user_in_course(self.__config.constantes.id_role_eleve,
                                             etablissement_context.id_zone_privee, id_user)
 
-            if 'National_3' in enseignant_ldap.profils or 'National_5' in \
-                    enseignant_ldap.profils or 'National_6' in enseignant_ldap.profils:
+            if set(enseignant_ldap.profils).intersection(['National_ENS', 'National_EVS', 'National_ETA']):
                 if not etablissement_context.gere_admin_local:
                     self.__db.add_role_to_user(self.context.id_role_extended_teacher,
                                                etablissement_context.id_context_categorie,
                                                id_user)
-            elif 'National_4' in enseignant_ldap.profils:
+            elif 'National_DIR' in enseignant_ldap.profils:
                 self.__db.add_role_to_user(self.__config.constantes.id_role_directeur,
                                            etablissement_context.id_context_categorie, id_user)
 
