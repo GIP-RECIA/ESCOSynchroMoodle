@@ -244,7 +244,7 @@ def _get_filtre_eleves(since_timestamp: datetime.datetime = None, uai: str = Non
     if uai:
         filtre += "(ESCOUAI={uai})".format(uai=uai)
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp.isoformat())
+        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
     filtre = filtre + ")"
     return filtre
 
@@ -272,7 +272,7 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
     if uai:
         filtre += "(ESCOUAI={uai})".format(uai=uai)
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp.isoformat())
+        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
 
     filtre = filtre + ")"
 
@@ -301,7 +301,7 @@ def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: 
         filtre = filtre + ")"
     if since_timestamp:
         filtre = filtre + "(modifyTimeStamp>=%s)"
-        filtre = filtre % since_timestamp.isoformat()
+        filtre = filtre % since_timestamp.strftime("%Y%m%d%H%M%SZ")
     filtre = filtre + ")"
     return filtre
 
