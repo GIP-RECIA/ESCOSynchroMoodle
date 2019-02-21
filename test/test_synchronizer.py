@@ -317,7 +317,7 @@ class TestEtablissement:
         for eleve in eleves:
             synchronizer.handle_eleve(etab_context, eleve)
 
-        eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.get_users_by_cohorts_comparators(etab_context)
+        eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.get_users_by_cohorts_comparators(etab_context, r'(Élèves de la Classe )(.*)$')
 
         eleves_by_cohorts_ldap.pop('1ERE S2', None)
         eleves_by_cohorts_ldap.pop('TES3', None)
@@ -325,7 +325,7 @@ class TestEtablissement:
         eleves_by_cohorts_ldap['TS2'].remove('f1700ivl')
         eleves_by_cohorts_ldap['TS2'].remove('f1700ivv')
 
-        synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap)
+        synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap, "Élèves de la Classe %s")
         db.delete_empty_cohorts()
 
         s = "SELECT COUNT(cohort_members.id) FROM {entete}cohort_members AS cohort_members" \

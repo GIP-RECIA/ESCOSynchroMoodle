@@ -62,7 +62,6 @@ class PersonneLdap:
         self.uai_courant = data.ESCOUAICourant.value
         self.mail = None
         self.classes = None  # type: List[str]
-        self.niveau_formation = None
         if 'mail' in data:
             self.mail = data.mail.value
 

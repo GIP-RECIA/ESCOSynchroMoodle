@@ -2,7 +2,7 @@
 import datetime
 import re
 from logging import getLogger
-from typing import Dict, List
+from typing import Dict, List, Pattern
 
 from synchromoodle.ldaputils import StructureLdap
 from .arguments import default_args
@@ -133,7 +133,7 @@ class Synchronizer:
         # Recuperation de l'id du champ personnalisé Domaine
         self.context.id_field_domaine = self.__db.get_id_user_info_field_by_shortname('Domaine')
 
-    def handle_etablissement(self, uai, log=getLogger()) -> EtablissementContext:
+    def handle_etablissement(self, uai, log=getLogger(), readonly=False) -> EtablissementContext:
         """
         Met a jour l'etablissement meme si celui-ci n'a pas ete modifie depuis la derniere synchro
         car des infos doivent etre recuperees dans Moodle dans tous les cas
@@ -168,15 +168,15 @@ class Synchronizer:
 
             # Creation de la structure si elle n'existe pas encore
             id_etab_categorie = self.__db.get_id_course_category_by_theme(context.etablissement_theme)
-            if id_etab_categorie is None:
-                log.info("Création de la structure dans Moodle")
+            if id_etab_categorie is None and not readonly:
+                log.info("Création de la structure")
                 self.insert_moodle_structure(context.etablissement_regroupe, structure_ldap.nom,
                                              etablissement_path, etablissement_ou,
                                              structure_ldap.siren, context.etablissement_theme)
                 id_etab_categorie = self.__db.get_id_course_category_by_id_number(structure_ldap.siren)
 
             # Mise a jour de la description dans la cas d'un groupement d'etablissement
-            if context.etablissement_regroupe:
+            if context.etablissement_regroupe and not readonly:
                 description = self.__db.get_description_course_category(id_etab_categorie)
                 if description.find(structure_ldap.siren) == -1:
                     log.info("Mise à jour de la description")
@@ -185,18 +185,21 @@ class Synchronizer:
                     self.__db.update_course_category_name(id_etab_categorie, etablissement_ou)
 
             # Recuperation de l'id du contexte correspondant à l'etablissement
-            context.id_context_categorie = self.__db.get_id_context_categorie(id_etab_categorie)
+            if id_etab_categorie is not None:
+                context.id_context_categorie = self.__db.get_id_context_categorie(id_etab_categorie)
+
             context.id_zone_privee = self.__db.get_id_course_by_id_number("ZONE-PRIVEE-" + structure_ldap.siren)
 
             # Recreation de la zone privee si celle-ci n'existe plus
-            if context.id_zone_privee is None:
+            if context.id_zone_privee is None and not readonly:
                 log.info("Création de la zone privée")
                 context.id_zone_privee = self.__db.insert_zone_privee(id_etab_categorie, structure_ldap.siren,
                                                                       etablissement_ou, self.context.timestamp_now_sql)
 
-            context.id_context_course_forum = self.__db.get_id_context(self.__config.constantes.niveau_ctx_cours, 3,
-                                                                       context.id_zone_privee)
-            if context.id_context_course_forum is None:
+            if context.id_zone_privee is not None:
+                context.id_context_course_forum = self.__db.get_id_context(self.__config.constantes.niveau_ctx_cours, 3,
+                                                                           context.id_zone_privee)
+            if context.id_context_course_forum is None and not readonly:
                 log.info("Création du cours associé à la zone privée")
                 context.id_context_course_forum = self.__db.insert_zone_privee_context(context.id_zone_privee)
 
@@ -240,9 +243,10 @@ class Synchronizer:
         if eleve_ldap.classes:
             log.info("Inscription de l'élève %s "
                      "dans les cohortes de classes %s" % (eleve_ldap, eleve_ldap.classes))
-            ids_classes_cohorts = self.create_classes_cohorts(etablissement_context.id_context_categorie,
-                                                              eleve_ldap.classes,
-                                                              self.context.timestamp_now_sql)
+            ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
+                                                                     eleve_ldap.classes,
+                                                                     self.context.timestamp_now_sql,
+                                                                     log=log)
             for ids_classe_cohorts in ids_classes_cohorts:
                 self.__db.enroll_user_in_cohort(ids_classe_cohorts, eleve_id, self.context.timestamp_now_sql)
 
@@ -252,9 +256,10 @@ class Synchronizer:
         if eleve_ldap.niveau_formation:
             log.info("Inscription de l'élève %s "
                      "dans la cohorte de niveau de formation %s" % (eleve_ldap, eleve_ldap.niveau_formation))
-            id_formation_cohort = self.create_formation_cohort(etablissement_context.id_context_categorie,
-                                                               eleve_ldap.niveau_formation,
-                                                               self.context.timestamp_now_sql)
+            id_formation_cohort = self.get_or_create_formation_cohort(etablissement_context.id_context_categorie,
+                                                                      eleve_ldap.niveau_formation,
+                                                                      self.context.timestamp_now_sql,
+                                                                      log=log)
             self.__db.enroll_user_in_cohort(id_formation_cohort, eleve_id, self.context.timestamp_now_sql)
             eleve_cohorts.append(id_formation_cohort)
 
@@ -317,7 +322,7 @@ class Synchronizer:
             self.__db.update_moodle_user(id_user, enseignant_ldap.given_name, enseignant_ldap.sn, enseignant_ldap.mail,
                                          mail_display, etablissement_context.etablissement_theme)
 
-        # Mise ajour des droits sur les anciens etablissement
+        # Mise à jour des droits sur les anciens etablissement
         if enseignant_ldap.uais is not None and not etablissement_context.etablissement_regroupe:
             # Recuperation des uais des etablissements dans lesquels l'enseignant est autorise
             self.mettre_a_jour_droits_enseignant(enseignant_infos, etablissement_context.gere_admin_local,
@@ -385,27 +390,22 @@ class Synchronizer:
                      % (enseignant_ldap, enseignant_ldap.classes))
             name_pattern = "Profs de la Classe %s"
             desc_pattern = "Profs de la Classe %s"
-            ids_classes_cohorts = self.create_classes_cohorts(etablissement_context.id_context_categorie,
-                                                              enseignant_ldap.classes,
-                                                              self.context.timestamp_now_sql,
-                                                              name_pattern=name_pattern,
-                                                              desc_pattern=desc_pattern)
+            ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
+                                                                     enseignant_ldap.classes,
+                                                                     self.context.timestamp_now_sql,
+                                                                     name_pattern=name_pattern,
+                                                                     desc_pattern=desc_pattern,
+                                                                     log=log)
             for ids_classe_cohorts in ids_classes_cohorts:
                 self.__db.enroll_user_in_cohort(ids_classe_cohorts, id_user, self.context.timestamp_now_sql)
 
             enseignant_cohorts.extend(ids_classes_cohorts)
 
-        # ATTENTION: Ce code n'est jamais appelé (enseignant_ldap.niveau_formation n'est jamais peuplé) car le LDAP ne
-        # contient pas l'information du niveau de formation sur les enseignants.
-        # Inscription dans la cohorte associee au niveau de formation
-        if enseignant_ldap.niveau_formation:
-            log.info("Inscription de l'enseignant %s dans la cohorte de niveau de formation %s"
-                     % (enseignant_ldap, enseignant_ldap.niveau_formation))
-            id_formation_cohort = self.create_formation_cohort(etablissement_context.id_context_categorie,
-                                                               enseignant_ldap.niveau_formation,
-                                                               self.context.timestamp_now_sql)
-            self.__db.enroll_user_in_cohort(id_formation_cohort, id_user, self.context.timestamp_now_sql)
-            enseignant_cohorts.append(id_formation_cohort)
+        log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement" % enseignant_ldap)
+        id_prof_etabs_cohort = self.get_or_create_profs_etab_cohort(etablissement_context, log)
+
+        id_user = self.__db.get_user_id(enseignant_ldap.uid)
+        self.__db.enroll_user_in_cohort(id_prof_etabs_cohort, id_user, self.context.timestamp_now_sql)
 
         # Mise a jour des dictionnaires concernant les cohortes
         for cohort_id in enseignant_cohorts:
@@ -558,43 +558,33 @@ class Synchronizer:
                 enseignant_infos, str(forums_summaries)))
             log.info("         Les seuls établissements autorisés pour cet enseignant sont '%s'" % themes_autorises)
 
-    def create_profs_etabs_cohorts(self, etablissement_context: EtablissementContext,
-                                   since_timestamp: datetime.datetime):
+    def get_or_create_cohort(self, id_context, name, id_number, description, time_created, log=getLogger()):
         """
-        Fonction permettant de creer des cohortes a partir de
-        etablissement. Puis de remplir la cohorte avec les enseignants de l'etablissement
-        :param etablissement_context:
-        :param since_timestamp:
+        Fonction permettant de creer une nouvelle cohorte pour
+        un contexte donne.
+        :param id_context:
+        :param name:
+        :param id_number:
+        :param description:
+        :param time_created:
         :return:
         """
-
-        liste_professeurs_insere = []
-
-        # TODO: Extraire ces deux libellés dans la configuration
-        cohort_name = 'Profs de l\'établissement (%s)' % etablissement_context.uai
-        cohort_description = 'Enseignants de l\'établissement %s' % etablissement_context.uai
-        id_cohort = self.__db.create_cohort(etablissement_context.id_context_categorie, cohort_name, cohort_name,
-                                            cohort_description, self.context.timestamp_now_sql)
-
-        enseignants = self.__ldap.search_enseignant(since_timestamp=since_timestamp, uai=etablissement_context.uai,
-                                                    tous=True)
-
-        for enseignant in enseignants:
-            id_user = self.__db.get_user_id(enseignant.uid)
-            self.__db.enroll_user_in_cohort(id_cohort, id_user, self.context.timestamp_now_sql)
-            liste_professeurs_insere.append(id_user)
-        if since_timestamp is None:
-            self.__db.purge_cohort_profs(id_cohort, liste_professeurs_insere)
-
-    def create_formation_cohort(self, id_context_etab, niveau_formation, timestamp_now_sql):
-        cohort_name = 'Élèves du Niveau de formation %s' % niveau_formation
-        cohort_description = 'Eleves avec le niveau de formation %s' % niveau_formation
-        id_cohort = self.__db.create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description,
-                                            timestamp_now_sql)
+        id_cohort = self.__db.get_id_cohort(id_context, name)
+        if id_cohort is None:
+            self.__db.create_cohort(id_context, name, id_number, description, time_created)
+            log.info("Creation de la cohorte (name=%s)" % name)
+            return self.__db.get_id_cohort(id_context, name)
         return id_cohort
 
-    def create_classes_cohorts(self, id_context_etab, classes_names, time_created, name_pattern=None,
-                               desc_pattern=None):
+    def get_or_create_formation_cohort(self, id_context_etab, niveau_formation, timestamp_now_sql, log=getLogger()):
+        cohort_name = 'Élèves du Niveau de formation %s' % niveau_formation
+        cohort_description = 'Eleves avec le niveau de formation %s' % niveau_formation
+        id_cohort = self.get_or_create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description,
+                                                   timestamp_now_sql, log)
+        return id_cohort
+
+    def get_or_create_classes_cohorts(self, id_context_etab, classes_names, time_created, name_pattern=None,
+                                      desc_pattern=None, log=getLogger()):
         """
         Fonction permettant de creer des cohortes a partir de
         classes liees a un etablissement.
@@ -615,22 +605,33 @@ class Synchronizer:
         for class_name in classes_names:
             cohort_name = name_pattern % class_name
             cohort_description = desc_pattern % class_name
-            id_cohort = self.__db.create_cohort(id_context_etab,
-                                                cohort_name,
-                                                cohort_name,
-                                                cohort_description,
-                                                time_created)
+            id_cohort = self.get_or_create_cohort(id_context_etab,
+                                                  cohort_name,
+                                                  cohort_name,
+                                                  cohort_description,
+                                                  time_created,
+                                                  log=log)
             ids_cohorts.append(id_cohort)
         return ids_cohorts
 
-    def get_users_by_cohorts_comparators(self, etab_context: EtablissementContext,
-                                         cohortname_pattern_re=r'(Élèves de la Classe )(.*)$')\
+    def get_or_create_profs_etab_cohort(self, etab_context: EtablissementContext, log=getLogger()):
+        cohort_name = 'Profs de l\'établissement (%s)' % etab_context.uai
+        cohort_description = 'Enseignants de l\'établissement %s' % etab_context.uai
+        id_cohort_enseignants = self.get_or_create_cohort(etab_context.id_context_categorie,
+                                                               cohort_name,
+                                                               cohort_name,
+                                                               cohort_description,
+                                                               self.context.timestamp_now_sql,
+                                                               log=log)
+        return id_cohort_enseignants
+
+    def get_users_by_cohorts_comparators(self, etab_context: EtablissementContext, cohortname_pattern_re: str)\
             -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les utilisateurs (uid) dans chacune des classes.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
         :param etab_context: EtablissementContext
-        :param cohortname_pattern_re:
+        :param cohortname_pattern_re: str
         :return:
         """
         classes_cohorts = self.__db.get_eleve_classe_cohorts(etab_context.id_context_categorie)
@@ -653,7 +654,7 @@ class Synchronizer:
 
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],
                       users_by_cohorts_ldap: Dict[str, List[str]],
-                      cohortname_pattern="Élèves de la Classe %s",
+                      cohortname_pattern: str,
                       log=getLogger()):
         """
         Vide les cohortes d'utilisateurs conformément à l'annuaire LDAP
@@ -686,8 +687,8 @@ class Synchronizer:
     def mise_a_jour_cohorte_interetab(self, is_member_of, cohort_name, since_timestamp: datetime.datetime,
                                       log=getLogger()):
         # Creation de la cohort si necessaire
-        self.__db.create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name, cohort_name,
-                                self.context.timestamp_now_sql)
+        self.__db.get_or_create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name, cohort_name,
+                                       self.context.timestamp_now_sql)
         id_cohort = self.__db.get_id_cohort(self.context.id_context_categorie_inter_etabs, cohort_name)
 
         # Liste permettant de sauvegarder les utilisateurs de la cohorte

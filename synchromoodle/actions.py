@@ -51,10 +51,6 @@ def default(config: Config, action: ActionConfig, arguments=default_args):
                 utilisateur_log.info("Traitement de l'enseignant (uid=%s)" % enseignant.uid)
                 synchronizer.handle_enseignant(etablissement_context, enseignant, log=utilisateur_log)
 
-            # TODO: Merger cette fonction dans mise_a_jour_enseignant
-            synchronizer.create_profs_etabs_cohorts(etablissement_context, since_timestamp)
-
-            # TODO: Executer un commit de base de données sur chaque objet traité (établissement, enseignant, élève)
             db.connection.commit()
 
             timestamp_store.mark(uai)
@@ -101,9 +97,6 @@ def interetab(config: Config, action: ActionConfig, arguments=default_args):
             synchronizer.handle_user_interetab(personne_ldap, log=utilisateur_log)
 
         log.info('Mise à jour des cohortes de la categorie inter-établissements')
-
-        # TODO: Cette variable ne semble plus alimentée
-        utilisateurs_by_cohortes = {}
 
         for is_member_of, cohort_name in action.inter_etablissements.cohorts.items():
             synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, since_timestamp, log=log)
@@ -186,27 +179,41 @@ def nettoyage(config: Config, action: ActionConfig, arguments=default_args):
         synchronizer.initialize()
 
         log.info("Début de l'action de nettoyage")
-        for uai in config.etablissements.listeEtab:
+        for uai in action.etablissements.listeEtab:
             etablissement_log = log.getChild('etablissement.%s' % uai)
 
-            etablissement_log.info('Nettoyage de l\'établissement (uai=%s)' % uai)
-            etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log)
+            etablissement_log.info("Nettoyage de l'établissement (uai=%s)" % uai)
+            etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
 
-            eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer. \
-                get_users_by_cohorts_comparators(etablissement_context)
+            eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
+                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves de la Classe )(.*)$')
 
-            eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer. \
+            eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
                 get_users_by_cohorts_comparators(etablissement_context, r'(Élèves du Niveau de formation )(.*)$')
 
-            profs_by_cohorts_db, profs_by_cohorts_ldap = synchronizer. \
+            profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
                 get_users_by_cohorts_comparators(etablissement_context, r'(Profs de la Classe )(.*)$')
 
-            synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap)
+            profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
+                get_users_by_cohorts_comparators(etablissement_context, r"(Profs de l'établissement )(.*)$")
+
+            log.info("Purge des cohortes Elèves de la Classe")
+            synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
+                                       "Élèves de la Classe %s")
+
+            log.info("Purge des cohortes Elèves du Niveau de formation")
             synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
                                        'Élèves du Niveau de formation %s')
-            synchronizer.purge_cohorts(profs_by_cohorts_db, profs_by_cohorts_ldap,
+
+            log.info("Purge des cohortes Profs de la Classe")
+            synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
                                        'Profs de la Classe %s')
-            log.info("Suppression des cohortes vides (sans utilisateurs)")
+
+            log.info("Purge des cohortes Profs de l'établissement")
+            synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
+                                       "Profs de l'établissement %s")
+
+            log.info("Suppression des cohortes vides (sans utilisateur)")
             db.delete_empty_cohorts()
 
         log.info("Fin d'action de nettoyage")

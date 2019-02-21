@@ -3,17 +3,12 @@
 """
 Accès à la base de données Moodle
 """
-from logging import getLogger
-import sys
 
 import mysql.connector
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
 
 from .config import DatabaseConfig, ConstantesConfig
-
-
-log = getLogger('database')
 
 ###############################################################################
 # CONSTANTS
@@ -151,7 +146,6 @@ class Database:
 
     def __init__(self, config: DatabaseConfig, constantes: ConstantesConfig):
         self.config = config
-        # TODO: Déplacer les constantes database dans DatabaseConfig
         self.constantes = constantes
         self.entete = config.entete
 
@@ -299,18 +293,13 @@ class Database:
         :param time_created:
         :return:
         """
-        # Si la cohorte n'existe pas encore
-        id_cohort = self.get_id_cohort(id_context, name)
-        if id_cohort is None:
-            s = "INSERT INTO {entete}cohort(contextid, name, idnumber, description, descriptionformat, timecreated," \
-                " timemodified)" \
-                " VALUES (%(id_context)s, %(name)s, %(id_number)s, %(description)s, 0, %(time_created)s," \
-                " %(time_created)s)" \
-                .format(entete=self.entete)
-            self.mark.execute(s, params={'id_context': id_context, 'name': name, 'id_number': id_number,
-                                         'description': description, 'time_created': time_created})
-            log.info("      |_ Creation de la cohorte '%s'" % name)
-        return self.get_id_cohort(id_context, name)
+        s = "INSERT INTO {entete}cohort(contextid, name, idnumber, description, descriptionformat, timecreated," \
+            " timemodified)" \
+            " VALUES (%(id_context)s, %(name)s, %(id_number)s, %(description)s, 0, %(time_created)s," \
+            " %(time_created)s)" \
+            .format(entete=self.entete)
+        self.mark.execute(s, params={'id_context': id_context, 'name': name, 'id_number': id_number,
+                                     'description': description, 'time_created': time_created})
 
     def disenroll_user_from_username_and_cohortname(self, username, cohortname):
         self.mark.execute("DELETE {entete}cohort_members FROM {entete}cohort_members"
@@ -384,8 +373,6 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user, 'time_added': time_added})
         cohort_name = self.get_cohort_name(id_cohort)
-        log.info(
-            "      |_ Inscription de l'utilisateur (id = %s) dans la cohorte '%s'" % (str(id_user), cohort_name))
 
     def purge_cohort_profs(self, id_cohort, list_profs):
         """
@@ -431,16 +418,11 @@ class Database:
         au sein de la BD moodle.
         :return:
         """
-        id_admin_local = self.get_id_role_by_shortname(SHORTNAME_ADMIN_LOCAL)
-        if id_admin_local is None:
-            log.error("Le role '%s' n'est pas defini" % SHORTNAME_ADMIN_LOCAL)
-            sys.exit(2)
-        return id_admin_local
+        return self.get_id_role_by_shortname(SHORTNAME_ADMIN_LOCAL)
 
     def get_id_role_by_shortname(self, short_name):
         """
-        Fonction permettant de recuperer l'id d'un role via son
-        shortname
+        Fonction permettant de recuperer l'id d'un role via son shortname
         :param short_name:
         :return:
         """
@@ -450,7 +432,7 @@ class Database:
         self.mark.execute(s, params={'short_name': short_name})
         ligne = self.mark.fetchone()
         if ligne is None:
-            return None
+            raise ValueError("Le rôle %s n'existe pas." % short_name)
         return ligne[0]
 
     def delete_moodle_local_admin(self, id_context_categorie, userid):
@@ -596,7 +578,6 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user})
 
-
     def get_cohort_name(self, id_cohort):
         """
         Fonction permettant de recuperer le nom d'une cohorte.
@@ -608,7 +589,6 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort})
         name = self.mark.fetchone()[0]
-        log.debug("Cohort : Name = %s" % name)
         return name
 
     def get_description_course_category(self, id_category):
@@ -1209,7 +1189,6 @@ class Database:
         start_date = time_created = time_modified = time
         self.insert_moodle_course(id_categorie_etablissement, full_name, id_number, short_name, summary, format,
                                   visible, num_sections, start_date, time_created, time_modified)
-        log.info('    |_ Creation de la zone privee pour la structure %s' % siren)
         id_zone_privee = self.get_id_course_by_id_number(id_number)
         return id_zone_privee
 
@@ -1355,7 +1334,6 @@ class Database:
                                      'USER_MNET_HOST_ID': USER_MNET_HOST_ID,
                                      'theme': theme,
                                      'id_user': id_user})
-        log.info("      |_ Mise a jour de %s %s ( id : %s )" % (first_name, last_name, id_user))
 
     def update_user_info_data(self, id_user, id_field, new_data):
         """
