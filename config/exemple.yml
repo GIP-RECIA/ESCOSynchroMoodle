@@ -1,3 +1,20 @@
+database:
+  database: moodle
+  user: moodle
+  password: moodle
+  host: 192.168.1.100
+  port: 9806
+  entete: mdl_
+  charset: utf8
+ldap:
+  uri: "ldap://192.168.1.100:9889"
+  username: "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr"
+  password: "admin"
+  baseDN: "dc=esco-centre,dc=fr"
+  structuresRDN: "ou=structures"
+  personnesRDN: "ou=people"
+  groupsRDN: "ou=groups"
+  adminRDN: "ou=administrateurs"
 logging:
   formatters:
     console:
@@ -12,13 +29,13 @@ logging:
     file:
       class: logging.handlers.TimedRotatingFileHandler
       formatter: file
-      when: 'D'
+      when: midnight
       filename: 'logs/synchromoodle.log'
     file-error:
       class: logging.handlers.TimedRotatingFileHandler
       level: ERROR
       formatter: file
-      when: 'D'
+      when: midnight
       filename: 'logs/synchromoodle.error.log'
   root:
     handlers: [console, file, file-error]
