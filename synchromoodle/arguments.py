@@ -2,8 +2,9 @@
 Arguments
 """
 
-from synchromoodle.__version__ import __version__
 from argparse import ArgumentParser
+
+from synchromoodle.__version__ import __version__
 
 
 def parse_args(args=None, namespace=None):
