@@ -3,7 +3,7 @@
 Configuration
 """
 from logging import getLogger
-from typing import List, Dict
+from typing import List, Dict, Union
 
 import ruamel.yaml as yaml
 
@@ -27,6 +27,7 @@ class ConstantesConfig(_BaseConfig):
     """
     Configuration des contstantes
     """
+
     def __init__(self, **entries):
         self.default_moodle_theme = "netocentre"  # type: str
         """Thèmes par défault pour les utilisateurs inter-etabs"""
@@ -89,6 +90,7 @@ class DatabaseConfig(_BaseConfig):
     """
     Configuration de la base de données Moodle
     """
+
     def __init__(self, **entries):
         self.database = "moodle"  # type: str
         """Nom de la base de données"""
@@ -118,6 +120,7 @@ class LdapConfig(_BaseConfig):
     """
     Configuration de l'annuaire LDAP.
     """
+
     def __init__(self, **entries):
         self.uri = "ldap://192.168.1.100:9889"  # type: str
         """URI du serveur LDAP"""
@@ -178,6 +181,7 @@ class EtablissementRegroupement(_BaseConfig):
     """
     Configuration d'un regroupement d'établissement
     """
+
     def __init__(self, **entries):
         self.nom = ""  # type: str
         """Nom du regroupement d'etablissements"""
@@ -192,6 +196,7 @@ class EtablissementsConfig(_BaseConfig):
     """
     Configuration des établissements
     """
+
     def __init__(self, **entries):
         self.etabRgp = []  # type: List[EtablissementRegroupement]
         """Regroupement d'etablissements"""
@@ -230,6 +235,7 @@ class InterEtablissementsConfig(_BaseConfig):
     """
     Configuration de l'inter-établissement
     """
+
     def __init__(self, **entries):
         self.cohorts = {}  # type: Dict[str, str]
         """Cohortes à synchroniser"""
@@ -256,6 +262,7 @@ class InspecteursConfig(_BaseConfig):
     """
     Configuration des inspecteurs
     """
+
     def __init__(self, **entries):
         self.ldap_attribut_user = "ESCOPersonProfils"  # type: str
         """Attribut utilisé pour determiner les inspecteurs"""
@@ -273,6 +280,7 @@ class TimestampStoreConfig(_BaseConfig):
     """
     Configuration des timestamp de traitement précédent
     """
+
     def __init__(self, **entries):
         self.file = "timestamps.txt"  # type: str
         """Fichier contenant les dates de traitement précedent pour les établissements"""
@@ -288,6 +296,7 @@ class ActionConfig(_BaseConfig):
     """
     Configuration d'une action
     """
+
     def __init__(self, **entries):
         self.id = None
         self.type = "default"
@@ -322,6 +331,7 @@ class Config(_BaseConfig):
     """
     Configuration globale.
     """
+
     def __init__(self, **entries):
         super().__init__(**entries)
 
@@ -329,7 +339,7 @@ class Config(_BaseConfig):
         self.database = DatabaseConfig()  # type: DatabaseConfig
         self.ldap = LdapConfig()  # type: LdapConfig
         self.actions = []  # type: List[ActionConfig]
-        self.logging = {}  # type: dict
+        self.logging = True  # type: Union[dict, bool]
 
     def update(self, **entries):
         if 'constantes' in entries:
@@ -353,11 +363,20 @@ class Config(_BaseConfig):
 
         super().update(**entries)
 
+    def validate(self):
+        """
+        Valide la configuration.
+        :return: 
+        """
+        if not self.actions:
+            raise ValueError("Au moins une action doit être définie dans la configuration.")
+
 
 class ConfigLoader:
     """
     Chargement de la configuration
     """
+
     def update(self, config: Config, config_fp: List[str], silent=False) -> Config:
         """
         Met à jour la configuration avec le chargement d'une une liste de fichier de configuration.

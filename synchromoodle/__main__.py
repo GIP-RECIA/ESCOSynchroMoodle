@@ -36,22 +36,35 @@ def main():
             basicConfig(level='INFO')
 
     log = getLogger()
+
+    try:
+        config.validate()
+    except ValueError as e:
+        log.error(e)
+        exit(1)
+
     log.info("Démarrage")
+
+    errors = 0
 
     for action in config.actions:
         try:
             action_func = getattr(actions, action.type)
         except AttributeError:
+            errors += 1
             log.error("Action invalide: %s", action)
             continue
         log.info("Démarrage de l'action %s", action)
         try:
             action_func(config, action, arguments)
         except Exception:  # pylint: disable=broad-except
+            errors += 1
             log.exception("Une erreur inattendue s'est produite")
         log.info("Fin de l'action %s", action)
 
     log.info("Terminé")
+    if errors:
+        exit(errors)
 
 
 if __name__ == "__main__":

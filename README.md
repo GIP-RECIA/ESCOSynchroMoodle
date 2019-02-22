@@ -5,19 +5,6 @@
 
 Ce script permet la synchronisation des données de l'annuaire LDAP avec Moodle. Il nécessite Python 3.5+.
 
-# Usage
-
-```bash
-usage: __main__.py [-h] [-c CONFIG]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -c CONFIG, --config CONFIG
-                        Chemin vers un fichier de configuration. Lorsque cette
-                        option est utilisée plusieurs fois, les fichiers de
-                        configuration sont alors fusionnés.
-```
-
 # Environnement de développement
 
 ### Prérequis
@@ -46,33 +33,57 @@ pipenv install --dev --python=3.5
 pipenv run python -m synchromoodle -c config/test.yml
 ```
 
-## Construire le binaire à partir des sources
+## Construire les binaires à partir des sources
 
 ```bash
-pipenv run python setup.py bdist_wheel
+pipenv run python setup.py clean build bdist bdist_wheel bdist_pex
 ```
 
-# Déploiement
+# Déploiement et exécution
 
-Le déploiement peut se faire au sein d'un Python installé directement sur le système, ou dans un virtualenv. Il est 
-possible d'utiliser [pyenv](https://github.com/pyenv/pyenv) pour installer une version spécifique de Python sous Linux 
-et créer un virtualenv pour le script.
+Les packages du script sont disponibles dans l'onglet 
+[Release du github](https://github.com/GIP-RECIA/ESCOSynchroMoodle/releases). 
 
-La dernière version du package wheel est disponible dans l'onglet [Release du github](https://github.com/GIP-RECIA/ESCOSynchroMoodle/releases).
+Deux formats sont disponibles:
+
+ - PEX, pour une exécution autonome
+ - Wheel, pour une installation via pip sur un environnement Python existant.
+
+## PEX
+
+Le fichier `.pex` est un executable qui contient l'environnement virtuel, les dépendances et le script. Cela permet de 
+déployer le script sans avoir à se soucier de l'installation de Python.
+
+```
+./synchromoodle-x.x.x.pex -c config/test.yml
+```
+
+## Wheel
+
+Le fichier `.whl` peut être installé via pip sur un Python système ou dans un virtualenv. 
+
+Il est possible d'utiliser [pyenv](https://github.com/pyenv/pyenv) pour installer une version spécifique de Python sous
+Linux et créer un virtualenv pour le script.
 
 ```
 pip3 install synchromoodle-x.x.x-py3-none-any.whl
-```
-
-# Executer à partir du script installé
-
-*Après avoir créé le fichier de configuration (voir section Configuration)*
-
-```bash
 python3 -m synchromoodle -c config/test.yml
 ```
 
-# Configuration
+# Usage
+
+```bash
+usage: __main__.py [-h] [-c CONFIG]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Chemin vers un fichier de configuration. Lorsque cette
+                        option est utilisée plusieurs fois, les fichiers de
+                        configuration sont alors fusionnés.
+```
+
+# Configuration YAML
 
 Le script fonctionne à l'aide d'un fichier de configuration au format YAML. Il est possible de spécifier plusieurs 
 fichiers de configuration, en utilisant plusieurs fois le flag -c, les configuration de chaque fichier sont alors 
