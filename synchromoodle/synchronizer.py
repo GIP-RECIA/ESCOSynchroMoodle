@@ -1,20 +1,25 @@
 # coding: utf-8
+"""
+Synchronizer
+"""
+
 import datetime
 import re
 from logging import getLogger
-from typing import Dict, List, Pattern
+from typing import Dict, List
 
-from synchromoodle.ldaputils import StructureLdap
-from .arguments import default_args
-from .config import EtablissementsConfig, Config, ActionConfig
-from .dbutils import Database, PROFONDEUR_CTX_ETAB, COURSE_MODULES_MODULE, PROFONDEUR_CTX_MODULE_ZONE_PRIVEE, \
+from synchromoodle.arguments import DEFAULT_ARGS
+from synchromoodle.config import EtablissementsConfig, Config, ActionConfig
+from synchromoodle.dbutils import Database, PROFONDEUR_CTX_ETAB, COURSE_MODULES_MODULE, \
+    PROFONDEUR_CTX_MODULE_ZONE_PRIVEE, \
     PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE
-from .ldaputils import Ldap, EleveLdap, EnseignantLdap, PersonneLdap
+from synchromoodle.ldaputils import Ldap, EleveLdap, EnseignantLdap, PersonneLdap
+from synchromoodle.ldaputils import StructureLdap
 
 #######################################
 # FORUM
 #######################################
-# Nom du forum pour la zone privee 
+# Nom du forum pour la zone privee
 # Le (%s) est reserve a l'organisation unit de l'etablissement
 FORUM_NAME_ZONE_PRIVEE = "Forum réservé au personnel éducatif de l'établissement %s"
 
@@ -66,6 +71,10 @@ def est_grp_etab(uai: str, etablissements_config: EtablissementsConfig):
 
 
 class SyncContext:
+    """
+    Contexte global de synchronisation
+    """
+
     def __init__(self):
         self.timestamp_now_sql = None
         self.map_etab_domaine = None  # type: Dict[str, List[str]]
@@ -79,6 +88,10 @@ class SyncContext:
 
 
 class EtablissementContext:
+    """
+    Contexte de synchronisation d'établissement
+    """
+
     def __init__(self, uai: str):
         self.uai = uai  # type: str
         self.id_context_categorie = None
@@ -95,17 +108,25 @@ class EtablissementContext:
 
 
 class Synchronizer:
+    """
+    Synchronise les objets métiers entre l'annuaire LDAP et le Moodle.
+    """
+
     def __init__(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig = None,
-                 arguments=default_args):
+                 arguments=DEFAULT_ARGS):
         self.__ldap = ldap  # type: Ldap
         self.__db = db  # type: Database
         self.__config = config  # type: Config
-        self.__action_config = action_config if action_config else next(iter(config.actions), ActionConfig())  # type: ActionConfig
+        self.__action_config = action_config if action_config \
+            else next(iter(config.actions), ActionConfig())  # type: ActionConfig
         self.__arguments = arguments
         self.context = None  # type: SyncContext
 
     def initialize(self):
-
+        """
+        Initialise la synchronisation
+        :return:
+        """
         self.context = SyncContext()
 
         # Recuperation du timestamp actuel
@@ -135,8 +156,7 @@ class Synchronizer:
 
     def handle_etablissement(self, uai, log=getLogger(), readonly=False) -> EtablissementContext:
         """
-        Met a jour l'etablissement meme si celui-ci n'a pas ete modifie depuis la derniere synchro
-        car des infos doivent etre recuperees dans Moodle dans tous les cas
+        Synchronise un établissement
         :return: EtabContext
         """
         context = EtablissementContext(uai)
@@ -157,11 +177,11 @@ class Synchronizer:
             if context.etablissement_regroupe:
                 etablissement_ou = context.etablissement_regroupe["nom"]
                 structure_ldap.uai = context.etablissement_regroupe["uais"][0]
-                log.debug("L'établissement fait partie d'un groupement: ou=%s, uai=%s" % (
-                    etablissement_ou, structure_ldap.uai))
+                log.debug("L'établissement fait partie d'un groupement: ou=%s, uai=%s",
+                          etablissement_ou, structure_ldap.uai)
             else:
                 etablissement_ou = structure_ldap.nom
-                log.debug("L'établissement ne fait partie d'un groupement: ou=%s" % etablissement_ou)
+                log.debug("L'établissement ne fait partie d'un groupement: ou=%s", etablissement_ou)
 
             # Recuperation du bon theme
             context.etablissement_theme = structure_ldap.uai.lower()
@@ -207,42 +227,49 @@ class Synchronizer:
         return context
 
     def handle_eleve(self, etablissement_context: EtablissementContext, eleve_ldap: EleveLdap, log=getLogger()):
+        """
+        Synchronise un élève au sein d'un établissement
+        :param etablissement_context:
+        :param eleve_ldap:
+        :param log:
+        :return:
+        """
         mail_display = self.__config.constantes.default_mail_display
         if not eleve_ldap.mail:
             eleve_ldap.mail = self.__config.constantes.default_mail
             log.info("Le mail de l'élève n'est pas défini dans l'annuaire, "
-                     "utilisation de la valeur par défault: %s" % eleve_ldap.mail)
+                     "utilisation de la valeur par défault: %s", eleve_ldap.mail)
 
         eleve_id = self.__db.get_user_id(eleve_ldap.uid)
         if not eleve_id:
-            log.info("Ajout de l'utilisateur: %s" % eleve_ldap)
+            log.info("Ajout de l'utilisateur: %s", eleve_ldap)
             self.__db.insert_moodle_user(eleve_ldap.uid, eleve_ldap.given_name,
                                          eleve_ldap.given_name, eleve_ldap.mail,
                                          mail_display, etablissement_context.etablissement_theme)
             eleve_id = self.__db.get_user_id(eleve_ldap.uid)
         else:
-            log.info("Mise à jour de l'utilisateur: %s" % eleve_ldap)
+            log.info("Mise à jour de l'utilisateur: %s", eleve_ldap)
             self.__db.update_moodle_user(eleve_id, eleve_ldap.given_name,
                                          eleve_ldap.given_name, eleve_ldap.mail, mail_display,
                                          etablissement_context.etablissement_theme)
 
         # Ajout ou suppression du role d'utilisateur avec droits limités Pour les eleves de college
         if etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_clg:
-            log.info("Ajout du rôle droit limités à l'utilisateur: %s" % eleve_ldap)
+            log.info("Ajout du rôle droit limités à l'utilisateur: %s", eleve_ldap)
             self.__db.add_role_to_user(self.__config.constantes.id_role_utilisateur_limite,
                                        self.__config.constantes.id_instance_moodle, eleve_id)
         else:
             self.__db.remove_role_to_user(self.__config.constantes.id_role_utilisateur_limite,
                                           self.__config.constantes.id_instance_moodle, eleve_id)
             log.info(
-                "      |_ Suppression du role d'utilisateur avec des droits limites à l'utilisateur %s %s %s (id = %s)"
-                % (eleve_ldap.given_name, eleve_ldap.sn, eleve_ldap.uid, str(eleve_id)))
+                "Suppression du role d'utilisateur avec des droits limites à l'utilisateur %s %s %s (id = %s)"
+                , eleve_ldap.given_name, eleve_ldap.sn, eleve_ldap.uid, str(eleve_id))
 
         # Inscription dans les cohortes associees aux classes
         eleve_cohorts = []
         if eleve_ldap.classes:
             log.info("Inscription de l'élève %s "
-                     "dans les cohortes de classes %s" % (eleve_ldap, eleve_ldap.classes))
+                     "dans les cohortes de classes %s", eleve_ldap, eleve_ldap.classes)
             ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
                                                                      eleve_ldap.classes,
                                                                      self.context.timestamp_now_sql,
@@ -255,7 +282,7 @@ class Synchronizer:
         # Inscription dans la cohorte associee au niveau de formation
         if eleve_ldap.niveau_formation:
             log.info("Inscription de l'élève %s "
-                     "dans la cohorte de niveau de formation %s" % (eleve_ldap, eleve_ldap.niveau_formation))
+                     "dans la cohorte de niveau de formation %s", eleve_ldap, eleve_ldap.niveau_formation)
             id_formation_cohort = self.get_or_create_formation_cohort(etablissement_context.id_context_categorie,
                                                                       eleve_ldap.niveau_formation,
                                                                       self.context.timestamp_now_sql,
@@ -263,7 +290,7 @@ class Synchronizer:
             self.__db.enroll_user_in_cohort(id_formation_cohort, eleve_id, self.context.timestamp_now_sql)
             eleve_cohorts.append(id_formation_cohort)
 
-        log.info("Désinscription de l'élève %s des anciennes cohortes" % eleve_ldap)
+        log.info("Désinscription de l'élève %s des anciennes cohortes", eleve_ldap)
         self.__db.disenroll_user_from_cohorts(eleve_cohorts, eleve_id)
 
         # Mise a jour des dictionnaires concernant les cohortes
@@ -297,6 +324,13 @@ class Synchronizer:
 
     def handle_enseignant(self, etablissement_context: EtablissementContext, enseignant_ldap: EnseignantLdap,
                           log=getLogger()):
+        """
+        Met à jour un enseignant au sein d'un établissement
+        :param etablissement_context:
+        :param enseignant_ldap:
+        :param log:
+        :return:
+        """
         enseignant_infos = "%s %s %s" % (enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
 
         if enseignant_ldap.uai_courant and not etablissement_context.etablissement_regroupe:
@@ -325,10 +359,7 @@ class Synchronizer:
         # Mise à jour des droits sur les anciens etablissement
         if enseignant_ldap.uais is not None and not etablissement_context.etablissement_regroupe:
             # Recuperation des uais des etablissements dans lesquels l'enseignant est autorise
-            self.mettre_a_jour_droits_enseignant(enseignant_infos, etablissement_context.gere_admin_local,
-                                                 etablissement_context.id_context_categorie,
-                                                 etablissement_context.id_context_course_forum,
-                                                 id_user, enseignant_ldap.uais, log=log)
+            self.mettre_a_jour_droits_enseignant(enseignant_infos, id_user, enseignant_ldap.uais, log=log)
 
         # Ajout du role de createur de cours au niveau de la categorie inter-etablissement Moodle
         self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
@@ -368,11 +399,11 @@ class Synchronizer:
         if etablissement_context.gere_admin_local:
             for member in enseignant_ldap.is_member_of:
                 # L'enseignant est il administrateur Moodle ?
-                adminMoodle = re.match(etablissement_context.regexp_admin_moodle, member, flags=re.IGNORECASE)
-                if adminMoodle:
+                admin_moodle = re.match(etablissement_context.regexp_admin_moodle, member, flags=re.IGNORECASE)
+                if admin_moodle:
                     self.__db.insert_moodle_local_admin(etablissement_context.id_context_categorie, id_user)
-                    log.info("Insertion d'un admin  local %s %s %s" % (
-                        enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn))
+                    log.info("Insertion d'un admin  local %s %s %s",
+                             enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
                     # Si il est admin local on en fait un utilisateur avancé par default
                     if not self.__db.is_enseignant_avance(id_user, self.context.id_role_advanced_teacher):
                         self.__db.add_role_to_user(self.context.id_role_advanced_teacher, 1, id_user)
@@ -380,14 +411,14 @@ class Synchronizer:
                 else:
                     delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
                     if delete:
-                        log.info("Suppression d'un admin local %s %s %s" % (
-                            enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn))
+                        log.info("Suppression d'un admin local %s %s %s",
+                                 enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
 
         # Inscription dans les cohortes associees aux classes
         enseignant_cohorts = []
         if enseignant_ldap.classes:
-            log.info("Inscription de l'enseignant %s dans les cohortes de classes %s"
-                     % (enseignant_ldap, enseignant_ldap.classes))
+            log.info("Inscription de l'enseignant %s dans les cohortes de classes %s",
+                     enseignant_ldap, enseignant_ldap.classes)
             name_pattern = "Profs de la Classe %s"
             desc_pattern = "Profs de la Classe %s"
             ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
@@ -401,7 +432,7 @@ class Synchronizer:
 
             enseignant_cohorts.extend(ids_classes_cohorts)
 
-        log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement" % enseignant_ldap)
+        log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
         id_prof_etabs_cohort = self.get_or_create_profs_etab_cohort(etablissement_context, log)
 
         id_user = self.__db.get_user_id(enseignant_ldap.uid)
@@ -427,6 +458,12 @@ class Synchronizer:
         self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
 
     def handle_user_interetab(self, personne_ldap: PersonneLdap, log=getLogger()):
+        """
+        Synchronise un utilisateur inter-etablissement
+        :param personne_ldap:
+        :param log:
+        :return:
+        """
         if not personne_ldap.mail:
             personne_ldap.mail = self.__config.constantes.default_mail
 
@@ -454,17 +491,22 @@ class Synchronizer:
             if admin:
                 insert = self.__db.insert_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
                 if insert:
-                    log.info(
-                        "      |_ Insertion d'un admin local %s %s %s" % (
-                            personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn))
+                    log.info("Insertion d'un admin local %s %s %s",
+                             personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn)
                 break
             else:
                 delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
                 if delete:
-                    log.info("      |_ Suppression d'un admin local %s %s %s" % (
-                        personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn))
+                    log.info("Suppression d'un admin local %s %s %s",
+                             personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn)
 
     def handle_inspecteur(self, personne_ldap: PersonneLdap, log=getLogger()):
+        """
+        Synchronise un inspecteur
+        :param personne_ldap:
+        :param log:
+        :return:
+        """
         if not personne_ldap.mail:
             personne_ldap.mail = self.__config.constantes.default_mail
 
@@ -500,27 +542,22 @@ class Synchronizer:
         log.debug("Insertion du Domaine")
         self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
 
-    def mettre_a_jour_droits_enseignant(self, enseignant_infos, gereAdminLocal, id_enseignant, id_context_categorie,
-                                        id_context_course_forum, uais_autorises, log=getLogger()):
+    def mettre_a_jour_droits_enseignant(self, enseignant_infos, id_enseignant, uais_autorises, log=getLogger()):
         """
         Fonction permettant de mettre a jour les droits d'un enseignant.
         Cette mise a jour consiste a :
           - Supprimer les roles non autorises
           - ajouter les roles
         :param enseignant_infos:
-        :param gereAdminLocal:
         :param id_enseignant:
-        :param id_context_categorie:
-        :param id_context_course_forum:
         :param uais_autorises:
         :param log:
         :return:
         """
         # Recuperation des themes autorises pour l'enseignant
         themes_autorises = [uai_autorise.lower() for uai_autorise in uais_autorises]
-        log.debug(
-            "      |_ Etablissements autorises pour l'enseignant pour %s : %s" % (enseignant_infos,
-                                                                                  str(themes_autorises)))
+        log.debug("Etablissements autorises pour l'enseignant pour %s : %s",
+                  enseignant_infos, themes_autorises)
 
         #########################
         # ZONES PRIVEES
@@ -533,8 +570,8 @@ class Synchronizer:
         if ids_roles_non_autorises:
             self.__db.delete_roles(ids_roles_non_autorises)
             log.info("Suppression des rôles d'enseignant pour %s dans les établissements %s"
-                     % (enseignant_infos, str(ids_themes_non_autorises)))
-            log.info("Les seuls établissements autorisés pour cet enseignant sont %s" % str(themes_autorises))
+                     , enseignant_infos, str(ids_themes_non_autorises))
+            log.info("Les seuls établissements autorisés pour cet enseignant sont %s", themes_autorises)
 
         #########################
         # FORUMS
@@ -554,14 +591,13 @@ class Synchronizer:
         if ids_roles_non_autorises:
             # Suppression des roles
             self.__db.delete_roles(ids_roles_non_autorises)
-            log.info("      |_ Suppression des rôles d'enseignant pour %s sur les forum '%s' " % (
-                enseignant_infos, str(forums_summaries)))
-            log.info("         Les seuls établissements autorisés pour cet enseignant sont '%s'" % themes_autorises)
+            log.info("Suppression des rôles d'enseignant pour %s sur les forum '%s' ",
+                     enseignant_infos, str(forums_summaries))
+            log.info("Les seuls établissements autorisés pour cet enseignant sont '%s'", themes_autorises)
 
     def get_or_create_cohort(self, id_context, name, id_number, description, time_created, log=getLogger()):
         """
-        Fonction permettant de creer une nouvelle cohorte pour
-        un contexte donne.
+        Fonction permettant de creer une nouvelle cohorte pour un contexte donne.
         :param id_context:
         :param name:
         :param id_number:
@@ -572,22 +608,29 @@ class Synchronizer:
         id_cohort = self.__db.get_id_cohort(id_context, name)
         if id_cohort is None:
             self.__db.create_cohort(id_context, name, id_number, description, time_created)
-            log.info("Creation de la cohorte (name=%s)" % name)
+            log.info("Creation de la cohorte (name=%s)", name)
             return self.__db.get_id_cohort(id_context, name)
         return id_cohort
 
     def get_or_create_formation_cohort(self, id_context_etab, niveau_formation, timestamp_now_sql, log=getLogger()):
+        """
+        Charge ou créer une cohorte de formation
+        :param id_context_etab:
+        :param niveau_formation:
+        :param timestamp_now_sql:
+        :param log:
+        :return:
+        """
         cohort_name = 'Élèves du Niveau de formation %s' % niveau_formation
         cohort_description = 'Eleves avec le niveau de formation %s' % niveau_formation
         id_cohort = self.get_or_create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description,
-                                                   timestamp_now_sql, log)
+                                              timestamp_now_sql, log)
         return id_cohort
 
     def get_or_create_classes_cohorts(self, id_context_etab, classes_names, time_created, name_pattern=None,
                                       desc_pattern=None, log=getLogger()):
         """
-        Fonction permettant de creer des cohortes a partir de
-        classes liees a un etablissement.
+        Charge ou crée des cohortes a partir de classes liées a un établissement.
         :param id_context_etab:
         :param classes_names:
         :param time_created:
@@ -615,17 +658,23 @@ class Synchronizer:
         return ids_cohorts
 
     def get_or_create_profs_etab_cohort(self, etab_context: EtablissementContext, log=getLogger()):
+        """
+        Charge ou crée la cohorte d'enseignant de l'établissement.
+        :param etab_context:
+        :param log:
+        :return:
+        """
         cohort_name = 'Profs de l\'établissement (%s)' % etab_context.uai
         cohort_description = 'Enseignants de l\'établissement %s' % etab_context.uai
         id_cohort_enseignants = self.get_or_create_cohort(etab_context.id_context_categorie,
-                                                               cohort_name,
-                                                               cohort_name,
-                                                               cohort_description,
-                                                               self.context.timestamp_now_sql,
-                                                               log=log)
+                                                          cohort_name,
+                                                          cohort_name,
+                                                          cohort_description,
+                                                          self.context.timestamp_now_sql,
+                                                          log=log)
         return id_cohort_enseignants
 
-    def get_users_by_cohorts_comparators(self, etab_context: EtablissementContext, cohortname_pattern_re: str)\
+    def get_users_by_cohorts_comparators(self, etab_context: EtablissementContext, cohortname_pattern_re: str) \
             -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les utilisateurs (uid) dans chacune des classes.
@@ -641,11 +690,11 @@ class Synchronizer:
             matches = re.search(cohortname_pattern_re, cohort.name)
             classe_name = matches.group(2)
             eleves_by_cohorts_db[classe_name] = []
-            for member_id, username in self.__db.get_cohort_members(cohort.id):
+            for username in self.__db.get_cohort_members(cohort.id):
                 eleves_by_cohorts_db[classe_name].append(username.lower())
 
         eleves_by_cohorts_ldap = {}
-        for classe, eleves in eleves_by_cohorts_db.items():
+        for classe in eleves_by_cohorts_db:
             eleves_by_cohorts_ldap[classe] = []
             for eleve in self.__ldap.search_eleves_in_classe(classe, etab_context.uai):
                 eleves_by_cohorts_ldap[classe].append(eleve.uid.lower())
@@ -669,7 +718,7 @@ class Synchronizer:
             cohortname = cohortname_pattern % cohort_db
             if cohort_db not in users_by_cohorts_ldap.keys():
                 for username_db in users_by_cohorts_db[cohort_db]:
-                    log.info("Désenrollement de l'utilisateur %s de la cohorte \"%s\"" % (username_db, cohort_db))
+                    log.info("Désenrollement de l'utilisateur %s de la cohorte \"%s\"", username_db, cohort_db)
                     self.__db.disenroll_user_from_username_and_cohortname(username_db, cohortname)
                     if cohort_db not in disenrolled_users.keys():
                         disenrolled_users[cohort_db] = []
@@ -677,7 +726,7 @@ class Synchronizer:
             else:
                 for username_db in eleves_db:
                     if username_db not in users_by_cohorts_ldap[cohort_db]:
-                        log.info("Désenrollement de l'utilisateur %s de la cohorte \"%s\"" % (username_db, cohort_db))
+                        log.info("Désenrollement de l'utilisateur %s de la cohorte \"%s\"", username_db, cohort_db)
                         self.__db.disenroll_user_from_username_and_cohortname(username_db, cohortname)
                         if cohort_db not in disenrolled_users.keys():
                             disenrolled_users[cohort_db] = []
@@ -686,9 +735,17 @@ class Synchronizer:
 
     def mise_a_jour_cohorte_interetab(self, is_member_of, cohort_name, since_timestamp: datetime.datetime,
                                       log=getLogger()):
+        """
+        Met à jour la cohorte inter-etablissement.
+        :param is_member_of:
+        :param cohort_name:
+        :param since_timestamp:
+        :param log:
+        :return:
+        """
         # Creation de la cohort si necessaire
-        self.__db.get_or_create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name, cohort_name,
-                                       self.context.timestamp_now_sql)
+        self.get_or_create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name,
+                                  cohort_name, self.context.timestamp_now_sql, log=log)
         id_cohort = self.__db.get_id_cohort(self.context.id_context_categorie_inter_etabs, cohort_name)
 
         # Liste permettant de sauvegarder les utilisateurs de la cohorte
@@ -708,9 +765,9 @@ class Synchronizer:
                 self.context.utilisateurs_by_cohortes[id_cohort].append(user_id)
             else:
                 log.warning("Impossible d'inserer l'utilisateur %s dans la cohorte %s, "
-                            "car il n'est pas connu dans Moodle" % (personne_ldap, cohort_name))
+                            "car il n'est pas connu dans Moodle", personne_ldap, cohort_name)
 
-    def insert_moodle_structure(self, grp, nom_structure, path, ou, siren, uai, log=getLogger()):
+    def insert_moodle_structure(self, grp, nom_structure, path, ou, siren, uai):
         """
         Fonction permettant d'inserer une structure dans Moodle.
         :param grp:
@@ -842,5 +899,3 @@ class Synchronizer:
         # Mise a jour du path du contexte
         path_contexte_bloc = "%s/%d" % (path_contexte_zone_privee, id_contexte_bloc)
         self.__db.update_context_path(id_contexte_bloc, path_contexte_bloc)
-
-        log.info('  |_ Insertion de %s %s' % (siren, ou.encode("utf-8")))

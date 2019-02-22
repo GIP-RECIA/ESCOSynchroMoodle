@@ -1,16 +1,19 @@
 # coding: utf-8
+"""
+Actions
+"""
 
 from logging import getLogger
 
 from synchromoodle.synchronizer import Synchronizer
 from synchromoodle.timestamp import TimestampStore
-from .arguments import default_args
+from .arguments import DEFAULT_ARGS
 from .config import Config, ActionConfig
 from .dbutils import Database
 from .ldaputils import Ldap
 
 
-def default(config: Config, action: ActionConfig, arguments=default_args):
+def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
     :param config: Configuration d'execution
@@ -62,7 +65,7 @@ def default(config: Config, action: ActionConfig, arguments=default_args):
         ldap.disconnect()
 
 
-def interetab(config: Config, action: ActionConfig, arguments=default_args):
+def interetab(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
     """
     Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
     Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
@@ -112,7 +115,7 @@ def interetab(config: Config, action: ActionConfig, arguments=default_args):
         ldap.disconnect()
 
 
-def inspecteurs(config: Config, action: ActionConfig, arguments=default_args):
+def inspecteurs(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
     """
     Effectue la mise a jour de la BD
     Moodle via les infos issues du LDAP
@@ -158,7 +161,7 @@ def inspecteurs(config: Config, action: ActionConfig, arguments=default_args):
         ldap.disconnect()
 
 
-def nettoyage(config: Config, action: ActionConfig, arguments=default_args):
+def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
     """
     Effectue une purge des cohortes dans la base de données par rapport
     au contenu du LDAP et supprime les cohortes inutiles (vides)

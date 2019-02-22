@@ -9,6 +9,7 @@ pytest = ">=4"
 coverage = "*"
 sqlparse = "*"
 cachetools = "*"
+pex = "*"
 
 [packages]
 mysql-connector-python = "*"

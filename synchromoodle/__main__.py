@@ -44,12 +44,12 @@ def main():
         except AttributeError:
             log.error("Action invalide: %s", action)
             continue
-        log.info('Démarrage de l\'action "%s"' % action)
+        log.info("Démarrage de l'action %s", action)
         try:
             action_func(config, action, arguments)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             log.exception("Une erreur inattendue s'est produite")
-        log.info('Fin de l\'action "%s"' % action)
+        log.info("Fin de l'action %s", action)
 
     log.info("Terminé")
 

@@ -89,7 +89,7 @@ class EleveLdap(PersonneLdap):
 
         if 'ENTEleveClasses' in data:
             self.classes = extraire_classes_ldap(data.ENTEleveClasses.values)
-            if len(self.classes) > 0:
+            if self.classes:
                 self.classe = self.classes[0]
 
 
@@ -194,6 +194,12 @@ class Ldap:
         return [EleveLdap(entry) for entry in self.connection.entries]
 
     def search_eleves_in_classe(self, classe, uai):
+        """
+        Recherche les élèves dans une classe.
+        :param classe:
+        :param uai:
+        :return:
+        """
         ldap_filter = '(&(ENTEleveClasses=*$%s)(ESCOUAI=%s))' % (classe, uai)
         self.connection.search(self.config.personnesDN, ldap_filter,
                                search_scope=LEVEL, attributes=
@@ -201,7 +207,8 @@ class Ldap:
                                 'ESCODomaines', 'ESCOUAICourant', '+'])
         return [EleveLdap(entry) for entry in self.connection.entries]
 
-    def search_enseignant(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) -> List[EnseignantLdap]:
+    def search_enseignant(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) \
+            -> List[EnseignantLdap]:
         """
         Recherche d'enseignants.
         :param since_timestamp: datetime.datetime
@@ -243,7 +250,8 @@ def _get_filtre_eleves(since_timestamp: datetime.datetime = None, uai: str = Non
     if uai:
         filtre += "(ESCOUAI={uai})".format(uai=uai)
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
+        filtre += "(modifyTimeStamp>={since_timestamp})" \
+            .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
     filtre = filtre + ")"
     return filtre
 
@@ -271,7 +279,8 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
     if uai:
         filtre += "(ESCOUAI={uai})".format(uai=uai)
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})".format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
+        filtre += "(modifyTimeStamp>={since_timestamp})" \
+            .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
 
     filtre = filtre + ")"
 

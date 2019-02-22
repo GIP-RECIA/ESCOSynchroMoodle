@@ -140,6 +140,14 @@ disable=print-statement,
         exception-escape,
         comprehension-escape,
         too-few-public-methods,
+        too-many-locals,
+        too-many-arguments,
+        too-many-instance-attributes,
+        too-many-public-methods,
+        too-many-branches,
+        too-many-statements,
+        invalid-name,
+        no-self-use,
         fixme
 
 # Enable the message, report, category or checker with the given id(s). You can
@@ -246,7 +254,8 @@ good-names=i,
            Run,
            _,
            s,
-           sn
+           sn,
+           db
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=no

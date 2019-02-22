@@ -1,4 +1,7 @@
 # coding: utf-8
+"""
+Configuration
+"""
 from logging import getLogger
 from typing import List, Dict
 
@@ -12,10 +15,18 @@ class _BaseConfig:
         self.update(**entries)
 
     def update(self, **entries):
+        """
+        Met à jour les données de l'objet de configuration.
+        :param entries:
+        :return:
+        """
         self.__dict__.update(entries)
 
 
 class ConstantesConfig(_BaseConfig):
+    """
+    Configuration des contstantes
+    """
     def __init__(self, **entries):
         self.default_moodle_theme = "netocentre"  # type: str
         """Thèmes par défault pour les utilisateurs inter-etabs"""
@@ -75,6 +86,9 @@ class ConstantesConfig(_BaseConfig):
 
 
 class DatabaseConfig(_BaseConfig):
+    """
+    Configuration de la base de données Moodle
+    """
     def __init__(self, **entries):
         self.database = "moodle"  # type: str
         """Nom de la base de données"""
@@ -101,6 +115,9 @@ class DatabaseConfig(_BaseConfig):
 
 
 class LdapConfig(_BaseConfig):
+    """
+    Configuration de l'annuaire LDAP.
+    """
     def __init__(self, **entries):
         self.uri = "ldap://192.168.1.100:9889"  # type: str
         """URI du serveur LDAP"""
@@ -158,6 +175,9 @@ class LdapConfig(_BaseConfig):
 
 
 class EtablissementRegroupement(_BaseConfig):
+    """
+    Configuration d'un regroupement d'établissement
+    """
     def __init__(self, **entries):
         self.nom = ""  # type: str
         """Nom du regroupement d'etablissements"""
@@ -169,6 +189,9 @@ class EtablissementRegroupement(_BaseConfig):
 
 
 class EtablissementsConfig(_BaseConfig):
+    """
+    Configuration des établissements
+    """
     def __init__(self, **entries):
         self.etabRgp = []  # type: List[EtablissementRegroupement]
         """Regroupement d'etablissements"""
@@ -204,6 +227,9 @@ class EtablissementsConfig(_BaseConfig):
 
 
 class InterEtablissementsConfig(_BaseConfig):
+    """
+    Configuration de l'inter-établissement
+    """
     def __init__(self, **entries):
         self.cohorts = {}  # type: Dict[str, str]
         """Cohortes à synchroniser"""
@@ -227,6 +253,9 @@ class InterEtablissementsConfig(_BaseConfig):
 
 
 class InspecteursConfig(_BaseConfig):
+    """
+    Configuration des inspecteurs
+    """
     def __init__(self, **entries):
         self.ldap_attribut_user = "ESCOPersonProfils"  # type: str
         """Attribut utilisé pour determiner les inspecteurs"""
@@ -241,18 +270,24 @@ class InspecteursConfig(_BaseConfig):
 
 
 class TimestampStoreConfig(_BaseConfig):
+    """
+    Configuration des timestamp de traitement précédent
+    """
     def __init__(self, **entries):
         self.file = "timestamps.txt"  # type: str
         """Fichier contenant les dates de traitement précedent pour les établissements"""
 
         self.separator = "-"  # type: str
-        """Séparateur utilisé dans le fichier de traitement pour séparer l'etablissement des date de traitement 
+        """Séparateur utilisé dans le fichier de traitement pour séparer l'etablissement des date de traitement
         précedent"""
 
         super().__init__(**entries)
 
 
 class ActionConfig(_BaseConfig):
+    """
+    Configuration d'une action
+    """
     def __init__(self, **entries):
         self.id = None
         self.type = "default"
@@ -284,7 +319,12 @@ class ActionConfig(_BaseConfig):
 
 
 class Config(_BaseConfig):
-    def __init__(self):
+    """
+    Configuration globale.
+    """
+    def __init__(self, **entries):
+        super().__init__(**entries)
+
         self.constantes = ConstantesConfig()  # type: ConstantesConfig
         self.database = DatabaseConfig()  # type: DatabaseConfig
         self.ldap = LdapConfig()  # type: LdapConfig
@@ -315,7 +355,17 @@ class Config(_BaseConfig):
 
 
 class ConfigLoader:
+    """
+    Chargement de la configuration
+    """
     def update(self, config: Config, config_fp: List[str], silent=False) -> Config:
+        """
+        Met à jour la configuration avec le chargement d'une une liste de fichier de configuration.
+        :param config:
+        :param config_fp:
+        :param silent:
+        :return:
+        """
         for config_item in config_fp:
             try:
                 with open(config_item) as fp:
@@ -330,6 +380,12 @@ class ConfigLoader:
         return config
 
     def load(self, config: List[str], silent=False) -> Config:
+        """
+        Charge une configuration à partir d'une liste de fichier de configuration.
+        :param config:
+        :param silent:
+        :return:
+        """
         loaded_config = Config()
         loaded_config = self.update(loaded_config, config, silent)
         return loaded_config

@@ -8,7 +8,7 @@ import mysql.connector
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
 
-from .config import DatabaseConfig, ConstantesConfig
+from synchromoodle.config import DatabaseConfig, ConstantesConfig
 
 ###############################################################################
 # CONSTANTS
@@ -41,9 +41,6 @@ COURSE_FORMAT_ZONE_PRIVEE = "topics"
 
 # Fullname pour la zone privee d'un etablissement
 COURSE_FULLNAME_ZONE_PRIVEE = "Zone privée"
-
-# Num. sections pour la zone privee d'un etablissement
-COURSE_NUM_SECTIONS_ZONE_PRIVEE = 7
 
 # Shortname pour la zone privee d'un etablissement
 # Le (%s) est reserve au siren de l'etablissement
@@ -111,13 +108,16 @@ def array_to_safe_sql_list(elements, name=None):
             format_strings.append('%({name}_{i})s'.format(name=name, i=i))
             params['{name}_{i}'.format(name=name, i=i)] = element
         return ','.join(format_strings), params
-    else:
-        format_strings = ['%s'] * len(elements)
-        params = tuple(elements)
-        return ','.join(format_strings), params
+    format_strings = ['%s'] * len(elements)
+    params = tuple(elements)
+    return ','.join(format_strings), params
 
 
 class Cohort:
+    """
+    Données associées à une cohorte.
+    """
+
     def __init__(self, cohortid=None, contextid=None,
                  name=None, idnumber=None,
                  description=None, descriptionformat=None,
@@ -138,6 +138,9 @@ class Cohort:
 
 
 class Database:
+    """
+    Couche d'accès à la base de données Moodle.
+    """
     config = None  # type: DatabaseConfig
     constantes = None  # type: ConstantesConfig
     connection = None  # type: MySQLConnection
@@ -161,10 +164,6 @@ class Database:
                                                   charset=self.config.charset,
                                                   port=self.config.port)
         self.mark = self.connection.cursor()
-
-    """
-    Public Methods
-    """
 
     def disconnect(self):
         """
@@ -222,8 +221,8 @@ class Database:
         :return:
         """
         s = "SELECT id FROM {entete}role_assignments" \
-            " WHERE roleid = %(role_id)s AND contextid = %(id_context)s AND userid = %(id_user)s".format(
-            entete=self.entete)
+            " WHERE roleid = %(role_id)s AND contextid = %(id_context)s AND userid = %(id_user)s" \
+            .format(entete=self.entete)
         self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
         ligne = self.mark.fetchone()
         if ligne is None:
@@ -302,6 +301,12 @@ class Database:
                                      'description': description, 'time_created': time_created})
 
     def disenroll_user_from_username_and_cohortname(self, username, cohortname):
+        """
+        Désenrole un utilisateur d'une cohorte.
+        :param username:
+        :param cohortname:
+        :return:
+        """
         self.mark.execute("DELETE {entete}cohort_members FROM {entete}cohort_members"
                           " INNER JOIN {entete}cohort"
                           " ON {entete}cohort_members.cohortid = {entete}cohort.id"
@@ -372,7 +377,6 @@ class Database:
             " VALUES (%(id_cohort)s, %(id_user)s, %(time_added)s)" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user, 'time_added': time_added})
-        cohort_name = self.get_cohort_name(id_cohort)
 
     def purge_cohort_profs(self, id_cohort, list_profs):
         """
@@ -388,7 +392,6 @@ class Database:
             .format(entete=self.entete, ids_list=ids_list)
         self.mark.execute(s, params={'id_cohort': id_cohort, **ids_list_params})
 
-
     def delete_moodle_local_admins(self, id_context_categorie, ids_not_admin):
         """
         Fonction permettant de supprimer les admins locaux
@@ -397,7 +400,7 @@ class Database:
         :param ids_not_admin:
         :return:
         """
-        if len(ids_not_admin) == 0:
+        if not ids_not_admin:
             return
         # Construction de la liste des ids admins a conserver
         ids_list, ids_list_params = array_to_safe_sql_list(ids_not_admin, 'ids_list')
@@ -473,7 +476,7 @@ class Database:
         :return:
         """
         # Suppression des enrolments dans les cours
-        for id_course, id_context in ids_contexts_by_courses.iteritems():
+        for id_course in ids_contexts_by_courses:
             # Recuperation de la methode d'enrolment
             id_enrol = self.get_id_enrol(ENROL_METHOD_MANUAL, role_id, id_course)
             if not id_enrol:
@@ -481,8 +484,8 @@ class Database:
             # Suppression de l'enrolment associe
             id_user_enrolment = self.get_id_user_enrolment(id_enrol, id_user)
             if id_user_enrolment:
-                s = "DELETE FROM {entete}user_enrolments" \
-                    " WHERE id = %(id_user_enrolment)s}" \
+                s = "DELETE FROM {entete}user_enrolments " \
+                    "WHERE id = %(id_user_enrolment)s" \
                     .format(entete=self.entete)
                 self.mark.execute(s, params={'id_user_enrolment': id_user_enrolment})
 
@@ -953,8 +956,8 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': context_level, 'instance_id': instance_id, 'depth': depth})
 
-    def insert_moodle_course(self, id_category, full_name, id_number, short_name, summary, format, visible,
-                             num_sections, start_date, time_created, time_modified):
+    def insert_moodle_course(self, id_category, full_name, id_number, short_name, summary, format_, visible,
+                             start_date, time_created, time_modified):
         """
         Fonction permettant d'inserer un cours.
         :param id_category:
@@ -962,9 +965,8 @@ class Database:
         :param id_number:
         :param short_name:
         :param summary:
-        :param format:
+        :param format_:
         :param visible:
-        :param num_sections:
         :param start_date:
         :param time_created:
         :param time_modified:
@@ -981,7 +983,7 @@ class Database:
                                      'id_number': id_number,
                                      'short_name': short_name,
                                      'summary': summary,
-                                     'format': format,
+                                     'format': format_,
                                      'visible': visible,
                                      'start_date': start_date,
                                      'time_created': time_created,
@@ -1183,12 +1185,11 @@ class Database:
         full_name = COURSE_FULLNAME_ZONE_PRIVEE
         id_number = short_name = COURSE_SHORTNAME_ZONE_PRIVEE % siren
         summary = COURSE_SUMMARY_ZONE_PRIVEE % ou.encode("utf-8")
-        format = COURSE_FORMAT_ZONE_PRIVEE
+        format_ = COURSE_FORMAT_ZONE_PRIVEE
         visible = COURSE_VISIBLE_ZONE_PRIVEE
-        num_sections = COURSE_NUM_SECTIONS_ZONE_PRIVEE
         start_date = time_created = time_modified = time
-        self.insert_moodle_course(id_categorie_etablissement, full_name, id_number, short_name, summary, format,
-                                  visible, num_sections, start_date, time_created, time_modified)
+        self.insert_moodle_course(id_categorie_etablissement, full_name, id_number, short_name, summary, format_,
+                                  visible, start_date, time_created, time_modified)
         id_zone_privee = self.get_id_course_by_id_number(id_number)
         return id_zone_privee
 
@@ -1231,6 +1232,11 @@ class Database:
             self.mark.execute(s, params={'cohort_id': cohort_id, **ids_list_params})
 
     def get_eleve_classe_cohorts(self, contextid):
+        """
+        Obtient les cohortes de classes d'élèves
+        :param contextid:
+        :return:
+        """
         like = "Élèves de la Classe %"
         self.mark.execute("SELECT id, contextid, name FROM {entete}cohort"
                           " WHERE contextid = %(contextid)s AND name LIKE %(like)s"
@@ -1242,14 +1248,19 @@ class Database:
         return [Cohort(cohortid=result[0], contextid=result[1], name=result[2]) for result in self.mark.fetchall()]
 
     def get_cohort_members(self, cohortid):
-        self.mark.execute("SELECT {entete}user.id, {entete}user.username FROM {entete}cohort_members AS cohort_members"
+        """
+        Obtient les noms d'utilisateurs membres de la cohorte.
+        :param cohortid:
+        :return:
+        """
+        self.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
                           " INNER JOIN {entete}user ON cohort_members.userid = {entete}user.id"
                           " WHERE cohortid = %(cohortid)s"
                           .format(entete=self.entete),
                           params={
                               'cohortid': cohortid
                           })
-        return self.mark.fetchall()
+        return map(lambda r: r[0], self.mark.fetchall())
 
     def update_context_path(self, id_context, new_path):
         """
