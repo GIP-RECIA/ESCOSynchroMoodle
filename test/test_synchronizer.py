@@ -354,3 +354,62 @@ class TestEtablissement:
         assert 'f1700ivl' not in results
         assert 'f1700ivv' not in results
         assert len(results) == 5
+
+    def test_anonymize_useless_users(self, ldap: Ldap, db: Database, config: Config):
+        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.initialize()
+        etab_context = synchronizer.handle_etablissement("0290009C")
+
+        ldap_eleves = ldap.search_eleve(uai="0290009C")
+        ldap_enseignants = ldap.search_enseignant(uai="0290009C")
+        for eleve in ldap_eleves:
+            synchronizer.handle_eleve(etab_context, eleve)
+        for enseignant in ldap_enseignants:
+            synchronizer.handle_enseignant(etab_context, enseignant)
+
+        ldap_users = ldap.search_personne()
+        db_valid_users = db.get_all_valid_users()
+
+        users_to_anon = []
+        for i in range(0, 3):
+            users_to_anon.append(ldap_users[i])
+
+        for user_to_anon in users_to_anon:
+            ldap_users.remove(user_to_anon)
+
+        synchronizer.anonymize_users(ldap_users, db_valid_users)
+
+        db.mark.execute("SELECT username, deleted, firstname, lastname, email, skype, yahoo, aim, msn, phone1, phone2,"
+                        " department, address, city, description, lastnamephonetic, firstnamephonetic, middlename,"
+                        " alternatename"
+                        " FROM {entete}user ORDER BY id LIMIT 3".format(entete=db.entete))
+        db_users = db.mark.fetchall()
+
+        assert db_users[0][0] == 'f1700ivg'
+        assert db_users[1][0] == 'f1700ivh'
+        assert db_users[2][0] == 'f1700ivi'
+
+        for x in range(0, 3):
+            assert db_users[x][1] == 1
+            assert db_users[x][2] == config.constantes.anonymous_name
+            assert db_users[x][3] == config.constantes.anonymous_name
+            assert db_users[x][4] == config.constantes.anonymous_mail
+            assert db_users[x][5] == config.constantes.anonymous_name
+            assert db_users[x][6] == config.constantes.anonymous_name
+            assert db_users[x][7] == config.constantes.anonymous_name
+            assert db_users[x][8] == config.constantes.anonymous_name
+            assert db_users[x][9] == config.constantes.anonymous_phone
+            assert db_users[x][10] == config.constantes.anonymous_phone
+            assert db_users[x][11] == config.constantes.anonymous_name
+            assert db_users[x][12] == config.constantes.anonymous_name
+            assert db_users[x][13] == config.constantes.anonymous_name
+            assert db_users[x][14] is None
+            assert db_users[x][15] == config.constantes.anonymous_name
+            assert db_users[x][16] == config.constantes.anonymous_name
+            assert db_users[x][17] == config.constantes.anonymous_name
+            assert db_users[x][18] == config.constantes.anonymous_name
