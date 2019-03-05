@@ -29,6 +29,15 @@ class ConstantesConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
+        self.anonymous_phone = "0606060606"
+        """Valeur assignée aux numeros de telephones des utilisateurs anonymisés"""
+
+        self.anonymous_name = "Anonyme"
+        """Valeur assignée au nom et au prénom des utilisateurs anonymisés"""
+
+        self.anonymous_mail = "anonyme@email.com"
+        """Adresse email assignée aux utilisateurs anonymisés"""
+
         self.default_moodle_theme = "netocentre"  # type: str
         """Thèmes par défault pour les utilisateurs inter-etabs"""
 
