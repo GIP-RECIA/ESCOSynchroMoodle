@@ -916,6 +916,50 @@ class Database:
             users_ids.append(user_id)
         return users_ids
 
+    def get_all_valid_users(self):
+        """
+        Retourne tous les utilisateurs de la base de données qui ne sont pas marqués comme "supprimés"
+        :return:
+        """
+        self.mark.execute("SELECT id, username FROM {entete}user WHERE deleted = 0".format(entete=self.entete))
+        return self.mark.fetchall()
+
+    def anonymize_users(self, user_ids):
+        """
+        Anonymise et marque comme "supprimé" un utilisateur dans la BDD
+        :param user_ids:
+        :return:
+        """
+
+        ids_list, ids_list_params = array_to_safe_sql_list(user_ids, 'ids_list')
+        self.mark.execute("UPDATE {entete}user"
+                          " SET deleted = 1,"
+                          " firstname = %(anonymous_name)s,"
+                          " lastname = %(anonymous_name)s,"
+                          " firstnamephonetic = %(anonymous_name)s,"
+                          " lastnamephonetic = %(anonymous_name)s,"
+                          " middlename = %(anonymous_name)s,"
+                          " alternatename = %(anonymous_name)s,"
+                          " city = %(anonymous_name)s,"
+                          " address = %(anonymous_name)s,"
+                          " department = %(anonymous_name)s,"
+                          " phone1 = %(anonymous_phone)s,"
+                          " phone2 = %(anonymous_phone)s,"
+                          " skype = %(anonymous_name)s,"
+                          " yahoo = %(anonymous_name)s,"
+                          " aim = %(anonymous_name)s,"
+                          " msn = %(anonymous_name)s,"
+                          " email = %(anonymous_mail)s,"
+                          " description = NULL"
+                          " WHERE id IN ({ids_list})"
+                          .format(entete=self.entete, ids_list=ids_list),
+                          params={
+                              'anonymous_name': self.constantes.anonymous_name,
+                              'anonymous_mail': self.constantes.anonymous_mail,
+                              'anonymous_phone': self.constantes.anonymous_phone,
+                              **ids_list_params
+                          })
+
     def insert_moodle_block(self, block_name, parent_context_id, show_in_subcontexts, page_type_pattern,
                             sub_page_pattern, default_region, default_weight):
         """

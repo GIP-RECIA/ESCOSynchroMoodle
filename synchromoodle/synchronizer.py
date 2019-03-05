@@ -701,6 +701,20 @@ class Synchronizer:
 
         return eleves_by_cohorts_db, eleves_by_cohorts_ldap
 
+    def list_contains_username(self, ldap_users: List[PersonneLdap], username: str):
+        for ldap_user in ldap_users:
+            if ldap_user.uid.lower() == username.lower():
+                return True
+        return False
+
+    def anonymize_users(self, ldap_users: List[PersonneLdap], db_users: List, log=getLogger()):
+        user_ids_to_delete = []
+        for db_user in db_users:
+            if not self.list_contains_username(ldap_users, db_user[1]):
+                log.info("Anonymisation de l'utilisateur %s" % db_user[1])
+                user_ids_to_delete.append(db_user[0])
+        self.__db.anonymize_users(user_ids_to_delete)
+
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],
                       users_by_cohorts_ldap: Dict[str, List[str]],
                       cohortname_pattern: str,
