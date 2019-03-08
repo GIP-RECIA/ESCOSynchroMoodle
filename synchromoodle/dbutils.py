@@ -177,6 +177,18 @@ class Database:
             self.connection.close()
             self.connection = None
 
+    def safe_fetchone(self):
+        """
+        Retourne uniquement 1 résultat et lève une exception si la requête invoquée récupère plusieurs resultats
+        :return:
+        """
+        rows = self.mark.fetchall()
+        count = len(rows)
+        if count > 1:
+            raise mysql.connector.DatabaseError("Résultat de requête SQL invalide: 1 résultat attendu, %d reçus"
+                                                % count)
+        return rows[0] if count == 1 else None
+
     def add_role_to_user(self, role_id, id_context, id_user):
         """
         Fonction permettant d'ajouter un role a un utilisateur
@@ -224,7 +236,7 @@ class Database:
             " WHERE roleid = %(role_id)s AND contextid = %(id_context)s AND userid = %(id_user)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -276,7 +288,7 @@ class Database:
             " ORDER BY id DESC LIMIT 1" \
             .format(entete=self.entete)
         self.mark.execute(s)
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -342,7 +354,7 @@ class Database:
             " AND name = %(cohort_name)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_context': id_context, 'cohort_name': cohort_name})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -358,7 +370,7 @@ class Database:
             "WHERE username = %(username)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'username': username.lower()})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -433,7 +445,7 @@ class Database:
             " WHERE shortname = %(short_name)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'short_name': short_name})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             raise ValueError("Le rôle %s n'existe pas." % short_name)
         return ligne[0]
@@ -513,7 +525,7 @@ class Database:
             " AND e.roleid = %(role_id)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'enrol_method': enrol_method, 'id_course': id_course, 'role_id': role_id})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -531,7 +543,7 @@ class Database:
             " AND enrolid = %(id_enrol)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_user': id_user, 'id_enrol': id_enrol})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -591,7 +603,7 @@ class Database:
             " WHERE id = %(id_cohort)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort})
-        name = self.mark.fetchone()[0]
+        name = self.safe_fetchone()[0]
         return name
 
     def get_description_course_category(self, id_category):
@@ -606,7 +618,7 @@ class Database:
             " WHERE id = %(id_category)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_category': id_category})
-        description = self.mark.fetchone()[0]
+        description = self.safe_fetchone()[0]
         return description
 
     def get_descriptions_course_categories_by_themes(self, themes):
@@ -638,7 +650,7 @@ class Database:
             " WHERE parentcontextid = %(parent_context_id)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'parent_context_id': parent_context_id})
-        id_block = self.mark.fetchone()[0]
+        id_block = self.safe_fetchone()[0]
         return id_block
 
     def get_id_categorie(self, categorie_name):
@@ -653,7 +665,7 @@ class Database:
             " WHERE name = %(categorie_name)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'categorie_name': categorie_name})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         return ligne[0]
 
     def get_id_context_no_depth(self, context_level, instance_id):
@@ -670,7 +682,7 @@ class Database:
             " AND instanceid = %(instance_id)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': context_level, 'instance_id': instance_id})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -691,7 +703,7 @@ class Database:
             " AND instanceid = %(instance_id)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': context_level, 'depth': depth, 'instance_id': instance_id})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -717,7 +729,7 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': self.constantes.niveau_ctx_categorie,
                                      'instanceid': self.constantes.id_instance_moodle})
-        id_context_moodle = self.mark.fetchone()[0]
+        id_context_moodle = self.safe_fetchone()[0]
         return id_context_moodle
 
     def get_id_course_by_id_number(self, id_number):
@@ -731,7 +743,7 @@ class Database:
             " WHERE idnumber = %(id)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id': id_number})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -748,7 +760,7 @@ class Database:
             " LIKE %(id)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id': '%' + str(id_number) + '%'})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -764,7 +776,7 @@ class Database:
             " WHERE theme = %(theme)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'theme': theme})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -780,7 +792,7 @@ class Database:
             " WHERE course = %(course)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'course': course})
-        id_course_module = self.mark.fetchone()[0]
+        id_course_module = self.safe_fetchone()[0]
         return id_course_module
 
     def get_id_forum(self, course):
@@ -795,7 +807,7 @@ class Database:
             " WHERE course = %(course)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'course': course})
-        id_forum = self.mark.fetchone()[0]
+        id_forum = self.safe_fetchone()[0]
         return id_forum
 
     def get_id_user_info_data(self, id_user, id_field):
@@ -812,7 +824,7 @@ class Database:
             " AND fieldid = %(id_field)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_user': id_user, 'id_field': id_field})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -829,7 +841,7 @@ class Database:
             " WHERE shortname = %(short_name)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'short_name': short_name})
-        ligne = self.mark.fetchone()
+        ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
@@ -1463,7 +1475,7 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(sql, params={'id_user': id_user, 'id_field_domaine': id_field_domaine})
 
-        result = self.mark.fetchone()
+        result = self.safe_fetchone()
         if result:
             sql = "REPLACE INTO {entete}user_info_data " \
                   "(id, userid, fieldid, data)" \
