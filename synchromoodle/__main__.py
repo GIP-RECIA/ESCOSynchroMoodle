@@ -23,6 +23,8 @@ def main():
 
     config = config_loader.update(config, arguments.config)
     if config.logging is not False:
+        # pylint is not that smart with union type conditional inference
+        # pylint: disable=no-member,not-a-mapping,unsupported-membership-test,unsupported-assignment-operation
         if isinstance(config.logging, dict):
             if config.logging.pop('basic', None):
                 basicConfig(**config.logging)

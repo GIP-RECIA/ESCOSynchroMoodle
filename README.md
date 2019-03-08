@@ -73,10 +73,11 @@ python3 -m synchromoodle -c config/test.yml
 # Usage
 
 ```bash
-usage: __main__.py [-h] [-c CONFIG]
+usage: __main__.py [-h] [-v] [-c CONFIG]
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
   -c CONFIG, --config CONFIG
                         Chemin vers un fichier de configuration. Lorsque cette
                         option est utilisée plusieurs fois, les fichiers de

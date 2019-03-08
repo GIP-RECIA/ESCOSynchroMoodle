@@ -339,7 +339,7 @@ class Config(_BaseConfig):
         self.database = DatabaseConfig()  # type: DatabaseConfig
         self.ldap = LdapConfig()  # type: LdapConfig
         self.actions = []  # type: List[ActionConfig]
-        self.logging = True  # type: Union[dict, bool]
+        self.logging = True  # type: Union[dict, str, bool]
 
     def update(self, **entries):
         if 'constantes' in entries:
@@ -366,7 +366,7 @@ class Config(_BaseConfig):
     def validate(self):
         """
         Valide la configuration.
-        :return: 
+        :return:
         """
         if not self.actions:
             raise ValueError("Au moins une action doit être définie dans la configuration.")
