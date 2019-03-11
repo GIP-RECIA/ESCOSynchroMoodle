@@ -382,8 +382,11 @@ class TestEtablissement:
         for user_to_anon in users_to_anon:
             ldap_users.remove(user_to_anon)
 
-        synchronizer._Synchronizer__webservice.delete_users = lambda **kwargs: None
-        synchronizer.delete_users(ldap_users, db_valid_users)
+        age = db.get_timestamp_now() - (config.delete.delay_anonymize_student * 86400) - 1
+        db_valid_users = [(db_valid_user[0], db_valid_user[1], age) for db_valid_user in db_valid_users]
+
+        synchronizer._Synchronizer__webservice.delete_users = lambda arg: None
+        synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
 
         db.mark.execute("SELECT username, deleted, firstname, lastname, email, skype, yahoo, aim, msn, phone1, phone2,"
                         " department, address, city, description, lastnamephonetic, firstnamephonetic, middlename,"

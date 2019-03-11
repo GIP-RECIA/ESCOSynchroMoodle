@@ -44,17 +44,20 @@ class DeleteConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
-        self.ids_roles_eleves = [5]
-        """Ids des roles considérés comme élèves pour la suppression"""
+        self.ids_roles_teachers = [2]
+        """Ids des roles considérés comme enseignants pour la suppression"""
 
-        self.ids_roles_autres = [9, 14, 18]
-        """Ids des roles considérés comme autres pour la suppression"""
-
-        self.delay_delete_student = 30
+        self.delay_anonymize_student = 60
         """Délai, en jours, avant de supprimer un élève qui n'est plus présent dans l'annuaire LDAP"""
 
-        self.delay_delete_teacher = 60
-        """Délai, en jours, avant de supprime un enseignant qui n'est plus présent dans l'annuaire LDAP"""
+        self.delay_delete_student = 90
+        """Délai, en jours, avant de supprimer un élève qui n'est plus présent dans l'annuaire LDAP"""
+
+        self.delay_anonymize_teacher = 90
+        """Délai, en jours, avant d'anonymiser un enseignant qui n'est plus présent dans l'annuaire LDAP"""
+
+        self.delay_delete_teacher = 365
+        """Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP"""
 
         super().__init__(**entries)
 

@@ -954,9 +954,24 @@ class Database:
                           " FROM {entete}user WHERE deleted = 0".format(entete=self.entete))
         return self.mark.fetchall()
 
+    def delete_users(self, user_ids, safe_mode=False):
+        """
+        Supprime des utilisateurs de la BDD
+        :param user_ids:
+        :param safe_mode:
+        :return:
+        """
+        ids_list, ids_list_params = array_to_safe_sql_list(user_ids, 'ids_list')
+        s = "DELETE FROM {entete}user WHERE id IN ({ids_list})".format(entete=self.entete, ids_list=ids_list)
+        if safe_mode:
+            s += " AND deleted = 1"
+        self.mark.execute(s, params={
+            **ids_list_params
+        })
+
     def anonymize_users(self, user_ids):
         """
-        Anonymise et marque comme "supprimé" un utilisateur dans la BDD
+        Anonymise des utilisateurs de la BDD
         :param user_ids:
         :return:
         """
