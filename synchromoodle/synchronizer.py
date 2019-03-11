@@ -21,6 +21,8 @@ from synchromoodle.ldaputils import StructureLdap
 #######################################
 # Nom du forum pour la zone privee
 # Le (%s) est reserve a l'organisation unit de l'etablissement
+from synchromoodle.webserviceutils import WebService
+
 FORUM_NAME_ZONE_PRIVEE = "Forum réservé au personnel éducatif de l'établissement %s"
 
 # Format d'intro. pour le forum de la zone privee
@@ -56,6 +58,7 @@ BLOCK_FORUM_SEARCH_SHOW_IN_SUB_CTX = 0
 # Sub page pattern pour le bloc de recherche sur le forum de la zone privee
 BLOCK_FORUM_SEARCH_SUB_PAGE_PATTERN = ""
 
+SECONDS_PER_DAY = 86400
 
 def est_grp_etab(uai: str, etablissements_config: EtablissementsConfig):
     """
@@ -114,6 +117,7 @@ class Synchronizer:
 
     def __init__(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig = None,
                  arguments=DEFAULT_ARGS):
+        self.__webservice = WebService(config.webservice)  # type: WebService
         self.__ldap = ldap  # type: Ldap
         self.__db = db  # type: Database
         self.__config = config  # type: Config
@@ -707,13 +711,25 @@ class Synchronizer:
                 return True
         return False
 
-    def anonymize_users(self, ldap_users: List[PersonneLdap], db_users: List, log=getLogger()):
+    def delete_users(self, ldap_users: List[PersonneLdap], db_users: List, log=getLogger()):
         user_ids_to_delete = []
+        now = self.__db.get_timestamp_now()
         for db_user in db_users:
             if not self.list_contains_username(ldap_users, db_user[1]):
-                log.info("Anonymisation de l'utilisateur %s" % db_user[1])
-                user_ids_to_delete.append(db_user[0])
-        self.__db.anonymize_users(user_ids_to_delete)
+                log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP" % db_user[1])
+                is_eleve = self.__db.user_has_role(db_user[0], self.__config.delete.ids_roles_eleves)
+                is_autre = self.__db.user_has_role(db_user[0], self.__config.delete.ids_roles_autres)
+                if is_eleve or is_autre:
+                    delay = self.__config.delete.delay_delete_student if is_eleve else \
+                        self.__config.delete.delay_delete_teacher
+                    if db_user[2] < now - (delay * SECONDS_PER_DAY):
+                        log.info("⤷ L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
+                                 " supprimé" % (db_user[1], delay))
+                        user_ids_to_delete.append(db_user[0])
+
+        if len(user_ids_to_delete) > 0:
+            self.__webservice.delete_users(user_ids_to_delete)
+            self.__db.anonymize_users(user_ids_to_delete)
 
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],
                       users_by_cohorts_ldap: Dict[str, List[str]],

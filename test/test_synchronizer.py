@@ -1,11 +1,11 @@
 # coding: utf-8
 
 import pytest
-
 from synchromoodle.config import Config, ActionConfig
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer
+from synchromoodle.webserviceutils import WebService
 from test.utils import db_utils, ldap_utils
 
 
@@ -382,7 +382,8 @@ class TestEtablissement:
         for user_to_anon in users_to_anon:
             ldap_users.remove(user_to_anon)
 
-        synchronizer.anonymize_users(ldap_users, db_valid_users)
+        synchronizer._Synchronizer__webservice.delete_users = lambda **kwargs: None
+        synchronizer.delete_users(ldap_users, db_valid_users)
 
         db.mark.execute("SELECT username, deleted, firstname, lastname, email, skype, yahoo, aim, msn, phone1, phone2,"
                         " department, address, city, description, lastnamephonetic, firstnamephonetic, middlename,"
@@ -395,7 +396,6 @@ class TestEtablissement:
         assert db_users[2][0] == 'f1700ivi'
 
         for x in range(0, 3):
-            assert db_users[x][1] == 1
             assert db_users[x][2] == config.constantes.anonymous_name
             assert db_users[x][3] == config.constantes.anonymous_name
             assert db_users[x][4] == config.constantes.anonymous_mail

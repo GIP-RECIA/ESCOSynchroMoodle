@@ -666,7 +666,7 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(s, params={'categorie_name': categorie_name})
         ligne = self.safe_fetchone()
-        return ligne[0]
+        return ligne[0] if ligne else None
 
     def get_id_context_no_depth(self, context_level, instance_id):
         """
@@ -928,12 +928,31 @@ class Database:
             users_ids.append(user_id)
         return users_ids
 
+    def user_has_role(self, userid, roles_list):
+        ids_list, ids_list_params = array_to_safe_sql_list(roles_list, 'ids_list')
+        self.mark.execute("SELECT COUNT(role.id)"
+                          " FROM {entete}role AS role"
+                          " INNER JOIN {entete}role_assignments AS role_assignments"
+                          " ON role.id = role_assignments.roleid"
+                          " WHERE role_assignments.userid = %(userid)s"
+                          " AND role.id IN ({ids_list})".format(entete=self.entete, ids_list=ids_list),
+                          params={
+                              'userid': userid,
+                              **ids_list_params
+                          })
+        count = self.mark.fetchone()[0]
+        return count > 0
+
     def get_all_valid_users(self):
         """
         Retourne tous les utilisateurs de la base de données qui ne sont pas marqués comme "supprimés"
         :return:
         """
-        self.mark.execute("SELECT id, username FROM {entete}user WHERE deleted = 0".format(entete=self.entete))
+        self.mark.execute("SELECT"
+                          " id AS id,"
+                          " username AS username,"
+                          " lastlogin AS lastlogin"
+                          " FROM {entete}user WHERE deleted = 0".format(entete=self.entete))
         return self.mark.fetchall()
 
     def anonymize_users(self, user_ids):
@@ -945,8 +964,7 @@ class Database:
 
         ids_list, ids_list_params = array_to_safe_sql_list(user_ids, 'ids_list')
         self.mark.execute("UPDATE {entete}user"
-                          " SET deleted = 1,"
-                          " firstname = %(anonymous_name)s,"
+                          " SET firstname = %(anonymous_name)s,"
                           " lastname = %(anonymous_name)s,"
                           " firstnamephonetic = %(anonymous_name)s,"
                           " lastnamephonetic = %(anonymous_name)s,"

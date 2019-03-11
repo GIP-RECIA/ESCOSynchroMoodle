@@ -23,6 +23,42 @@ class _BaseConfig:
         self.__dict__.update(entries)
 
 
+class WebServiceConfig(_BaseConfig):
+    """
+    Configuration du Webservice Moodle
+    """
+
+    def __init__(self, **entries):
+        self.token = ""
+        """Token d'accès au webservice Moodle"""
+
+        self.moodle_host = ""
+        """Host HTTP cible pour accéder au webservice Moodle"""
+
+        super().__init__(**entries)
+
+
+class DeleteConfig(_BaseConfig):
+    """
+    Configuration des valeurs pour l'anonymisation/suppression
+    """
+
+    def __init__(self, **entries):
+        self.ids_roles_eleves = [5]
+        """Ids des roles considérés comme élèves pour la suppression"""
+
+        self.ids_roles_autres = [9, 14, 18]
+        """Ids des roles considérés comme autres pour la suppression"""
+
+        self.delay_delete_student = 30
+        """Délai, en jours, avant de supprimer un élève qui n'est plus présent dans l'annuaire LDAP"""
+
+        self.delay_delete_teacher = 60
+        """Délai, en jours, avant de supprime un enseignant qui n'est plus présent dans l'annuaire LDAP"""
+
+        super().__init__(**entries)
+
+
 class ConstantesConfig(_BaseConfig):
     """
     Configuration des contstantes
@@ -344,6 +380,8 @@ class Config(_BaseConfig):
     def __init__(self, **entries):
         super().__init__(**entries)
 
+        self.delete = DeleteConfig()  # type: DeleteConfig
+        self.webservice = WebServiceConfig()  # type: WebServiceConfig
         self.constantes = ConstantesConfig()  # type: ConstantesConfig
         self.database = DatabaseConfig()  # type: DatabaseConfig
         self.ldap = LdapConfig()  # type: LdapConfig
@@ -351,6 +389,12 @@ class Config(_BaseConfig):
         self.logging = True  # type: Union[dict, str, bool]
 
     def update(self, **entries):
+        if 'delete' in entries:
+            self.delete.update(**entries['delete'])
+            entries['delete'] = self.delete
+        if 'webservice' in entries:
+            self.webservice.update(**entries['webservice'])
+            entries['webservice'] = self.webservice
         if 'constantes' in entries:
             self.constantes.update(**entries['constantes'])
             entries['constantes'] = self.constantes

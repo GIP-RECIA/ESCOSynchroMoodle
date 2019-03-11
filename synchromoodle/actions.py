@@ -219,10 +219,10 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             log.info("Suppression des cohortes vides (sans utilisateur)")
             db.delete_empty_cohorts()
 
-        log.info("Anonymisation des utilisateurs inutiles")
+        log.info("Début de la procédure d'anonymisation/suppression des utilisateurs inutiles")
         ldap_users = ldap.search_personne()
         db_valid_users = db.get_all_valid_users()
-        synchronizer.anonymize_users(ldap_users, db_valid_users)
+        synchronizer.delete_users(ldap_users, db_valid_users)
 
         log.info("Fin d'action de nettoyage")
     finally:
