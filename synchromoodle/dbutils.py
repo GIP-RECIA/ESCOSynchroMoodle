@@ -476,7 +476,6 @@ class Database:
             " AND userid = %(userid)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_context_category': id_context_category, 'roleid': roleid, 'userid': userid})
-        return self.mark.rowcount > 0
 
     def delete_role_for_contexts(self, role_id, ids_contexts_by_courses, id_user):
         """
@@ -1140,7 +1139,7 @@ class Database:
         :return:
         """
         id_role_admin_local = self.get_id_role_admin_local()
-        sql = "SELECT id FROM {entete}role_assignments" \
+        sql = "SELECT COUNT(id) FROM {entete}role_assignments" \
               " WHERE roleid = %(id_role_admin_local)s" \
               " AND contextid = %(id_context_categorie)s" \
               " AND userid = %(id_user)s" \
@@ -1148,8 +1147,8 @@ class Database:
         params = {'id_role_admin_local': id_role_admin_local, 'id_context_categorie': id_context_categorie,
                   'id_user': id_user}
         self.mark.execute(sql, params=params)
-        is_local_admin = self.mark.rowcount > 0
-        self.mark.fetchall()
+        result = self.safe_fetchone()
+        is_local_admin = result[0] > 0
         return is_local_admin
 
     def insert_moodle_local_admin(self, id_context_categorie, id_user):
@@ -1464,13 +1463,14 @@ class Database:
         :param id_role_enseignant_avance:
         :return:
         """
-        sql = "SELECT id" \
+        sql = "SELECT COUNT(id)" \
               " FROM {entete}role_assignments" \
               " WHERE userid = %(id_user)s" \
               " AND roleid = %(id_role_enseignant_avance)s" \
             .format(entete=self.entete)
         self.mark.execute(sql, params={'id_user': id_user, 'id_role_enseignant_avance': id_role_enseignant_avance})
-        return self.mark.rowcount > 0
+        result = self.safe_fetchone()
+        return result[0] > 0
 
     def set_user_domain(self, id_user, id_field_domaine, user_domain):
         """
