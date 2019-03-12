@@ -185,8 +185,8 @@ class Database:
         rows = self.mark.fetchall()
         count = len(rows)
         if count > 1:
-            raise mysql.connector.DatabaseError("Résultat de requête SQL invalide: 1 résultat attendu, %d reçus"
-                                                % count)
+            raise mysql.connector.DatabaseError("Résultat de requête SQL invalide: 1 résultat attendu, %d reçus:\n%s"
+                                                % (count, self.mark.statement))
         return rows[0] if count == 1 else None
 
     def add_role_to_user(self, role_id, id_context, id_user):
@@ -234,6 +234,7 @@ class Database:
         """
         s = "SELECT id FROM {entete}role_assignments" \
             " WHERE roleid = %(role_id)s AND contextid = %(id_context)s AND userid = %(id_user)s" \
+            " LIMIT 1" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'role_id': role_id, 'id_context': id_context, 'id_user': id_user})
         ligne = self.safe_fetchone()
