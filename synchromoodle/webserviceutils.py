@@ -1,6 +1,11 @@
-import requests
-from synchromoodle.config import WebServiceConfig, ConstantesConfig
+# coding: utf-8
+"""
+Webservice
+"""
+
 from typing import List
+import requests
+from synchromoodle.config import WebServiceConfig
 
 
 class WebService:
@@ -13,6 +18,11 @@ class WebService:
         self.url = "%s/webservice/rest/server.php" % config.moodle_host
 
     def delete_users(self, userids: List[int]):
+        """
+        Supprime des utilisateurs via le webservice moodle
+        :param userids:
+        :return:
+        """
         i = 0
         params = {
             'wstoken': self.config.token,

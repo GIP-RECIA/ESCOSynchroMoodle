@@ -706,12 +706,19 @@ class Synchronizer:
         return eleves_by_cohorts_db, eleves_by_cohorts_ldap
 
     def list_contains_username(self, ldap_users: List[PersonneLdap], username: str):
+        """
+        Vérifie si une liste d'utilisateurs ldap contient un utilisateur via son username
+        :param ldap_users:
+        :param username:
+        :return:
+        """
         for ldap_user in ldap_users:
             if ldap_user.uid.lower() == username.lower():
                 return True
         return False
 
-    def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: List, safe_mode=True, log=getLogger()):
+    def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: List, safe_mode=True,
+                                  log=getLogger()):
         """
         Anonymise ou Supprime les utilisateurs devenus inutiles
         :param ldap_users:
@@ -725,7 +732,7 @@ class Synchronizer:
         now = self.__db.get_timestamp_now()
         for db_user in db_users:
             if not self.list_contains_username(ldap_users, db_user[1]):
-                log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP" % db_user[1])
+                log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP", db_user[1])
                 is_teacher = self.__db.user_has_role(db_user[0], self.__config.delete.ids_roles_teachers)
 
                 delete_delay = self.__config.delete.delay_delete_teacher if is_teacher else \
@@ -734,17 +741,17 @@ class Synchronizer:
                     self.__config.delete.delay_anonymize_student
                 if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
                     log.info("⤷ L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
-                             " supprimé" % (db_user[1], delete_delay))
+                             " supprimé", db_user[1], delete_delay)
                     user_ids_to_delete.append(db_user[0])
                 elif db_user[2] < now - (anon_delay * SECONDS_PER_DAY):
                     log.info("⤷ L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
-                             " anonymisé" % (db_user[1], delete_delay))
+                             " anonymisé", db_user[1], delete_delay)
                     user_ids_to_anonymize.append(db_user[0])
 
-        if len(user_ids_to_delete) > 0:
+        if user_ids_to_delete:
             self.__webservice.delete_users(user_ids_to_delete)
             self.__db.delete_users(user_ids_to_delete, safe_mode=safe_mode)
-        if len(user_ids_to_anonymize) > 0:
+        if user_ids_to_anonymize:
             self.__db.anonymize_users(user_ids_to_anonymize)
 
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],

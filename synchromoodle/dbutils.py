@@ -929,6 +929,12 @@ class Database:
         return users_ids
 
     def user_has_role(self, userid, roles_list):
+        """
+        Vérifie si un utilisateur a au moins un role parmis une liste
+        :param userid:
+        :param roles_list:
+        :return:
+        """
         ids_list, ids_list_params = array_to_safe_sql_list(roles_list, 'ids_list')
         self.mark.execute("SELECT COUNT(role.id)"
                           " FROM {entete}role AS role"
