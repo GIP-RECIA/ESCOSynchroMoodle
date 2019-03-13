@@ -13,7 +13,7 @@
 ## Créer un Webservice
 - Aller dans **Home > Site Administration > Plugins > Web services > External services**
 - Ajouter un nouveau service a l'aide du bouton **_Add_** en bas de la section **Custom services**
-- Donner un nom au serve (Par exemple: **_Synchronizer Service_**) et cocher les cases **_Enabled_** et **_Authorized users only_**
+- Donner un nom au service (Par exemple: **_Synchronizer Service_**) et cocher les cases **_Enabled_** et **_Authorized users only_**
 - Sauvegarder
 - Accéder au menu d'ajout de fonctions à ce service a l'aide du bouton **_Add functions_**
 - Ajouter les fonctions:

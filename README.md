@@ -102,6 +102,9 @@ La structure de la configuration est modélisée par les classes situées dans
 | ldap                 | Informations de connexion au LDAP                                    | Dictionnaire |
 | logging              | Configuration de logging (module standard logging, voir dictConfig)  | Dictionnaire |
 | actions              | Liste des actions a exécuter avec la configuration associée          | Tableau      |
+| delete               | Informations pour la suppression de données                          | Dictionnaire |
+| webservice           | Informations de connexion au webservice moodle                       | Dictionnaire |
+
 
 #### actions
 
@@ -137,6 +140,9 @@ La structure de la configuration est modélisée par les classes situées dans
 | id_role_utilisateur_limite | Id pour le role d'utilisateur avec droits limites                        | 14                            |     Nombre entier    |
 | type_structure_cfa         | Type de structure d'un CFA                                               | "CFA"                         | Chaine de caractères |
 | type_structure_clg         | Type de structure d'un college                                           | "COLLEGE"                     | Chaine de caractères |
+| anonymous_phone            | Valeur assignée aux numeros de telephones des utilisateurs anonymisés    | "0606060606"                  | Chaine de caractères |
+| anonymous_name             | Valeur assignée aux champs divers du profil des utilisateurs anonymisés  | "Anonyme"                     | Chaine de caractères |
+| anonymous_mail             | Adresse email assignée aux utilisateurs anonymisés                       | "Anonyme"                     | Chaine de caractères |
 
 ###### database
 
@@ -162,6 +168,23 @@ La structure de la configuration est modélisée par les classes situées dans
 | personnesRDN  | OU pour les personnes       | "ou=people"                                        | Chaine de caractères |
 | groupsRDN     | OU pour les groupes         | "ou=groups"                                        | Chaine de caractères |
 | adminRDN      | OU pour les administrateurs | "ou=administrateurs"                               | Chaine de caractères |
+
+###### delete
+
+| Propriété               | Description                                                                                   | Valeur par défaut |           Type           |
+|-------------------------|-----------------------------------------------------------------------------------------------|-------------------|:------------------------:|
+| ids_roles_teachers      | Ids des roles considérés comme enseignants pour la suppression                                | [2]               | Liste de Nombres entiers |
+| delay_anonymize_student | Délai, en jours, avant de anonymiser un élève qui n'est plus présent dans l'annuaire LDAP     | 60                |      Nombres entiers     |
+| delay_delete_student    | Délai, en jours, avant de supprimer un élève qui n'est plus présent dans l'annuaire LDAP      | 90                |      Nombres entiers     |
+| delay_anonymize_teacher | Délai, en jours, avant d'anonymiser un enseignant qui n'est plus présent dans l'annuaire LDAP | 90                | Nombres entiers          |
+| delay_delete_teacher    | Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP | 365               | Nombres entiers          |
+
+###### webservice
+
+| Propriété   | Description                                       | Valeur par défaut |         Type         |
+|-------------|---------------------------------------------------|-------------------|:--------------------:|
+| token       | Token d'accès au webservice Moodle                | ""                | Chaine de caractères |
+| moodle_host | Host HTTP cible pour accéder au webservice Moodle | ""                | Chaine de caractères |
 
 ###### timestamp_store
 

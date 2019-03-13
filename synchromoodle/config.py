@@ -48,7 +48,7 @@ class DeleteConfig(_BaseConfig):
         """Ids des roles considérés comme enseignants pour la suppression"""
 
         self.delay_anonymize_student = 60
-        """Délai, en jours, avant de supprimer un élève qui n'est plus présent dans l'annuaire LDAP"""
+        """Délai, en jours, avant de anonymiser un élève qui n'est plus présent dans l'annuaire LDAP"""
 
         self.delay_delete_student = 90
         """Délai, en jours, avant de supprimer un élève qui n'est plus présent dans l'annuaire LDAP"""
@@ -72,7 +72,7 @@ class ConstantesConfig(_BaseConfig):
         """Valeur assignée aux numeros de telephones des utilisateurs anonymisés"""
 
         self.anonymous_name = "Anonyme"
-        """Valeur assignée au nom et au prénom des utilisateurs anonymisés"""
+        """Valeur assignée aux champs divers du profil des utilisateurs anonymisés"""
 
         self.anonymous_mail = "anonyme@email.com"
         """Adresse email assignée aux utilisateurs anonymisés"""
