@@ -181,10 +181,10 @@ La structure de la configuration est modélisée par les classes situées dans
 
 ###### webservice
 
-| Propriété   | Description                                       | Valeur par défaut |         Type         |
-|-------------|---------------------------------------------------|-------------------|:--------------------:|
-| token       | Token d'accès au webservice Moodle                | ""                | Chaine de caractères |
-| moodle_host | Host HTTP cible pour accéder au webservice Moodle | ""                | Chaine de caractères |
+| Propriété   | Description                                                      | Valeur par défaut |         Type         |
+|-------------|------------------------------------------------------------------|-------------------|:--------------------:|
+| token       | Token d'accès au webservice Moodle                               | ""                | Chaine de caractères |
+| moodle_host | Host HTTP cible pour accéder au webservice Moodle SANS '/' FINAL | ""                | Chaine de caractères |
 
 ###### timestamp_store
 

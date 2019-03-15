@@ -21,6 +21,17 @@
     - core_webservice_get_site_infos
 - Sauvegarder
 
+⚠Cas particulier - Environnement de Dev⚠
+
+Il est possible qu'une erreur survienne sur l'écran d'ajout de fonction. Pour la faire disparaitre, il faut
+modifier le code du fichier `/lib/externallib.php` de moodle à la ligne 87 tel que:
+```php
+if (!file_exists($function->classpath)) {
+    return;                
+    throw new coding_exception('Cannot find file with external function implementation');
+}
+```
+
 ## Créer le compte utilisateur pour utiliser le Webservice
 - Aller dans **Home > Site Administration > Users > Accounts > Browse list of users**
 - Créer un nouvel utilisateur avec les valeurs par défaut.
@@ -55,4 +66,4 @@ Vous pouvez tester le bon fonctionnement du service en accédant à:
 
 _https://votre-appli-moodle.com/webservice/rest/server.php?wstoken=**TOKEN**&moodlewsrestformat=json&wsfunction=core_webservice_get_site_info_
 
-En remplaçant **TOKEN** par le token généré
+En remplaçant **TOKEN** par le token généré.

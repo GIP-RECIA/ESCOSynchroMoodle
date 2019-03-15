@@ -1,6 +1,6 @@
 webservice:
-  token: ''
-  moodle_host: ''
+  token: '335bd52f4870d657c0312214642315d7'
+  moodle_host: 'https://moodle.synchro-moodle.test'
 logging:
   formatters:
     console:
