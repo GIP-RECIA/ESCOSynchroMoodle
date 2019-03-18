@@ -3,8 +3,8 @@
 Webservice
 """
 from typing import List
-import requests
 import json
+import requests
 from synchromoodle.config import WebServiceConfig
 
 

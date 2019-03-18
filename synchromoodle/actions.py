@@ -223,7 +223,7 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             log.info("Suppression des cohortes vides (sans utilisateur)")
             db.delete_empty_cohorts()
 
-        """Premier commit pour libérer les locks pour le webservice moodle"""
+        # Premier commit pour libérer les locks pour le webservice moodle
         db.connection.commit()
         log.info("Début de la procédure d'anonymisation/suppression des utilisateurs inutiles")
         ldap_users = ldap.search_personne()

@@ -1340,7 +1340,6 @@ class Database:
         :param cohortname_pattern:
         :return:
         """
-        like = "Élèves de la Classe %"
         self.mark.execute("SELECT id, contextid, name FROM {entete}cohort"
                           " WHERE contextid = %(contextid)s AND name LIKE %(like)s"
                           .format(entete=self.entete),

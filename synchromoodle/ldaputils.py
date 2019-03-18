@@ -27,6 +27,11 @@ def extraire_classes_ldap(classes_ldap: List[str]):
 
 
 def ldap_escape(ldapstr: str) -> str:
+    """
+    Echappe les caractères specifiques pour les filtres LDAP
+    :param ldapstr:
+    :return:
+    """
     if ldapstr is None:
         return ""
     return ldapstr\

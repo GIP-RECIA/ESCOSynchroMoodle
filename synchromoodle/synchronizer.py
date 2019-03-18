@@ -718,13 +718,11 @@ class Synchronizer:
                 return True
         return False
 
-    def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: List, safe_mode=True,
-                                  log=getLogger()):
+    def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: List, log=getLogger()):
         """
         Anonymise ou Supprime les utilisateurs devenus inutiles
         :param ldap_users:
         :param db_users:
-        :param safe_mode:
         :param log:
         :return:
         """
@@ -761,6 +759,13 @@ class Synchronizer:
             log.info("%d utilisateurs anonymisés", len(user_ids_to_anonymize))
 
     def delete_users(self, userids: List[int], pagesize=50, log=getLogger()) -> int:
+        """
+        Supprime les utilisateurs d'une liste en paginant les appels au webservice
+        :param userids:
+        :param pagesize:
+        :param log:
+        :return:
+        """
         i = 0
         total = len(userids)
         userids_page = []
