@@ -44,6 +44,9 @@ class DeleteConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
+        self.ids_users_undeletable = [1, 2]
+        """Ids des utilisateurs qui ne doivent en aucun cas être supprimés"""
+
         self.ids_roles_teachers = [2]
         """Ids des roles considérés comme enseignants pour la suppression"""
 
