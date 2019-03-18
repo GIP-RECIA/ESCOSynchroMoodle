@@ -976,6 +976,13 @@ class Database:
             **ids_list_params
         })
 
+    def delete_useless_users(self):
+        """
+        Supprime les utilisateurs de la BDD avec le champ "deleted = 1"
+        :return:
+        """
+        self.mark.execute("DELETE FROM {entete}user WHERE deleted = 1".format(entete=self.entete))
+
     def anonymize_users(self, user_ids):
         """
         Anonymise des utilisateurs de la BDD
@@ -1026,9 +1033,9 @@ class Database:
         """
         s = "INSERT INTO {entete}block_instances " \
             "( blockname, parentcontextid, showinsubcontexts, pagetypepattern, subpagepattern, defaultregion, " \
-            "defaultweight ) " \
+            "defaultweight, timecreated, timemodified ) " \
             " VALUES ( %(block_name)s, %(parent_context_id)s, %(show_in_subcontexts)s, %(page_type_pattern)s, " \
-            "%(sub_page_pattern)s, %(default_region)s, %(default_weight)s )" \
+            "%(sub_page_pattern)s, %(default_region)s, %(default_weight)s, NOW(), NOW() )" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'block_name': block_name,
                                      'parent_context_id': parent_context_id,
@@ -1326,10 +1333,11 @@ class Database:
                 .format(entete=self.entete, ids_list=ids_list)
             self.mark.execute(s, params={'cohort_id': cohort_id, **ids_list_params})
 
-    def get_eleve_classe_cohorts(self, contextid):
+    def get_user_filtered_cohorts(self, contextid, cohortname_pattern):
         """
         Obtient les cohortes de classes d'élèves
         :param contextid:
+        :param cohortname_pattern:
         :return:
         """
         like = "Élèves de la Classe %"
@@ -1338,7 +1346,7 @@ class Database:
                           .format(entete=self.entete),
                           params={
                               'contextid': contextid,
-                              'like': like
+                              'like': cohortname_pattern
                           })
         return [Cohort(cohortid=result[0], contextid=result[1], name=result[2]) for result in self.mark.fetchall()]
 

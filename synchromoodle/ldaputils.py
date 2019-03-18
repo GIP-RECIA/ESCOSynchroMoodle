@@ -26,6 +26,17 @@ def extraire_classes_ldap(classes_ldap: List[str]):
     return classes
 
 
+def ldap_escape(ldapstr: str) -> str:
+    if ldapstr is None:
+        return ""
+    return ldapstr\
+        .replace("\\", "\\5C")\
+        .replace("*", "\\2A")\
+        .replace("(", "\\28")\
+        .replace(")", "\\29")\
+        .replace("\000", "\\00")
+
+
 class StructureLdap:
     """
     Représente une structure issue du LDAP.
@@ -200,7 +211,7 @@ class Ldap:
         :param uai:
         :return:
         """
-        ldap_filter = '(&(ENTEleveClasses=*$%s)(ESCOUAI=%s))' % (classe, uai)
+        ldap_filter = '(&(ENTEleveClasses=*$%s)(ESCOUAI=%s))' % (ldap_escape(classe), ldap_escape(uai))
         self.connection.search(self.config.personnesDN, ldap_filter,
                                search_scope=LEVEL, attributes=
                                ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',

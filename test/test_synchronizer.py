@@ -5,7 +5,6 @@ from synchromoodle.config import Config, ActionConfig
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer
-from synchromoodle.webserviceutils import WebService
 from test.utils import db_utils, ldap_utils
 
 
@@ -317,7 +316,9 @@ class TestEtablissement:
         for eleve in eleves:
             synchronizer.handle_eleve(etab_context, eleve)
 
-        eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.get_users_by_cohorts_comparators(etab_context, r'(Élèves de la Classe )(.*)$')
+        eleves_by_cohorts_db, eleves_by_cohorts_ldap = \
+            synchronizer.get_users_by_cohorts_comparators(etab_context, r'(Élèves de la Classe )(.*)$',
+                                                          'Élèves de la Classe %')
 
         eleves_by_cohorts_ldap.pop('1ERE S2', None)
         eleves_by_cohorts_ldap.pop('TES3', None)

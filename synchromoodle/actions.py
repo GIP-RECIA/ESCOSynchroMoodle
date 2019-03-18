@@ -189,16 +189,20 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
 
             eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves de la Classe )(.*)$')
+                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves de la Classe )(.*)$',
+                                                 'Élèves de la Classe %')
 
             eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves du Niveau de formation )(.*)$')
+                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves du Niveau de formation )(.*)$',
+                                                 'Élèves du Niveau de formation %')
 
             profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Profs de la Classe )(.*)$')
+                get_users_by_cohorts_comparators(etablissement_context, r'(Profs de la Classe )(.*)$',
+                                                 'Profs de la Classe %')
 
             profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r"(Profs de l'établissement )(.*)$")
+                get_users_by_cohorts_comparators(etablissement_context, r"(Profs de l'établissement )(.*)$",
+                                                 "Profs de l'établissement %")
 
             log.info("Purge des cohortes Elèves de la Classe")
             synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
@@ -219,10 +223,15 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             log.info("Suppression des cohortes vides (sans utilisateur)")
             db.delete_empty_cohorts()
 
+        """Premier commit pour libérer les locks pour le webservice moodle"""
+        db.connection.commit()
         log.info("Début de la procédure d'anonymisation/suppression des utilisateurs inutiles")
         ldap_users = ldap.search_personne()
         db_valid_users = db.get_all_valid_users()
         synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
+        db.delete_useless_users()
+
+        db.connection.commit()
 
         log.info("Fin d'action de nettoyage")
     finally:

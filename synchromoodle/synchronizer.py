@@ -678,16 +678,17 @@ class Synchronizer:
                                                           log=log)
         return id_cohort_enseignants
 
-    def get_users_by_cohorts_comparators(self, etab_context: EtablissementContext, cohortname_pattern_re: str) \
-            -> (Dict[str, List[str]], Dict[str, List[str]]):
+    def get_users_by_cohorts_comparators(self, etab_context: EtablissementContext, cohortname_pattern_re: str,
+                                         cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les utilisateurs (uid) dans chacune des classes.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
         :param etab_context: EtablissementContext
         :param cohortname_pattern_re: str
+        :param cohortname_pattern: str
         :return:
         """
-        classes_cohorts = self.__db.get_eleve_classe_cohorts(etab_context.id_context_categorie)
+        classes_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
 
         eleves_by_cohorts_db = {}
         for cohort in classes_cohorts:
@@ -731,6 +732,8 @@ class Synchronizer:
         user_ids_to_anonymize = []
         now = self.__db.get_timestamp_now()
         for db_user in db_users:
+            if db_user[0] in self.__config.delete.ids_users_undeletable:
+                continue
             if not self.list_contains_username(ldap_users, db_user[1]):
                 log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP", db_user[1])
                 is_teacher = self.__db.user_has_role(db_user[0], self.__config.delete.ids_roles_teachers)
@@ -740,19 +743,38 @@ class Synchronizer:
                 anon_delay = self.__config.delete.delay_anonymize_teacher if is_teacher else \
                     self.__config.delete.delay_anonymize_student
                 if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
-                    log.info("⤷ L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
+                    log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
                              " supprimé", db_user[1], delete_delay)
                     user_ids_to_delete.append(db_user[0])
                 elif db_user[2] < now - (anon_delay * SECONDS_PER_DAY):
-                    log.info("⤷ L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
+                    log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
                              " anonymisé", db_user[1], delete_delay)
                     user_ids_to_anonymize.append(db_user[0])
 
         if user_ids_to_delete:
-            self.__webservice.delete_users(user_ids_to_delete)
-            self.__db.delete_users(user_ids_to_delete, safe_mode=safe_mode)
+            log.info("Suppression des utilisateurs en cours...")
+            self.delete_users(user_ids_to_delete, log=log)
+            log.info("%d utilisateurs supprimés", len(user_ids_to_delete))
         if user_ids_to_anonymize:
+            log.info("Anonymisation des utilisateurs en cours...")
             self.__db.anonymize_users(user_ids_to_anonymize)
+            log.info("%d utilisateurs anonymisés", len(user_ids_to_anonymize))
+
+    def delete_users(self, userids: List[int], pagesize=50, log=getLogger()) -> int:
+        i = 0
+        total = len(userids)
+        userids_page = []
+        for userid in userids:
+            userids_page.append(userid)
+            i += 1
+            if i % pagesize == 0:
+                self.__webservice.delete_users(userids_page)
+                userids_page = []
+                log.info("%d / %d utilisateurs supprimés", i, total)
+        if i % pagesize > 0:
+            self.__webservice.delete_users(userids_page)
+            log.info("%d / %d utilisateurs supprimés", i, total)
+        return i
 
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],
                       users_by_cohorts_ldap: Dict[str, List[str]],
@@ -829,7 +851,6 @@ class Synchronizer:
         :param ou:
         :param siren:
         :param uai:
-        :param log:
         :return:
         """
         # Recuperation du timestamp

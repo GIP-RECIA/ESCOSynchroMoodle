@@ -2,9 +2,9 @@
 """
 Webservice
 """
-
 from typing import List
 import requests
+import json
 from synchromoodle.config import WebServiceConfig
 
 
@@ -24,15 +24,19 @@ class WebService:
         :return:
         """
         i = 0
-        params = {
-            'wstoken': self.config.token,
-            'moodlewsrestformat': "json",
-            'wsfunction': "core_user_delete_users"
-        }
+        users_to_delete = {}
         for userid in userids:
-            params["userids[%d]" % i] = userid
+            users_to_delete["userids[%d]" % i] = userid
             i += 1
-        return requests.get(
-            url=self.url,
-            params=params
-        )
+        res = requests.get(url=self.url,
+                           params={
+                               'wstoken': self.config.token,
+                               'moodlewsrestformat': "json",
+                               'wsfunction': "core_user_delete_users",
+                               **users_to_delete
+                           })
+        json_data = json.loads(res.text)
+
+        if json_data is not None and 'exception' in json_data:
+            raise Exception(json_data['message'])
+        return json_data
