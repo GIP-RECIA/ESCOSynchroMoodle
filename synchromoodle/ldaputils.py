@@ -264,7 +264,7 @@ def _get_filtre_eleves(since_timestamp: datetime.datetime = None, uai: str = Non
     """
     filtre = "(&(objectClass=ENTEleve)"
     if uai:
-        filtre += "(ESCOUAI={uai})".format(uai=uai)
+        filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))
     if since_timestamp:
         filtre += "(modifyTimeStamp>={since_timestamp})" \
             .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
@@ -293,7 +293,7 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
     filtre += "(!(uid=ADM00000))"
 
     if uai:
-        filtre += "(ESCOUAI={uai})".format(uai=uai)
+        filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))
     if since_timestamp:
         filtre += "(modifyTimeStamp>={since_timestamp})" \
             .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
@@ -320,7 +320,7 @@ def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: 
             if not isinstance(v, Iterable) or isinstance(v, str):
                 v = [v]
             for item in v:
-                attribute_filtre = "(%s=%s)" % (k, item)
+                attribute_filtre = "(%s=%s)" % (ldap_escape(k), ldap_escape(item))
                 filtre = filtre + attribute_filtre
         filtre = filtre + ")"
     if since_timestamp:
@@ -336,7 +336,7 @@ def _get_filtre_etablissement(uai=None):
              "(!(ENTStructureSiren=0000000000000A))"
 
     if uai:
-        filtre += "(ENTStructureUAI={uai})".format(uai=uai)
+        filtre += "(ENTStructureUAI={uai})".format(uai=ldap_escape(uai))
 
     filtre += ")"
 
