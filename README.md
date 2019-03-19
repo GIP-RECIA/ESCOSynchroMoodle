@@ -36,7 +36,7 @@ pipenv run python -m synchromoodle -c config/test.yml
 ## Construire les binaires à partir des sources
 
 ```bash
-pipenv run python setup.py clean build bdist bdist_wheel bdist_pex
+pipenv run python setup.py clean build bdist bdist_wheel bdist_pex --pex-args="--disable-cache"
 ```
 
 # Déploiement et exécution
