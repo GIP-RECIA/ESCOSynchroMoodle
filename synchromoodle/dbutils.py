@@ -1035,7 +1035,8 @@ class Database:
             "( blockname, parentcontextid, showinsubcontexts, pagetypepattern, subpagepattern, defaultregion, " \
             "defaultweight, timecreated, timemodified ) " \
             " VALUES ( %(block_name)s, %(parent_context_id)s, %(show_in_subcontexts)s, %(page_type_pattern)s, " \
-            "%(sub_page_pattern)s, %(default_region)s, %(default_weight)s, NOW(), NOW() )" \
+            "%(sub_page_pattern)s, %(default_region)s, %(default_weight)s, UNIX_TIMESTAMP( now( ) ) - 3600*2," \
+            "UNIX_TIMESTAMP( now( ) ) - 3600*2 )" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'block_name': block_name,
                                      'parent_context_id': parent_context_id,
