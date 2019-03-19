@@ -10,7 +10,8 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 install_requires = ['mysql-connector-python',
                     'ldap3',
-                    'ruamel.yaml']
+                    'ruamel.yaml',
+                    'requests']
 
 setup_requires = ['pytest-runner']
 
