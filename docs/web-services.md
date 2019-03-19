@@ -67,3 +67,5 @@ Vous pouvez tester le bon fonctionnement du service en accédant à:
 _https://votre-appli-moodle.com/webservice/rest/server.php?wstoken=**TOKEN**&moodlewsrestformat=json&wsfunction=core_webservice_get_site_info_
 
 En remplaçant **TOKEN** par le token généré.
+
+Ne pas oublier d'ajouter l'ID de l'utilisateur créé à la liste des IDs des utilisateurs à ne pas supprimer dans la configuration.
