@@ -1291,6 +1291,9 @@ class Database:
         format_ = COURSE_FORMAT_ZONE_PRIVEE
         visible = COURSE_VISIBLE_ZONE_PRIVEE
         start_date = time_created = time_modified = time
+        id_zone_privee = self.get_id_course_by_id_number(id_number)
+        if id_zone_privee is not None:
+            return id_zone_privee
         self.insert_moodle_course(id_categorie_etablissement, full_name, id_number, short_name, summary, format_,
                                   visible, start_date, time_created, time_modified)
         id_zone_privee = self.get_id_course_by_id_number(id_number)

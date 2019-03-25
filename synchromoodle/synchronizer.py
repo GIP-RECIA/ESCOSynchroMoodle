@@ -924,8 +924,10 @@ class Synchronizer:
         max_attachements = FORUM_MAX_ATTACHEMENTS_ZONE_PRIVEE
         time_modified = now
 
-        self.__db.insert_moodle_forum(course, name, intro, intro_format, max_bytes, max_attachements, time_modified)
         id_forum = self.__db.get_id_forum(course)
+        if id_forum is None:
+            self.__db.insert_moodle_forum(course, name, intro, intro_format, max_bytes, max_attachements, time_modified)
+            id_forum = self.__db.get_id_forum(course)
 
         #########################
         # PARTIE MODULE
@@ -935,17 +937,22 @@ class Synchronizer:
         module = COURSE_MODULES_MODULE
         instance = id_forum
         added = now
-
-        self.__db.insert_moodle_course_module(course, module, instance, added)
         id_course_module = self.__db.get_id_course_module(course)
+        if id_course_module is None:
+            self.__db.insert_moodle_course_module(course, module, instance, added)
+            id_course_module = self.__db.get_id_course_module(course)
 
         # Insertion du contexte pour le module de cours (forum)
-        self.__db.insert_moodle_context(self.__config.constantes.niveau_ctx_forum,
-                                        PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
-                                        id_course_module)
         id_contexte_module = self.__db.get_id_context(self.__config.constantes.niveau_ctx_forum,
                                                       PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
                                                       id_course_module)
+        if id_contexte_module is None:
+            self.__db.insert_moodle_context(self.__config.constantes.niveau_ctx_forum,
+                                            PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
+                                            id_course_module)
+            id_contexte_module = self.__db.get_id_context(self.__config.constantes.niveau_ctx_forum,
+                                                          PROFONDEUR_CTX_MODULE_ZONE_PRIVEE,
+                                                          id_course_module)
 
         # Mise a jour du path du contexte
         path_contexte_module = "%s/%d" % (path_contexte_zone_privee, id_contexte_module)
@@ -963,17 +970,23 @@ class Synchronizer:
         default_region = BLOCK_FORUM_SEARCH_DEFAULT_REGION
         default_weight = BLOCK_FORUM_SEARCH_DEFAULT_WEIGHT
 
-        self.__db.insert_moodle_block(block_name, parent_context_id, show_in_subcontexts, page_type_pattern,
-                                      sub_page_pattern, default_region, default_weight)
         id_block = self.__db.get_id_block(parent_context_id)
+        if id_block is None:
+            self.__db.insert_moodle_block(block_name, parent_context_id, show_in_subcontexts, page_type_pattern,
+                                          sub_page_pattern, default_region, default_weight)
+            id_block = self.__db.get_id_block(parent_context_id)
 
         # Insertion du contexte pour le bloc
-        self.__db.insert_moodle_context(self.__config.constantes.niveau_ctx_bloc,
-                                        PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
-                                        id_block)
         id_contexte_bloc = self.__db.get_id_context(self.__config.constantes.niveau_ctx_bloc,
                                                     PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
                                                     id_block)
+        if id_contexte_bloc is None:
+            self.__db.insert_moodle_context(self.__config.constantes.niveau_ctx_bloc,
+                                            PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
+                                            id_block)
+            id_contexte_bloc = self.__db.get_id_context(self.__config.constantes.niveau_ctx_bloc,
+                                                        PROFONDEUR_CTX_BLOCK_ZONE_PRIVEE,
+                                                        id_block)
 
         # Mise a jour du path du contexte
         path_contexte_bloc = "%s/%d" % (path_contexte_zone_privee, id_contexte_bloc)
