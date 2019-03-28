@@ -603,8 +603,10 @@ class Database:
             " WHERE id = %(id_cohort)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_cohort': id_cohort})
-        name = self.safe_fetchone()[0]
-        return name
+        ligne = self.safe_fetchone()
+        if ligne is None:
+            return None
+        return ligne[0]
 
     def get_description_course_category(self, id_category):
         """
@@ -618,8 +620,10 @@ class Database:
             " WHERE id = %(id_category)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'id_category': id_category})
-        description = self.safe_fetchone()[0]
-        return description
+        ligne = self.safe_fetchone()
+        if ligne is None:
+            return None
+        return ligne[0]
 
     def get_descriptions_course_categories_by_themes(self, themes):
         """
@@ -650,8 +654,10 @@ class Database:
             " WHERE parentcontextid = %(parent_context_id)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'parent_context_id': parent_context_id})
-        id_block = self.safe_fetchone()[0]
-        return id_block
+        ligne = self.safe_fetchone()
+        if ligne is None:
+            return None
+        return ligne[0]
 
     def get_id_categorie(self, categorie_name):
         """
@@ -729,8 +735,10 @@ class Database:
             .format(entete=self.entete)
         self.mark.execute(s, params={'context_level': self.constantes.niveau_ctx_categorie,
                                      'instanceid': self.constantes.id_instance_moodle})
-        id_context_moodle = self.safe_fetchone()[0]
-        return id_context_moodle
+        ligne = self.safe_fetchone()
+        if ligne is None:
+            return None
+        return ligne[0]
 
     def get_id_course_by_id_number(self, id_number):
         """
@@ -792,8 +800,10 @@ class Database:
             " WHERE course = %(course)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'course': course})
-        id_course_module = self.safe_fetchone()[0]
-        return id_course_module
+        ligne = self.safe_fetchone()
+        if ligne is None:
+            return None
+        return ligne[0]
 
     def get_id_forum(self, course):
         """
@@ -807,8 +817,10 @@ class Database:
             " WHERE course = %(course)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'course': course})
-        id_forum = self.safe_fetchone()[0]
-        return id_forum
+        ligne = self.safe_fetchone()
+        if ligne is None:
+            return None
+        return ligne[0]
 
     def get_id_user_info_data(self, id_user, id_field):
         """
