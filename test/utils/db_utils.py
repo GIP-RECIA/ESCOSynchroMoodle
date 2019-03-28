@@ -22,7 +22,7 @@ def reset(db: Database):
 @cached(__statements_cache)
 def _get_statements(path: str):
     script_data = str(get_data('test', path), 'utf8')
-    cleaned_script_data = re.sub('/\*.+?\*/;\n', "", script_data, flags=re.MULTILINE)
+    cleaned_script_data = re.sub(r'/\*.+?\*/;\n', "", script_data, flags=re.MULTILINE)
     statements = sqlparse.split(cleaned_script_data)
     return statements
 
