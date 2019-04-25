@@ -248,13 +248,13 @@ class Synchronizer:
         if not eleve_id:
             log.info("Ajout de l'utilisateur: %s", eleve_ldap)
             self.__db.insert_moodle_user(eleve_ldap.uid, eleve_ldap.given_name,
-                                         eleve_ldap.given_name, eleve_ldap.mail,
+                                         eleve_ldap.sn, eleve_ldap.mail,
                                          mail_display, etablissement_context.etablissement_theme)
             eleve_id = self.__db.get_user_id(eleve_ldap.uid)
         else:
             log.info("Mise à jour de l'utilisateur: %s", eleve_ldap)
             self.__db.update_moodle_user(eleve_id, eleve_ldap.given_name,
-                                         eleve_ldap.given_name, eleve_ldap.mail, mail_display,
+                                         eleve_ldap.sn, eleve_ldap.mail, mail_display,
                                          etablissement_context.etablissement_theme)
 
         # Ajout ou suppression du role d'utilisateur avec droits limités Pour les eleves de college
