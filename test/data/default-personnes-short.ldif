@@ -7,8 +7,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: COLIN CORENTIN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -52,8 +51,7 @@ ENTPersonNomPatro: COLIN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 062900$SCIENCES DE LA VIE ET DE LA TERRE
@@ -77,8 +75,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Corentin
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -95,8 +92,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MEYER DORIAN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -138,8 +134,7 @@ ENTPersonNomPatro: MEYER
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
 ESCOEleveCodeEnseignements: 030201$ANGLAIS LV1
@@ -163,8 +158,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Dorian
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -180,8 +174,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: AUBERT RACHEL
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -225,8 +218,7 @@ ENTPersonNomPatro: AUBERT
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
 ESCOEleveCodeEnseignements: 062900$SCIENCES DE LA VIE ET DE LA TERRE
@@ -250,8 +242,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Rachel
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -268,8 +259,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: NGUYEN MALO
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -313,8 +303,7 @@ ENTPersonNomPatro: NGUYEN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
 ESCOEleveCodeEnseignements: 031103$PORTUGAIS LV3
@@ -339,8 +328,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Malo
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -356,8 +344,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LEGRAND BENJAMIN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -399,8 +386,7 @@ ENTPersonNomPatro: LEGRAND
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 050700$SCIENCES ECONOMIQUES ET SOCIALES
@@ -425,8 +411,7 @@ givenName: Benjamin
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: benjamin.legrand3@netocentre.fr
@@ -441,8 +426,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LECLERCQ ALBANE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -486,8 +470,7 @@ ENTPersonNomPatro: LECLERCQ
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
@@ -511,8 +494,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Albane
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -529,8 +511,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LACROIX RYAN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -574,8 +555,7 @@ ENTPersonNomPatro: LACROIX
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
@@ -600,8 +580,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Ryan
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -617,8 +596,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: GIRAUD ILAN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -660,8 +638,7 @@ ENTPersonNomPatro: GIRAUD
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
@@ -686,8 +663,7 @@ givenName: Ilan
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: ilan.giraud@netocentre.fr
@@ -702,8 +678,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LEMAIRE CORENTIN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -747,8 +722,7 @@ ENTPersonNomPatro: LEMAIRE
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -772,8 +746,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Corentin
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -790,8 +763,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: CHARLES LILOU
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -833,8 +805,7 @@ ENTPersonNomPatro: CHARLES
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
@@ -858,8 +829,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Lilou
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -875,8 +845,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DESCHAMPS ELYA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -922,8 +891,7 @@ ENTPersonNomPatro: DESCHAMPS
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
@@ -948,8 +916,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Elya
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -966,8 +933,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LEFEBVRE SOREN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -1009,8 +975,7 @@ ENTPersonNomPatro: LEFEBVRE
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
@@ -1035,8 +1000,7 @@ givenName: Soren
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: soren.lefebvre@netocentre.fr
@@ -1051,8 +1015,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DUPUIS LAURINE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -1098,8 +1061,7 @@ ENTPersonNomPatro: DUPUIS
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
@@ -1125,8 +1087,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Laurine
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -1142,8 +1103,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: BONNET NAOMI
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -1187,8 +1147,7 @@ ENTPersonNomPatro: BONNET
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 062900$SCIENCES DE LA VIE ET DE LA TERRE
@@ -1212,8 +1171,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Naomi
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -1230,8 +1188,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: RIVIERE MANON
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -1273,8 +1230,7 @@ ENTPersonNomPatro: RIVIERE
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -1298,8 +1254,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Manon
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -1315,8 +1270,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MULLER OWEN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -1360,8 +1314,7 @@ ENTPersonNomPatro: MULLER
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
@@ -1385,8 +1338,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Owen
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -1403,8 +1355,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DA SILVA DAMIEN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -1446,8 +1397,7 @@ ENTPersonNomPatro: DA SILVA
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
@@ -1472,8 +1422,7 @@ givenName: Damien
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: damien.da-silva2@netocentre.fr
@@ -1488,8 +1437,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DUPONT SOPHIA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -1531,8 +1479,7 @@ ENTPersonNomPatro: DUPONT
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 050700$SCIENCES ECONOMIQUES ET SOCIALES
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
@@ -1556,8 +1503,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Sophia
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -1573,8 +1519,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: NOEL VICTOIRE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ES EUROPEENNE
 ENTEleveMajeur: O
@@ -1620,8 +1565,7 @@ ENTPersonNomPatro: NOEL
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
@@ -1647,8 +1591,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Victoire
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -1664,8 +1607,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LEMOINE JULES
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -1709,8 +1651,7 @@ ENTPersonNomPatro: LEMOINE
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
@@ -1735,8 +1676,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Jules
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -1752,8 +1692,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: PEREZ CLEA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -1799,8 +1738,7 @@ ENTPersonNomPatro: PEREZ
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
@@ -1825,8 +1763,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName:: Q2zDqWE=
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -1843,8 +1780,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: PERRIN HELOISE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -1890,8 +1826,7 @@ ENTPersonNomPatro: PERRIN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
 ESCOEleveCodeEnseignements: 052200$ECONOMIE APPROFONDIE
@@ -1917,8 +1852,7 @@ ESCOUAIRattachement: 0290009C
 givenName:: SMOpbG/Dr3Nl
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -1934,8 +1868,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: GERARD NAEL
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SVT EUROPEENNE
 ENTEleveMajeur: N
@@ -1981,8 +1914,7 @@ ENTPersonNomPatro: GERARD
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030201$ANGLAIS LV1
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
@@ -2007,8 +1939,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName:: TmHDq2w=
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -2025,8 +1956,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: FRANCOIS NINA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE L EUROPEENNE/ORIENTALE
 ENTEleveMajeur: O
@@ -2072,8 +2002,7 @@ ENTPersonNomPatro: FRANCOIS
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
@@ -2099,8 +2028,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Nina
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -2116,8 +2044,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MEYER CELIAN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -2161,8 +2088,7 @@ ENTPersonNomPatro: MEYER
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -2187,8 +2113,7 @@ ESCOUAIRattachement: 0290009C
 givenName:: Q8OpbGlhbg==
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -2204,8 +2129,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: SIMON TITOUAN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -2249,8 +2173,7 @@ ENTPersonNomPatro: SIMON
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
 ESCOEleveCodeEnseignements: 030201$ANGLAIS LV1
@@ -2275,8 +2198,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Titouan
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -2292,8 +2214,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: GAUTHIER FANNY
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE LITTERAIRE
 ENTEleveMajeur: O
@@ -2337,8 +2258,7 @@ ENTPersonNomPatro: GAUTHIER
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030208$LITTERATURE EN ANGLAIS
 ESCOEleveCodeEnseignements: 030201$ANGLAIS LV1
@@ -2363,8 +2283,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Fanny
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -2380,8 +2299,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: NOEL INAYA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: N
@@ -2425,8 +2343,7 @@ ENTPersonNomPatro: NOEL
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030201$ANGLAIS LV1
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
@@ -2450,8 +2367,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Inaya
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -2468,8 +2384,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: AUBERT ALEX
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ES EUROPEENNE
 ENTEleveMajeur: O
@@ -2515,8 +2430,7 @@ ENTPersonNomPatro: AUBERT
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030209$ANGLAIS LANGUE DE SECTION
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -2542,8 +2456,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Alex
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -2559,8 +2472,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: COLIN CLARA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -2602,8 +2514,7 @@ ENTPersonNomPatro: COLIN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
@@ -2627,8 +2538,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Clara
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -2644,8 +2554,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: FLEURY FLORA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -2687,8 +2596,7 @@ ENTPersonNomPatro: FLEURY
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -2712,8 +2620,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Flora
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -2729,8 +2636,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MOREAU THOMAS
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -2774,8 +2680,7 @@ ENTPersonNomPatro: MOREAU
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 052100$SCIENCES SOCIALES ET POLITIQUES
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
@@ -2801,8 +2706,7 @@ givenName: Thomas
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: thomas.moreau1@netocentre.fr
@@ -2817,8 +2721,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: FLEURY MAELIA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -2864,8 +2767,7 @@ ENTPersonNomPatro: FLEURY
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
 ESCOEleveCodeEnseignements: 062300$PHYSIQUE-CHIMIE
@@ -2890,8 +2792,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName:: TWHDq2xpYQ==
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -2908,8 +2809,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DUMONT CLEMENCE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -2955,8 +2855,7 @@ ENTPersonNomPatro: DUMONT
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -2981,8 +2880,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName:: Q2zDqW1lbmNl
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -2999,8 +2897,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: SCHMITT JADE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -3046,8 +2943,7 @@ ENTPersonNomPatro: SCHMITT
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
 ESCOEleveCodeEnseignements: 062900$SCIENCES DE LA VIE ET DE LA TERRE
@@ -3072,8 +2968,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Jade
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -3090,8 +2985,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: JEAN SOHAN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ES EUROPEENNE
 ENTEleveMajeur: O
@@ -3137,8 +3031,7 @@ ENTPersonNomPatro: JEAN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 052100$SCIENCES SOCIALES ET POLITIQUES
@@ -3165,8 +3058,7 @@ givenName: Sohan
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: sohan.jean@netocentre.fr
@@ -3181,8 +3073,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LOUIS MATTHIEU
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -3228,8 +3119,7 @@ ENTPersonNomPatro: LOUIS
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
@@ -3254,8 +3144,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Matthieu
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -3272,8 +3161,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MATHIEU ALICE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -3315,8 +3203,7 @@ ENTPersonNomPatro: MATHIEU
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030201$ANGLAIS LV1
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
@@ -3340,8 +3227,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Alice
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -3357,8 +3243,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LEMAIRE MORGANE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE LITTERAIRE
 ENTEleveMajeur: O
@@ -3404,8 +3289,7 @@ ENTPersonNomPatro: LEMAIRE
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
@@ -3431,8 +3315,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Morgane
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -3448,8 +3331,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: PIERRE TRISTAN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$1ERE ES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$1ERE ES1
 ENTEleveFiliere: 1ERE GENERALE
 ENTEleveLibelleMEF: PREMIERE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -3497,8 +3379,7 @@ ENTPersonNomPatro: PIERRE
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
@@ -3524,8 +3405,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Tristan
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TE
- CHNO YC BT:Eleves_1ERE ES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TECHNO YC BT:Eleves_1ERE ES1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -3542,8 +3422,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: GUILLOT LUCIE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -3589,8 +3468,7 @@ ENTPersonNomPatro: GUILLOT
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
@@ -3615,8 +3493,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Lucie
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -3633,8 +3510,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: PICARD SOLENE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ES EUROPEENNE
 ENTEleveMajeur: O
@@ -3678,8 +3554,7 @@ ENTPersonNomPatro: PICARD
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
@@ -3705,8 +3580,7 @@ givenName:: U29sw6huZQ==
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: solene.picard@netocentre.fr
@@ -3721,8 +3595,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: NGUYEN NILS
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SVT EUROPEENNE
 ENTEleveMajeur: N
@@ -3768,8 +3641,7 @@ ENTPersonNomPatro: NGUYEN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
@@ -3794,8 +3666,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Nils
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -3812,8 +3683,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: FONTAI CHARLINE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE LITTERAIRE
 ENTEleveMajeur: O
@@ -3857,8 +3727,7 @@ ENTPersonNomPatro: FONTAI
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
@@ -3883,8 +3752,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Charline
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -3900,8 +3768,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: VIDAL PAULINE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: N
@@ -3943,8 +3810,7 @@ ENTPersonNomPatro: VIDAL
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
@@ -3968,8 +3834,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Pauline
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -3985,8 +3850,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MOREAU MARTIN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -4030,8 +3894,7 @@ ENTPersonNomPatro: MOREAU
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
@@ -4055,8 +3918,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Martin
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -4073,8 +3935,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DAVID LISE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE LITTERAIRE
 ENTEleveMajeur: O
@@ -4118,8 +3979,7 @@ ENTPersonNomPatro: DAVID
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
@@ -4144,8 +4004,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Lise
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -4161,8 +4020,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: ROUSSEL LINO
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -4204,8 +4062,7 @@ ENTPersonNomPatro: ROUSSEL
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
@@ -4229,8 +4086,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Lino
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -4246,8 +4102,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: GIRAUD THAIS
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -4291,8 +4146,7 @@ ENTPersonNomPatro: GIRAUD
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 062900$SCIENCES DE LA VIE ET DE LA TERRE
@@ -4316,8 +4170,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName:: VGhhw69z
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -4334,8 +4187,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DUVAL REMI
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SVT EUROPEENNE
 ENTEleveMajeur: O
@@ -4381,8 +4233,7 @@ ENTPersonNomPatro: DUVAL
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 062900$SCIENCES DE LA VIE ET DE LA TERRE
@@ -4407,8 +4258,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName:: UsOpbWk=
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -4425,8 +4275,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: HENRY CANDICE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -4470,8 +4319,7 @@ ENTPersonNomPatro: HENRY
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
@@ -4496,8 +4344,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Candice
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -4513,8 +4360,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: ARNAUD ADAM
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -4560,8 +4406,7 @@ ENTPersonNomPatro: ARNAUD
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
@@ -4586,8 +4431,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Adam
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -4604,8 +4448,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: RENAUD LENNY
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -4651,8 +4494,7 @@ ENTPersonNomPatro: RENAUD
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
@@ -4677,8 +4519,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Lenny
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -4695,8 +4536,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MOULIN LEONARD
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -4740,8 +4580,7 @@ ENTPersonNomPatro: MOULIN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
@@ -4766,8 +4605,7 @@ ESCOUAIRattachement: 0290009C
 givenName:: TMOpb25hcmQ=
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -4783,8 +4621,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DUMAS FANNY
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ES BILINGUE
 ENTEleveMajeur: O
@@ -4830,8 +4667,7 @@ ENTPersonNomPatro: DUMAS
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
@@ -4858,8 +4694,7 @@ givenName: Fanny
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: fanny.dumas@netocentre.fr
@@ -4874,8 +4709,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: GUILLAUME NINA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE L EUROPEENNE/ORIENTALE
 ENTEleveMajeur: O
@@ -4923,8 +4757,7 @@ ENTPersonNomPatro: GUILLAUME
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
@@ -4951,8 +4784,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Nina
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -4968,8 +4800,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: BLANC MAELYS
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SVT EUROPEENNE
 ENTEleveMajeur: O
@@ -5017,8 +4848,7 @@ ENTPersonNomPatro: BLANC
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -5044,8 +4874,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName:: TWHDq2x5cw==
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -5062,8 +4891,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: VIDAL MELINE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -5107,8 +4935,7 @@ ENTPersonNomPatro: VIDAL
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030201$ANGLAIS LV1
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
@@ -5132,8 +4959,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName:: TcOpbGluZQ==
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -5150,8 +4976,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: LECLERC MAYA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SVT EUROPEENNE
 ENTEleveMajeur: O
@@ -5197,8 +5022,7 @@ ENTPersonNomPatro: LECLERC
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
@@ -5223,8 +5047,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Maya
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -5241,8 +5064,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MATHIEU JUSTINE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SVT EUROPEENNE
 ENTEleveMajeur: O
@@ -5288,8 +5110,7 @@ ENTPersonNomPatro: MATHIEU
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -5314,8 +5135,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Justine
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -5332,8 +5152,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DENIS ELISE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -5379,8 +5198,7 @@ ENTPersonNomPatro: DENIS
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 031103$PORTUGAIS LV3
@@ -5405,8 +5223,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Elise
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -5423,8 +5240,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MEYER SOAN
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$1ERE S2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$1ERE S2
 ENTEleveFiliere: 1ERE GENERALE
 ENTEleveLibelleMEF: PREMIERE SCIENTIFIQUE SVT
 ENTEleveMajeur: N
@@ -5470,8 +5286,7 @@ ENTPersonNomPatro: MEYER
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 002300$TRAVAUX PERSONNELS ENCADRES
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
@@ -5497,8 +5312,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Soan
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TE
- CHNO YC BT:Eleves_1ERE S2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TECHNO YC BT:Eleves_1ERE S2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -5514,8 +5328,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: NOEL LOUANE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS2
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS2
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SVT EUROPEENNE
 ENTEleveMajeur: O
@@ -5561,8 +5374,7 @@ ENTPersonNomPatro: NOEL
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 062300$PHYSIQUE-CHIMIE
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
@@ -5587,8 +5399,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Louane
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -5605,8 +5416,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: BRUN LEA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE L EUROPEENNE/ORIENTALE
 ENTEleveMajeur: O
@@ -5654,8 +5464,7 @@ ENTPersonNomPatro: BRUN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 030204$ANGLAIS APPROFONDI
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
@@ -5682,8 +5491,7 @@ ESCOUAIRattachement: 0290009C
 givenName:: TMOpYQ==
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -5699,8 +5507,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: PETIT ELEA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE LITTERAIRE
 ENTEleveMajeur: O
@@ -5744,8 +5551,7 @@ ENTPersonNomPatro: PETIT
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 023300$LITTERATURE
 ESCOEleveCodeEnseignements: 030602$ESPAGNOL LV2
@@ -5770,8 +5576,7 @@ ESCOUAIRattachement: 0290009C
 givenName:: RWzDqWE=
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -5787,8 +5592,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: MARCHAND ENOLA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE LITTERAIRE
 ENTEleveMajeur: O
@@ -5832,8 +5636,7 @@ ENTPersonNomPatro: MARCHAND
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
@@ -5858,8 +5661,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Enola
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -5875,8 +5677,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: CHARLES MELISSA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE LITTERAIRE
 ENTEleveMajeur: O
@@ -5922,8 +5723,7 @@ ENTPersonNomPatro: CHARLES
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 006600$ACCOMPAGNEMENT PERSONNALISE
@@ -5949,8 +5749,7 @@ ESCOUAIRattachement: 0290009C
 givenName:: TcOpbGlzc2E=
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -5966,8 +5765,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: FABRE LIVIA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TS3
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TS3
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE SCIENTIFIQUE SVT
 ENTEleveMajeur: O
@@ -6013,8 +5811,7 @@ ENTPersonNomPatro: FABRE
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
@@ -6039,8 +5836,7 @@ ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Livia
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TS3
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TS3
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
@@ -6057,8 +5853,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: BRUN NORA
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE L EUROPEENNE/ORIENTALE
 ENTEleveMajeur: O
@@ -6104,8 +5899,7 @@ ENTPersonNomPatro: BRUN
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -6131,8 +5925,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Nora
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -6148,8 +5941,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DUPONT GARANCE
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -6193,8 +5985,7 @@ ENTPersonNomPatro: DUPONT
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 010300$PHILOSOPHIE
 ESCOEleveCodeEnseignements: 008400$VIE DE CLASSE
@@ -6220,8 +6011,7 @@ givenName: Garance
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: garance.dupont@netocentre.fr
@@ -6236,8 +6026,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: ROGER LEONARD
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TES1
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE ECONOMIQUE ET SOCIALE
 ENTEleveMajeur: O
@@ -6281,8 +6070,7 @@ ENTPersonNomPatro: ROGER
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 061300$MATHEMATIQUES
 ESCOEleveCodeEnseignements: 052100$SCIENCES SOCIALES ET POLITIQUES
@@ -6308,8 +6096,7 @@ givenName:: TMOpb25hcmQ=
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TES1
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: leonard.roger@netocentre.fr
@@ -6324,8 +6111,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: RENAUD ISAAC
-ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cent
- re,dc=fr$TL
+ENTEleveClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL
 ENTEleveFiliere: TERMINALE GENERALE
 ENTEleveLibelleMEF: TERMINALE LITTERAIRE
 ENTEleveMajeur: O
@@ -6369,8 +6155,7 @@ ENTPersonNomPatro: RENAUD
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 023300$LITTERATURE
 ESCOEleveCodeEnseignements: 100100$EDUCATION PHYSIQUE ET SPORTIVE
@@ -6395,8 +6180,7 @@ ESCOUAIRattachement: 0290009C
 givenName: Isaac
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Eleves_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Eleves_TL
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Eleves
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -6417,15 +6201,13 @@ sn: OLIVIER
 displayName: Chiara OLIVIER
 ENTAuxEnsCategoDiscipline: 04$LANGUES VIVANTES
 ENTPersonDateNaissance: 22/04/1975
-ENTPersonFonctions: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-c
- entre,dc=fr$ENS$ENSEIGNEMENT$L0422$ANGLAIS
+ENTPersonFonctions: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$ENS$ENSEIGNEMENT$L0422$ANGLAIS
 ENTPersonGARIdentifiant:: YmE3NzQxNjQtNTJmNi00NGZkLWE1NWUtYjVjY2FlODk3ZWFi
 ENTPersonNomPatro: OLIVIER
 ENTPersonProfils: National_ENS
 ENTPersonProfils: National_3
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19291595700018,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOPersonEtatCompte: INVALIDE
 ESCOPersonListeRouge: FALSE
@@ -6458,14 +6240,12 @@ ENTPersonLogin: amandine.fontai
 sn: FONTAI
 displayName: Amandine FONTAI
 ENTPersonDateNaissance: 21/08/1965
-ENTPersonFonctions: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-c
- entre,dc=fr$ADA$READAPTATION$L0080$DOCUMENTATION
+ENTPersonFonctions: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$ADA$READAPTATION$L0080$DOCUMENTATION
 ENTPersonGARIdentifiant:: MTNiZGRhOGEtNWU4ZC00NzdmLWEzM2QtYzc4ZDYzZWZiNTkz
 ENTPersonNomPatro: FONTAI
 ENTPersonProfils: National_6
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOPersonEtatCompte: INVALIDE
 ESCOPersonListeRouge: FALSE
@@ -6476,11 +6256,9 @@ ESCOUAI: 0290009C
 ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Amandine
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Administratifs:Tous_Adm
- inistratifs
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Administratifs:Tous_Administratifs
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Administratifs:READAPTA
- TION
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Administratifs:READAPTATION
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
@@ -6496,8 +6274,7 @@ objectClass: ESCOAddons
 objectClass: ENTPerson
 objectClass: ENTEleve
 cn: DURAND RAYAN
-ENTEleveClasses: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-cent
- re,dc=fr$3EME2
+ENTEleveClasses: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$3EME2
 ENTEleveFiliere: 3EME
 ENTEleveLibelleMEF: 3EME BILINGUE
 ENTEleveMajeur: N
@@ -6537,10 +6314,8 @@ ENTEleveEnseignements: BRETON LV1 BIS (SECTION BILINGUE)
 ENTEleveEnseignements: MATHEMATIQUES
 ENTEleveEnseignements: ANGLAIS LV1
 ENTEleveEnseignements: SCIENCES DE LA VIE ET DE LA TERRE
-ENTEleveGroupes: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-cent
- re,dc=fr$32ESP2P1
-ENTEleveGroupes: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-cent
- re,dc=fr$32L1BIP1
+ENTEleveGroupes: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$32ESP2P1
+ENTEleveGroupes: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$32L1BIP1
 ENTEleveRegime: EXTERNE LIBRE
 ENTEleveStructRattachId: 1354118
 ENTEleveTransport: N
@@ -6551,8 +6326,7 @@ ENTPersonNomPatro: DURAND
 ENTPersonProfils: National_ELV
 ENTPersonProfils: National_1
 ENTPersonSexe: M
-ENTPersonStructRattach: ENTStructureSIREN=19291595700018,ou=structures,dc=es
- co-centre,dc=fr
+ENTPersonStructRattach: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr
 ESCODomaines: lycees.netocentre.fr
 ESCOEleveCodeEnseignements: 043800$ENSEIGNEMENT MORAL ET CIVIQUE
 ESCOEleveCodeEnseignements: 043700$HISTOIRE-GEOGRAPHIE
@@ -6600,72 +6374,42 @@ ENTPersonLogin: diane.jean
 sn: JEAN
 displayName: Diane JEAN
 ENTAuxEnsCategoDiscipline: 11$SCIENCES ECONOMIQUES ET SOCIALES
-ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
- tre,dc=fr$TES1
-ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
- tre,dc=fr$1ERE ES2
-ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
- esco-centre,dc=fr$TES1$050700
-ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
- esco-centre,dc=fr$TES1$006600
-ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
- esco-centre,dc=fr$1ERE ES2$006600
-ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
- esco-centre,dc=fr$1ERE ES2$050700
-ENTAuxEnsClassesPrincipal: ENTStructureSIREN=19290009000015,ou=structures,dc
- =esco-centre,dc=fr$TES1
-ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
- tre,dc=fr$-1ERE EA
-ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
- tre,dc=fr$TES1_SES
-ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
- tre,dc=fr$2NDE1_SE
-ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-cen
- tre,dc=fr$TEMCGR1
-ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
- esco-centre,dc=fr$-1ERE EA$002300
-ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
- esco-centre,dc=fr$TES1_SES$050700
-ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
- esco-centre,dc=fr$2NDE1_SE$050700
-ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=
- esco-centre,dc=fr$TEMCGR1$050700
-ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,
- dc=esco-centre,dc=fr$SCIENCES ECONOMIQUES ET SOCIALES
-ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,
- dc=esco-centre,dc=fr$ACCOMPAGNEMENT PERSONNALISE
-ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,
- dc=esco-centre,dc=fr$TRAVAUX PERSONNELS ENCADRES
-ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
- dc=fr$20112005110$PREMIERE ECONOMIQUE ET SOCIALE
-ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
- dc=fr$20010015110$2DEGT2 (CAS GENERAL 2 ENS.EXPLO)
-ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
- dc=fr$20112005112$PREMIERE ES EUROPEENNE
-ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
- dc=fr$20212005110$TERMINALE ECONOMIQUE ET SOCIALE
-ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
- dc=fr$20212005112$TERMINALE ES EUROPEENNE
-ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
- dc=fr$20212005113$TERMINALE ES BILINGUE
-ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,
- dc=fr$20010015112$2NDE EURO / ORIENTALE (2 ENS.EXPLO)
+ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
+ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$1ERE ES2
+ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1$050700
+ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1$006600
+ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$1ERE ES2$006600
+ENTAuxEnsClassesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$1ERE ES2$050700
+ENTAuxEnsClassesPrincipal: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$-1ERE EA
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1_SES
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$2NDE1_SE
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TEMCGR1
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$-1ERE EA$002300
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1_SES$050700
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$2NDE1_SE$050700
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TEMCGR1$050700
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$SCIENCES ECONOMIQUES ET SOCIALES
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$ACCOMPAGNEMENT PERSONNALISE
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TRAVAUX PERSONNELS ENCADRES
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20112005110$PREMIERE ECONOMIQUE ET SOCIALE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20010015110$2DEGT2 (CAS GENERAL 2 ENS.EXPLO)
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20112005112$PREMIERE ES EUROPEENNE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20212005110$TERMINALE ECONOMIQUE ET SOCIALE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20212005112$TERMINALE ES EUROPEENNE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20212005113$TERMINALE ES BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20010015112$2NDE EURO / ORIENTALE (2 ENS.EXPLO)
 ENTPersonDateNaissance: 05/03/1970
-ENTPersonFonctions: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-c
- entre,dc=fr$ENS$ENSEIGNEMENT$L1100$SCIENCES ECONOMIQUES ET SOCIALES
+ENTPersonFonctions: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$ENS$ENSEIGNEMENT$L1100$SCIENCES ECONOMIQUES ET SOCIALES
 ENTPersonGARIdentifiant:: YTFiNzIzZGItNjQxNy00ZWQ5LWI0MDktMDk3MWNmMzkxNDE1
 ENTPersonNomPatro: JEAN
 ENTPersonProfils: National_ENS
 ENTPersonProfils: National_3
 ENTPersonSexe: F
-ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=es
- co-centre,dc=fr
-ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=struct
- ures,dc=esco-centre,dc=fr$050700$SCIENCES ECONOMIQUES ET SOCIALES
-ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=struct
- ures,dc=esco-centre,dc=fr$006600$ACCOMPAGNEMENT PERSONNALISE
-ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=struct
- ures,dc=esco-centre,dc=fr$002300$TRAVAUX PERSONNELS ENCADRES
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$050700$SCIENCES ECONOMIQUES ET SOCIALES
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$006600$ACCOMPAGNEMENT PERSONNALISE
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$002300$TRAVAUX PERSONNELS ENCADRES
 ESCODomaines: lycees.netocentre.fr
 ESCOPersonEtatCompte: INVALIDE
 ESCOPersonListeRouge: FALSE
@@ -6676,28 +6420,139 @@ ESCOUAI: 0290009C
 ESCOUAICourant: 0290009C
 ESCOUAIRattachement: 0290009C
 givenName: Diane
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Profs_TES1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Profs_TES1
 isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:SECONDE GENERALE et TEC
- HNO YC BT:Profs_2NDE1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:SECONDE GENERALE et TECHNO YC BT:Profs_2NDE1
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:Autre
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Profs Principaux
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:ACCOMPAGN
- EMENT PERSONNALISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:TRAVAUX P
- ERSONNELS ENCADRES
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:SCIENCES
- ECONOMIQUES ET SOCIALES
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:ACCOMPAGNEMENT PERSONNALISE
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:TRAVAUX PERSONNELS ENCADRES
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:SCIENCESECONOMIQUES ET SOCIALES
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TE
- CHNO YC BT:Profs_1ERE ES2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TECHNO YC BT:Profs_1ERE ES2
 isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Profs
-isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et T
- ECHNO YC BT:Profs Principaux
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Profs Principaux
 isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
 isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
 mail: noreply@ac-rennes.fr
 personalTitle: Mme
 uid: F1700jym
+userPassword:: e3NzaGF9WkY4bWExS3YzY2c2NFQ2U0JNTzRnWTVkSHVKSXEvQ0VmakwyRVE9PQ==
+
+dn: uid=F1700jz1,ou=people,dc=esco-centre,dc=fr
+objectClass: eduMember
+objectClass: ESCOAddons
+objectClass: ENTPerson
+objectClass: ENTAuxEnseignant
+cn: PICARD JULES
+ENTPersonJointure: AC-RENNES$2403
+ENTPersonLogin: jules.picard
+sn: PICARD
+displayName: Jules PICARD
+ENTAuxEnsCategoDiscipline: 04$LANGUES VIVANTES
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL_AGL4_
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL_AGL4
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TLV1BIGB
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TLV1BIGA
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$1HISTOIG
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TLV1BIGR
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$2NDE2_LV
+ENTAuxEnsGroupes: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$2NDE2_2N
+ENTAuxEnsGroupes: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$42L1BIP1
+ENTAuxEnsGroupes: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$32L1BIP1
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL_AGL4_$030204
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TL_AGL4$030204
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TLV1BIGB$030E07
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TLV1BIGA$030E07
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$1HISTOIG$030E07
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TLV1BIGR$030E07
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$2NDE2_LV$030E07
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$2NDE2_2N$030E07
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$42L1BIP1$030E07
+ENTAuxEnsGroupesMatieres: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$32L1BIP1$030E07
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$ANGLAIS APPROFONDI
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$BRETON LV1 BIS (SECTION BILINGUE)
+ENTAuxEnsMatiereEnseignEtab: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$BRETON LV1 BIS (SECTION BILINGUE)
+ENTAuxEnsMEF: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$10310019110$3EME
+ENTAuxEnsMEF: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$10210001110$4EME
+ENTAuxEnsMEF: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$10310019113$3EME BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$10210001113$4EME BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20213019110$TERMINALE LITTERAIRE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20112005112$PREMIERE ES EUROPEENNE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20112005110$PREMIERE ECONOMIQUE ET SOCIALE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20010015112$2NDE EURO / ORIENTALE (2 ENS.EXPLO)
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20213019113$TERMINALE LITTERAIRE BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20212005113$TERMINALE ES BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20111010110$PREMIERE SCIENTIFIQUE SVT
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20212005112$TERMINALE ES EUROPEENNE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20211010110$TERMINALE SCIENTIFIQUE SVT
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20213019112$TERMINALE L EUROPEENNE/ORIENTALE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20010015110$2DEGT2 (CAS GENERAL 2 ENS.EXPLO)
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20010015113$2NDE BILINGUE (2 ENS.EXPLO)
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20111010113$PREMIERE SVT BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20113019112$PREMIERE L EUROPEENNE/ORIENTALE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20113019110$PREMIERE LITTERAIRE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20211010113$TERMINALE SVT BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20113019113$PREMIERE LITTERAIRE BILINGUE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20211010112$TERMINALE SVT EUROPEENNE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20111010112$PREMIERE SVT EUROPEENNE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20212005110$TERMINALE ECONOMIQUE ET SOCIALE
+ENTAuxEnsMEF: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$20112005113$PREMIERE ES BILINGUE
+ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES1
+ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES2
+ENTAuxEnsClasses: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$TES3
+ENTAuxEnsClasses: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$3EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$3EME2
+ENTPersonDateNaissance: 13/11/1963
+ENTPersonFonctions: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$ENS$ENSEIGNEMENT$L0441$BRETON
+ENTPersonFonctions: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$ENS$ENSEIGNEMENT$L0441$BRETON
+ENTPersonFonctions: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$ENS$ENSEIGNEMENT$L0422$ANGLAIS
+ENTPersonGARIdentifiant:: N2Y1ODkxZmYtZjUzZC00YjMxLThkMTktMzU4NzViYTdjODNj
+ENTPersonNomPatro: PICARD
+ENTPersonProfils: National_ENS
+ENTPersonProfils: National_3
+ENTPersonSexe: M
+ENTPersonStructRattach: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$030204$ANGLAIS APPROFONDI
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19290009000015,ou=structures,dc=esco-centre,dc=fr$030E07$BRETON LV1 BIS (SECTION BILINGUE)
+ESCOAuxEnsCodeMatiereEnseignEtab: ENTStructureSIREN=19291595700018,ou=structures,dc=esco-centre,dc=fr$030E07$BRETON LV1 BIS (SECTION BILINGUE)
+ESCODomaines: lycees.netocentre.fr
+ESCOPersonEtatCompte: INVALIDE
+ESCOPersonListeRouge: FALSE
+ESCOPersonProfils: ENS
+ESCOSIREN: 19290009000015
+ESCOSIREN: 19291595700018
+ESCOSIRENCourant: 19290009000015
+ESCOUAI: 0290009C
+ESCOUAI: 0291595B
+ESCOUAICourant: 0290009C
+ESCOUAIRattachement: 0290009C
+givenName: Jules
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Profs_TES1
+isMemberOf: esco:Applications:Folios:DE L IROISE_0291595B
+isMemberOf: esco:Etablissements:DE L IROISE_0291595B:Tous_DE L IROISE
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Profs_TS2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Profs_TS1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TECHNO YC BT:Profs_1ERE L
+isMemberOf: esco:Etablissements:DE L IROISE_0291595B:Enseignements:BRETON LV1 BIS (SECTION BILINGUE)
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Profs
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:BRETON LV1 BIS (SECTION BILINGUE)
+isMemberOf: esco:Etablissements:DE L IROISE_0291595B:Profs
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:TERMINALE GENERALE et TECHNO YC BT:Profs_TL
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:SECONDE GENERALE et TECHNO YC BT:Profs_2NDE2
+isMemberOf: esco:Applications:Folios:DE L IROISE_0290009C
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TECHNO YC BT:Profs_1ERE S2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TECHNO YC BT:Profs_1ERE S1
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:Enseignements:ANGLAIS APPROFONDI
+isMemberOf: esco:Etablissements:DE L IROISE_0291595B:4EME (NC 4E AES):Profs_4EME2
+isMemberOf: esco:Etablissements:DE L IROISE_0291595B:3EME:Profs_3EME2
+isMemberOf: esco:Etablissements:DE L IROISE_0290009C:PREMIERE GENERALE et TECHNO YC BT:Profs_1ERE ES1
+isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0290009C
+isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0291595B
+isMemberOf: esco:Applications:mediacentre:GAR:DE L IROISE_0290009C
+isMemberOf: esco:admin:mediacentre:GAR:UTILISATEUR:DE L IROISE_0291595B
+mail: noreply@ac-rennes.fr
+personalTitle: M
+uid: F1700jz1
 userPassword:: e3NzaGF9WkY4bWExS3YzY2c2NFQ2U0JNTzRnWTVkSHVKSXEvQ0VmakwyRVE9PQ==

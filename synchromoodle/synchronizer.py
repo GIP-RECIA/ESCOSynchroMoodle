@@ -271,11 +271,15 @@ class Synchronizer:
 
         # Inscription dans les cohortes associees aux classes
         eleve_cohorts = []
-        if eleve_ldap.classes:
+        eleve_classes_for_etab = []
+        for classe in eleve_ldap.classes:
+            if classe.etab_dn == etablissement_context.structure_ldap.dn:
+                eleve_classes_for_etab.append(classe.classe)
+        if eleve_classes_for_etab:
             log.info("Inscription de l'élève %s "
-                     "dans les cohortes de classes %s", eleve_ldap, eleve_ldap.classes)
+                     "dans les cohortes de classes %s", eleve_ldap, eleve_classes_for_etab)
             ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
-                                                                     eleve_ldap.classes,
+                                                                     eleve_classes_for_etab,
                                                                      self.context.timestamp_now_sql,
                                                                      log=log)
             for ids_classe_cohorts in ids_classes_cohorts:
@@ -309,11 +313,10 @@ class Synchronizer:
         # Mise a jour de la classe
         id_user_info_data = self.__db.get_id_user_info_data(eleve_id, self.context.id_field_classe)
         if id_user_info_data is not None:
-            self.__db.update_user_info_data(eleve_id, self.context.id_field_classe, eleve_ldap.classe)
+            self.__db.update_user_info_data(eleve_id, self.context.id_field_classe, eleve_ldap.classe.classe)
             log.debug("Mise à jour user_info_data")
         else:
-            self.__db.insert_moodle_user_info_data(eleve_id, self.context.id_field_classe,
-                                                   eleve_ldap.classe)
+            self.__db.insert_moodle_user_info_data(eleve_id, self.context.id_field_classe, eleve_ldap.classe.classe)
             log.debug("Insertion user_info_data")
 
         # Mise a jour du Domaine
@@ -420,13 +423,17 @@ class Synchronizer:
 
         # Inscription dans les cohortes associees aux classes
         enseignant_cohorts = []
-        if enseignant_ldap.classes:
+        enseignant_classes_for_etab = []
+        for classe in enseignant_ldap.classes:
+            if classe.etab_dn == etablissement_context.structure_ldap.dn:
+                enseignant_classes_for_etab.append(classe.classe)
+        if enseignant_classes_for_etab:
             log.info("Inscription de l'enseignant %s dans les cohortes de classes %s",
-                     enseignant_ldap, enseignant_ldap.classes)
+                     enseignant_ldap, enseignant_classes_for_etab)
             name_pattern = "Profs de la Classe %s"
             desc_pattern = "Profs de la Classe %s"
             ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
-                                                                     enseignant_ldap.classes,
+                                                                     enseignant_classes_for_etab,
                                                                      self.context.timestamp_now_sql,
                                                                      name_pattern=name_pattern,
                                                                      desc_pattern=desc_pattern,

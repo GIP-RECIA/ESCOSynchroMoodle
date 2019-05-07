@@ -519,7 +519,7 @@ class Database:
         :param id_course:
         :return:
         """
-        s = "SELECT e.id FROM {entete}enrol e" \
+        s = "SELECT e.id FROM {entete}enrol AS e" \
             " WHERE e.enrol = %(enrol_method)s" \
             " AND e.courseid = %(id_course)s" \
             " AND e.roleid = %(role_id)s" \

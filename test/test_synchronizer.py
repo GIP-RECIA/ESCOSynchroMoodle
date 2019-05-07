@@ -145,9 +145,9 @@ class TestEtablissement:
 
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
-        structure = ldap.get_structure("0291595B")
-        enseignants = ldap.search_enseignant(None, "0291595B")
-        enseignant = enseignants[0]
+        structure = ldap.get_structure("0290009C")
+        enseignants = ldap.search_enseignant(None, "0290009C")
+        enseignant = enseignants[1]
         etab_context = synchronizer.handle_etablissement(structure.uai)
         synchronizer.handle_enseignant(etab_context, enseignant)
 
@@ -157,10 +157,10 @@ class TestEtablissement:
                         })
         result = db.mark.fetchone()
         assert result is not None
-        assert result[10] == 'Chiara'
-        assert result[11] == 'OLIVIER'
+        assert result[10] == 'Jules'
+        assert result[11] == 'PICARD'
         assert result[12] == 'noreply@ac-rennes.fr'
-        assert result[27] == '0291595b'
+        assert result[27] == '0290009c'
         enseignant_id = result[0]
 
         db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),

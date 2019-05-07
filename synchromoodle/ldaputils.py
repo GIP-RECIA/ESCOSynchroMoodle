@@ -10,6 +10,10 @@ from ldap3 import Server, Connection, LEVEL
 
 from synchromoodle.config import LdapConfig
 
+class ClasseLdap:
+    def __init__(self, etab_dn: str, classe: str):
+        self.etab_dn = etab_dn
+        self.classe = classe
 
 def extraire_classes_ldap(classes_ldap: List[str]):
     """
@@ -22,7 +26,7 @@ def extraire_classes_ldap(classes_ldap: List[str]):
     for classe_ldap in classes_ldap:
         split = classe_ldap.split("$")
         if len(split) > 1:
-            classes.append(split[-1])
+            classes.append(ClasseLdap(split[0], split[-1]))
     return classes
 
 
@@ -56,6 +60,7 @@ class StructureLdap:
         self.uai = data.ENTStructureUAI.value
         self.domaine = data.ESCODomaines.value
         self.domaines = data.ESCODomaines.values
+        self.dn = data.entry_dn
 
     def __str__(self):
         return "uai=%s, siren=%s, nom=%s" % (self.uai, self.siren, self.nom)
@@ -77,7 +82,7 @@ class PersonneLdap:
         self.domaines = data.ESCODomaines.values
         self.uai_courant = data.ESCOUAICourant.value
         self.mail = None
-        self.classes = None  # type: List[str]
+        self.classes = None  # type: List[ClasseLdap]
         if 'mail' in data:
             self.mail = data.mail.value
 
@@ -101,7 +106,7 @@ class EleveLdap(PersonneLdap):
         super().__init__(data)
         self.niveau_formation = data.ENTEleveNivFormation.value
 
-        self.classe = None  # type: str
+        self.classe = None  # type: ClasseLdap
 
         if 'ENTEleveClasses' in data:
             self.classes = extraire_classes_ldap(data.ENTEleveClasses.values)
