@@ -133,6 +133,7 @@ La structure de la configuration est modélisée par les classes situées dans
 | niveau_ctx_bloc            | Niveau de contexte pour un bloc                                          | 80                            |     Nombre entier    |
 | id_role_admin              | Id pour le role admin                                                    | 1                             |     Nombre entier    |
 | id_role_createur_cours     | Id pour le role createur de cours                                        | 2                             |     Nombre entier    |
+| id_role_proprietaire_cours | Id pour le role propriétaire de cours                                    | 11                            |     Nombre entier    |
 | id_role_enseignant         | Id pour le role enseignant                                               | 3                             |     Nombre entier    |
 | id_role_eleve              | Id pour le role eleve                                                    | 5                             |     Nombre entier    |
 | id_role_inspecteur         | Id pour le role inspecteur                                               | 9                             |     Nombre entier    |
@@ -178,13 +179,16 @@ La structure de la configuration est modélisée par les classes situées dans
 | delay_delete_student    | Délai, en jours, avant de supprimer un élève qui n'est plus présent dans l'annuaire LDAP      | 90                |      Nombres entiers     |
 | delay_anonymize_teacher | Délai, en jours, avant d'anonymiser un enseignant qui n'est plus présent dans l'annuaire LDAP | 90                | Nombres entiers          |
 | delay_delete_teacher    | Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP | 365               | Nombres entiers          |
+| delay_backup_course     | Délai, en jours, avant de sauvegarder un cours inutilisé                                      | 365               | Nombres entiers          |
 
 ###### webservice
 
-| Propriété   | Description                                                      | Valeur par défaut |         Type         |
-|-------------|------------------------------------------------------------------|-------------------|:--------------------:|
-| token       | Token d'accès au webservice Moodle                               | ""                | Chaine de caractères |
-| moodle_host | Host HTTP cible pour accéder au webservice Moodle SANS '/' FINAL | ""                | Chaine de caractères |
+| Propriété         | Description                                                                                                               | Valeur par défaut                                                  |         Type         |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|:--------------------:|
+| token             | Token d'accès au webservice Moodle                                                                                        | ""                                                                 | Chaine de caractères |
+| moodle_host       | Host HTTP cible pour accéder au webservice Moodle SANS '/' FINAL                                                          | ""                                                                 | Chaine de caractères |
+| backup_cmd        | Commande à executer pour lancer la backup d'un cours                                                                      | "php backup.php --courseid=%courseid% --destination=/MoodleBackups"| Chaine de caractères |
+| backup_success_re | Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le succès de l'opération | "Backup completed"                                                 | Chaine de caractères |
 
 ###### timestamp_store
 

@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import pytest
+import platform
 from synchromoodle.config import Config, ActionConfig
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
@@ -417,3 +418,75 @@ class TestEtablissement:
             assert db_users[x][16] == config.constantes.anonymous_name
             assert db_users[x][17] == config.constantes.anonymous_name
             assert db_users[x][18] == config.constantes.anonymous_name
+
+    def test_course_backup(self, ldap: Ldap, db: Database, config: Config):
+        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        os = platform.system()
+        if os == "Linux":
+            config.webservice.backup_cmd = "sh backup.sh --courseid=%courseid% --destination=/MoodleBackups"
+        elif os == "Windows":
+            config.webservice.backup_cmd = "backup.bat --courseid=%courseid% --destination=/MoodleBackups"
+
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.initialize()
+        etab_context = synchronizer.handle_etablissement("0290009C")
+
+        ldap_eleves = ldap.search_eleve(uai="0290009C")
+        ldap_enseignants = ldap.search_enseignant(uai="0290009C")
+        enseignant = ldap_enseignants[0]
+        enseignant2 = ldap_enseignants[1]
+        for eleve in ldap_eleves:
+            synchronizer.handle_eleve(etab_context, eleve)
+        for enseignant in ldap_enseignants:
+            synchronizer.handle_enseignant(etab_context, enseignant)
+
+        db.mark.execute("SELECT id FROM {entete}user WHERE username = %(username)s".format(entete=db.entete), params={
+            'username': str(enseignant.uid).lower()
+        })
+        enseignant_db = db.mark.fetchone()
+
+        db.mark.execute("SELECT id FROM {entete}user WHERE username = %(username)s".format(entete=db.entete), params={
+            'username': str(enseignant2.uid).lower()
+        })
+        enseignant2_db = db.mark.fetchone()
+
+        now = synchronizer.context.timestamp_now_sql
+        db.mark.execute("INSERT INTO {entete}course (fullname, timemodified) VALUES ('cours de test 1',"
+                        " %(timemodified)s)".format(entete=db.entete), params={'timemodified': now})
+        db.mark.execute("INSERT INTO {entete}course (fullname, timemodified) VALUES ('cours de test 2',"
+                        " %(timemodified)s)".format(entete=db.entete), params={'timemodified': now - 31622400})
+        db.mark.execute("INSERT INTO {entete}course (fullname, timemodified) VALUES ('cours de test 3',"
+                        " %(timemodified)s)".format(entete=db.entete), params={'timemodified': now - 31622400})
+        db.mark.execute("SELECT id, fullname, timemodified FROM {entete}course ORDER BY id DESC LIMIT 3"
+                        .format(entete=db.entete))
+        courses = db.mark.fetchall()
+
+        for course in courses:
+            db.mark.execute("INSERT INTO {entete}context (contextlevel, instanceid) VALUES (50, %(instanceid)s)"
+                            .format(entete=db.entete), params={'instanceid': course[0]})
+            db.mark.execute("SELECT id FROM {entete}context ORDER BY id DESC LIMIT 1".format(entete=db.entete))
+            contextid = db.mark.fetchone()
+            db.add_role_to_user(config.constantes.id_role_proprietaire_cours, contextid[0], enseignant_db[0])
+
+        db.mark.execute("INSERT INTO {entete}context (contextlevel, instanceid) VALUES (60, %(instanceid)s)"
+                        .format(entete=db.entete), params={'instanceid': courses[1][0]})
+
+        db.mark.execute("SELECT id FROM {entete}context ORDER BY id DESC LIMIT 1".format(entete=db.entete))
+        contextid = db.mark.fetchone()
+
+        db.add_role_to_user(config.constantes.id_role_proprietaire_cours, contextid[0], enseignant2_db[0])
+
+        synchronizer.check_and_process_user_courses(enseignant_db[0])
+
+        db.mark.execute("SELECT id FROM {entete}course WHERE fullname LIKE 'cours de test%'".format(entete=db.entete))
+        new_courses = db.mark.fetchall()
+        new_courses_ids = [new_course[0] for new_course in new_courses]
+        assert len(new_courses_ids) == 2
+        assert courses[0][0] not in new_courses_ids
+
+
+

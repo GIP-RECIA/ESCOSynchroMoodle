@@ -35,6 +35,13 @@ class WebServiceConfig(_BaseConfig):
         self.moodle_host = ""
         """Host HTTP cible pour accéder au webservice Moodle"""
 
+        self.backup_cmd = "php backup.php --courseid=%courseid% --destination=/MoodleBackups"
+        """Commande à executer pour lancer la backup d'un cours"""
+
+        self.backup_success_re = "Backup completed"
+        """Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le 
+        succès de l'opération"""
+
         super().__init__(**entries)
 
 
@@ -61,6 +68,9 @@ class DeleteConfig(_BaseConfig):
 
         self.delay_delete_teacher = 365
         """Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP"""
+
+        self.delay_backup_course = 365
+        """Délai, en jours, avant de sauvegarder un cours inutilisé"""
 
         super().__init__(**entries)
 
@@ -112,6 +122,9 @@ class ConstantesConfig(_BaseConfig):
 
         self.id_role_createur_cours = 2  # type: int
         """Id pour le role createur de cours"""
+
+        self.id_role_proprietaire_cours = 11  # type: int
+        """Id pour le role propriétaire de cours"""
 
         self.id_role_enseignant = 3  # type: int
         """Id pour le role enseignant"""

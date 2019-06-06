@@ -5,6 +5,7 @@ Synchronizer
 
 import datetime
 import re
+import subprocess
 from logging import getLogger
 from typing import Dict, List
 
@@ -725,6 +726,32 @@ class Synchronizer:
                 return True
         return False
 
+    def backup_course(self, courseid, log=getLogger()):
+        log.info("Backup du cours avec l'id %d", courseid)
+        cmd = self.__config.webservice.backup_cmd.replace("%courseid%", str(courseid))
+        backup_process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        stdout = backup_process.stdout.read()
+        output = stdout.decode('utf-8')
+        m = re.search(self.__config.webservice.backup_success_re, output)
+        return m is not None
+
+    def check_and_process_user_courses(self, user_id: int, log=getLogger()):
+        user_courses_ids = [user_course[0] for user_course in self.__db.get_courses_ids_owned_by(user_id)]
+        now = self.__db.get_timestamp_now()
+        for courseid in user_courses_ids:
+            owners_ids = [ownerid[0] for ownerid in self.__db.get_userids_owner_of_course(courseid)]
+            if len(owners_ids) == 1 and owners_ids[0] == user_id:
+                timemodified = self.__db.get_course_timemodified(courseid)
+                delay_backup_course = self.__config.delete.delay_backup_course
+                if timemodified < now - (delay_backup_course * SECONDS_PER_DAY):
+                    backup_success = self.backup_course(courseid, log)
+                    if backup_success:
+                        log.info("La backup du cours %d été sauvegardée", courseid)
+                        self.__db.delete_course(courseid)
+                        log.info("Le cours %d a été supprimé de la base de données Moodle", courseid)
+                    else:
+                        log.error("La backup du cours %d a échouée", courseid)
+
     def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: List, log=getLogger()):
         """
         Anonymise ou Supprime les utilisateurs devenus inutiles
@@ -758,6 +785,8 @@ class Synchronizer:
 
         if user_ids_to_delete:
             log.info("Suppression des utilisateurs en cours...")
+            for user_id in user_ids_to_delete:
+                self.check_and_process_user_courses(user_id, log=log)
             self.delete_users(user_ids_to_delete, log=log)
             log.info("%d utilisateurs supprimés", len(user_ids_to_delete))
         if user_ids_to_anonymize:

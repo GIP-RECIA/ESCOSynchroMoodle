@@ -659,6 +659,41 @@ class Database:
             return None
         return ligne[0]
 
+    def get_course_timemodified(self, course_id: int):
+        s = "SELECT timemodified FROM {entete}course" \
+            " WHERE id = %(course_id)s" \
+            .format(entete=self.entete)
+        self.mark.execute(s, params={'course_id': course_id})
+        ligne = self.safe_fetchone()
+        if ligne is None:
+            return None
+        return ligne[0]
+
+    def delete_course(self, course_id: int):
+        s = "DELETE FROM {entete}course WHERE id = %(course_id)s" \
+            .format(entete=self.entete)
+        self.mark.execute(s, params={
+            'course_id': course_id
+        })
+
+    def get_courses_ids_owned_by(self, user_id: int):
+        s = "SELECT instanceid FROM {entete}context AS context" \
+            " INNER JOIN {entete}role_assignments AS role_assignments" \
+            " ON context.id = role_assignments.contextid" \
+            " WHERE role_assignments.userid = %(userid)s AND role_assignments.roleid = %(roleid)s" \
+            .format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id, 'roleid': self.constantes.id_role_proprietaire_cours})
+        return self.mark.fetchall()
+
+    def get_userids_owner_of_course(self, course_id: int):
+        s = "SELECT userid FROM {entete}role_assignments AS role_assignments" \
+            " INNER JOIN {entete}context AS context" \
+            " ON role_assignments.contextid = context.id" \
+            " WHERE context.instanceid = %(courseid)s AND role_assignments.roleid = %(roleid)s" \
+            .format(entete=self.entete)
+        self.mark.execute(s, params={'courseid': course_id, 'roleid': self.constantes.id_role_proprietaire_cours})
+        return self.mark.fetchall()
+
     def get_id_categorie(self, categorie_name):
         """
         Fonction permettant de recuperer l'id correspondant a la

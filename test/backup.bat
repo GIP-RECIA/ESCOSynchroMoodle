@@ -1,0 +1,2 @@
+@echo %*
+@echo Backup completed
