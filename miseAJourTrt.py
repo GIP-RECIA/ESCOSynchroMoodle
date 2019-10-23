@@ -420,9 +420,13 @@ def miseAJour(host,user,password,nomBD,port,ldapServer,ldapUsername, ldapPasswor
 
                 # Inscription dans la cohorte associee au niveau de formation
                 if eleve_niveau_formation :
-                    id_formation_cohort = create_formation_cohort( mark, entete, id_context_categorie, eleve_niveau_formation, maintenant_sql )
-                    enroll_user_in_cohort( mark, entete, id_formation_cohort, eleve_id, eleve_infos, maintenant_sql )
-                    eleve_cohorts.append( id_formation_cohort )
+                #Vérification que le nom de la cohorte n'est pas trop long (pas plus de 70 caractères pour que l'id_number ne dépasse pas 100 caractères)
+                        if len(eleve_niveau_formation) > 70:
+                            logging.info( "      |___ Impossible de créer la cohorte car son nom est trop long '%s'" % ( eleve_niveau_formation ))
+                        else:
+	                    id_formation_cohort = create_formation_cohort( mark, entete, id_context_categorie, eleve_niveau_formation, maintenant_sql )
+        	            enroll_user_in_cohort( mark, entete, id_formation_cohort, eleve_id, eleve_infos, maintenant_sql )
+                	    eleve_cohorts.append( id_formation_cohort )
 
                 # Desinscription des anciennes cohortes
                 disenroll_user_from_cohorts( mark, entete, eleve_cohorts, eleve_id )
