@@ -380,6 +380,13 @@ class Synchronizer:
             self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                        self.context.id_context_categorie_inter_cfa, id_user)
             log.info("Ajout du role de createur de cours dans la categorie inter-cfa")
+        else:
+            if etablissement_context.structure_ldap.type.startswith('LYCEE') \
+                    or etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_ens_adapte:
+                if set(enseignant_ldap.profils).intersection(['National_ENS','National_DOC','National_DIR']):
+                    log.info(" 	AJOUT ROLE BIGBLUEBUTTON %s" % id_user)
+                    self.__db.add_role_to_user(self.__config.constantes.id_role_bigbluebutton,
+                                               etablissement_context.id_instance_moodle, id_user)
 
         # ajout du role de createur de cours dans l'etablissement
         self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,

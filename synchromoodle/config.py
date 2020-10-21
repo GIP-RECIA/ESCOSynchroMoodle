@@ -141,11 +141,18 @@ class ConstantesConfig(_BaseConfig):
         self.id_role_utilisateur_limite = 14  # type: int
         """Id pour le role d'utilisateur avec droits limites"""
 
+        self.id_role_bigbluebutton = 21 # type: int
+        """Id pour le role bigbluebutton"""
+
         self.type_structure_cfa = "CFA"  # type: str
         """Type de structure d'un CFA"""
 
         self.type_structure_clg = "COLLEGE"  # type: str
         """Type de structure d'un college"""
+
+        self.type_structure_ens_adapte = "ETABLISSEMENT REGIONAL D'ENSEIGNT ADAPTE" # type: str
+        """Type de structure pour l'enseignement adapté"""
+
 
         super().__init__(**entries)
 
