@@ -1,0 +1,9 @@
+version: "3.3"
+
+services:
+    python:
+        container_name: esco_python
+        build:
+            context: python
+        volumes:
+            - ..:/usr/share/app
