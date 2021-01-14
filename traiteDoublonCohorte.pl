@@ -19,6 +19,7 @@ use Unicode::Normalize;
 
 use DBI();
 
+# Chargement de la conf
 my $config=do("./config.pl");
 die "Error parsing config file: $@" if $@;
 die "Error reading config file: $!" unless defined $config;
@@ -31,6 +32,7 @@ my $sqlPort = $config->{sqlPort};
 my $sqlDataSource = "DBI:mysql:database=$sqlDatabase;host=$sqlHost;port=$sqlPort";
 my $SQL_CONNEXION;
 
+# Création de la connexion a la base
 sub connectSql {
 	if ($SQL_CONNEXION) {
 		return $SQL_CONNEXION;
@@ -126,7 +128,7 @@ sub traitementDoublon(){
 						}
 					}
 				} else {
-					print "nombres de cours differents"; 
+					print "nombres de cours differents\n"; 
 				}
 				
 		} 
