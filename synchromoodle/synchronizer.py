@@ -388,7 +388,8 @@ class Synchronizer:
                     and ( etablissement_context.structure_ldap.uai.startswith('041') \
                         or etablissement_context.structure_ldap.uai.startswith('045') \
                         or etablissement_context.structure_ldap.uai.startswith('037') \
-                )   ) :
+                ) \
+                or etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_cfa_agricole  ) :
                 if set(enseignant_ldap.profils).intersection(['National_ENS','National_DOC','National_DIR', 'National_ETA', 'National_EVS']):
                     log.info("		AJOUT ROLE BIGBLUEBUTTON %s" % id_user)
                     self.__db.add_role_to_user(self.__config.constantes.id_role_bigbluebutton,
