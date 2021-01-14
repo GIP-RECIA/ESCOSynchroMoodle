@@ -153,6 +153,8 @@ class ConstantesConfig(_BaseConfig):
         self.type_structure_ens_adapte = "ETABLISSEMENT REGIONAL D'ENSEIGNT ADAPTE" # type: str
         """Type de structure pour l'enseignement adapté"""
 
+        self.type_structure_cfa_agricole = "CFA AGRICOLE"
+
 
         super().__init__(**entries)
 
