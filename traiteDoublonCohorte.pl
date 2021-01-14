@@ -59,11 +59,16 @@ my $queryDouble =  "select *, (select count(cm1.userid) from mdl_cohort_members 
 (select count(courseid) from mdl_enrol where enrol = 'cohort' and customint1 =c.id) nbCours from mdl_cohort c where contextid = ? and name = ?";
 my $statementDouble = $sql->prepare($queryDouble) or die $sql->errstr;
 
+my nbPb = 0;
+
 while (my $tuple =  $sqlStatement->fetchrow_hashref()) {
 	&traitementDoublon($tuple->{'contextid'}, $tuple->{'name'},  $statementDouble );
 }
 
+print "Fin avec $nbPb restant(s)."
+
 sub traitementDoublon(){
+	print "\n";
 	my $contextId = shift;
 	my $cName = shift;
 	my $statement = shift;
@@ -121,6 +126,7 @@ sub traitementDoublon(){
 								}
 						} else {
 							print "liste des cours differenes \n";
+							$nbPb++;
 						}
 					} else {
 						unless ($couple[$idKo]->{'idOk'}){
@@ -129,11 +135,13 @@ sub traitementDoublon(){
 					}
 				} else {
 					print "nombres de cours differents\n"; 
+					$nbPb++;
 				}
 				
 		} 
 	}else {
 		print "mauvais compte \n";
+		$nbPb++;
 	}		
 }
 
