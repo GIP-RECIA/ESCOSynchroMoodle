@@ -94,7 +94,7 @@ sub traitementDoublon(){
 			$tuple->{'estVide'} = 1;
 			$estVide = $cpt;
 		}
-		if ($nbUSer == 0) {
+		if ($nbUser == 0) {
 			$nbUserVide++;
 			$tuple->{'userVide'} = 1;
 			$userVide = $cpt;
