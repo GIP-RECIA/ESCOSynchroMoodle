@@ -197,7 +197,7 @@ sub deleteCohorte {
 		print "delete member => $count / ", $cohorte->{'nbUser'}," \n"; 
 	}
 	if ($cohorte->{'nbCours'} > 0 ) {
-		 $query = "delete from mdl_enrol where enrol = 'cohort' and customint1 = ? '";
+		 $query = "delete from mdl_enrol where enrol = 'cohort' and customint1 = ?";
 		 $count = connectSql()->do($query, undef, $cohorte->{'id'});
 		 print "delete enrol  => $count / ", $cohorte->{'nbCours'}," \n"; 
 	}
