@@ -73,7 +73,9 @@ sub traitementDoublon(){
 	my @couple;
 	my $idKo = 0;
 	my $estVide = 0;
+	my $userVide = 0;
 	my $nbVide = 0;
+	my $nbUserVide = 0;
 	my $cpt=0;
 	
 	while (my $tuple =  $statement->fetchrow_hashref()) {
@@ -92,6 +94,11 @@ sub traitementDoublon(){
 			$tuple->{'estVide'} = 1;
 			$estVide = $cpt;
 		}
+		if ($nbUSer == 0) {
+			$nbUserVide++;
+			$tuple->{'userVide'} = 1;
+			$userVide = $cpt;
+		}
 		
 		print "$cohortId $contextId; $cName; ", $tuple->{'idnumber'} , "; ", $tuple->{'nbUser'} ,"; ", $tuple->{'nbCours'} , , "\n";
 		$cpt++;
@@ -106,7 +113,9 @@ sub traitementDoublon(){
 			if ($estVide != $idKo) {
 				&updateCohorte($couple[$idKo], $couple[$estVide]->{'idnumber'} , $couple[$estVide]->{'description'});
 			}
-			
+		} elsif ($nbUserVide == 1) {
+				# si un avec utilisateur vide, on delete
+			&deleteCohorte($couple[$userVide]);
 		} else {
 			# cas plus dificile ou il des membres ou des classes.
 				
