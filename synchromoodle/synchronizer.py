@@ -743,7 +743,7 @@ class Synchronizer:
     def backup_course(self, courseid, log=getLogger()):
         log.info("Backup du cours avec l'id %d", courseid)
         cmd = self.__config.webservice.backup_cmd.replace("%courseid%", str(courseid))
-        backup_process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        backup_process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
         stdout = backup_process.stdout.read()
         output = stdout.decode('utf-8')
         m = re.search(self.__config.webservice.backup_success_re, output)
