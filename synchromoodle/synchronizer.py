@@ -794,7 +794,7 @@ class Synchronizer:
                     user_ids_to_delete.append(db_user[0])
                 elif db_user[2] < now - (anon_delay * SECONDS_PER_DAY):
                     log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
-                             " anonymisé", db_user[1], delete_delay)
+                             " anonymisé", db_user[1], anon_delay)
                     user_ids_to_anonymize.append(db_user[0])
 
         if user_ids_to_delete:
