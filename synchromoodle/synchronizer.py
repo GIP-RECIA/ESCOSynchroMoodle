@@ -760,11 +760,11 @@ class Synchronizer:
                 if timemodified < now - (delay_backup_course * SECONDS_PER_DAY):
                     backup_success = self.backup_course(courseid, log)
                     if backup_success:
-                        log.info("La backup du cours %d été sauvegardée", courseid)
+                        log.info("Le backup du cours %d été sauvegardée", courseid)
                         self.__db.delete_course(courseid)
                         log.info("Le cours %d a été supprimé de la base de données Moodle", courseid)
                     else:
-                        log.error("La backup du cours %d a échouée", courseid)
+                        log.error("Le backup du cours %d a échouée", courseid)
 
     def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: List, log=getLogger()):
         """
