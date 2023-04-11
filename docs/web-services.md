@@ -18,6 +18,7 @@
 - Accéder au menu d'ajout de fonctions à ce service a l'aide du bouton **_Add functions_**
 - Ajouter les fonctions:
     - core_user_delete_users
+    - core_course_delete_courses
     - core_webservice_get_site_infos
 - Sauvegarder
 
@@ -43,6 +44,8 @@ if (!file_exists($function->classpath)) {
 - Assigner les capacités suivantes au rôle:
     - webservice/rest:use
     - moodle/user:delete
+    - moodle/course:delete
+    - moodle/course:view
 - Sauvegarder
 
 ## Autoriser l'utilisateur à utiliser le service

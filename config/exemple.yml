@@ -107,7 +107,7 @@ actions:
   type: interetab
   timestampStore:
     file: "trtInteretabAll_precedent.txt"
-  inter_etablissements:
+  interEtablissements:
     cohorts:
       "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs"
       "cfa:Inter_etablissements:Tous_Direction": "CFA : Tout le personnel de direction"

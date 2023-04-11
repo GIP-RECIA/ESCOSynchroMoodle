@@ -69,6 +69,8 @@ actions:
   type: interetab
   timestampStore:
     file: "trtInteretabAll_precedent.txt"
+  interEtablissements:
+    cohorts: {"esco:Etablissements:DE L IROISE_0290009C:Enseignements:MATHEMATIQUES": "Profs de mathématiques"}
 - id: inspecteurs
   type: inspecteurs
 - id: nettoyage
