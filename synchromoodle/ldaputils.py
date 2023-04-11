@@ -214,7 +214,7 @@ class Ldap:
                                 'ESCODomaines', 'ESCOUAICourant', '+'])
         return [EleveLdap(entry) for entry in self.connection.entries]
 
-    def search_eleves_in_classe(self, classe, uai):
+    def search_eleves_in_classe(self, classe: str, uai):
         """
         Recherche les élèves dans une classe.
         :param classe:
@@ -222,6 +222,20 @@ class Ldap:
         :return:
         """
         ldap_filter = '(&(ENTEleveClasses=*$%s)(ESCOUAI=%s))' % (ldap_escape(classe), ldap_escape(uai))
+        self.connection.search(self.config.personnesDN, ldap_filter,
+                               search_scope=LEVEL, attributes=
+                               ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',
+                                'ESCODomaines', 'ESCOUAICourant', '+'])
+        return [EleveLdap(entry) for entry in self.connection.entries]
+
+    def search_eleves_in_niveau(self, niveau: str, uai):
+        """
+        Recherche les élèves dans une niveau.
+        :param niveau: Le niveau de formation recherché
+        :param uai: L'établissement dans lequel on effectue la recherche
+        :return: La liste des élèves trouvés
+        """
+        ldap_filter = '(&(objectClass=ENTEleve)(ENTEleveNivFormation=%s)(ESCOUAI=%s))' % (ldap_escape(niveau), ldap_escape(uai))
         self.connection.search(self.config.personnesDN, ldap_filter,
                                search_scope=LEVEL, attributes=
                                ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',
@@ -238,6 +252,35 @@ class Ldap:
         :return: Liste des enseignants
         """
         ldap_filter = get_filtre_enseignants(since_timestamp, uai, tous)
+        self.connection.search(self.config.personnesDN,
+                               ldap_filter, LEVEL, attributes=
+                               ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',
+                                'ESCOUAICourant', 'ENTPersonStructRattach', 'ENTPersonProfils', 'isMemberOf', '+',
+                                'ENTAuxEnsClasses'])
+        return [EnseignantLdap(entry) for entry in self.connection.entries]
+
+    def search_enseignants_in_classe(self, classe: str, uai):
+        """
+        Recherche les enseignants dans une classe.
+        :param classe: La classe recherchée
+        :param uai: L'établissement dans lequel on effectue la recherche
+        :return: La liste des enseignants trouvés
+        """
+        ldap_filter = '(&(objectClass=ENTAuxEnseignant)(ENTAuxEnsClasses=*$%s)(ESCOUAI=%s))' % (ldap_escape(classe), ldap_escape(uai))
+        self.connection.search(self.config.personnesDN,
+                               ldap_filter, LEVEL, attributes=
+                               ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',
+                                'ESCOUAICourant', 'ENTPersonStructRattach', 'ENTPersonProfils', 'isMemberOf', '+',
+                                'ENTAuxEnsClasses'])
+        return [EnseignantLdap(entry) for entry in self.connection.entries]
+
+    def search_enseignants_in_etab(self, uai: str):
+        """
+        Recherche les enseignants dans un établissement.
+        :param uai: L'établissement recherché
+        :return: La liste des enseignants trouvés
+        """
+        ldap_filter = '(&(objectClass=ENTAuxEnseignant)(ESCOUAI=%s))' % ldap_escape(uai)
         self.connection.search(self.config.personnesDN,
                                ldap_filter, LEVEL, attributes=
                                ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',

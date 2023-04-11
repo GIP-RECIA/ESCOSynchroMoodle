@@ -188,40 +188,43 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             etablissement_log.info("Nettoyage de l'établissement (uai=%s)" % uai)
             etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
 
-            eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves de la Classe )(.*)$',
-                                                 'Élèves de la Classe %')
+            if config.delete.purge_cohorts:
 
-            eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves du Niveau de formation )(.*)$',
-                                                 'Élèves du Niveau de formation %')
+                eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_eleves_classes(etablissement_context, r'(Élèves de la Classe )(.*)$',
+                                                     'Élèves de la Classe %')
 
-            profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Profs de la Classe )(.*)$',
-                                                 'Profs de la Classe %')
+                eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_eleves_niveau(etablissement_context, r'(Élèves du Niveau de formation )(.*)$',
+                                                     'Élèves du Niveau de formation %')
 
-            profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r"(Profs de l'établissement )(.*)$",
-                                                 "Profs de l'établissement %")
+                profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_classes(etablissement_context, r'(Profs de la Classe )(.*)$',
+                                                     'Profs de la Classe %')
 
-            log.info("Purge des cohortes Elèves de la Classe")
-            synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
-                                       "Élèves de la Classe %s")
+                profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_etab(etablissement_context, r"(Profs de l'établissement )(.*)$",
+                                                     "Profs de l'établissement %")
 
-            log.info("Purge des cohortes Elèves du Niveau de formation")
-            synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
-                                       'Élèves du Niveau de formation %s')
+                #Sert à purger les élèves qui ne sont plus présents dans l'annuaire LDAP des cohortes
+                log.info("Purge des cohortes Elèves de la Classe")
+                synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
+                                           "Élèves de la Classe %s")
 
-            log.info("Purge des cohortes Profs de la Classe")
-            synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
-                                       'Profs de la Classe %s')
+                log.info("Purge des cohortes Elèves du Niveau de formation")
+                synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
+                                           'Élèves du Niveau de formation %s')
 
-            log.info("Purge des cohortes Profs de l'établissement")
-            synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
-                                       "Profs de l'établissement %s")
+                log.info("Purge des cohortes Profs de la Classe")
+                synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
+                                           'Profs de la Classe %s')
 
-            log.info("Suppression des cohortes vides (sans utilisateur)")
-            db.delete_empty_cohorts()
+                log.info("Purge des cohortes Profs de l'établissement")
+                synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
+                                           "Profs de l'établissement %s")
+
+                log.info("Suppression des cohortes vides (sans utilisateur)")
+                db.delete_empty_cohorts()
 
         # Premier commit pour libérer les locks pour le webservice moodle
         db.connection.commit()
@@ -229,7 +232,8 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         ldap_users = ldap.search_personne()
         db_valid_users = db.get_all_valid_users()
         synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
-        db.delete_useless_users()
+        #TODO : à garder ? Une fois les dépendances de l'utilisateur supprimées il est peut être possible de le supprimer complètement
+        #db.delete_useless_users()
 
         db.connection.commit()
 

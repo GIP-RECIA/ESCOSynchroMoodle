@@ -18,3 +18,4 @@ build/
 dist/
 
 *_precedent.txt
+timestamps.txt

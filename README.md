@@ -41,8 +41,8 @@ pipenv run python setup.py clean build bdist bdist_wheel bdist_pex --pex-args="-
 
 # Déploiement et exécution
 
-Les packages du script sont disponibles dans l'onglet 
-[Release du github](https://github.com/GIP-RECIA/ESCOSynchroMoodle/releases). 
+Les packages du script sont disponibles dans l'onglet
+[Release du github](https://github.com/GIP-RECIA/ESCOSynchroMoodle/releases).
 
 Deux formats sont disponibles:
 
@@ -51,7 +51,7 @@ Deux formats sont disponibles:
 
 ## PEX
 
-Le fichier `.pex` est un executable qui contient l'environnement virtuel, les dépendances et le script. Cela permet de 
+Le fichier `.pex` est un executable qui contient l'environnement virtuel, les dépendances et le script. Cela permet de
 déployer le script sans avoir à se soucier de l'installation de Python.
 
 ```
@@ -60,7 +60,7 @@ déployer le script sans avoir à se soucier de l'installation de Python.
 
 ## Wheel
 
-Le fichier `.whl` peut être installé via pip sur un Python système ou dans un virtualenv. 
+Le fichier `.whl` peut être installé via pip sur un Python système ou dans un virtualenv.
 
 Il est possible d'utiliser [pyenv](https://github.com/pyenv/pyenv) pour installer une version spécifique de Python sous
 Linux et créer un virtualenv pour le script.
@@ -86,11 +86,11 @@ optional arguments:
 
 # Configuration YAML
 
-Le script fonctionne à l'aide d'un fichier de configuration au format YAML. Il est possible de spécifier plusieurs 
-fichiers de configuration, en utilisant plusieurs fois le flag -c, les configuration de chaque fichier sont alors 
+Le script fonctionne à l'aide d'un fichier de configuration au format YAML. Il est possible de spécifier plusieurs
+fichiers de configuration, en utilisant plusieurs fois le flag -c, les configuration de chaque fichier sont alors
 fusionnées.
 
-La structure de la configuration est modélisée par les classes situées dans 
+La structure de la configuration est modélisée par les classes situées dans
 [synchromoodle/config.py](./synchromoodle/config.py)
 
 #### Propriétés
@@ -180,6 +180,7 @@ La structure de la configuration est modélisée par les classes situées dans
 | delay_anonymize_teacher | Délai, en jours, avant d'anonymiser un enseignant qui n'est plus présent dans l'annuaire LDAP | 90                | Nombres entiers          |
 | delay_delete_teacher    | Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP | 365               | Nombres entiers          |
 | delay_backup_course     | Délai, en jours, avant de sauvegarder un cours inutilisé                                      | 365               | Nombres entiers          |
+| purge_cohorts     | Indicateur de purge des cohortes                                     | False               | Booléen          |
 
 ###### webservice
 
@@ -189,12 +190,14 @@ La structure de la configuration est modélisée par les classes situées dans
 | moodle_host       | Host HTTP cible pour accéder au webservice Moodle SANS '/' FINAL                                                          | ""                                                                 | Chaine de caractères |
 | backup_cmd        | Commande à executer pour lancer la backup d'un cours                                                                      | "php backup.php --courseid=%courseid% --destination=/MoodleBackups"| Chaine de caractères |
 | backup_success_re | Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le succès de l'opération | "Backup completed"                                                 | Chaine de caractères |
+| user_delete_pagesize        | Nombre d'utilisateurs maximum supprimés en un seul     appel au WebService                                                                      | 50 | Nombres entiers |
+| course_delete_pagesize        | Nombre de cours maximum supprimés en un seul     appel au WebService                                                                      | 50 | Nombres entiers |
 
 ###### timestamp_store
 
 | Propriété | Description                                                                                                    | Valeur par défaut |         Type         |
 |-----------|----------------------------------------------------------------------------------------------------------------|-------------------|:--------------------:|
-| file      | Fichier contenant les dates de traitement précedent pour les établissements                                    | "timestamps.txt"  | Chaine de caractères |
+| file      | Fichier contenant les dates de traitement précédent pour les établissements                                    | "timestamps.txt"  | Chaine de caractères |
 | separator | Séparateur utilisé dans le fichier de traitement pour séparer l'etablissement des date de traitement précedent | "-"               | Chaine de caractères |
 
 ###### etablissements
@@ -232,8 +235,8 @@ La structure de la configuration est modélisée par les classes situées dans
 
 | Propriété                 | Description                                                              | Valeur par défaut   |              Type              |
 |---------------------------|--------------------------------------------------------------------------|---------------------|:------------------------------:|
-| ldap_attribut_user        | Attribut utilisé pour determiner les inspecteurs                         | "ESCOPersonProfils" |      Chaine de caractères      |
-| ldap_valeur_attribut_user | Valeur de l'attribute pour déterminer les inspecteurs                    | ["INS"]             | Liste de chaines de caractères |
+| ldap_attribut_user        | Attribut utilisé pour déterminer les inspecteurs                         | "ESCOPersonProfils" |      Chaine de caractères      |
+| ldap_valeur_attribut_user | Valeur de l'attribut pour déterminer les inspecteurs                    | ["INS"]             | Liste de chaines de caractères |
 | cle_timestamp             | Clé pour stocker le timestamp du dernier traitement inter-etablissements | "INSPECTEURS"       |      Chaine de caractères      |
 
 #### Exemple de configuration

@@ -1,0 +1,77 @@
+database:
+  database: moodle
+  user: moodle
+  password: moodle
+  host: localhost
+  port: 33306
+  entete: mdl_
+  charset: utf8
+
+ldap:
+  uri: "ldap://localhost:389"
+  username: "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr"
+  password: "admin"
+  baseDN: "dc=esco-centre,dc=fr"
+  structuresRDN: "ou=structures"
+  personnesRDN: "ou=people"
+  groupsRDN: "ou=groups"
+  adminRDN: "ou=administrateurs"
+
+webservice:
+  token: "cd4ab10e5cdd9c81d49d5aec9097a685"
+  moodle_host: "http://localhost:8080"
+  backup_cmd: sudo docker exec -it mde_php php admin/cli/backup.php --courseid=%courseid% --destination=../../MoodleBackups
+
+constantes:
+  id_role_enseignant : 4
+  id_role_proprietaire_cours : 3
+  id_role_inspecteur : 10
+  id_role_directeur : 11
+  id_role_utilisateur_limite : 12
+
+delete:
+  purge_cohorts: True
+
+logging:
+  formatters:
+    console:
+      format: '[%(name)s] [%(levelname)s] %(message)s'
+    file:
+      format: '[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s'
+  handlers:
+    debug:
+      class: logging.StreamHandler
+      formatter: console
+      stream: ext://sys.stdout
+      level: DEBUG
+    file:
+      class: logging.handlers.TimedRotatingFileHandler
+      formatter: file
+      when: midnight
+      filename: 'logs/synchromoodle.log'
+    file-error:
+      class: logging.handlers.TimedRotatingFileHandler
+      level: ERROR
+      formatter: file
+      when: midnight
+      filename: 'logs/synchromoodle.error.log'
+  root:
+    level: NOTSET
+    handlers: [debug, file, file-error]
+
+actions:
+- id: academique
+  timestampStore:
+    file: "trtAcademique_precedent.txt"
+  etablissements:
+    listeEtab: ["0290009C", "0291595B"]
+- id: interetab-all
+  type: interetab
+  timestampStore:
+    file: "trtInteretabAll_precedent.txt"
+- id: inspecteurs
+  type: inspecteurs
+- id: nettoyage
+  type: nettoyage
+  etablissements:
+    listeEtab: ["0290009C", "0291595B"]

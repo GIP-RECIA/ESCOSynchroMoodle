@@ -39,8 +39,14 @@ class WebServiceConfig(_BaseConfig):
         """Commande à executer pour lancer la backup d'un cours"""
 
         self.backup_success_re = "Backup completed"
-        """Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le 
+        """Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le
         succès de l'opération"""
+
+        self.user_delete_pagesize = 50
+        """Nombre d'utilisateurs qu'on supprime en 1 seul appel au web service"""
+
+        self.course_delete_pagesize = 50
+        """Nombre de cours qu'on supprime en 1 seul appel au web service"""
 
         super().__init__(**entries)
 
@@ -51,7 +57,7 @@ class DeleteConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
-        self.ids_users_undeletable = [1, 2]
+        self.ids_users_undeletable = [1, 2, 3]
         """Ids des utilisateurs qui ne doivent en aucun cas être supprimés"""
 
         self.ids_roles_teachers = [2]
@@ -71,6 +77,9 @@ class DeleteConfig(_BaseConfig):
 
         self.delay_backup_course = 365
         """Délai, en jours, avant de sauvegarder un cours inutilisé"""
+
+        self.purge_cohorts = False
+        """Booléen indiquant si on purge les cohortes s'il y a une action de suppression"""
 
         super().__init__(**entries)
 

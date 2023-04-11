@@ -5,7 +5,7 @@ Synchronizer
 
 import datetime
 import re
-import subprocess
+import os
 from logging import getLogger
 from typing import Dict, List
 
@@ -164,6 +164,7 @@ class Synchronizer:
         Synchronise un établissement
         :return: EtabContext
         """
+
         context = EtablissementContext(uai)
         context.gere_admin_local = uai not in self.__action_config.etablissements.listeEtabSansAdmin
         context.etablissement_regroupe = est_grp_etab(uai, self.__action_config.etablissements)
@@ -299,6 +300,7 @@ class Synchronizer:
             self.__db.enroll_user_in_cohort(id_formation_cohort, eleve_id, self.context.timestamp_now_sql)
             eleve_cohorts.append(id_formation_cohort)
 
+        #Note : Ne désinscrit pas les elèves qui ne sont plus présents dans le LDAP des cohortes
         log.info("Désinscription de l'élève %s des anciennes cohortes", eleve_ldap)
         self.__db.disenroll_user_from_cohorts(eleve_cohorts, eleve_id)
 
@@ -686,10 +688,10 @@ class Synchronizer:
                                                           log=log)
         return id_cohort_enseignants
 
-    def get_users_by_cohorts_comparators(self, etab_context: EtablissementContext, cohortname_pattern_re: str,
+    def get_users_by_cohorts_comparators_eleves_classes(self, etab_context: EtablissementContext, cohortname_pattern_re: str,
                                          cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
-        Renvoie deux dictionnaires listant les utilisateurs (uid) dans chacune des classes.
+        Renvoie deux dictionnaires listant les élèves (uid) dans chacune des classes.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
         :param etab_context: EtablissementContext
         :param cohortname_pattern_re: str
@@ -714,6 +716,92 @@ class Synchronizer:
 
         return eleves_by_cohorts_db, eleves_by_cohorts_ldap
 
+    def get_users_by_cohorts_comparators_eleves_niveau(self, etab_context: EtablissementContext, cohortname_pattern_re: str,
+                                         cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+        """
+        Renvoie deux dictionnaires listant les élèves (uid) dans chacun des niveaux de formation
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
+        :param etab_context: EtablissementContext
+        :param cohortname_pattern_re: str
+        :param cohortname_pattern: str
+        :return:
+        """
+        classes_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
+
+        eleves_by_cohorts_db = {}
+        for cohort in classes_cohorts:
+            matches = re.search(cohortname_pattern_re, cohort.name)
+            classe_name = matches.group(2)
+            eleves_by_cohorts_db[classe_name] = []
+            for username in self.__db.get_cohort_members(cohort.id):
+                eleves_by_cohorts_db[classe_name].append(username.lower())
+
+        eleves_by_cohorts_ldap = {}
+        for niveau in eleves_by_cohorts_db:
+            eleves_by_cohorts_ldap[niveau] = []
+            for eleve in self.__ldap.search_eleves_in_niveau(niveau, etab_context.uai):
+                eleves_by_cohorts_ldap[niveau].append(eleve.uid.lower())
+
+        return eleves_by_cohorts_db, eleves_by_cohorts_ldap
+
+    def get_users_by_cohorts_comparators_profs_classes(self, etab_context: EtablissementContext, cohortname_pattern_re: str,
+                                         cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+        """
+        Renvoie deux dictionnaires listant les profs (uid) dans chacune des classes
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
+        :param etab_context: EtablissementContext
+        :param cohortname_pattern_re: str
+        :param cohortname_pattern: str
+        :return:
+        """
+        classes_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
+
+        profs_by_cohorts_db = {}
+        for cohort in classes_cohorts:
+            matches = re.search(cohortname_pattern_re, cohort.name)
+            classe_name = matches.group(2)
+            profs_by_cohorts_db[classe_name] = []
+            for username in self.__db.get_cohort_members(cohort.id):
+                profs_by_cohorts_db[classe_name].append(username.lower())
+
+        profs_by_cohorts_ldap = {}
+        for classe in profs_by_cohorts_db:
+            profs_by_cohorts_ldap[classe] = []
+            for prof in self.__ldap.search_enseignants_in_classe(classe, etab_context.uai):
+                profs_by_cohorts_ldap[classe].append(prof.uid.lower())
+
+        return profs_by_cohorts_db, profs_by_cohorts_ldap
+
+
+    def get_users_by_cohorts_comparators_profs_etab(self, etab_context: EtablissementContext, cohortname_pattern_re: str,
+                                         cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+        """
+        Renvoie deux dictionnaires listant les profs (uid) dans chacun des établissement
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
+        :param etab_context: EtablissementContext
+        :param cohortname_pattern_re: str
+        :param cohortname_pattern: str
+        :return:
+        """
+        etab_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
+
+        profs_by_cohorts_db = {}
+        for cohort in etab_cohorts:
+            matches = re.search(cohortname_pattern_re, cohort.name)
+            etab_name = matches.group(2)
+            profs_by_cohorts_db[etab_name] = []
+            for username in self.__db.get_cohort_members(cohort.id):
+                profs_by_cohorts_db[etab_name].append(username.lower())
+
+        profs_by_cohorts_ldap = {}
+        for etab in profs_by_cohorts_db:
+            profs_by_cohorts_ldap[etab] = []
+            for prof in self.__ldap.search_enseignants_in_etab(etab_context.uai):
+                profs_by_cohorts_ldap[etab].append(prof.uid.lower())
+
+        return profs_by_cohorts_db, profs_by_cohorts_ldap
+
+
     def list_contains_username(self, ldap_users: List[PersonneLdap], username: str):
         """
         Vérifie si une liste d'utilisateurs ldap contient un utilisateur via son username
@@ -729,79 +817,102 @@ class Synchronizer:
     def backup_course(self, courseid, log=getLogger()):
         log.info("Backup du cours avec l'id %d", courseid)
         cmd = self.__config.webservice.backup_cmd.replace("%courseid%", str(courseid))
-        backup_process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        stdout = backup_process.stdout.read()
-        output = stdout.decode('utf-8')
+        backup_process = os.popen(cmd)
+        output = backup_process.read()
         m = re.search(self.__config.webservice.backup_success_re, output)
         return m is not None
 
     def check_and_process_user_courses(self, user_id: int, log=getLogger()):
+        #Liste stockant tous les cours à supprimer
+        course_ids_to_delete = []
+        #Récupère tous les cours de l'utilisateur
         user_courses_ids = [user_course[0] for user_course in self.__db.get_courses_ids_owned_by(user_id)]
+        #Date actuelle
         now = self.__db.get_timestamp_now()
+        #Pour chaque cours de l'utilisateur
         for courseid in user_courses_ids:
+            #On récupère tous les Propriétaire de cours de ce cours
             owners_ids = [ownerid[0] for ownerid in self.__db.get_userids_owner_of_course(courseid)]
+            #Si il est tout seul à posséder ce cours
             if len(owners_ids) == 1 and owners_ids[0] == user_id:
+                #Récupération de la date de dernière modification
                 timemodified = self.__db.get_course_timemodified(courseid)
+                #Récupération du délai avant suppression du cours
                 delay_backup_course = self.__config.delete.delay_backup_course
+                #Test pour voir si le cours doit être supprimé
                 if timemodified < now - (delay_backup_course * SECONDS_PER_DAY):
+                    log.info("Le cours %d n'a pas été modifié depuis plus de %d jours, il va être supprimé", courseid, delay_backup_course)
+                    #Backup d'abord
                     backup_success = self.backup_course(courseid, log)
                     if backup_success:
                         log.info("La backup du cours %d été sauvegardée", courseid)
-                        self.__db.delete_course(courseid)
-                        log.info("Le cours %d a été supprimé de la base de données Moodle", courseid)
+                        course_ids_to_delete.append(courseid)
                     else:
                         log.error("La backup du cours %d a échouée", courseid)
+        #Suppression des cours
+        if course_ids_to_delete:
+            self.delete_courses(course_ids_to_delete)
 
     def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: List, log=getLogger()):
         """
         Anonymise ou Supprime les utilisateurs devenus inutiles
-        :param ldap_users:
-        :param db_users:
+        :param ldap_users: La liste de toutes les personnes du ldap
+        :param db_users: La liste de toutes les personnes dans moodle
         :param log:
         :return:
         """
         user_ids_to_delete = []
         user_ids_to_anonymize = []
         now = self.__db.get_timestamp_now()
+        is_teacher = False
         for db_user in db_users:
             if db_user[0] in self.__config.delete.ids_users_undeletable:
                 continue
             if not self.list_contains_username(ldap_users, db_user[1]):
                 log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP", db_user[1])
                 is_teacher = self.__db.user_has_role(db_user[0], self.__config.delete.ids_roles_teachers)
-
+                #Récupération des délais avant anonymisation et avant suppression
                 delete_delay = self.__config.delete.delay_delete_teacher if is_teacher else \
                     self.__config.delete.delay_delete_student
                 anon_delay = self.__config.delete.delay_anonymize_teacher if is_teacher else \
                     self.__config.delete.delay_anonymize_student
+
                 if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
                     log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
                              " supprimé", db_user[1], delete_delay)
                     user_ids_to_delete.append(db_user[0])
+
                 elif db_user[2] < now - (anon_delay * SECONDS_PER_DAY):
                     log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
                              " anonymisé", db_user[1], delete_delay)
                     user_ids_to_anonymize.append(db_user[0])
 
+        #Pour chaque utilisateur à supprimer
         if user_ids_to_delete:
             log.info("Suppression des utilisateurs en cours...")
             for user_id in user_ids_to_delete:
-                self.check_and_process_user_courses(user_id, log=log)
+                #Suppression des cours inutiles si l'utilisateur est un enseignant
+                if is_teacher:
+                    log.info("Suppression des cours inutiles de l'enseignant %s", user_id)
+                    self.check_and_process_user_courses(user_id, log=log)
             self.delete_users(user_ids_to_delete, log=log)
             log.info("%d utilisateurs supprimés", len(user_ids_to_delete))
+
+        #De même pour user_ids_to_anonymize
         if user_ids_to_anonymize:
             log.info("Anonymisation des utilisateurs en cours...")
             self.__db.anonymize_users(user_ids_to_anonymize)
             log.info("%d utilisateurs anonymisés", len(user_ids_to_anonymize))
 
-    def delete_users(self, userids: List[int], pagesize=50, log=getLogger()) -> int:
+    def delete_users(self, userids: List[int], log=getLogger()) -> int:
         """
         Supprime les utilisateurs d'une liste en paginant les appels au webservice
-        :param userids:
-        :param pagesize:
+        :param userids: La liste des id des utilisateurs à supprimer
+        :param pagesize:  Le nombre d'utilisateurs supprimés en un seul appel au webservice
         :param log:
         :return:
         """
+        pagesize = self.__config.webservice.user_delete_pagesize
         i = 0
         total = len(userids)
         userids_page = []
@@ -816,6 +927,32 @@ class Synchronizer:
             self.__webservice.delete_users(userids_page)
             log.info("%d / %d utilisateurs supprimés", i, total)
         return i
+
+
+    def delete_courses(self, courseids: List[int], log=getLogger()) -> int:
+        """
+        Supprime les cours d'une liste en paginant les appels au webservice
+        :param courseids: La liste des id de cours à supprimer
+        :param pagesize: Le nombre de cours supprimés en un seul appel au webservice
+        :param log:
+        :return:
+        """
+        pagesize = self.__config.webservice.course_delete_pagesize
+        i = 0
+        total = len(courseids)
+        courseids_page = []
+        for courseid in courseids:
+            courseids_page.append(courseid)
+            i += 1
+            if i % pagesize == 0:
+                self.__webservice.delete_courses(courseids_page)
+                courseids_page = []
+                log.info("%d / %d cours supprimés", i, total)
+        if i % pagesize > 0:
+            self.__webservice.delete_courses(courseids_page)
+            log.info("%d / %d cours supprimés", i, total)
+        return i
+
 
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],
                       users_by_cohorts_ldap: Dict[str, List[str]],
@@ -872,8 +1009,8 @@ class Synchronizer:
 
         # Ajout des utilisateurs dans la cohorte
         for personne_ldap in self.__ldap.search_personne(
-                since_timestamp=since_timestamp if not self.__arguments.purge_cohortes else None,
-                isMemberOf=is_member_of_list):
+                since_timestamp = since_timestamp,
+                isMemberOf = is_member_of_list):
             user_id = self.__db.get_user_id(personne_ldap.uid)
             if user_id:
                 self.__db.enroll_user_in_cohort(id_cohort, user_id, self.context.timestamp_now_sql)
