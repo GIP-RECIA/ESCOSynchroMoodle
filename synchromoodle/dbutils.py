@@ -677,12 +677,34 @@ class Database:
         })
 
     def get_courses_ids_owned_by(self, user_id: int):
+        """
+        Recherche tous les cours dont l'utilisateur est propriétaire
+        :param user_id: L'id de l'utilisateur concerné
+        :returns: La liste des cours dont l'utilisateur est propriétaire
+        """
         s = "SELECT instanceid FROM {entete}context AS context" \
             " INNER JOIN {entete}role_assignments AS role_assignments" \
             " ON context.id = role_assignments.contextid" \
             " WHERE role_assignments.userid = %(userid)s AND role_assignments.roleid = %(roleid)s" \
             .format(entete=self.entete)
         self.mark.execute(s, params={'userid': user_id, 'roleid': self.constantes.id_role_proprietaire_cours})
+        return self.mark.fetchall()
+
+    def get_courses_ids_owned_or_teach(self, user_id: int):
+        """
+        Retourne tous les cours auxquels participe un utilisateur
+        en tant qu'enseignant (role enseignant ou propriétaire de cours)
+        :param user_id: L'id de l'utilisateur concerné
+        :returns: La liste des cours dans lequel enseigne l'utilisateur
+        """
+        s = "SELECT instanceid FROM {entete}context AS context" \
+            " INNER JOIN {entete}role_assignments AS role_assignments" \
+            " ON context.id = role_assignments.contextid" \
+            " WHERE role_assignments.userid = %(userid)s AND (role_assignments.roleid = %(roleidowner)s" \
+            " OR role_assignments.roleid = %(roleidteacher)s)" \
+            .format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id, 'roleidowner': self.constantes.id_role_proprietaire_cours,
+        'roleidteacher': self.constantes.id_role_enseignant})
         return self.mark.fetchall()
 
     def get_userids_owner_of_course(self, course_id: int):

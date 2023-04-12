@@ -823,25 +823,31 @@ class Synchronizer:
         return m is not None
 
     def check_and_process_user_courses(self, user_id: int, log=getLogger()):
+
         #Liste stockant tous les cours à supprimer
         course_ids_to_delete = []
         #Récupère tous les cours de l'utilisateur
-        user_courses_ids = [user_course[0] for user_course in self.__db.get_courses_ids_owned_by(user_id)]
+        user_courses_ids = [user_course[0] for user_course in self.__db.get_courses_ids_owned_or_teach(user_id)]
         #Date actuelle
         now = self.__db.get_timestamp_now()
+
         #Pour chaque cours de l'utilisateur
         for courseid in user_courses_ids:
+            log.info("Traitement du cours %d", courseid)
             #On récupère tous les Propriétaire de cours de ce cours
             owners_ids = [ownerid[0] for ownerid in self.__db.get_userids_owner_of_course(courseid)]
+
             #Si il est tout seul à posséder ce cours
             if len(owners_ids) == 1 and owners_ids[0] == user_id:
                 #Récupération de la date de dernière modification
                 timemodified = self.__db.get_course_timemodified(courseid)
                 #Récupération du délai avant suppression du cours
                 delay_backup_course = self.__config.delete.delay_backup_course
+
                 #Test pour voir si le cours doit être supprimé
                 if timemodified < now - (delay_backup_course * SECONDS_PER_DAY):
-                    log.info("Le cours %d n'a pas été modifié depuis plus de %d jours, il va être supprimé", courseid, delay_backup_course)
+                    log.info("Le cours %d n'a pas été modifié depuis plus de %d jours, et l'utilisateur %d est le seul\
+                    propriétaire de ce cours, il va donc être supprimé", courseid, user_id, elay_backup_course)
                     #Backup d'abord
                     backup_success = self.backup_course(courseid, log)
                     if backup_success:
@@ -849,6 +855,13 @@ class Synchronizer:
                         course_ids_to_delete.append(courseid)
                     else:
                         log.error("La backup du cours %d a échouée", courseid)
+
+            #Sinon s'il n'est pas tout seul à posséder ce cours, on lui retire son rôle
+            #Autrement dit on le désinscrit du cours
+            else:
+                log.info("L'utilisateur %d n'est pas le seul enseignant du cours %d, il va donc être désinscrit", user_id, courseid)
+                self.__webservice.unenrol_user_from_course(user_id, courseid)
+
         #Suppression des cours
         if course_ids_to_delete:
             self.delete_courses(course_ids_to_delete)
@@ -861,8 +874,9 @@ class Synchronizer:
         :param log:
         :return:
         """
-        user_ids_to_delete = []
-        user_ids_to_anonymize = []
+        user_ids_to_delete = [] #Utilisateurs à supprimer
+        user_ids_to_anonymize = [] #Utilisateurs à anonymiser
+        user_ids_to_process_courses = [] #Enseignants dont les cours doivent subir un traitement
         now = self.__db.get_timestamp_now()
         is_teacher = False
 
@@ -891,29 +905,37 @@ class Synchronizer:
                 #à des cours, et pas de connection à oodle depuis plus de delete_delay jours
                 if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
                     if len(user_courses) == 0:
-                        log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
+                        log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours et n'est pas inscrit à un cours. Il va être"
                                  " supprimé", db_user[1], delete_delay)
                         user_ids_to_delete.append(db_user[0])
 
-                #Cas ou on doit anonymiser un utilisateur : plus présent dans le ldap, inscrit à des cours,
-                #et pas de connection à moodle depuis plus de anon_delay jours
                 if db_user[0] not in user_ids_to_delete:
+                    #Cas ou on doit anonymiser un utilisateur : plus présent dans le ldap, inscrit à des
+                    #cours, et pas de connection à moodle depuis plus de anon_delay jours
                     if db_user[2] < now - (anon_delay * SECONDS_PER_DAY):
                         if len(user_courses) > 0:
-                            log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
-                                     " anonymisé", db_user[1], delete_delay)
+                            log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours et est inscrit à %s cours. Il va être"
+                                     " anonymisé", db_user[1], delete_delay, len(user_courses))
                             user_ids_to_anonymize.append(db_user[0])
+
+                    #Cas ou on doit effectuer un traitement sur les cours d'un prof : plus présent dans le ldap,
+                    #inscrit avec le role propriétaire de cours ou enseignant dans au moins 1 cours,
+                    #et pas de connection à moodle depuis plus de delay_backup_course jours
+                    if is_teacher and (db_user[2] < now - (self.__config.delete.delay_backup_course * SECONDS_PER_DAY)):
+                        owned_or_teach_courses = [user_course[0] for user_course in self.__db.get_courses_ids_owned_or_teach(db_user[0])]
+                        if len(owned_or_teach_courses) > 0:
+                            log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Un traitement"
+                                     " va être effectué sur ses cours", db_user[1], self.__config.delete.delay_backup_course)
+                            user_ids_to_process_courses.append(db_user[0])
+
+        #Traitement sur les cours des enseignants
+        for user_id in user_ids_to_process_courses:
+            log.info("Traitement des cours de l'enseignant %s", user_id)
+            self.check_and_process_user_courses(user_id, log=log)
 
         #Pour chaque utilisateur à supprimer
         if user_ids_to_delete:
             log.info("Suppression des utilisateurs en cours...")
-            for user_id in user_ids_to_delete:
-                #Suppression des cours inutiles si l'utilisateur est un enseignant
-                if is_teacher:
-                    log.info("Suppression des cours inutiles de l'enseignant %s", user_id)
-                    self.check_and_process_user_courses(user_id, log=log)
-
-            #Suppression des utilisateurs inutiles
             self.delete_users(user_ids_to_delete, log=log)
             log.info("%d utilisateurs supprimés", len(user_ids_to_delete))
 
