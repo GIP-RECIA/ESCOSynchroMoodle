@@ -716,6 +716,16 @@ class Database:
         self.mark.execute(s, params={'courseid': course_id, 'roleid': self.constantes.id_role_proprietaire_cours})
         return self.mark.fetchall()
 
+    def get_user_data(self, user_id: int):
+        """
+        Retourne les informations détaillées sur un utilisateur (table mdl_user)
+        :param user_id: L'id de l'utilisateur dont on veut récupére les infos
+        :returns:
+        """
+        s = "SELECT * FROM {entete}user WHERE id = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        return self.mark.fetchone()
+
     def eleve_has_references(self, user_id: int):
         """
         Indique si un élève dipose de références dans des exercices ou des notations moodle
@@ -769,6 +779,17 @@ class Database:
             return True
 
         #Si jamais on n'a trouvé aucune référence, alors on peut renvoyer False
+        return False
+
+    def enseignant_has_references(self, user_id: int):
+        """
+        Indique si un enseignant dipose de références dans des exercices ou des notations moodle
+        Les références comprennent :
+        - # TODO:
+        :param user_id: L'id de l'utilisateur qu'on veut vérifier
+        :returns: Un booléen à vrai si l'utilisateur à des références, faux sinon
+        """
+        ## TODO:
         return False
 
     def get_id_categorie(self, categorie_name):
