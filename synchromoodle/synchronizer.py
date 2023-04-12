@@ -901,21 +901,24 @@ class Synchronizer:
                 #Récupération de la liste des cours de l'utilisateur
                 user_courses = self.__webservice.get_courses_user_enrolled(db_user[0])
 
-                #Cas ou on doit supprimer un utilisateur : plus présent dans le ldap, pas d'inscriptions
-                #à des cours, et pas de connection à oodle depuis plus de delete_delay jours
-                if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
-                    if len(user_courses) == 0:
-                        log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours et n'est pas inscrit à un cours. Il va être"
-                                 " supprimé", db_user[1], delete_delay)
-                        user_ids_to_delete.append(db_user[0])
+                #Cas ou on doit supprimer un utilisateur : plus présent dans le ldap, pas
+                #d'inscriptions à des cours pas de références à des notations ou exercices
+                #et pas de connection à moodle depuis plus de delete_delay jours
+                if db_user[2] < now - (delete_delay * SECONDS_PER_DAY): #delai de connexion
+                    if len(user_courses) == 0: #inscription à aucun cours
+                        if not self.__db.eleve_has_references(db_user[0]): #si pas de références
+                            log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours et n'est pas inscrit à un cours,"
+                            " ni ne possède de référénces. Il va être supprimé", db_user[1], delete_delay)
+                            user_ids_to_delete.append(db_user[0])
 
                 if db_user[0] not in user_ids_to_delete:
                     #Cas ou on doit anonymiser un utilisateur : plus présent dans le ldap, inscrit à des
-                    #cours, et pas de connection à moodle depuis plus de anon_delay jours
-                    if db_user[2] < now - (anon_delay * SECONDS_PER_DAY):
-                        if len(user_courses) > 0:
-                            log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours et est inscrit à %s cours. Il va être"
-                                     " anonymisé", db_user[1], delete_delay, len(user_courses))
+                    #cours ou dispose de références dans des notations ou exercices,
+                    #et pas de connection à moodle depuis plus de anon_delay jours
+                    if db_user[2] < now - (anon_delay * SECONDS_PER_DAY): #délai de connexion
+                        if len(user_courses) > 0 or self.__db.eleve_has_references(db_user[0]): #inscrit à au moins 1 cours ou possède des références
+                            log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours et est inscrit à des cours ou possèdes des références."
+                            " Il va être anonymisé", db_user[1], anon_delay)
                             user_ids_to_anonymize.append(db_user[0])
 
                     #Cas ou on doit effectuer un traitement sur les cours d'un prof : plus présent dans le ldap,

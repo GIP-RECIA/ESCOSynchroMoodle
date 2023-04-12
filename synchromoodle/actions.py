@@ -232,12 +232,10 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         ldap_users = ldap.search_personne()
         db_valid_users = db.get_all_valid_users()
         synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
-        #TODO : à garder ? Une fois les dépendances de l'utilisateur supprimées il est peut être possible de le supprimer complètement
-        #db.delete_useless_users()
 
         db.connection.commit()
 
-        log.info("Fin d'action de nettoyage")
+        log.info("Fin de l'action de nettoyage")
     finally:
         db.disconnect()
         ldap.disconnect()

@@ -716,6 +716,61 @@ class Database:
         self.mark.execute(s, params={'courseid': course_id, 'roleid': self.constantes.id_role_proprietaire_cours})
         return self.mark.fetchall()
 
+    def eleve_has_references(self, user_id: int):
+        """
+        Indique si un élève dipose de références dans des exercices ou des notations moodle
+        Les références comprennent :
+        - des notes obtenues dans n'importe quelle activité (historique de notes)
+        - des réponses à une activité (feedback, test, consultation, sondage)
+        - des participations à une activités (forum, chat)
+        :param user_id: L'id de l'utilisateur qu'on veut vérifier
+        :returns: Un booléen à vrai si l'utilisateur à des références, faux sinon
+        """
+
+        #Dès qu'on trouve une référence on renvoie True
+        s = "SELECT count(*) FROM {entete}forum_posts WHERE userid = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
+
+        s = "SELECT count(*) FROM {entete}grade_grades_history WHERE userid = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
+
+        s = "SELECT count(*) FROM {entete}feedback_completed WHERE userid = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
+
+        s = "SELECT count(*) FROM {entete}chat_messages WHERE userid = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
+
+        s = "SELECT count(*) FROM {entete}course_modules_completion WHERE userid = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
+
+        s = "SELECT count(*) FROM {entete}quiz_attempts WHERE userid = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
+
+        s = "SELECT count(*) FROM {entete}survey_answers WHERE userid = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
+
+        s = "SELECT count(*) FROM {entete}choice_answers WHERE userid = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
+
+        #Si jamais on n'a trouvé aucune référence, alors on peut renvoyer False
+        return False
+
     def get_id_categorie(self, categorie_name):
         """
         Fonction permettant de recuperer l'id correspondant a la
