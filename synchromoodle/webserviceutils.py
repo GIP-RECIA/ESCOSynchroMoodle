@@ -21,7 +21,7 @@ class WebService:
     def delete_users(self, userids: List[int]):
         """
         Supprime des utilisateurs via le webservice moodle
-        Attention à bien donner à l'utilisateur WebService le rôle moodle/user:delete
+        L'utilisateur WebService doit avoir la permission moodle/user:delete
         :param userids: La liste des ids des utilisateurs à supprimer
         :return:
         """
@@ -47,8 +47,8 @@ class WebService:
     def delete_courses(self, courseids: list[int]):
         """
         Supprime des cours via le webservice moodle
-        Attention à bien donner à l'utilisateur WebService les rôles
-        moodle/course:delete ET moodle/course:view
+        L'utilisateur WebService doit avoir les permissions
+        moodle/course:delete et moodle/course:view
         :param courseid: La liste des id des cours à supprimer
         :returns: Un dictionnaire avec la liste des warnings
         :raises Exception:
@@ -64,6 +64,40 @@ class WebService:
                                'wstoken': self.config.token,
                                'moodlewsrestformat': "json",
                                'wsfunction': "core_course_delete_courses",
+                               **params
+                           })
+
+        json_data = json.loads(res.text)
+
+        if json_data is not None and 'exception' in json_data:
+            raise Exception(json_data['message'])
+        else:
+            return(json_data)
+
+
+    def get_courses_user_enrolled(self, userid: int, returnusercount=0):
+        """
+        Récupère la liste de tous les cours auxquels est inscrit un utilisateur
+        L'utilisateur WebService doit avoir les permissions
+        moodle/course:viewparticipants et moodle/user:viewdetails
+
+        :param userid: L'id de l'utilisateur
+        :param returnusercount: - 0 si on ne retourne pas le nombre d'utilisateurs inscrits à un cours
+                                - 1 si on retourne le nombre d'utilisateurs inscrits à un cours
+                                (influe sur le temps de réponse)
+        :returns: Un dictionnaire contenant les cours de l'utilisateur
+        :raises Exception:
+        """
+
+        params = {}
+        params["userid"] = userid
+        params["returnusercount"] = returnusercount
+
+        res = requests.get(url=self.url,
+                           params={
+                               'wstoken': self.config.token,
+                               'moodlewsrestformat': "json",
+                               'wsfunction': "core_enrol_get_users_courses",
                                **params
                            })
 

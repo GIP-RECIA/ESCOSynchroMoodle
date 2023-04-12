@@ -865,27 +865,44 @@ class Synchronizer:
         user_ids_to_anonymize = []
         now = self.__db.get_timestamp_now()
         is_teacher = False
+
+        #Pour chaque utilisateur en BD
         for db_user in db_users:
+
+            #Si jamais c'est un utilisateur à ne pas supprimer
             if db_user[0] in self.__config.delete.ids_users_undeletable:
                 continue
+
+            #Si l'utilisateur n'est plus présent dans l'annuaire LDAP, alors il faut faire un traitement
             if not self.list_contains_username(ldap_users, db_user[1]):
                 log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP", db_user[1])
                 is_teacher = self.__db.user_has_role(db_user[0], self.__config.delete.ids_roles_teachers)
+
                 #Récupération des délais avant anonymisation et avant suppression
                 delete_delay = self.__config.delete.delay_delete_teacher if is_teacher else \
                     self.__config.delete.delay_delete_student
                 anon_delay = self.__config.delete.delay_anonymize_teacher if is_teacher else \
                     self.__config.delete.delay_anonymize_student
 
-                if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
-                    log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
-                             " supprimé", db_user[1], delete_delay)
-                    user_ids_to_delete.append(db_user[0])
+                #Récupération de la liste des cours de l'utilisateur
+                user_courses = self.__webservice.get_courses_user_enrolled(db_user[0])
 
-                elif db_user[2] < now - (anon_delay * SECONDS_PER_DAY):
-                    log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
-                             " anonymisé", db_user[1], delete_delay)
-                    user_ids_to_anonymize.append(db_user[0])
+                #Cas ou on doit supprimer un utilisateur : plus présent dans le ldap, pas d'inscriptions
+                #à des cours, et pas de connection à oodle depuis plus de delete_delay jours
+                if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
+                    if len(user_courses) == 0:
+                        log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
+                                 " supprimé", db_user[1], delete_delay)
+                        user_ids_to_delete.append(db_user[0])
+
+                #Cas ou on doit anonymiser un utilisateur : plus présent dans le ldap, inscrit à des cours,
+                #et pas de connection à moodle depuis plus de anon_delay jours
+                if db_user[0] not in user_ids_to_delete:
+                    if db_user[2] < now - (anon_delay * SECONDS_PER_DAY):
+                        if len(user_courses) > 0:
+                            log.info("L'utilisateur %s ne s'est pas connecté depuis au moins %s jours. Il va être"
+                                     " anonymisé", db_user[1], delete_delay)
+                            user_ids_to_anonymize.append(db_user[0])
 
         #Pour chaque utilisateur à supprimer
         if user_ids_to_delete:
@@ -895,6 +912,8 @@ class Synchronizer:
                 if is_teacher:
                     log.info("Suppression des cours inutiles de l'enseignant %s", user_id)
                     self.check_and_process_user_courses(user_id, log=log)
+
+            #Suppression des utilisateurs inutiles
             self.delete_users(user_ids_to_delete, log=log)
             log.info("%d utilisateurs supprimés", len(user_ids_to_delete))
 
