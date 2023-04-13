@@ -708,6 +708,11 @@ class Database:
         return self.mark.fetchall()
 
     def get_userids_owner_of_course(self, course_id: int):
+        """
+        Retourne tous les utilisateurs qui sont propriétaires d'un cours
+        :param course_id: L'id du cours concerné
+        :returns: La liste des utilisateurs propriétaires du cours
+        """
         s = "SELECT userid FROM {entete}role_assignments AS role_assignments" \
             " INNER JOIN {entete}context AS context" \
             " ON role_assignments.contextid = context.id" \
@@ -720,11 +725,21 @@ class Database:
         """
         Retourne les informations détaillées sur un utilisateur (table mdl_user)
         :param user_id: L'id de l'utilisateur dont on veut récupére les infos
-        :returns:
+        :returns: Un tuple représentant la ligne récupérée depuis la BD
         """
         s = "SELECT * FROM {entete}user WHERE id = %(userid)s".format(entete=self.entete)
         self.mark.execute(s, params={'userid': user_id})
         return self.mark.fetchone()
+
+    def user_has_used_moodle(self, user_id: int):
+        """
+        Indique si un utilisateur à déjà utilisé moodle, c'est-à-dire s'il s'est déjà connecté
+        :param user_id: L'id de l'utilisateur qu'on veut vérifier
+        :returns: Un booléen, qui vaut True si l'utilisateur à déjà utilisé moodle, et False sinon
+        """
+        s = "SELECT lastaccess FROM {entete}user WHERE id = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        return self.mark.fetchone()[0] != 0
 
     def eleve_has_references(self, user_id: int):
         """
