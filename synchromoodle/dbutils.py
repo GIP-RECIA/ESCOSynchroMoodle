@@ -800,11 +800,14 @@ class Database:
         """
         Indique si un enseignant dipose de références dans des exercices ou des notations moodle
         Les références comprennent :
-        - # TODO:
+        - des notes qui ont été données à des étudiants dans des cours
         :param user_id: L'id de l'utilisateur qu'on veut vérifier
         :returns: Un booléen à vrai si l'utilisateur à des références, faux sinon
         """
-        ## TODO:
+        s = "SELECT count(*) FROM {entete}grade_grades_history WHERE loggeduser = %(userid)s".format(entete=self.entete)
+        self.mark.execute(s, params={'userid': user_id})
+        if self.mark.fetchone()[0] > 0:
+            return True
         return False
 
     def get_id_categorie(self, categorie_name):
