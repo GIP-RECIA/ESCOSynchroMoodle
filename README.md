@@ -180,7 +180,8 @@ La structure de la configuration est modélisée par les classes situées dans
 | delay_anonymize_teacher | Délai, en jours, avant d'anonymiser un enseignant qui n'est plus présent dans l'annuaire LDAP | 90                | Nombres entiers          |
 | delay_delete_teacher    | Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP | 365               | Nombres entiers          |
 | delay_backup_course     | Délai, en jours, avant de sauvegarder un cours inutilisé                                      | 365               | Nombres entiers          |
-| purge_cohorts     | Indicateur de purge des cohortes                                     | False               | Booléen          |
+| delay_force_delete      | Délai, en jours, avant de supprimer un compte qui n'est plus présent dans l'annuaire LDAP peut importe ses références                                                                                                                | 1095              | Nombres entiers          |
+| purge_cohorts           | Indicateur de purge des cohortes                                                              | False             | Booléen                  |
 
 ###### webservice
 

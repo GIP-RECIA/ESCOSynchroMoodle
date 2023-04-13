@@ -78,6 +78,9 @@ class DeleteConfig(_BaseConfig):
         self.delay_backup_course = 365
         """Délai, en jours, avant de sauvegarder un cours inutilisé"""
 
+        self.delay_force_delete = 1095
+        """Délai, en jours, avant de supprimer un compte qui n'est plus présent dans l'annuaire LDAP peut importe ses références"""
+
         self.purge_cohorts = False
         """Booléen indiquant si on purge les cohortes s'il y a une action de suppression"""
 

@@ -133,8 +133,6 @@ class WebService:
 
         json_data = json.loads(res.text)
 
-        print(json_data)
-
         if json_data is not None and 'exception' in json_data:
             raise Exception(json_data['message'])
         else:
