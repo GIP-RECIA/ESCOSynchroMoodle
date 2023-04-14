@@ -61,6 +61,7 @@ class StructureLdap:
         self.domaine = data.ESCODomaines.value
         self.domaines = data.ESCODomaines.values
         self.dn = data.entry_dn
+        self.jointure = data.ENTStructureJointure.value
 
     def __str__(self):
         return "uai=%s, siren=%s, nom=%s" % (self.uai, self.siren, self.nom)
@@ -135,6 +136,25 @@ class EnseignantLdap(PersonneLdap):
             self.classes = extraire_classes_ldap(data.ENTAuxEnsClasses.values)
 
 
+
+class PersonnelDirection(PersonneLdap):
+    """
+    Représente un personnel de direction issu du LDAP.
+    """
+
+    def __init__(self, data):
+        super().__init__(data)
+        self.structure_rattachement = data.ENTPersonStructRattach.value
+
+        self.profils = None
+        if 'ENTPersonProfils' in data:
+            self.profils = data.ENTPersonProfils.values
+
+        self.uais = None
+        if 'ESCOUAI' in data:
+            self.uais = data.ESCOUAI.values
+
+
 class Ldap:
     """
     Couche d'accès aux données du LDAP.
@@ -182,8 +202,8 @@ class Ldap:
         ldap_filter = _get_filtre_etablissement(uai)
         self.connection.search(self.config.structuresDN, ldap_filter,
                                search_scope=LEVEL, attributes=
-                               ['ou', 'ENTStructureSIREN', 'ENTStructureTypeStruct', 'postalCode', 'ENTStructureUAI',
-                                'ESCODomaines', '+'])
+                               ['ou', 'ENTStructureSIREN', 'ENTStructureTypeStruct', 'ENTStructureJointure',
+                                'postalCode', 'ENTStructureUAI', 'ESCODomaines', '+'])
         return [StructureLdap(entry) for entry in self.connection.entries]
 
     def search_personne(self, since_timestamp: datetime.datetime = None, **filters) -> List[PersonneLdap]:
@@ -213,6 +233,19 @@ class Ldap:
                                ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',
                                 'ESCODomaines', 'ESCOUAICourant', '+'])
         return [EleveLdap(entry) for entry in self.connection.entries]
+
+    def search_eleve_uid(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[str]:
+        """
+        Recherche d'uid d'étudiants.
+        :param since_timestamp: datetime.datetime
+        :param uai: code établissement
+        :return: Liste des uid d'étudiants correspondant
+        """
+        ldap_filter = _get_filtre_eleves(since_timestamp, uai)
+        self.connection.search(self.config.personnesDN, ldap_filter,
+                               search_scope=LEVEL, attributes=
+                               ['uid'])
+        return [entry.uid.lower() for entry in self.connection.entries]
 
     def search_eleves_in_classe(self, classe, uai):
         """
@@ -244,6 +277,50 @@ class Ldap:
                                 'ESCOUAICourant', 'ENTPersonStructRattach', 'ENTPersonProfils', 'isMemberOf', '+',
                                 'ENTAuxEnsClasses'])
         return [EnseignantLdap(entry) for entry in self.connection.entries]
+
+    def search_enseignant_uid(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) \
+            -> List[str]:
+        """
+        Recherche d'uid d'enseignants.
+        :param since_timestamp: datetime.datetime
+        :param uai: code etablissement
+        :param tous: Si True, retourne également le personnel non enseignant
+        :return: Liste des uid d'enseignants
+        """
+        ldap_filter = get_filtre_enseignants(since_timestamp, uai, tous)
+        self.connection.search(self.config.personnesDN,
+                               ldap_filter, LEVEL, attributes=
+                               ['uid'])
+        return [entry.uid.lower() for entry in self.connection.entries]
+
+    def search_personnel_direction(self, since_timestamp: datetime.datetime = None, uai=None) \
+            -> List[PersonnelDirection]:
+        """
+        Recherche du personnel de direction.
+        :param since_timestamp: datetime.datetime
+        :param uai: code etablissement
+        :return: Liste du personnel de direction
+        """
+        ldap_filter = get_filtre_personnel_direction(since_timestamp, uai)
+        self.connection.search(self.config.personnesDN,
+                               ldap_filter, LEVEL, attributes=
+                               ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',
+                                'ESCOUAICourant', 'ENTPersonStructRattach', 'ENTPersonProfils', 'isMemberOf', '+'])
+        return [PersonnelDirection(entry) for entry in self.connection.entries]
+
+    def search_personnel_direction_uid(self, since_timestamp: datetime.datetime = None, uai=None) \
+            -> List[str]:
+        """
+        Recherche des uid du personnel de direction.
+        :param since_timestamp: datetime.datetime
+        :param uai: code etablissement
+        :return: Liste des uid du personnel de direction
+        """
+        ldap_filter = get_filtre_personnel_direction(since_timestamp, uai)
+        self.connection.search(self.config.personnesDN,
+                               ldap_filter, LEVEL, attributes=
+                               ['uid'])
+        return [entry.uid.lower() for entry in self.connection.entries]
 
     def get_domaines_etabs(self) -> Dict[str, List[str]]:
         """
@@ -296,6 +373,30 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
         filtre += "(objectClass=ENTAuxEnseignant)"
 
     filtre += "(!(uid=ADM00000))"
+
+    if uai:
+        filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))
+    if since_timestamp:
+        filtre += "(modifyTimeStamp>={since_timestamp})" \
+            .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
+
+    filtre = filtre + ")"
+
+    return filtre
+
+def get_filtre_personnel_direction(since_timestamp: datetime.datetime = None, uai=None) -> str:
+    """
+    Construit le filtre pour récupérer les utilisateurs pêrsonne de direction au sein du LDAP.
+
+    :param since_timestamp:
+    :param uai: code établissement
+    :return: Le filtre
+    """
+    filtre = "(&(|(objectClass=ENTAuxEnseignant)" \
+        "(objectClass=ENTAuxNonEnsEtab)" \
+        "(objectClass=ENTAuxNonEnsCollLoc)" \
+        ")(!(uid=ADM00000))" \
+        "(ENTPersonProfils=National_DIR)"
 
     if uai:
         filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))

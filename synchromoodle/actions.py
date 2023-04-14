@@ -165,6 +165,7 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
     """
     Effectue une purge des cohortes dans la base de données par rapport
     au contenu du LDAP et supprime les cohortes inutiles (vides)
+    Anonymisation/suppression des utilisateurs inutiles
     :param config: Configuration globale
     :param action: Configuration de l'action
     :param arguments: Arguments de ligne de commande
@@ -181,28 +182,58 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
 
+        synchronizer.handle_dane(__config.uai_dane)
+        
+        cohort_elv_lycee_en_ldap = []
+        cohort_ens_lycee_en_ldap = []
+        cohort_dir_lycee_en_ldap = []
+        cohorts_elv_dep_clg_ldap = {}
+        cohorts_ens_dep_clg_ldap = {}
+        cohorts_dir_dep_clg_ldap = {}
+
+        for departement in config.departements:
+            cohorts_elv_dep_clg_ldap[departement] = []
+            cohorts_ens_dep_clg_ldap[departement] = []
+            cohorts_dir_dep_clg_ldap[departement] = []
+
         log.info("Début de l'action de nettoyage")
+        # Purge des cohortes pour n'y conserver que les utilisateurs qui doivent encore être dedans
+        #  (correspond à la purge de l'ancien script)
         for uai in action.etablissements.listeEtab:
             etablissement_log = log.getChild('etablissement.%s' % uai)
 
             etablissement_log.info("Nettoyage de l'établissement (uai=%s)" % uai)
             etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
+            departement = etablissement_context.departement
 
+            # On récupére :
+            #  - Dictionnaire contenant la liste des élèves par cohorte provenant de la bdd
+            #  - Dictionnaire contenant la liste des élèves par cohorte provenant du ldap
             eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves de la Classe )(.*)$',
+                get_users_by_cohorts_comparators(etablissement_context, r'^(Élèves de la Classe )(.*)$',
                                                  'Élèves de la Classe %')
 
             eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Élèves du Niveau de formation )(.*)$',
+                get_users_by_cohorts_comparators(etablissement_context, r'^(Élèves du Niveau de formation )(.*)$',
                                                  'Élèves du Niveau de formation %')
 
             profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r'(Profs de la Classe )(.*)$',
+                get_users_by_cohorts_comparators(etablissement_context, r'^(Profs de la Classe )(.*)$',
                                                  'Profs de la Classe %')
 
             profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
-                get_users_by_cohorts_comparators(etablissement_context, r"(Profs de l'établissement )(.*)$",
-                                                 "Profs de l'établissement %")
+                get_users_by_cohorts_comparators(etablissement_context, r'^(Profs de l\'établissement )(.*)$',
+                                                 'Profs de l\'établissement %')
+
+            if etablissement_context.college and departement in config.departements:
+                cohorts_elv_dep_clg_ldap[departement].append(ldap.search_eleve_uid(uai=uai))
+                cohorts_ens_dep_clg_ldap[departement].append(ldap.search_enseignant_uid(uai=uai, tous=True))
+                cohorts_dir_dep_clg_ldap[departement].append(ldap.search_personnel_direction_uid(uai=uai))
+
+            if etablissement_context.lycee and etablissement_context.etablissement_en:
+                cohort_elv_lycee_en_ldap.append(ldap.search_eleve_uid(uai=uai))
+                cohort_ens_lycee_en_ldap.append(ldap.search_enseignant_uid(uai=uai, tous=True))
+                cohort_dir_lycee_en_ldap.append(ldap.search_personnel_direction_uid(uai=uai))
 
             log.info("Purge des cohortes Elèves de la Classe")
             synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
@@ -220,11 +251,22 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
                                        "Profs de l'établissement %s")
 
-            log.info("Suppression des cohortes vides (sans utilisateur)")
-            db.delete_empty_cohorts()
+            # On commit pour chaque étab afin de libérer rapidement le lock
+            db.connection.commit()
 
-        # Premier commit pour libérer les locks pour le webservice moodle
+        # TODO lvillanne mettre en place le système de nettoyage des cohortes dane
+        # TODO lvillanne ceci est un exemple pour un type de cohorte dane
+        #  voir pour rendre la fonction paramétrable pour els 3 cohortes lycee puis pour faire le même genre de chose pour les colleges
+        log.info("Purge de la cohorte dane élèves des lycées de l'éducation national")
+        synchronizer.purge_cohort_dane_elv_lycee_en(cohort_elv_lycee_en_ldap)
+
+        log.info("Suppression des cohortes vides (sans utilisateur)")
+        db.delete_empty_cohorts()
+
+        # Commit pour libérer les locks pour le webservice moodle
         db.connection.commit()
+
+        # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
         log.info("Début de la procédure d'anonymisation/suppression des utilisateurs inutiles")
         ldap_users = ldap.search_personne()
         db_valid_users = db.get_all_valid_users()

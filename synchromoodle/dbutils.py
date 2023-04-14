@@ -332,6 +332,25 @@ class Database:
                               'cohortname': cohortname
                           })
 
+    def disenroll_user_from_username_and_cohortid(self, username: str, cohortid):
+        """
+        Désenrole un utilisateur d'une cohorte.
+        :param username:
+        :param cohortid:
+        :return:
+        """
+        self.mark.execute("DELETE {entete}cohort_members FROM {entete}cohort_members"
+                          " INNER JOIN {entete}cohort"
+                          " ON {entete}cohort_members.cohortid = {entete}cohort.id"
+                          " INNER JOIN {entete}user"
+                          " ON {entete}cohort_members.userid = {entete}user.id"
+                          " WHERE {entete}user.username = %(username)s"
+                          " AND {entete}cohort.id = %(cohortid)s".format(entete=self.entete),
+                          params={
+                              'username': username,
+                              'cohortid': cohortid
+                          })
+
     def delete_empty_cohorts(self):
         """
         Supprime les cohortes de la liste qui n'ont aucun membre
@@ -1400,14 +1419,14 @@ class Database:
                           })
         return [Cohort(cohortid=result[0], contextid=result[1], name=result[2]) for result in self.mark.fetchall()]
 
-    def get_cohort_members(self, cohortid):
+    def get_cohort_members(self, cohortid) -> list:
         """
         Obtient les noms d'utilisateurs membres de la cohorte.
         :param cohortid:
-        :return:
+        :return: list de username
         """
         self.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
-                          " INNER JOIN {entete}user ON cohort_members.userid = {entete}user.id"
+                          " INNER JOIN {entete}user ON {entete}cohort_members.userid = {entete}user.id"
                           " WHERE cohortid = %(cohortid)s"
                           .format(entete=self.entete),
                           params={

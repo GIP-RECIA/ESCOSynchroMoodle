@@ -150,10 +150,22 @@ class ConstantesConfig(_BaseConfig):
         self.type_structure_clg = "COLLEGE"  # type: str
         """Type de structure d'un college"""
 
+        self.type_structure_lycee_start_with = "LYCEE "  # type: str
+        """Type de structure d'un lycée commence par"""
+
         self.type_structure_ens_adapte = "ETABLISSEMENT REGIONAL D'ENSEIGNT ADAPTE" # type: str
         """Type de structure pour l'enseignement adapté"""
 
         self.type_structure_cfa_agricole = "CFA AGRICOLE"
+
+        self.type_structure_jointure_en_start_with = "AC-ORLEANS-TOURS$"
+        """Jointure de type de structure pour l'enseignement national"""
+
+        self.uai_dane = "0450080T"  # type: string
+        """Uai de la dane"""
+
+        self.departements = ['18', '28', '36', '37', '41', '45']
+        """Liste des départements pour les cohortes de la dane"""
 
 
         super().__init__(**entries)
