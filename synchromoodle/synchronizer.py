@@ -247,6 +247,7 @@ class Synchronizer:
                      "utilisation de la valeur par défault: %s", eleve_ldap.mail)
 
         eleve_id = self.__db.get_user_id(eleve_ldap.uid)
+
         if not eleve_id:
             log.info("Ajout de l'utilisateur: %s", eleve_ldap)
             self.__db.insert_moodle_user(eleve_ldap.uid, eleve_ldap.given_name,
@@ -914,7 +915,7 @@ class Synchronizer:
                     #pas de connexion a moodle depuis plus de delay_force_delete jours
                     if not is_teacher:
                         if db_user[2] < now - (self.__config.delete.delay_force_delete * SECONDS_PER_DAY):
-                            log.info("L'élève %s ne s'est pas connecté depuis au moins %s jours. Il va être supprimé", db_user[1], delay_force_delete)
+                            log.info("L'élève %s ne s'est pas connecté depuis au moins %s jours. Il va être supprimé", db_user[1], self.__config.delete.delay_force_delete)
                             user_ids_to_delete.append(db_user[0])
 
                     #Suite du traitement si on ne sait pas encore si on doit supprimer l'utilisateur

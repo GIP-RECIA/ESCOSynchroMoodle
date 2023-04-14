@@ -737,7 +737,7 @@ class Database:
         :param user_id: L'id de l'utilisateur qu'on veut vérifier
         :returns: Un booléen, qui vaut True si l'utilisateur à déjà utilisé moodle, et False sinon
         """
-        s = "SELECT lastaccess FROM {entete}user WHERE id = %(userid)s".format(entete=self.entete)
+        s = "SELECT lastlogin FROM {entete}user WHERE id = %(userid)s".format(entete=self.entete)
         self.mark.execute(s, params={'userid': user_id})
         return self.mark.fetchone()[0] != 0
 
