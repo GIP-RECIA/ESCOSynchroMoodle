@@ -924,7 +924,7 @@ class Synchronizer:
                         #Cas ou on doit supprimer un utilisateur : plus présent dans le ldap, pas
                         #d'inscriptions à des cours pas de références à des notations ou exercices
                         #et pas de connection à moodle depuis plus de delete_delay jours
-                        if db_user[2] < now - (delete_delay * SECONDS_PER_DAY): #delai de connexion
+                        if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
                             if len(user_courses) == 0: #inscription à aucun cours
                                 #Différence de traitement au niveau des références entre un enseignant et un élève
                                 if is_teacher:

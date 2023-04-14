@@ -472,7 +472,8 @@ class ConfigLoader:
         for config_item in config_fp:
             try:
                 with open(config_item) as fp:
-                    data = yaml.safe_load(fp)
+                    yaml_config = yaml.YAML(typ='unsafe', pure=True)
+                    data = yaml_config.load(fp)
                     config.update(**data)
             except FileNotFoundError as e:
                 message = "Le fichier de configuration n'a pas été chargé: " + str(e)
