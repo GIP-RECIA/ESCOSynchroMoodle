@@ -6,6 +6,7 @@ Module de tests de la synchronisation, le principe est le suivant :
 """
 
 import pytest
+from test_utils import *
 from logging import getLogger
 from synchromoodle.dbutils import Database
 from synchromoodle import actions
@@ -15,36 +16,13 @@ from synchromoodle.webserviceutils import WebService
 
 SECONDS_PER_DAY = 86400
 
-def insert_fake_user(db: Database, username: str, first_name: str, last_name: str, email: str, mail_display: int, theme: str):
-    """
-    Fonction permettant d'insérer un utilisateur de test
-    """
-    db.insert_moodle_user(username, first_name, last_name, email, mail_display, theme)
-    return db.get_user_id(username)
-
-def insert_fake_course_reference(db: Database, userid: int):
-    """
-    Fonction permettant de donner une référence à un utilisateur dans un cours
-    On ne se préoccupe pas des dépendances car ici la table de l'historique des notes
-    peut de toute manière faire référence à des cours qui n'éxistent plus
-    """
-    s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser, itemid, userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade, hidden, locked, locktime, exported, overridden, excluded, feedback, feedbackformat, information, informationformat) VALUES (1, 0, 'mod/assign', 0, 0, 0, %(userid)s, 50, 100.00000, 0.00000, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
-    db.mark.execute(s, params={'userid': userid})
-
-def update_lastlogin_user(db, userid: int, lastlogin):
-    """
-    Fonction permettant de mettre a jour la date de dernière connexion d'un utilisateur
-    :param db: L'objet Database représentant la base de données moodle
-    :param userid: L'id de l'utilisateur à modifier
-    :param lastlogin: Le timestamp (en s) représentant la date de dernière connexion de l'utilisateur
-    :return:
-    """
-    s = "UPDATE {entete}user SET lastlogin = %(lastlogin)s WHERE id = %(userid)s".format(entete=db.entete)
-    db.mark.execute(s, params={'lastlogin': lastlogin, 'userid': userid})
-
-@pytest.fixture(scope="module", name="db")
-def db():
+@pytest.fixture(scope="module", name="arguments")
+def arguments():
     arguments = parse_args()
+    return arguments
+
+@pytest.fixture(scope="module", name="config")
+def config(arguments):
 
     config_loader = ConfigLoader()
     config = config_loader.load(['config.yml', 'config.yaml'], True)
@@ -57,30 +35,22 @@ def db():
     except ValueError as e:
         log.error(e)
         exit(1)
+
+    return config
+
+@pytest.fixture(scope="module", name="db")
+def db(config, arguments):
     db = Database(config.database, config.constantes)
     db.connect()
     return db
 
+
 @pytest.fixture(scope="module", autouse=True)
-def inserts(db: Database):
+def inserts(db: Database, config, arguments):
     """
     Remplit la base de données avec les données nécéssaires pour les tests
     Cette fonction va s'éxécuter une fois avant tous les tests
     """
-
-    arguments = parse_args()
-
-    config_loader = ConfigLoader()
-    config = config_loader.load(['config.yml', 'config.yaml'], True)
-    config = config_loader.update(config, arguments.config)
-
-    log = getLogger()
-
-    try:
-        config.validate()
-    except ValueError as e:
-        log.error(e)
-        exit(1)
 
     webservice = WebService(config.webservice)
     now = db.get_timestamp_now()
@@ -124,6 +94,7 @@ def inserts(db: Database):
     webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_a, course_test1_id)
     webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_d, course_test1_id)
     webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_k, course_test1_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_j, course_test1_id)
 
     #Création de fausses références dans des cours
     insert_fake_course_reference(db, eleveid_b)
@@ -134,26 +105,12 @@ def inserts(db: Database):
     #Mise à jour BD avant de faire les tests
     db.connection.commit()
 
+
 @pytest.fixture(scope="module", autouse=True)
-def run_script():
+def run_script(config, arguments):
     """
     Fonction permettant de lancer le script
     """
-
-    arguments = parse_args()
-
-    config_loader = ConfigLoader()
-    config = config_loader.load(['config.yml', 'config.yaml'], True)
-    config = config_loader.update(config, arguments.config)
-
-    log = getLogger()
-
-    try:
-        config.validate()
-    except ValueError as e:
-        log.error(e)
-        exit(1)
-
     for action in config.actions:
         action_func = getattr(actions, action.type)
         action_func(config, action, arguments)
