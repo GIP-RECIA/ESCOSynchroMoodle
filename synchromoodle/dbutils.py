@@ -1519,7 +1519,7 @@ class Database:
         :param cohortid:
         :return: list de username
         """
-        self.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+        self.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members"
                           " INNER JOIN {entete}user ON {entete}cohort_members.userid = {entete}user.id"
                           " WHERE cohortid = %(cohortid)s"
                           .format(entete=self.entete),

@@ -182,7 +182,7 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
 
-        synchronizer.handle_dane(__config.uai_dane)
+        synchronizer.handle_dane(config.constantes.uai_dane)
 
         cohort_elv_lycee_en_ldap = []
         cohort_ens_lycee_en_ldap = []
@@ -191,7 +191,7 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         cohorts_ens_dep_clg_ldap = {}
         cohorts_dir_dep_clg_ldap = {}
 
-        for departement in config.departements:
+        for departement in config.constantes.departements:
             cohorts_elv_dep_clg_ldap[departement] = []
             cohorts_ens_dep_clg_ldap[departement] = []
             cohorts_dir_dep_clg_ldap[departement] = []
@@ -224,7 +224,7 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
                     get_users_by_cohorts_comparators_profs_etab(etablissement_context, r"(Profs de l'établissement )(.*)$",
                                                      "Profs de l'établissement %")
 
-                if etablissement_context.college and departement in config.departements:
+                if etablissement_context.college and departement in config.constantes.departements:
                     cohorts_elv_dep_clg_ldap[departement].append(ldap.search_eleve_uid(uai=uai))
                     cohorts_ens_dep_clg_ldap[departement].append(ldap.search_enseignant_uid(uai=uai, tous=True))
                     cohorts_dir_dep_clg_ldap[departement].append(ldap.search_personnel_direction_uid(uai=uai))
