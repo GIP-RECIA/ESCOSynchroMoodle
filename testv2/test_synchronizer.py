@@ -22,7 +22,8 @@ def temp():
     Dictionnaire utilisé pour tracker toutes les objets de tests qui ont
     été insérés dans la base de données
     """
-    return {"users":[],"courses":[],"references":[]}
+    temp = {"users":[],"courses":[],"references":[]}
+    return temp
 
 @pytest.fixture(scope="module", name="arguments")
 def arguments():
@@ -46,31 +47,43 @@ def config(arguments):
 
     return config
 
+@pytest.fixture(scope="module", name="webservice")
+def webservice(config, arguments):
+    webservice = WebService(config.webservice)
+    return webservice
+
 @pytest.fixture(scope="module", name="db")
-def db(config, arguments, temp):
+def db(config, arguments, temp, webservice):
     #Exécution avant tous les tests
     db = Database(config.database, config.constantes)
     db.connect()
     yield db
 
-    #Remise à l'état avant les tests de la BD
+    #Exécution après tous les tests : remise à l'état avant les tests de la BD
+
+    #Suppression des cours de test
+    webservice.delete_courses(temp["courses"])
+
+    #Suppression des références de test
+    for refid in temp["references"]:
+        remove_fake_course_reference(db, refid)
 
     #Suppression des utilisateurs de test
-    #for userid in temp["user"]:
-    #    remove_fake_user(userid)
+    for userid in temp["users"]:
+        remove_fake_user(db, userid)
 
-    #Exécution après tous les tests
+    db.connection.commit()
     db.disconnect()
 
 
 @pytest.fixture(scope="module", autouse=True)
-def inserts(db: Database, config, arguments, temp):
+def inserts(db: Database, config, arguments, temp, webservice):
     """
     Remplit la base de données avec les données nécéssaires pour les tests
     Cette fonction va s'éxécuter une fois avant tous les tests
     """
 
-    webservice = WebService(config.webservice)
+    #Récupération du timestamp actuel
     now = db.get_timestamp_now()
 
     #Insertion des utilisateurs de test
@@ -87,8 +100,8 @@ def inserts(db: Database, config, arguments, temp):
     eleveid_k = insert_fake_user(db, "F1700tsk", "test", "K", "test.K@netocentre.fr", 2, "0290009c")
     eleveid_l = insert_fake_user(db, "F1700tsl", "test", "L", "test.L@netocentre.fr", 2, "0290009c")
     eleveid_m = insert_fake_user(db, "F1700tsm", "test", "M", "test.M@netocentre.fr", 2, "0290009c")
-    #temp["user"].extend(eleveid_a,eleveid_b,eleveid_c,eleveid_d,eleveid_e,eleveid_f,eleveid_g,eleveid_h,\
-    #eleveid_i,eleveid_j,eleveid_k,eleveid_l,eleveid_m)
+    temp["users"].extend([eleveid_a,eleveid_b,eleveid_c,eleveid_d,eleveid_e,eleveid_f,eleveid_g,eleveid_h,\
+    eleveid_i,eleveid_j,eleveid_k,eleveid_l,eleveid_m])
 
     #Changement des dates de dernière connexions
     update_lastlogin_user(db, eleveid_a, now - config.delete.delay_delete_student * SECONDS_PER_DAY + 1)
@@ -109,6 +122,7 @@ def inserts(db: Database, config, arguments, temp):
 
     #Création d'un cours factice pour y inscire les éventuels utilisateurs
     course_test1_id = webservice.create_course("testnettoyage", "testnettoyage", 1)[0]["id"]
+    temp["courses"].append(course_test1_id)
 
     #Inscription des utilisateurs aux cours factices
     webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_a, course_test1_id)
@@ -117,10 +131,11 @@ def inserts(db: Database, config, arguments, temp):
     webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_j, course_test1_id)
 
     #Création de fausses références dans des cours
-    insert_fake_course_reference(db, eleveid_b)
-    insert_fake_course_reference(db, eleveid_d)
-    insert_fake_course_reference(db, eleveid_h)
-    insert_fake_course_reference(db, eleveid_l)
+    refid_b = insert_fake_course_reference(db, eleveid_b)
+    refid_d = insert_fake_course_reference(db, eleveid_d)
+    refid_h = insert_fake_course_reference(db, eleveid_h)
+    refid_l = insert_fake_course_reference(db, eleveid_l)
+    temp["references"].extend([refid_b,refid_d,refid_h,refid_l])
 
     #Mise à jour BD avant de faire les tests
     db.connection.commit()
