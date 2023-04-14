@@ -137,3 +137,67 @@ class WebService:
             raise Exception(json_data['message'])
         else:
             return(json_data)
+
+
+    def enrol_user_to_course(self, roleid: int, userid: int, courseid: int):
+        """
+        Inscris un utilisateur à un cours
+        L'utilisateur WebService doit avoir la permission enrol/manual:enrol
+        :param roleid: Le rôle de l'utilisateur dans le cours
+        :param userid: L'id de l'utilisateur à inscrire
+        :param courseid: L'id du cours auquel on inscrit l'utilisateur
+        :returns: None si la fonction s'est éxécutée correctement
+        :raises Exception:
+        """
+
+        enrolments = {}
+        enrolments["enrolments[0][roleid]"] = roleid
+        enrolments["enrolments[0][userid]"] = userid
+        enrolments["enrolments[0][courseid]"] = courseid
+
+        res = requests.get(url=self.url,
+                           params={
+                               'wstoken': self.config.token,
+                               'moodlewsrestformat': "json",
+                               'wsfunction': "enrol_manual_enrol_users",
+                               **enrolments
+                           })
+
+        json_data = json.loads(res.text)
+
+        if json_data is not None and 'exception' in json_data:
+            raise Exception(json_data['message'])
+        else:
+            return(json_data)
+
+
+    def create_course(self, fullname: str, shortname: str, categoryid: int):
+        """
+        Ajoute un nouveau cours
+        L'utilisateur WebService doit avoir la permission moodle/course:create
+        :param fullname: Le nom complet du cours
+        :param shortname: Le nom court du cours
+        :param categoryid: L'id de la catégorie dans laquelle va être insérée le cours
+        :returns: Un dictionnaire avec les informations du cours créé
+        :raises Exception:
+        """
+
+        params = {}
+        params["courses[0][fullname]"] = fullname
+        params["courses[0][shortname]"] = shortname
+        params["courses[0][categoryid]"] = categoryid
+
+        res = requests.get(url=self.url,
+                           params={
+                               'wstoken': self.config.token,
+                               'moodlewsrestformat': "json",
+                               'wsfunction': "core_course_create_courses",
+                               **params
+                           })
+
+        json_data = json.loads(res.text)
+
+        if json_data is not None and 'exception' in json_data:
+            raise Exception(json_data['message'])
+        else:
+            return(json_data)
