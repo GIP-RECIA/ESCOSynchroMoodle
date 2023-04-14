@@ -16,6 +16,14 @@ from synchromoodle.webserviceutils import WebService
 
 SECONDS_PER_DAY = 86400
 
+@pytest.fixture(scope="module", name="temp")
+def temp():
+    """
+    Dictionnaire utilisé pour tracker toutes les objets de tests qui ont
+    été insérés dans la base de données
+    """
+    return {"users":[],"courses":[],"references":[]}
+
 @pytest.fixture(scope="module", name="arguments")
 def arguments():
     arguments = parse_args()
@@ -39,14 +47,24 @@ def config(arguments):
     return config
 
 @pytest.fixture(scope="module", name="db")
-def db(config, arguments):
+def db(config, arguments, temp):
+    #Exécution avant tous les tests
     db = Database(config.database, config.constantes)
     db.connect()
-    return db
+    yield db
+
+    #Remise à l'état avant les tests de la BD
+
+    #Suppression des utilisateurs de test
+    #for userid in temp["user"]:
+    #    remove_fake_user(userid)
+
+    #Exécution après tous les tests
+    db.disconnect()
 
 
 @pytest.fixture(scope="module", autouse=True)
-def inserts(db: Database, config, arguments):
+def inserts(db: Database, config, arguments, temp):
     """
     Remplit la base de données avec les données nécéssaires pour les tests
     Cette fonction va s'éxécuter une fois avant tous les tests
@@ -69,6 +87,8 @@ def inserts(db: Database, config, arguments):
     eleveid_k = insert_fake_user(db, "F1700tsk", "test", "K", "test.K@netocentre.fr", 2, "0290009c")
     eleveid_l = insert_fake_user(db, "F1700tsl", "test", "L", "test.L@netocentre.fr", 2, "0290009c")
     eleveid_m = insert_fake_user(db, "F1700tsm", "test", "M", "test.M@netocentre.fr", 2, "0290009c")
+    #temp["user"].extend(eleveid_a,eleveid_b,eleveid_c,eleveid_d,eleveid_e,eleveid_f,eleveid_g,eleveid_h,\
+    #eleveid_i,eleveid_j,eleveid_k,eleveid_l,eleveid_m)
 
     #Changement des dates de dernière connexions
     update_lastlogin_user(db, eleveid_a, now - config.delete.delay_delete_student * SECONDS_PER_DAY + 1)
