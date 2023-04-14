@@ -24,7 +24,7 @@ Les dépendances et l'environnement virtuel sont gérées par [pipenv](https://g
 La commande suivante permet d'initialiser l'environnement et d'installer les dépendances.
 
 ```bash
-pipenv install --dev --python=3.5
+pipenv install --dev
 ```
 
 ### Executer le script à partir des sources

@@ -14,10 +14,8 @@ pex = "*"
 [packages]
 mysql-connector-python = "*"
 ruamel-yaml = "*"
-pytest-docker = {editable = true,git = "https://github.com/Toilal/pytest-docker.git"}
 ldap3 = "*"
 requests = "*"
-attrs = "*"
 
 [requires]
 python_version = "3.10"
