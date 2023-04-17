@@ -14,13 +14,14 @@ def parse_args(args=None, namespace=None):
     :param namespace:
     :return:
     """
-    parser = ArgumentParser()
+    parser = ArgumentParser(description="Scrit de synchronisation de moodle depuis l'annuaire LDAP.")
     parser.add_argument("-v", "--version", action="version", version='%(prog)s ' + __version__)
     parser.add_argument("-c", "--config", action="append", dest="config", default=[],
                         help="Chemin vers un fichier de configuration. Lorsque cette option est utilisée plusieurs "
                              "fois, les fichiers de configuration sont alors fusionnés.")
 
     arguments = parser.parse_args(args, namespace)
+    print(type(arguments))
     return arguments
 
 

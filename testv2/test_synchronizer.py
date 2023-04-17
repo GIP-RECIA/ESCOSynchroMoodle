@@ -10,8 +10,8 @@ from test_utils import *
 from logging import getLogger
 from synchromoodle.dbutils import Database
 from synchromoodle import actions
-from synchromoodle.arguments import parse_args
-from synchromoodle.config import ConfigLoader
+from argparse import ArgumentParser,Namespace
+from synchromoodle.config import ConfigLoader,Config
 from synchromoodle.webserviceutils import WebService
 
 SECONDS_PER_DAY = 86400
@@ -19,20 +19,30 @@ SECONDS_PER_DAY = 86400
 @pytest.fixture(scope="module", name="temp")
 def temp():
     """
-    Dictionnaire utilisé pour tracker toutes les objets de tests qui ont
-    été insérés dans la base de données
+    Dictionnaire utilisé pour tracker toutes les objets de tests
+    qui ont été insérés dans la base de données
     """
-    temp = {"users":[],"courses":[],"references":[]}
+    temp = {"eleves":[],"courses":[],"references":[], "profs":[]}
     return temp
 
 @pytest.fixture(scope="module", name="arguments")
 def arguments():
-    arguments = parse_args()
+    """
+    Permet de charger les arguments (nom du fichier de config)
+    """
+    parser = ArgumentParser(description="Scrit de synchronisation de moodle depuis l'annuaire LDAP.")
+    parser.add_argument("-c", "--config", action="append", dest="config", default=[],
+                        help="Chemin vers un fichier de configuration. Lorsque cette option est utilisée plusieurs "
+                             "fois, les fichiers de configuration sont alors fusionnés.")
+    #Simule un argument sur la ligne de commande pour pour lancer avec le bon fichier de config
+    arguments = parser.parse_args(["--config", "config/nettoyage.yml"])
     return arguments
 
 @pytest.fixture(scope="module", name="config")
 def config(arguments):
-
+    """
+    Permet de charger la config
+    """
     config_loader = ConfigLoader()
     config = config_loader.load(['config.yml', 'config.yaml'], True)
     config = config_loader.update(config, arguments.config)
@@ -48,12 +58,18 @@ def config(arguments):
     return config
 
 @pytest.fixture(scope="module", name="webservice")
-def webservice(config, arguments):
+def webservice(config: Config, arguments):
+    """
+    Fixture permettant d'utiliser l'objet webservice
+    """
     webservice = WebService(config.webservice)
     return webservice
 
 @pytest.fixture(scope="module", name="db")
-def db(config, arguments, temp, webservice):
+def db(config: Config, arguments: Namespace, temp: dict[str, list[int]], webservice: WebService):
+    """
+    Fixture permettant d'utiliser la bd
+    """
     #Exécution avant tous les tests
     db = Database(config.database, config.constantes)
     db.connect()
@@ -69,24 +85,22 @@ def db(config, arguments, temp, webservice):
         remove_fake_course_reference(db, refid)
 
     #Suppression des utilisateurs de test
-    for userid in temp["users"]:
+    for userid in temp["eleves"]:
         remove_fake_user(db, userid)
 
     db.connection.commit()
     db.disconnect()
 
 
-@pytest.fixture(scope="module", autouse=True)
-def inserts(db: Database, config, arguments, temp, webservice):
+def insert_eleves(db: Database, config: Config, arguments: Namespace, temp: dict[str, list[int]], webservice: WebService):
     """
-    Remplit la base de données avec les données nécéssaires pour les tests
-    Cette fonction va s'éxécuter une fois avant tous les tests
+    Insérère toutes les données nécéssaisres aux tests
+    des élèves dans la base de données moodle
     """
-
     #Récupération du timestamp actuel
     now = db.get_timestamp_now()
 
-    #Insertion des utilisateurs de test
+    #Insertion des utilisateurs de test (élèves)
     eleveid_a = insert_fake_user(db, "F1700tsa", "test", "A", "test.A@netocentre.fr", 2, "0290009c")
     eleveid_b = insert_fake_user(db, "F1700tsb", "test", "B", "test.B@netocentre.fr", 2, "0290009c")
     eleveid_c = insert_fake_user(db, "F1700tsc", "test", "C", "test.C@netocentre.fr", 2, "0290009c")
@@ -100,7 +114,7 @@ def inserts(db: Database, config, arguments, temp, webservice):
     eleveid_k = insert_fake_user(db, "F1700tsk", "test", "K", "test.K@netocentre.fr", 2, "0290009c")
     eleveid_l = insert_fake_user(db, "F1700tsl", "test", "L", "test.L@netocentre.fr", 2, "0290009c")
     eleveid_m = insert_fake_user(db, "F1700tsm", "test", "M", "test.M@netocentre.fr", 2, "0290009c")
-    temp["users"].extend([eleveid_a,eleveid_b,eleveid_c,eleveid_d,eleveid_e,eleveid_f,eleveid_g,eleveid_h,\
+    temp["eleves"].extend([eleveid_a,eleveid_b,eleveid_c,eleveid_d,eleveid_e,eleveid_f,eleveid_g,eleveid_h,\
     eleveid_i,eleveid_j,eleveid_k,eleveid_l,eleveid_m])
 
     #Changement des dates de dernière connexions
@@ -137,12 +151,34 @@ def inserts(db: Database, config, arguments, temp, webservice):
     refid_l = insert_fake_course_reference(db, eleveid_l)
     temp["references"].extend([refid_b,refid_d,refid_h,refid_l])
 
+
+def insert_profs(db: Database, config: Config, arguments: Namespace, temp: dict[str, list[int]], webservice: WebService):
+    """
+    Insérère toutes les données nécéssaisres aux tests
+    des profs dans la base de données moodle
+    """
+    pass
+
+
+@pytest.fixture(scope="module", autouse=True)
+def inserts(db: Database, config: Config, arguments: Namespace, temp: dict[str, list[int]], webservice: WebService):
+    """
+    Remplit la base de données avec les données nécéssaires pour les tests
+    Cette fonction va s'éxécuter une fois avant tous les tests
+    """
+
+    #Insertion des élèves
+    insert_eleves(db, config, arguments, temp, webservice)
+
+    #Insertion des profs
+    insert_profs(db, config, arguments, temp, webservice)
+
     #Mise à jour BD avant de faire les tests
     db.connection.commit()
 
 
 @pytest.fixture(scope="module", autouse=True)
-def run_script(config, arguments):
+def run_script(config: Config, arguments: Namespace):
     """
     Fonction permettant de lancer le script
     """
