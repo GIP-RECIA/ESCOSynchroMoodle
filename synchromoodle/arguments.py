@@ -21,7 +21,6 @@ def parse_args(args=None, namespace=None):
                              "fois, les fichiers de configuration sont alors fusionnés.")
 
     arguments = parser.parse_args(args, namespace)
-    print(type(arguments))
     return arguments
 
 

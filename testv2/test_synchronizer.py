@@ -98,7 +98,7 @@ def db(config: Config, arguments: Namespace, temp: dict[str, list[int]], webserv
 def inserts(db: Database, config: Config, arguments: Namespace, temp: dict[str, list[int]], webservice: WebService):
     """
     Remplit la base de données avec les données nécéssaires pour les tests
-    Cette fonction va s'éxécuter une fois avant tous les tests
+    Cette fonction va s'éxécuter une seule fois avant tous les tests
     """
 
     #Insertion des élèves
@@ -224,6 +224,7 @@ def test_enseignant_nothing_no_delay_enrolled(db):
     qui est inscrit à des cours
     """
     assert is_normal(db, "F1700tta", "A")
+    assert not is_course_deleted(db, "testnettoyageA")
 
 def test_enseignant_nothing_no_delay_owner(db):
     """
@@ -231,6 +232,7 @@ def test_enseignant_nothing_no_delay_owner(db):
     qui possède un cours
     """
     assert is_normal(db, "F1700ttb", "B")
+    assert not is_course_deleted(db, "testnettoyageB")
 
 def test_enseignant_nothing_no_delay_references(db):
     """
@@ -253,6 +255,7 @@ def test_enseignant_anon_anon_delay_enrolled(db):
     et qui est inscrit à des cours
     """
     assert is_anonymized(db, "F1700tte")
+    assert not is_course_deleted(db, "testnettoyageE")
 
 def test_enseignant_anon_anon_delay_owner(db):
     """
@@ -260,6 +263,7 @@ def test_enseignant_anon_anon_delay_owner(db):
     et qui possède un cours
     """
     assert is_anonymized(db, "F1700ttf")
+    assert not is_course_deleted(db, "testnettoyageF")
 
 def test_enseignant_anon_anon_delay_references(db):
     """
@@ -276,13 +280,13 @@ def test_enseignant_anon_anon_delay_no_references_and_enrollements(db):
     assert is_normal(db, "F1700tth", "H")
 
 #Délais de backup de cours
-# TODO: Tester les traitements sur les cours
 def test_enseignant_anon_backup_delay_enrolled(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour faire
     un backup de ses cours et qui est inscrit à des cours
     """
     assert is_anonymized(db, "F1700tti")
+    assert not is_course_deleted(db, "testnettoyageI")
 
 def test_enseignant_anon_backup_delay_owner(db):
     """
@@ -290,6 +294,7 @@ def test_enseignant_anon_backup_delay_owner(db):
     un backup de ses cours et qui est possède un cours
     """
     assert is_anonymized(db, "F1700ttj")
+    assert is_course_deleted(db, "testnettoyageJ")
 
 def test_enseignant_anon_backup_delay_references(db):
     """
@@ -303,7 +308,7 @@ def test_enseignant_anon_backup_delay_no_references_and_enrollements(db):
     Enseignant qui ne s'est pas connecté depuis le délai pour faire un backup
     de ses cours mais qui n'a pas de références ni d'inscriptions
     """
-    assert is_normal(db, "F1700ttl", "L")
+    assert is_deleted(db, "F1700ttl")
 
 #Délais de suppression
 def test_enseignant_anon_delete_delay_enrolled(db):
@@ -312,6 +317,7 @@ def test_enseignant_anon_delete_delay_enrolled(db):
     et qui est inscrit à des cours
     """
     assert is_anonymized(db, "F1700ttm")
+    assert not is_course_deleted(db, "testnettoyageM")
 
 def test_enseignant_anon_delete_delay_owner(db):
     """
@@ -319,6 +325,7 @@ def test_enseignant_anon_delete_delay_owner(db):
     et qui possède un cours
     """
     assert is_anonymized(db, "F1700ttn")
+    assert is_course_deleted(db, "testnettoyageN")
 
 def test_enseignant_anon_delete_delay_references(db):
     """

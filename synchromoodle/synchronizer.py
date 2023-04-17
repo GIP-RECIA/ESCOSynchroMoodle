@@ -1045,7 +1045,7 @@ class Synchronizer:
             #Si l'utilisateur n'est plus présent dans l'annuaire LDAP, alors il faut faire un traitement
             if not self.list_contains_username(ldap_users, db_user[1]):
                 log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP", db_user[1])
-
+                #log.info("L'utilisateur %s n'a pas utilisé moodle depuis %f jours", db_user[1], (now - db_user[2])/SECONDS_PER_DAY)
                 #Dans tous les cas, si jamais il n'a jamais utilisé moodle alors on peut le supprimer
                 if not self.__db.user_has_used_moodle(db_user[0]):
                     log.info("L'utilisateur %s n'a jamais utilisé moodle. Il va être supprimé", db_user[1])
