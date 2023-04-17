@@ -129,90 +129,90 @@ def test_eleve_anon_delete_delay_enrolled(db):
     Elève qui ne s'est pas connecté depuis le délai pour être supprimé
     mais qui est inscrit à des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tsa"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700tsa")
 
 def test_eleve_anon_delete_delay_references(db):
     """
     Elève qui ne s'est pas connecté depuis le délai pour être supprimé
     mais qui a des références dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tsb"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700tsb")
 
 def test_eleve_delete_delete_delay_no_references_and_enrollements(db):
     """
     Elève qui ne s'est pas connecté depuis le délai pour être supprimé
     et qui n'a ni références ni inscriptions
     """
-    assert db.get_user_data(db.get_user_id("F1700tsc")) == None
+    assert is_deleted(db, "F1700tsc")
 
 def test_eleve_anon_anon_delay_references(db):
     """
     Elève qui ne s'est pas connecté depuis le délai pour être anonymisé
     mais qui a des références dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tsd"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700tsd")
 
 def test_eleve_delete_force_delay_enrolled(db):
     """
     Elève qui ne s'est pas connecté depuis le délai pour être supprimé de force
     mais qui a des inscriptions dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tse")) == None
+    assert is_deleted(db, "F1700tse")
 
 def test_eleve_delete_never_used(db):
     """
     Elève qui n'a jamais utilisé moodle
     """
-    assert db.get_user_data(db.get_user_id("F1700tsf")) == None
+    assert is_deleted(db, "F1700tsf")
 
 def test_eleve_nothing_anon_delay_no_references_and_enrollements(db):
     """
     Elève qui ne s'est pas connecté depuis le délai pour être anonymisé
     mais qui n'a pas de références ou d'inscriptions dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tsg"))[11] == "G"
+    assert is_normal(db, "F1700tsg", "G")
 
 def test_eleve_delete_force_delay_references(db):
     """
     Elève qui ne s'est pas connecté depuis le délai pour être supprimé de force
     mais qui a des références dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tsh")) == None
+    assert is_deleted(db, "F1700tsh")
 
 def test_eleve_delete_force_delay_no_references_and_enrollements(db):
     """
     Elève qui ne s'est pas connecté depuis le délai pour être supprimé de force
     et qui n'a ni références ni inscriptions
     """
-    assert db.get_user_data(db.get_user_id("F1700tsi")) == None
+    assert is_deleted(db, "F1700tsi")
 
 def test_eleve_anon_anon_delay_enrolled(db):
     """
     Elève qui ne s'est pas connecté depuis le délai pour être anonymisé
     mais qui est inscrit à des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tsj"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700tsj")
 
 def test_eleve_nothing_no_delay_enrolled(db):
     """
     Elève qui s'est connecté avant les délais
     et qui est inscrit à des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tsk"))[11] == "K"
+    assert is_normal(db, "F1700tsk", "K")
 
 def test_eleve_nothing_no_delay_references(db):
     """
     Elève qui s'est connecté avant les délais
     et qui a des références dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tsl"))[11] == "L"
+    assert is_normal(db, "F1700tsl", "L")
 
 def test_eleve_nothing_no_delay_no_references_and_enrollements(db):
     """
     Elève qui s'est connecté avant les délais
     mais qui n'est ni inscrit à des cours ni possède de références
     """
-    assert db.get_user_data(db.get_user_id("F1700tsm"))[11] == "M"
+    assert is_normal(db, "F1700tsm", "M")
 
 
 #--- TEST ENSEIGNANTS ---#
@@ -223,28 +223,28 @@ def test_enseignant_nothing_no_delay_enrolled(db):
     Enseignant qui s'est connecté avant les délais et
     qui est inscrit à des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tta"))[11] == "A"
+    assert is_normal(db, "F1700tta", "A")
 
 def test_enseignant_nothing_no_delay_owner(db):
     """
     Enseignant qui s'est connecté avant les délais et
     qui possède un cours
     """
-    assert db.get_user_data(db.get_user_id("F1700ttb"))[11] == "B"
+    assert is_normal(db, "F1700ttb", "B")
 
 def test_enseignant_nothing_no_delay_references(db):
     """
     Enseignant qui s'est connecté avant les délais et
     qui possède des références dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700ttc"))[11] == "C"
+    assert is_normal(db, "F1700ttc", "C")
 
 def test_enseignant_nothing_no_delay_no_references_and_enrollements(db):
     """
     Enseignant qui s'est connecté avant les délais
     mais qui n'a pas de références ni d'inscriptions
     """
-    assert db.get_user_data(db.get_user_id("F1700ttd"))[11] == "D"
+    assert is_normal(db, "F1700ttd", "D")
 
 #Délais d'anonymisation
 def test_enseignant_anon_anon_delay_enrolled(db):
@@ -252,28 +252,28 @@ def test_enseignant_anon_anon_delay_enrolled(db):
     Enseignant qui ne s'est pas connecté depuis le délai pour être anonymisé
     et qui est inscrit à des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tte"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700tte")
 
 def test_enseignant_anon_anon_delay_owner(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour être anonymisé
     et qui possède un cours
     """
-    assert db.get_user_data(db.get_user_id("F1700ttf"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700ttf")
 
 def test_enseignant_anon_anon_delay_references(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour être anonymisé
     et qui possède des références dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700ttg"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700ttg")
 
 def test_enseignant_anon_anon_delay_no_references_and_enrollements(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour être anonymisé
     mais qui n'a pas de références ni d'inscriptions
     """
-    assert db.get_user_data(db.get_user_id("F1700tth"))[11] == "H"
+    assert is_normal(db, "F1700tth", "H")
 
 #Délais de backup de cours
 # TODO: Tester les traitements sur les cours
@@ -282,28 +282,28 @@ def test_enseignant_anon_backup_delay_enrolled(db):
     Enseignant qui ne s'est pas connecté depuis le délai pour faire
     un backup de ses cours et qui est inscrit à des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tti"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700tti")
 
 def test_enseignant_anon_backup_delay_owner(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour faire
     un backup de ses cours et qui est possède un cours
     """
-    assert db.get_user_data(db.get_user_id("F1700ttj"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700ttj")
 
 def test_enseignant_anon_backup_delay_references(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour faire
     un backup de ses cours et qui possède des références dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700ttk"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700ttk")
 
 def test_enseignant_anon_backup_delay_no_references_and_enrollements(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour faire un backup
     de ses cours mais qui n'a pas de références ni d'inscriptions
     """
-    assert db.get_user_data(db.get_user_id("F1700ttl"))[11] == "H"
+    assert is_normal(db, "F1700ttl", "L")
 
 #Délais de suppression
 def test_enseignant_anon_delete_delay_enrolled(db):
@@ -311,31 +311,31 @@ def test_enseignant_anon_delete_delay_enrolled(db):
     Enseignant qui ne s'est pas connecté depuis le délai pour être supprimé
     et qui est inscrit à des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700ttm"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700ttm")
 
 def test_enseignant_anon_delete_delay_owner(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour être supprimé
     et qui possède un cours
     """
-    assert db.get_user_data(db.get_user_id("F1700ttn"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700ttn")
 
 def test_enseignant_anon_delete_delay_references(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour être supprimé
     et qui possède des références dans des cours
     """
-    assert db.get_user_data(db.get_user_id("F1700tto"))[10] == "Anonyme"
+    assert is_anonymized(db, "F1700tto")
 
 def test_enseignant_delete_delete_delay_no_references_and_enrollements(db):
     """
     Enseignant qui ne s'est pas connecté depuis le délai pour être supprimé
     mais qui n'a pas de références ni d'inscriptions
     """
-    assert db.get_user_data(db.get_user_id("F1700ttp")) == None
+    assert is_deleted(db, "F1700ttp")
 
 def test_enseignant_delete_never_used(db):
     """
     Enseignant qui n'a jamais utilisé moodle
     """
-    assert db.get_user_data(db.get_user_id("F1700tsq")) == None
+    assert is_deleted(db, "F1700ttq")

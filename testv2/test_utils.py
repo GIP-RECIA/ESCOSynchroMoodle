@@ -5,6 +5,42 @@ from argparse import Namespace
 
 SECONDS_PER_DAY = 86400
 
+def is_anonymized(db: Database, userid: int):
+    """
+    Teste si un utilisateur est anonymisé
+    :param userid: L'id de l'utilisateur
+    :returns: Un booléen à True si l'utilisateur est anonyme, False sinon
+    """
+    try:
+        return db.get_user_data(db.get_user_id(userid))[10] == "Anonyme"
+    #Cas ou l'utilisateur est supprimé de la BD
+    except TypeError as e:
+        return False
+
+def is_deleted(db: Database, userid: int):
+    """
+    Teste si un utilisateur est supprimé de la base de données moodle
+    :param userid: L'id de l'utilisateur
+    :returns: Un booléen à True si l'utilisateur n'est plus dans la base de données, False sinon
+    """
+    return db.get_user_data(db.get_user_id(userid)) == None
+
+def is_normal(db: Database, userid: int, name: str):
+    """
+    Teste si un utilisateur est présent dans la base de données moodle sans qu'un
+    traitement ait été effectué dessus, autrement dit qu'il n'ait pas été
+    supprimé ou anonymisé
+    :param userid: L'id de l'utilisateur
+    :param name: Le nom originel de l'utilisateur
+    :returns: Un booléen à True si l'utilisateur n'a pas eu de traitement
+    """
+    try:
+        return db.get_user_data(db.get_user_id(userid))[11] == name
+    #Cas ou l'utilisateur est supprimé de la BD
+    except TypeError as e:
+        return False
+
+
 def insert_eleves(db: Database, config: Config, arguments: Namespace, temp: dict[str, list[int]], webservice: WebService):
     """
     Insérère toutes les données nécéssaisres aux tests
