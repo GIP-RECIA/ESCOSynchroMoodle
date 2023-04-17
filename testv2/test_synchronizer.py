@@ -107,8 +107,8 @@ def inserts(db: Database, config: Config, arguments: Namespace, temp: dict[str, 
     #Insertion des profs
     insert_profs(db, config, arguments, temp, webservice)
 
-    #Mise à jour BD avant de faire les tests
-    db.connection.commit()
+    #Insertion des cours
+    insert_courses(db, config, arguments, temp, webservice)
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -346,3 +346,50 @@ def test_enseignant_delete_never_used(db):
     Enseignant qui n'a jamais utilisé moodle
     """
     assert is_deleted(db, "F1700ttq")
+
+
+#--- TESTS COURS ---#
+
+def test_cours_nothing_no_delay_only_owner(db):
+    """
+    Cours qui a été modifié avant les délais
+    et qui n'a qu'un seul enseignant inactif en propriétaire
+    """
+    assert not is_course_deleted(db, "testnettoyage1")
+
+def test_cours_nothing_no_delay_both_owner(db):
+    """
+    Cours qui a été modifié avant les délais
+    et qui a deux enseignants (dont un inactif) en propriétaire
+    """
+    assert not is_course_deleted(db, "testnettoyage2")
+
+def test_cours_nothing_no_delay_not_owner(db):
+    """
+    Cours qui a été modifié avant les délais et qui a deux enseignants :
+    - un non propriétaire inactif
+    - un propriétaire actif
+    """
+    assert not is_course_deleted(db, "testnettoyage3")
+
+def test_cours_delete_backup_delay_only_owner(db):
+    """
+    Cours qui n'a pas été modifié avant les délais
+    et qui n'a qu'un seul enseignant inactif en propriétaire
+    """
+    assert is_course_deleted(db, "testnettoyage4")
+
+def test_cours_nothing_backup_delay_both_owner(db):
+    """
+    Cours qui n'a pas été modifié avant les délais
+    et qui a deux enseignants (dont un inactif) en propriétaire
+    """
+    assert is_course_deleted(db, "testnettoyage5")
+
+def test_cours_nothing_backup_delay_not_owner(db):
+    """
+    Cours qui n'a pas été modifié avant les délais et qui a deux enseignants :
+    - un non propriétaire inactif
+    - un propriétaire actif
+    """
+    assert not is_course_deleted(db, "testnettoyage6")

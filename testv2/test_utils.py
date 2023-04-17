@@ -93,14 +93,14 @@ def insert_eleves(db: Database, config: Config, arguments: Namespace, temp: dict
     db.connection.commit()
 
     #Création d'un cours factice pour y inscire les éventuels utilisateurs
-    course_test1_id = webservice.create_course("testnettoyage", "testnettoyage", 1)[0]["id"]
-    temp["courses"].append(course_test1_id)
+    course_test_id = webservice.create_course("testnettoyage", "testnettoyage", 1)[0]["id"]
+    temp["courses"].append(course_test_id)
 
     #Inscription des utilisateurs aux cours factices
-    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_a, course_test1_id)
-    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_d, course_test1_id)
-    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_k, course_test1_id)
-    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_j, course_test1_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_a, course_test_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_d, course_test_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_k, course_test_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_eleve, eleveid_j, course_test_id)
 
     #Création de fausses références dans des cours
     refid_b = insert_fake_course_reference_eleve(db, eleveid_b)
@@ -108,6 +108,9 @@ def insert_eleves(db: Database, config: Config, arguments: Namespace, temp: dict
     refid_h = insert_fake_course_reference_eleve(db, eleveid_h)
     refid_l = insert_fake_course_reference_eleve(db, eleveid_l)
     temp["references"].extend([refid_b,refid_d,refid_h,refid_l])
+
+    #Mise à jour BD
+    db.connection.commit()
 
 
 def insert_profs(db: Database, config: Config, arguments: Namespace, temp: dict[str, list[int]], webservice: WebService):
@@ -215,6 +218,63 @@ def insert_profs(db: Database, config: Config, arguments: Namespace, temp: dict[
     refidprof_k = insert_fake_course_reference_enseignant(db, profid_k)
     refidprof_o = insert_fake_course_reference_enseignant(db, profid_o)
     temp["references"].extend([refidprof_c,refidprof_g,refidprof_k,refidprof_o])
+
+    #Mise à jour BD
+    db.connection.commit()
+
+
+def insert_courses(db: Database, config: Config, arguments: Namespace, temp: dict[str, list[int]], webservice: WebService):
+    """
+    Insérère toutes les données nécéssaisres aux tests
+    des élèves dans la base de données moodle
+    """
+    #Récupération du timestamp actuel
+    now = db.get_timestamp_now()
+
+    #Création des cours de test
+    course1_id = webservice.create_course("testnettoyage1", "testnettoyage1", ID_TEST_CATEGORY)[0]["id"]
+    course2_id = webservice.create_course("testnettoyage2", "testnettoyage2", ID_TEST_CATEGORY)[0]["id"]
+    course3_id = webservice.create_course("testnettoyage3", "testnettoyage3", ID_TEST_CATEGORY)[0]["id"]
+    course4_id = webservice.create_course("testnettoyage4", "testnettoyage4", ID_TEST_CATEGORY)[0]["id"]
+    course5_id = webservice.create_course("testnettoyage5", "testnettoyage5", ID_TEST_CATEGORY)[0]["id"]
+    course6_id = webservice.create_course("testnettoyage6", "testnettoyage6", ID_TEST_CATEGORY)[0]["id"]
+    temp["courses"].extend([course1_id,course2_id,course3_id,course4_id,course5_id,course6_id])
+
+    #Création d'utilisateurs factices à inscire dans les cours pour pouvoir vérifier les traitements sur les cours
+    profid_x = insert_fake_user(db, "F1700ttx", "testprof", "X", "testprof.X@netocentre.fr", 2, "0290009c")
+    profid_y = insert_fake_user(db, "F1700tty", "testprof", "Y", "testprof.Y@netocentre.fr", 2, "0290009c")
+    id_context_test_category = db.get_id_context_categorie(ID_TEST_CATEGORY)
+    db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_test_category, profid_x)
+    db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_test_category, profid_y)
+    update_lastlogin_user(db, profid_x, now - (config.delete.delay_backup_course + 1) * SECONDS_PER_DAY)
+    update_lastlogin_user(db, profid_y, now)
+    temp["profs"].extend([profid_x, profid_y])
+
+    #Mise à jour BD
+    db.connection.commit()
+
+    #Inscription des enseignants factices dans les différents cours
+    webservice.enrol_user_to_course(config.constantes.id_role_proprietaire_cours, profid_x, course1_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_proprietaire_cours, profid_x, course2_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_enseignant, profid_x, course3_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_proprietaire_cours, profid_x, course4_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_proprietaire_cours, profid_x, course5_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_enseignant, profid_x, course6_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_proprietaire_cours, profid_y, course2_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_proprietaire_cours, profid_y, course3_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_proprietaire_cours, profid_y, course5_id)
+    webservice.enrol_user_to_course(config.constantes.id_role_proprietaire_cours, profid_y, course6_id)
+
+    #Changement des dates de dernière modification des cours
+    update_timemodified_course(db, course1_id, now)
+    update_timemodified_course(db, course2_id, now)
+    update_timemodified_course(db, course3_id, now)
+    update_timemodified_course(db, course4_id, now - (config.delete.delay_backup_course + 1) * SECONDS_PER_DAY)
+    update_timemodified_course(db, course5_id, now - (config.delete.delay_backup_course + 1) * SECONDS_PER_DAY)
+    update_timemodified_course(db, course6_id, now - (config.delete.delay_backup_course + 1) * SECONDS_PER_DAY)
+
+    #Mise à jour BD
+    db.connection.commit()
 
 
 def get_course_count_by_shortname(db: Database, shortname: str):
