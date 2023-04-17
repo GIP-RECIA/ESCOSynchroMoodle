@@ -441,10 +441,6 @@ class Synchronizer:
                 or etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_ens_adapte \
                 or etablissement_context.structure_ldap.uai == '0370074E' \
                 or ( etablissement_context.structure_ldap.type.startswith('COLLEGE') \
-                    and ( etablissement_context.structure_ldap.uai.startswith('041') \
-                        or etablissement_context.structure_ldap.uai.startswith('045') \
-                        or etablissement_context.structure_ldap.uai.startswith('037') \
-                ) \
                 or etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_cfa_agricole  ) :
                 if set(enseignant_ldap.profils).intersection(['National_ENS','National_DOC','National_DIR', 'National_ETA', 'National_EVS']):
                     log.info("Ajout du rôle bigbluebutton pour l'utilisateur %s" % id_user)
