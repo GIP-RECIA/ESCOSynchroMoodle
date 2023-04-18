@@ -122,13 +122,14 @@ class TestEtablissement:
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 0
         for classe in eleve.classes:
-            cohort_name = "Élèves de la Classe %s" % classe
+            cohort_name = "Élèves de la Classe %s" % classe.classe
             db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
                             params={
                                 'name': cohort_name
                             })
             cohort = db.mark.fetchone()
-            cohort_id = cohort[0]# TODO: Aucun cohorte récupérée donc TypeError
+            assert cohort != None
+            cohort_id = cohort[0]
             db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                             .format(entete=db.entete),
                             params={
