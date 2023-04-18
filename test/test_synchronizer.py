@@ -308,38 +308,100 @@ class TestEtablissement:
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 0
 
-    def test_nettoyage(self, ldap: Ldap, db: Database, config: Config):
+    def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Test la purge des cohortes :
+            - Récupération des cohortes de moodle
+            - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
+                - Eleves par classe
+                - Eleves par niveau de formation
+                - Enseignants par classe
+                - Enseignants par établissement
+            - Suppression des cohortes vides
+        """
 
         #Charger une configuration spécifique à partir de ce test et pour tous les tests d'après
         config_loader = ConfigLoader()
         config = config_loader.update(config, ["config/test-nettoyage.yml"])
 
+        #Chargement du ldap et de la bd
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
+        #Initialisation du synchronizer
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
+
+        #Synchronisation d'un établissement
         etab_context = synchronizer.handle_etablissement("0290009C")
+
+        #Synchronisation des élèves de cet établissement
         eleves = ldap.search_eleve(None, "0290009C")
         for eleve in eleves:
             synchronizer.handle_eleve(etab_context, eleve)
 
-        # TODO: Rajouter des tests pour les cohortes d'élèves par niveau, de profs par classe et par établissement
-        eleves_by_cohorts_db, eleves_by_cohorts_ldap = \
-            synchronizer.get_users_by_cohorts_comparators_eleves_classes(etab_context, r'(Élèves de la Classe )(.*)$',
-                                                          'Élèves de la Classe %')
+        #Synchronisation des enseignants de cet établissement
+        enseignants = ldap.search_enseignant(None, "0290009C")
+        for enseignant in enseignants:
+            synchronizer.handle_enseignant(etab_context, enseignant)
 
+        #Récupération des cohortes dans le ldap et des cohortes crées dans moodle
+        eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
+            get_users_by_cohorts_comparators_eleves_classes(etab_context, r'(Élèves de la Classe )(.*)$',
+                                             'Élèves de la Classe %')
+
+        eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
+            get_users_by_cohorts_comparators_eleves_niveau(etab_context, r'(Élèves du Niveau de formation )(.*)$',
+                                             'Élèves du Niveau de formation %')
+
+        profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
+            get_users_by_cohorts_comparators_profs_classes(etab_context, r'(Profs de la Classe )(.*)$',
+                                             'Profs de la Classe %')
+
+        profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
+            get_users_by_cohorts_comparators_profs_etab(etab_context, r"(Profs de l'établissement )(.*)$",
+                                             "Profs de l'établissement %")
+
+        #Sans aucune suppression ou ajout, les cohortes dans le ldap et dans moodle doivent être les mêmes
+        assert eleves_by_cohorts_db == eleves_by_cohorts_ldap
+        assert eleves_lvformation_by_cohorts_db == eleves_lvformation_by_cohorts_ldap
+        assert profs_classe_by_cohorts_db == profs_classe_by_cohorts_ldap
+        assert profs_etab_by_cohorts_db == profs_etab_by_cohorts_ldap
+
+        #Suppression manuelle de certaines cohortes d'utilisateurs spécifiques dans le ldap
+        #Eleves par classe
         eleves_by_cohorts_ldap.pop('1ERE S2', None)
         eleves_by_cohorts_ldap.pop('TES3', None)
         eleves_by_cohorts_ldap['TS2'].remove('f1700ivg')
         eleves_by_cohorts_ldap['TS2'].remove('f1700ivl')
         eleves_by_cohorts_ldap['TS2'].remove('f1700ivv')
 
-        synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap, "Élèves de la Classe %s")
+        #Eleves par niveau
+        eleves_lvformation_by_cohorts_ldap["TERMINALE GENERALE & TECHNO YC BT"].remove("f1700ivg")
+        eleves_lvformation_by_cohorts_ldap["TERMINALE GENERALE & TECHNO YC BT"].remove("f1700ivh")
+
+        #Enseignants par classe
+        profs_classe_by_cohorts_ldap["TES1"].remove("f1700jym")
+
+        #Enseignants par établissement
+        profs_etab_by_cohorts_ldap["(0290009C)"].remove("f1700jym")
+
+        #Purge des cohortes
+        synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
+                                   "Élèves de la Classe %s")
+        synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
+                                   'Élèves du Niveau de formation %s')
+        synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
+                                   'Profs de la Classe %s')
+        synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
+                                   "Profs de l'établissement %s")
+
+        #Suppression des cohortes vides
         db.delete_empty_cohorts()
 
+        #Vérification de la suppression des cohortes 1ERE S2 et TS2
         s = "SELECT COUNT(cohort_members.id) FROM {entete}cohort_members AS cohort_members" \
             " INNER JOIN {entete}cohort AS cohort" \
             " ON cohort_members.cohortid = cohort.id" \
@@ -352,6 +414,8 @@ class TestEtablissement:
         result = db.mark.fetchone()
         assert result[0] == 0
 
+        #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap ont bien aussi été supprimés des cohortes dans moodle
+        #Eleves par classe : récupération des membres de la cohorte d'élèves TS2
         db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
                         " INNER JOIN {entete}cohort AS cohort"
                         " ON cohort_members.cohortid = cohort.id"
@@ -365,7 +429,51 @@ class TestEtablissement:
         assert 'f1700ivg' not in results
         assert 'f1700ivl' not in results
         assert 'f1700ivv' not in results
-        assert len(results) == 5
+        assert len(results) == len(eleves_by_cohorts_db["TS2"])-3
+
+        #Eleves par niveau : récupération des membres de la cohorte d'élèves TERMINALE GENERALE & TECHNO YC BT
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Élèves du Niveau de formation TERMINALE GENERALE & TECHNO YC BT"
+                        })
+        results = [result[0] for result in db.mark.fetchall()]
+        assert 'f1700ivg' not in results
+        assert 'f1700ivh' not in results
+        assert len(results) == len(eleves_lvformation_by_cohorts_db["TERMINALE GENERALE & TECHNO YC BT"])-2
+
+        #Enseignants par classe : récupération des membres de la cohorte de profs TES1
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Profs de la Classe TES1"
+                        })
+        results = [result[0] for result in db.mark.fetchall()]
+        assert 'f1700jym' not in results
+        assert len(results) == len(profs_classe_by_cohorts_db["TES1"])-1
+
+        #Enseignants par établissement : récupération des membres de la cohorte de profs TES1
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Profs de l'établissement (0290009C)"
+                        })
+        results = [result[0] for result in db.mark.fetchall()]
+        assert 'f1700jym' not in results
+        assert len(results) == len(profs_etab_by_cohorts_db["(0290009C)"])-1
+
 
     def test_anonymize_useless_users(self, ldap: Ldap, db: Database, config: Config):
 

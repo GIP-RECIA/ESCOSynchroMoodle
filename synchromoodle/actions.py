@@ -254,11 +254,11 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
                 # On commit pour chaque étab afin de libérer rapidement le lock
                 db.connection.commit()
 
-            # TODO lvillanne mettre en place le système de nettoyage des cohortes dane
-            # TODO lvillanne ceci est un exemple pour un type de cohorte dane
-            #  voir pour rendre la fonction paramétrable pour els 3 cohortes lycee puis pour faire le même genre de chose pour les colleges
-            log.info("Purge de la cohorte dane élèves des lycées de l'éducation national")
-            synchronizer.purge_cohort_dane_elv_lycee_en(cohort_elv_lycee_en_ldap)
+                # TODO lvillanne mettre en place le système de nettoyage des cohortes dane
+                # TODO lvillanne ceci est un exemple pour un type de cohorte dane
+                #  voir pour rendre la fonction paramétrable pour els 3 cohortes lycee puis pour faire le même genre de chose pour les colleges
+                log.info("Purge de la cohorte dane élèves des lycées de l'éducation national")
+                synchronizer.purge_cohort_dane_elv_lycee_en(cohort_elv_lycee_en_ldap)
 
             log.info("Suppression des cohortes vides (sans utilisateur)")
             db.delete_empty_cohorts()
