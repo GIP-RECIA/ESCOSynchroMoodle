@@ -171,13 +171,15 @@ class TestEtablissement:
                             'userid': enseignant_id
                         })
         roles_results = db.mark.fetchall()
-        assert len(roles_results) == 3# TODO: 4 roles sont donnés au lieu de 3 -> voir role 21
+        assert len(roles_results) == 4
         assert roles_results[0][1] == 2
         assert roles_results[0][2] == 3
-        assert roles_results[1][1] == 2
-        assert roles_results[1][2] == 1184277
-        assert roles_results[2][1] == 5
-        assert roles_results[2][2] == 1184278
+        assert roles_results[1][1] == 21
+        assert roles_results[1][2] == 1
+        assert roles_results[2][1] == 2
+        assert roles_results[2][2] == 1184277
+        assert roles_results[3][1] == 5
+        assert roles_results[3][2] == 1184278
 
     def test_maj_user_interetab(self, ldap: Ldap, db: Database, config: Config):
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
