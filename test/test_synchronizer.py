@@ -2,7 +2,8 @@
 
 import pytest
 import platform
-from synchromoodle.config import Config, ActionConfig
+import json
+from synchromoodle.config import Config, ActionConfig, ConfigLoader
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer
@@ -127,7 +128,7 @@ class TestEtablissement:
                                 'name': cohort_name
                             })
             cohort = db.mark.fetchone()
-            cohort_id = cohort[0]
+            cohort_id = cohort[0]# TODO: Aucun cohorte récupérée donc TypeError
             db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                             .format(entete=db.entete),
                             params={
@@ -169,7 +170,7 @@ class TestEtablissement:
                             'userid': enseignant_id
                         })
         roles_results = db.mark.fetchall()
-        assert len(roles_results) == 3
+        assert len(roles_results) == 3# TODO: 4 roles sont donnés au lieu de 3 -> voir role 21
         assert roles_results[0][1] == 2
         assert roles_results[0][2] == 3
         assert roles_results[1][1] == 2
@@ -305,6 +306,11 @@ class TestEtablissement:
         assert len(roles_results) == 0
 
     def test_nettoyage(self, ldap: Ldap, db: Database, config: Config):
+
+        #Charger une configuration spécifique à partir de ce test et pour tous les tests d'après
+        config_loader = ConfigLoader()
+        config = config_loader.update(config, ["config/test-nettoyage.yml"])
+
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -317,8 +323,9 @@ class TestEtablissement:
         for eleve in eleves:
             synchronizer.handle_eleve(etab_context, eleve)
 
+        # TODO: Rajouter des tests pour les cohortes d'élèves par niveau, de profs par classe et par établissement
         eleves_by_cohorts_db, eleves_by_cohorts_ldap = \
-            synchronizer.get_users_by_cohorts_comparators(etab_context, r'(Élèves de la Classe )(.*)$',
+            synchronizer.get_users_by_cohorts_comparators_eleves_classes(etab_context, r'(Élèves de la Classe )(.*)$',
                                                           'Élèves de la Classe %')
 
         eleves_by_cohorts_ldap.pop('1ERE S2', None)
@@ -358,6 +365,7 @@ class TestEtablissement:
         assert len(results) == 5
 
     def test_anonymize_useless_users(self, ldap: Ldap, db: Database, config: Config):
+
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -420,16 +428,12 @@ class TestEtablissement:
             assert db_users[x][18] == config.constantes.anonymous_name
 
     def test_course_backup(self, ldap: Ldap, db: Database, config: Config):
+
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
-
-        os = platform.system()
-        if os == "Linux":
-            config.webservice.backup_cmd = "sh backup.sh --courseid=%courseid% --destination=/MoodleBackups"
-        elif os == "Windows":
-            config.webservice.backup_cmd = "backup.bat --courseid=%courseid% --destination=/MoodleBackups"
+        db_utils.run_script('data/delete-context.sql', db, connect=False)
 
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
@@ -487,6 +491,3 @@ class TestEtablissement:
         new_courses_ids = [new_course[0] for new_course in new_courses]
         assert len(new_courses_ids) == 2
         assert courses[0][0] not in new_courses_ids
-
-
-

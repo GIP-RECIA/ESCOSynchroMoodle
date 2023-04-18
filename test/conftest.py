@@ -43,10 +43,10 @@ def docker_config(config, docker_ip, docker_services):
 
     S'assure également que les containers sont disponibles.
 
-    :param config: 
-    :param docker_ip: 
-    :param docker_services: 
-    :return: 
+    :param config:
+    :param docker_ip:
+    :param docker_services:
+    :return:
     """
     docker_config = Config()
     docker_config.update(**json.loads(json.dumps(config, default=lambda o: getattr(o, '__dict__', str(o)))))
