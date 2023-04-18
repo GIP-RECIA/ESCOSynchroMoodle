@@ -384,7 +384,7 @@ def test_cours_nothing_backup_delay_both_owner(db):
     Cours qui n'a pas été modifié avant les délais
     et qui a deux enseignants (dont un inactif) en propriétaire
     """
-    assert is_course_deleted(db, "testnettoyage5")
+    assert not is_course_deleted(db, "testnettoyage5")
 
 def test_cours_nothing_backup_delay_not_owner(db):
     """
