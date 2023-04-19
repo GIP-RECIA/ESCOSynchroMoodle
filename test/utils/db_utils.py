@@ -314,6 +314,7 @@ def insert_courses(db: Database, config: Config):
     enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course2_id, profid_x)
     enrol_user_to_fake_course(db, config.constantes.id_role_enseignant, course3_id, profid_x)
     enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course4_id, profid_x)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course5_id, profid_x)
     enrol_user_to_fake_course(db, config.constantes.id_role_enseignant, course6_id, profid_x)
     enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course2_id, profid_y)
     enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course3_id, profid_y)

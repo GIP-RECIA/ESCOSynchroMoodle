@@ -651,7 +651,7 @@ class TestEtablissement:
         mock_delete_courses.assert_has_calls([call([37003])])
 
         #Cours dont doit être désinscrit l'utilisateur
-        mock_unenrol_user_from_course.assert_has_calls([call(492216,37004),call(492216,37005)])
+        mock_unenrol_user_from_course.assert_has_calls([call(492216,37001),call(492216,37002),call(492216,37004),call(492216,37005)])
 
         #On n'est pas censé anonymiser ou supprimer des utilisateurs dans les cas testés
         mock_anon_users.assert_not_called()
