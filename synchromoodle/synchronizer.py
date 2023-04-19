@@ -1095,14 +1095,13 @@ class Synchronizer:
                             if db_user[2] < now - (anon_delay * SECONDS_PER_DAY): #délai de connexion
                                 #Différence de traitement au niveau des références entre un enseignant et un élève
                                 if is_teacher:
-                                    if len(user_courses) > 0 or self.__db.enseignant_has_references(db_user[0]): #inscrit à au moins 1 cours ou possède des références
-                                        #S'il doit être anonymisé, on vérifie qu'il ne l'est pas déjà
-                                        if self.__db.get_user_data(db_user[0])[10] != self.__config.constantes.anonymous_name:
-                                            log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours et est inscrit à des cours ou possèdes des références."
-                                            " Il va être anonymisé", db_user[1], anon_delay)
-                                            user_ids_to_anonymize.append(db_user[0])
-                                        else:
-                                            log.info("L'enseignant %s doit être anonymisé, mais il est déja anonymisé", db_user[1])
+                                    #S'il doit être anonymisé, on vérifie qu'il ne l'est pas déjà
+                                    if self.__db.get_user_data(db_user[0])[10] != self.__config.constantes.anonymous_name:
+                                        log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours et est inscrit à des cours ou possèdes des références."
+                                        " Il va être anonymisé", db_user[1], anon_delay)
+                                        user_ids_to_anonymize.append(db_user[0])
+                                    else:
+                                        log.info("L'enseignant %s doit être anonymisé, mais il est déja anonymisé", db_user[1])
                                 else:
                                     #Même principe pour les élèves
                                     if self.__db.get_user_data(db_user[0])[10] != self.__config.constantes.anonymous_name:
