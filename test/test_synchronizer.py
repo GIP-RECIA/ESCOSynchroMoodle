@@ -36,6 +36,9 @@ def fake_get_courses_user_enrolled_test_enseignants(userid):
         return []
     return return_values[userid]
 
+def fake_get_courses_user_enrolled_test_cours(userid):
+    return []
+
 class TestEtablissement:
     @pytest.fixture(autouse=True)
     def manage_ldap(self, ldap: Ldap):
@@ -570,7 +573,7 @@ class TestEtablissement:
         for enseignant in ldap_enseignants:
             synchronizer.handle_enseignant(etab_context, enseignant)
 
-        #Ajout dans la BD des élèves, cours et références factices
+        #Ajout dans la BD des enseignants, cours et références factices
         db_utils.insert_enseignants(db, config)
 
         #Récupération des utilisateurs de la bd coté moodle
@@ -599,67 +602,57 @@ class TestEtablissement:
         mock_delete_courses.assert_has_calls([call([37005]),call([37007])])
 
 
-    def test_course_backup(self, ldap: Ldap, db: Database, config: Config):
+    def test_course_backup(self, ldap: Ldap, db: Database, config: Config, mocker):
+        """
+        Teste le traitement des cours des enseignants devenus inutiles :
+            - Ajout d'enseignants directement dans moodle qui ne sont pas présents dans le ldap
+            - Création de cours pour ces enseignants
+            - Inscription ou non aux cours avec des rôles différents (propriétaire ou simple enseignant)
+        """
 
+        #Chargement du ldap et de la bd
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
-        db_utils.run_script('data/delete-context.sql', db, connect=False)
 
+        #Initialisation du synchronizer
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
+
+        #Synchronisation d'un établissement
         etab_context = synchronizer.handle_etablissement("0290009C")
 
-        ldap_eleves = ldap.search_eleve(uai="0290009C")
+        #Synchronisation des enseignants
         ldap_enseignants = ldap.search_enseignant(uai="0290009C")
-        enseignant = ldap_enseignants[0]
-        enseignant2 = ldap_enseignants[1]
-        for eleve in ldap_eleves:
-            synchronizer.handle_eleve(etab_context, eleve)
         for enseignant in ldap_enseignants:
             synchronizer.handle_enseignant(etab_context, enseignant)
 
-        db.mark.execute("SELECT id FROM {entete}user WHERE username = %(username)s".format(entete=db.entete), params={
-            'username': str(enseignant.uid).lower()
-        })
-        enseignant_db = db.mark.fetchone()
+        #Ajout dans la BD des enseignants, cours et références factices
+        db_utils.insert_courses(db, config)
 
-        db.mark.execute("SELECT id FROM {entete}user WHERE username = %(username)s".format(entete=db.entete), params={
-            'username': str(enseignant2.uid).lower()
-        })
-        enseignant2_db = db.mark.fetchone()
+        #Récupération des utilisateurs de la bd coté moodle
+        db_valid_users = db.get_all_valid_users()
 
-        now = synchronizer.context.timestamp_now_sql
-        db.mark.execute("INSERT INTO {entete}course (fullname, timemodified) VALUES ('cours de test 1',"
-                        " %(timemodified)s)".format(entete=db.entete), params={'timemodified': now})
-        db.mark.execute("INSERT INTO {entete}course (fullname, timemodified) VALUES ('cours de test 2',"
-                        " %(timemodified)s)".format(entete=db.entete), params={'timemodified': now - 31622400})
-        db.mark.execute("INSERT INTO {entete}course (fullname, timemodified) VALUES ('cours de test 3',"
-                        " %(timemodified)s)".format(entete=db.entete), params={'timemodified': now - 31622400})
-        db.mark.execute("SELECT id, fullname, timemodified FROM {entete}course ORDER BY id DESC LIMIT 3"
-                        .format(entete=db.entete))
-        courses = db.mark.fetchall()
+        #Mocks
+        mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
+            side_effect=fake_get_courses_user_enrolled_test_cours)
+        mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
+        mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
+        mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
+        mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
+        mock_backup_course = mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
+            return_value=config.webservice.backup_success_re)
 
-        for course in courses:
-            db.mark.execute("INSERT INTO {entete}context (contextlevel, instanceid) VALUES (50, %(instanceid)s)"
-                            .format(entete=db.entete), params={'instanceid': course[0]})
-            db.mark.execute("SELECT id FROM {entete}context ORDER BY id DESC LIMIT 1".format(entete=db.entete))
-            contextid = db.mark.fetchone()
-            db.add_role_to_user(config.constantes.id_role_proprietaire_cours, contextid[0], enseignant_db[0])
+        #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
+        synchronizer.anonymize_or_delete_users(ldap_enseignants, db_valid_users)
 
-        db.mark.execute("INSERT INTO {entete}context (contextlevel, instanceid) VALUES (60, %(instanceid)s)"
-                        .format(entete=db.entete), params={'instanceid': courses[1][0]})
+        #Cours qui doit être supprimé
+        mock_delete_courses.assert_has_calls([call([37003])])
 
-        db.mark.execute("SELECT id FROM {entete}context ORDER BY id DESC LIMIT 1".format(entete=db.entete))
-        contextid = db.mark.fetchone()
+        #Cours dont doit être désinscrit l'utilisateur
+        mock_unenrol_user_from_course.assert_has_calls([call(492216,37004),call(492216,37005)])
 
-        db.add_role_to_user(config.constantes.id_role_proprietaire_cours, contextid[0], enseignant2_db[0])
-
-        synchronizer.check_and_process_user_courses(enseignant_db[0])
-
-        db.mark.execute("SELECT id FROM {entete}course WHERE fullname LIKE 'cours de test%'".format(entete=db.entete))
-        new_courses = db.mark.fetchall()
-        new_courses_ids = [new_course[0] for new_course in new_courses]
-        assert len(new_courses_ids) == 2
-        assert courses[0][0] not in new_courses_ids
+        #On n'est pas censé anonymiser ou supprimer des utilisateurs dans les cas testés
+        mock_anon_users.assert_not_called()
+        mock_delete_users.assert_not_called()

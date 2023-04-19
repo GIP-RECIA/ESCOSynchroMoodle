@@ -178,7 +178,7 @@ def insert_eleves(db: Database, config: Config):
 def insert_enseignants(db: Database, config: Config):
     """
     Insérère toutes les données nécéssaisres aux tests
-    des élèves dans la base de données moodle
+    des enseignants dans la base de données moodle
     """
     #Récupération du timestamp actuel
     now = db.get_timestamp_now()
@@ -276,6 +276,57 @@ def insert_enseignants(db: Database, config: Config):
     refidprof_g = insert_fake_course_reference_enseignant(db, profid_g)
     refidprof_k = insert_fake_course_reference_enseignant(db, profid_k)
     refidprof_o = insert_fake_course_reference_enseignant(db, profid_o)
+
+    #Mise à jour BD
+    db.connection.commit()
+
+
+def insert_courses(db: Database, config: Config):
+    """
+    Insérère toutes les données nécéssaisres aux tests
+    des cours dans la base de données moodle
+    """
+    #Récupération du timestamp actuel
+    now = db.get_timestamp_now()
+
+    #Création des cours de test
+    course1_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyage1", 0, "testnettoyage1", "", "", 1, 0, 0, 0)
+    course2_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyage2", 0, "testnettoyage2", "", "", 1, 0, 0, 0)
+    course3_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyage3", 0, "testnettoyage3", "", "", 1, 0, 0, 0)
+    course4_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyage4", 0, "testnettoyage4", "", "", 1, 0, 0, 0)
+    course5_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyage5", 0, "testnettoyage5", "", "", 1, 0, 0, 0)
+    course6_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyage6", 0, "testnettoyage6", "", "", 1, 0, 0, 0)
+
+    #Création d'utilisateurs factices à inscire dans les cours pour pouvoir vérifier les traitements sur les cours
+    profid_x = insert_fake_user(db, "F1700ttx", "testprof", "X", "testprof.X@netocentre.fr", 2, "0290009c")
+    profid_y = insert_fake_user(db, "F1700tty", "testprof", "Y", "testprof.Y@netocentre.fr", 2, "0290009c")
+    id_context_test_category = db.get_id_context_categorie(ID_TEST_CATEGORY)
+    db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_test_category, profid_x)
+    db.add_role_to_user(config.constantes.id_role_createur_cours, id_context_test_category, profid_y)
+    update_lastlogin_user(db, profid_x, now - (config.delete.delay_backup_course + 1) * SECONDS_PER_DAY)
+    update_lastlogin_user(db, profid_y, now)
+
+    #Mise à jour BD
+    db.connection.commit()
+
+    #Inscription des enseignants factices dans les différents cours
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course1_id, profid_x)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course2_id, profid_x)
+    enrol_user_to_fake_course(db, config.constantes.id_role_enseignant, course3_id, profid_x)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course4_id, profid_x)
+    enrol_user_to_fake_course(db, config.constantes.id_role_enseignant, course6_id, profid_x)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course2_id, profid_y)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course3_id, profid_y)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course5_id, profid_y)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course6_id, profid_y)
+
+    #Changement des dates de dernière modification des cours
+    update_timemodified_course(db, course1_id, now)
+    update_timemodified_course(db, course2_id, now)
+    update_timemodified_course(db, course3_id, now)
+    update_timemodified_course(db, course4_id, now - (config.delete.delay_backup_course + 1) * SECONDS_PER_DAY)
+    update_timemodified_course(db, course5_id, now - (config.delete.delay_backup_course + 1) * SECONDS_PER_DAY)
+    update_timemodified_course(db, course6_id, now - (config.delete.delay_backup_course + 1) * SECONDS_PER_DAY)
 
     #Mise à jour BD
     db.connection.commit()
