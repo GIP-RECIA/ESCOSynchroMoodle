@@ -8,7 +8,6 @@ from synchromoodle.config import Config, ActionConfig, ConfigLoader
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer
-from synchromoodle.webserviceutils import WebService
 from test.utils import db_utils, ldap_utils
 
 
@@ -28,6 +27,13 @@ def ldap(docker_config: Config):
 def fake_get_courses_user_enrolled_test_eleves(userid):
     return_values = {492286:[37000],492287:[],492288:[],492289:[],492290:[37000],492291:[],\
     492292:[],492293:[],492294:[],492295:[],492296:[37000],492297:[37000],492298:[]}
+    return return_values[userid]
+
+def fake_get_courses_user_enrolled_test_enseignants(userid):
+    return_values = {492216:[37000],492217:[37001],492220:[37002],492221:[37003],\
+    492224:[37004],492225:[37005],49228:[37006],492229:[37007]}
+    if userid not in return_values.keys():
+        return []
     return return_values[userid]
 
 class TestEtablissement:
@@ -326,10 +332,6 @@ class TestEtablissement:
             - Suppression des cohortes vides
         """
 
-        #Chargement d'une configuration spécifique avec les infos relatives au nettoyage
-        config_loader = ConfigLoader()
-        config = config_loader.update(config, ["config/test-nettoyage.yml"])
-
         #Chargement du ldap et de la bd
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -496,9 +498,6 @@ class TestEtablissement:
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
-        #Initialisation de l'objet webservice
-        webservice = WebService(config.webservice)
-
         #Initialisation du synchronizer
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
@@ -512,7 +511,7 @@ class TestEtablissement:
             synchronizer.handle_eleve(etab_context, eleve)
 
         #Ajout dans la BD des élèves, cours et références factices
-        db_utils.insert_eleves(db, config, webservice)
+        db_utils.insert_eleves(db, config)
 
         #Récupération des utilisateurs de la bd coté moodle
         db_valid_users = db.get_all_valid_users()
@@ -540,6 +539,65 @@ class TestEtablissement:
         #On vérifie aussi que l'on a pas fait d'appels aux méthodes qui ne doivent pas reçevoir d'appels
         mock_delete_courses.assert_not_called()
         mock_unenrol_user_from_course.assert_not_called()
+
+
+    def test_anonymize_or_delete_enseignants(self, ldap: Ldap, db: Database, config: Config, mocker):
+        """
+        Teste la suppression/anonymisation des enseignants devenus inutiles :
+            - Ajout d'utilisateurs directement dans moodle qui ne sont pas présents dans le ldap
+                - Variation de la date de dernière connexion
+                - Inscriptions ou non à des cours (hors enseignant)
+                - Références ou non à des cours
+                - Possession de cours (rôles enseignant ou propriétaire de cours)
+            - # TODO: Suppression d'utilisateurs dans le ldap qui sont présents dans moodle
+        """
+
+        #Chargement du ldap et de la bd
+        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
+        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
+        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        #Initialisation du synchronizer
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.initialize()
+
+        #Synchronisation d'un établissement
+        etab_context = synchronizer.handle_etablissement("0290009C")
+
+        #Synchronisation des élèves de cet établissement
+        ldap_enseignants = ldap.search_enseignant(uai="0290009C")
+        for enseignant in ldap_enseignants:
+            synchronizer.handle_enseignant(etab_context, enseignant)
+
+        #Ajout dans la BD des élèves, cours et références factices
+        db_utils.insert_enseignants(db, config)
+
+        #Récupération des utilisateurs de la bd coté moodle
+        db_valid_users = db.get_all_valid_users()
+
+        #Mocks
+        mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
+            side_effect=fake_get_courses_user_enrolled_test_enseignants)
+        mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
+        mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
+        mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
+        mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
+        mock_backup_course = mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
+            return_value=config.webservice.backup_success_re)
+
+        #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
+        synchronizer.anonymize_or_delete_users(ldap_enseignants, db_valid_users)
+
+        #Vérification de la suppression des utilisateurs
+        mock_delete_users.assert_has_calls([call([492231,492232])])
+
+        #Vérification de l'anonymisation des utilisateurs
+        mock_anon_users.assert_has_calls([call([492220,492222,492223,492224,492226,492227,492228,492230])])
+
+        #Vérification que des traitements ont été lancés sur les cours de certains enseignants
+        mock_delete_courses.assert_has_calls([call([37005]),call([37007])])
+
 
     def test_course_backup(self, ldap: Ldap, db: Database, config: Config):
 

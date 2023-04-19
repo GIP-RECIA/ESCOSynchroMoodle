@@ -257,11 +257,10 @@ class Database:
 
     def enroll_user_in_course(self, role_id, id_course, id_user):
         """
-        Fonction permettant d'enroler un utilisateur dans un
-        cours
-        :param role_id:
-        :param id_course:
-        :param id_user:
+        Fonction permettant d'enroler un utilisateur dans un cours
+        :param role_id: L'id du rôle à donner à l'utilisateur dans le cours
+        :param id_course: L'id du cours dans lequel on veut inscrire l'utilisateur
+        :param id_user: L'id de l'utilisateur à inscrire
         :return:
         """
         id_enrol = self.get_id_enrol(ENROL_METHOD_MANUAL, role_id, id_course)

@@ -72,7 +72,7 @@ class DeleteConfig(_BaseConfig):
         self.delay_anonymize_teacher = 90
         """Délai, en jours, avant d'anonymiser un enseignant qui n'est plus présent dans l'annuaire LDAP"""
 
-        self.delay_delete_teacher = 365
+        self.delay_delete_teacher = 395
         """Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP"""
 
         self.delay_backup_course = 365
