@@ -26,7 +26,7 @@ def ldap(docker_config: Config):
 
 def fake_get_courses_user_enrolled_test_eleves(userid):
     return_values = {492286:[37000],492287:[],492288:[],492289:[],492290:[37000],492291:[],\
-    492292:[],492293:[],492294:[],492295:[],492296:[37000],492297:[37000],492298:[]}
+    492292:[],492293:[],492294:[],492295:[37000],492296:[37000],492297:[],492298:[]}
     return return_values[userid]
 
 def fake_get_courses_user_enrolled_test_enseignants(userid):
