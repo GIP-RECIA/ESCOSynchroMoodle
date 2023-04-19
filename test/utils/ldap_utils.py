@@ -8,7 +8,6 @@ from ldap3.core.exceptions import LDAPNoSuchObjectResult
 import test.utils.ldif as ldif
 from synchromoodle.ldaputils import Ldap
 
-
 def _remove_all_in(connection: Connection, dn: str):
     try:
         connection.search(dn, '(objectClass=*)', search_scope=LEVEL)

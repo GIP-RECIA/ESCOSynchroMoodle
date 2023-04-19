@@ -35,7 +35,6 @@ def config(action_config: ActionConfig):
     config.actions.append(action_config)
     return config
 
-
 @pytest.fixture(scope="session", name="docker_config")
 def docker_config(config, docker_ip, docker_services):
     """

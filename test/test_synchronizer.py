@@ -1,12 +1,14 @@
 # coding: utf-8
 
 import pytest
+from unittest.mock import call
 import platform
 import json
 from synchromoodle.config import Config, ActionConfig, ConfigLoader
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer
+from synchromoodle.webserviceutils import WebService
 from test.utils import db_utils, ldap_utils
 
 
@@ -23,6 +25,10 @@ def ldap(docker_config: Config):
     ldap_utils.reset(ldap)
     return ldap
 
+def fake_get_courses_user_enrolled_test_eleves(userid):
+    return_values = {492286:[37000],492287:[],492288:[],492289:[],492290:[37000],492291:[],\
+    492292:[],492293:[],492294:[],492295:[],492296:[37000],492297:[37000],492298:[]}
+    return return_values[userid]
 
 class TestEtablissement:
     @pytest.fixture(autouse=True)
@@ -310,7 +316,7 @@ class TestEtablissement:
 
     def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config):
         """
-        Test la purge des cohortes :
+        Teste la purge des cohortes :
             - Récupération des cohortes de moodle
             - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
                 - Eleves par classe
@@ -320,7 +326,7 @@ class TestEtablissement:
             - Suppression des cohortes vides
         """
 
-        #Charger une configuration spécifique à partir de ce test et pour tous les tests d'après
+        #Chargement d'une configuration spécifique avec les infos relatives au nettoyage
         config_loader = ConfigLoader()
         config = config_loader.update(config, ["config/test-nettoyage.yml"])
 
@@ -474,69 +480,66 @@ class TestEtablissement:
         assert 'f1700jym' not in results
         assert len(results) == len(profs_etab_by_cohorts_db["(0290009C)"])-1
 
+    def test_anonymize_or_delete_eleves(self, ldap: Ldap, db: Database, config: Config, mocker):
+        """
+        Teste la suppression/anonymisation des élèves devenus inutiles :
+            - Ajout d'utilisateurs directement dans moodle qui ne sont pas présents dans le ldap
+                - Variation de la date de dernière connexion
+                - Inscriptions ou non à des cours
+                - Références ou non à des cours
+            - # TODO: Suppression d'utilisateurs dans le ldap qui sont présents dans moodle
+        """
 
-    def test_anonymize_useless_users(self, ldap: Ldap, db: Database, config: Config):
-
+        #Chargement du ldap et de la bd
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
+        #Initialisation de l'objet webservice
+        webservice = WebService(config.webservice)
+
+        #Initialisation du synchronizer
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
+
+        #Synchronisation d'un établissement
         etab_context = synchronizer.handle_etablissement("0290009C")
 
+        #Synchronisation des élèves de cet établissement
         ldap_eleves = ldap.search_eleve(uai="0290009C")
-        ldap_enseignants = ldap.search_enseignant(uai="0290009C")
         for eleve in ldap_eleves:
             synchronizer.handle_eleve(etab_context, eleve)
-        for enseignant in ldap_enseignants:
-            synchronizer.handle_enseignant(etab_context, enseignant)
 
-        ldap_users = ldap.search_personne()
+        #Ajout dans la BD des élèves, cours et références factices
+        db_utils.insert_eleves(db, config, webservice)
+
+        #Récupération des utilisateurs de la bd coté moodle
         db_valid_users = db.get_all_valid_users()
 
-        users_to_anon = []
-        for i in range(0, 3):
-            users_to_anon.append(ldap_users[i])
+        #Mocks
+        #Attention on mock les fonctions dans synchronizer.py et pas dans webserviceutils.py
+        #Ici on a .WebService mais c'est pour indiquer l'objet WebService et non pas le fichier
+        mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
+         side_effect=fake_get_courses_user_enrolled_test_eleves)
+        mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
+        mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
+        mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
+        mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
 
-        for user_to_anon in users_to_anon:
-            ldap_users.remove(user_to_anon)
+        #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
+        synchronizer.anonymize_or_delete_users(ldap_eleves, db_valid_users)
 
-        age = db.get_timestamp_now() - (config.delete.delay_anonymize_student * 86400) - 1
-        db_valid_users = [(db_valid_user[0], db_valid_user[1], age) for db_valid_user in db_valid_users]
+        #Vérification de la suppression des utilisateurs
+        #Attention on bien 1 seul call à la méthode car on supprime tous les utilisateurs d'un coup
+        mock_delete_users.assert_has_calls([call([492288,492290,492291,492293,492294])])
 
-        synchronizer._Synchronizer__webservice.delete_users = lambda arg: None
-        synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
+        #Vérification de l'anonymisation des utilisateurs
+        mock_anon_users.assert_has_calls([call([492286,492287,492289,492292,492295])])
 
-        db.mark.execute("SELECT username, deleted, firstname, lastname, email, skype, yahoo, aim, msn, phone1, phone2,"
-                        " department, address, city, description, lastnamephonetic, firstnamephonetic, middlename,"
-                        " alternatename"
-                        " FROM {entete}user ORDER BY id LIMIT 3".format(entete=db.entete))
-        db_users = db.mark.fetchall()
-
-        assert db_users[0][0] == 'f1700ivg'
-        assert db_users[1][0] == 'f1700ivh'
-        assert db_users[2][0] == 'f1700ivi'
-
-        for x in range(0, 3):
-            assert db_users[x][2] == config.constantes.anonymous_name
-            assert db_users[x][3] == config.constantes.anonymous_name
-            assert db_users[x][4] == config.constantes.anonymous_mail
-            assert db_users[x][5] == config.constantes.anonymous_name
-            assert db_users[x][6] == config.constantes.anonymous_name
-            assert db_users[x][7] == config.constantes.anonymous_name
-            assert db_users[x][8] == config.constantes.anonymous_name
-            assert db_users[x][9] == config.constantes.anonymous_phone
-            assert db_users[x][10] == config.constantes.anonymous_phone
-            assert db_users[x][11] == config.constantes.anonymous_name
-            assert db_users[x][12] == config.constantes.anonymous_name
-            assert db_users[x][13] == config.constantes.anonymous_name
-            assert db_users[x][14] is None
-            assert db_users[x][15] == config.constantes.anonymous_name
-            assert db_users[x][16] == config.constantes.anonymous_name
-            assert db_users[x][17] == config.constantes.anonymous_name
-            assert db_users[x][18] == config.constantes.anonymous_name
+        #On vérifie aussi que l'on a pas fait d'appels aux méthodes qui ne doivent pas reçevoir d'appels
+        mock_delete_courses.assert_not_called()
+        mock_unenrol_user_from_course.assert_not_called()
 
     def test_course_backup(self, ldap: Ldap, db: Database, config: Config):
 
