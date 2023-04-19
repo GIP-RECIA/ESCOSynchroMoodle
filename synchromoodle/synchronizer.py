@@ -987,7 +987,6 @@ class Synchronizer:
             log.info("Traitement du cours %d", courseid)
             #On récupère tous les Propriétaire de cours de ce cours
             owners_ids = [ownerid[0] for ownerid in self.__db.get_userids_owner_of_course(courseid)]
-
             #Si il est tout seul à posséder ce cours
             if len(owners_ids) == 1 and owners_ids[0] == user_id:
                 #Récupération de la date de dernière modification
@@ -1076,6 +1075,7 @@ class Synchronizer:
                         #et pas de connection à moodle depuis plus de delete_delay jours
                         if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
                             if len(user_courses) == 0: #inscription à aucun cours
+                                # TODO: Enseignant ne pas tenir compte des cours en tant que propriétaire ou enseignant
                                 #Différence de traitement au niveau des références entre un enseignant et un élève
                                 if is_teacher:
                                     if not self.__db.enseignant_has_references(db_user[0]): #si pas de références
@@ -1105,13 +1105,12 @@ class Synchronizer:
                                             log.info("L'enseignant %s doit être anonymisé, mais il est déja anonymisé", db_user[1])
                                 else:
                                     #Même principe pour les élèves
-                                    if len(user_courses) > 0 or self.__db.eleve_has_references(db_user[0]):
-                                        if self.__db.get_user_data(db_user[0])[10] != self.__config.constantes.anonymous_name:
-                                            log.info("L'élève %s ne s'est pas connecté depuis au moins %s jours et est inscrit à des cours ou possèdes des références."
-                                            " Il va être anonymisé", db_user[1], anon_delay)
-                                            user_ids_to_anonymize.append(db_user[0])
-                                        else:
-                                            log.info("L'élève %s doit être anonymisé, mais il est déja anonymisé", db_user[1])
+                                    if self.__db.get_user_data(db_user[0])[10] != self.__config.constantes.anonymous_name:
+                                        log.info("L'élève %s ne s'est pas connecté depuis au moins %s jours et est inscrit à des cours ou possèdes des références."
+                                        " Il va être anonymisé", db_user[1], anon_delay)
+                                        user_ids_to_anonymize.append(db_user[0])
+                                    else:
+                                        log.info("L'élève %s doit être anonymisé, mais il est déja anonymisé", db_user[1])
 
                             #Cas ou on doit effectuer un traitement sur les cours d'un prof : plus présent dans le ldap,
                             #inscrit avec le role propriétaire de cours ou enseignant dans au moins 1 cours,
