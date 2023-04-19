@@ -1060,6 +1060,13 @@ class Synchronizer:
                     #Récupération de la liste des cours de l'utilisateur
                     user_courses = self.__webservice.get_courses_user_enrolled(db_user[0])
 
+                    #Si c'est un enseignant il ne faut pas tenir compte des cours ou il est propriétaire/enseignant
+                    if is_teacher:
+                        owned_courses = self.__db.get_courses_ids_owned_or_teach(db_user[0])
+                        for course_owned in owned_courses:
+                            if course_owned in user_courses:
+                                user_courses.remove(course_owned)
+
                     #Cas ou on doit supprimer un élève : plus présent dans le ldap, et
                     #pas de connexion a moodle depuis plus de delay_force_delete jours
                     if not is_teacher:
@@ -1074,7 +1081,6 @@ class Synchronizer:
                         #et pas de connection à moodle depuis plus de delete_delay jours
                         if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
                             if len(user_courses) == 0: #inscription à aucun cours
-                                # TODO: Enseignant ne pas tenir compte des cours en tant que propriétaire ou enseignant
                                 #Différence de traitement au niveau des références entre un enseignant et un élève
                                 if is_teacher:
                                     if not self.__db.enseignant_has_references(db_user[0]): #si pas de références
