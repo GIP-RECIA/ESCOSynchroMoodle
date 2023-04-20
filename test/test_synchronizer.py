@@ -8,8 +8,7 @@ from synchromoodle.config import Config, ActionConfig, ConfigLoader
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer
-from test.utils import db_utils, ldap_utils
-
+from test.utils import db_utils, ldap_utils, mock_utils
 
 @pytest.fixture(scope='function', name='db')
 def db(docker_config: Config):
@@ -23,21 +22,6 @@ def ldap(docker_config: Config):
     ldap = Ldap(docker_config.ldap)
     ldap_utils.reset(ldap)
     return ldap
-
-def fake_get_courses_user_enrolled_test_eleves(userid):
-    return_values = {492286:[37000],492287:[],492288:[],492289:[],492290:[37000],492291:[],\
-    492292:[],492293:[],492294:[],492295:[37000],492296:[37000],492297:[],492298:[]}
-    return return_values[userid]
-
-def fake_get_courses_user_enrolled_test_enseignants(userid):
-    return_values = {492216:[37000],492217:[37001],492220:[37002],492221:[37003],\
-    492224:[37004],492225:[37005],492228:[37006],492229:[37007]}
-    if userid not in return_values.keys():
-        return []
-    return return_values[userid]
-
-def fake_get_courses_user_enrolled_test_cours(userid):
-    return []
 
 class TestEtablissement:
     @pytest.fixture(autouse=True)
@@ -75,11 +59,15 @@ class TestEtablissement:
                                                          '0290009C': ['lycees.netocentre.fr']}
 
     def test_maj_etab(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Permet de vérifier la synchronisation des établissements dans moodle
+        """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
+        #Synchronisation d'un établissement
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
         structure = ldap.get_structure("0290009C")
@@ -95,6 +83,7 @@ class TestEtablissement:
         assert etab_context.id_zone_privee is not None
         assert etab_context.id_context_course_forum is not None
 
+        #On s'assure qu'une catégorie de cours associée à l'établissement à bien été créée
         etablissement_ou = ldap.get_structure("0290009C").nom
         db.mark.execute("SELECT * FROM {entete}course_categories "
                         "WHERE name = %(name)s "
@@ -106,7 +95,11 @@ class TestEtablissement:
         result = db.mark.fetchone()
         assert result is not None
 
+
     def test_maj_eleve(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Permet de vérifier la synchronisation des élèves dans moodle
+        """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -120,6 +113,7 @@ class TestEtablissement:
         etab_context = synchronizer.handle_etablissement(structure.uai)
         synchronizer.handle_eleve(etab_context, eleve)
 
+        #On vérifie si les infos de moodle correspondent bien avec celles du ldap
         db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
                         params={
                             'username': str(eleve.uid).lower()
@@ -129,6 +123,19 @@ class TestEtablissement:
         assert result[10] == 'Dorian'
         assert result[12] == 'dorian.meyer@netocentre.fr'
         assert result[27] == '0290009c'
+
+        #On modifie l'élève dans le ldap et on vérifie que la modification s'est bien reportée
+        eleve.given_name = "Thomas"
+        synchronizer.handle_eleve(etab_context, eleve)
+        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+                        params={
+                            'username': str(eleve.uid).lower()
+                        })
+        result = db.mark.fetchone()
+        assert result is not None
+        assert result[10] == 'Thomas'
+
+        #Vérification des rôles et des inscriptions dans les cohortes
         eleve_id = result[0]
         db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
                         params={
@@ -155,7 +162,14 @@ class TestEtablissement:
             assert result_cohort_enrollment is not None
             assert result_cohort_enrollment[2] == eleve_id
 
+
     def test_maj_enseignant(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Permet de vérifier la synchronisation des enseignants dans moodle
+        - Charge un enseignant depuis le LDAP et l'ajoute dans moodle
+        - Modifie un enseignant dans le LDAP et vérifie que les informations
+          sont bien reportées dans mooodle
+        """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -169,6 +183,7 @@ class TestEtablissement:
         etab_context = synchronizer.handle_etablissement(structure.uai)
         synchronizer.handle_enseignant(etab_context, enseignant)
 
+        #On vérifie que les informations correspondent bien
         db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
                         params={
                             'username': str(enseignant.uid).lower()
@@ -179,24 +194,50 @@ class TestEtablissement:
         assert result[11] == 'PICARD'
         assert result[12] == 'noreply@ac-rennes.fr'
         assert result[27] == '0290009c'
+
+        #On simule un changement sur l'enseignant dans le ldap
+        enseignant.sn = "PICART"
+        synchronizer.handle_enseignant(etab_context, enseignant)
+        #On vérifie qu'il s'est bien reporté dans moodle
+        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+                        params={
+                            'username': str(enseignant.uid).lower()
+                        })
+        result = db.mark.fetchone()
+        assert result is not None
+        assert result[11] == 'PICART'
+
         enseignant_id = result[0]
 
+        #On vérifie qu'il a les bons rôles
         db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
                         params={
                             'userid': enseignant_id
                         })
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 4
-        assert roles_results[0][1] == 2
+
+        #Role créateur de cours dans la catégorie interetablissements
+        assert roles_results[0][1] == config.constantes.id_role_createur_cours
         assert roles_results[0][2] == 3
-        assert roles_results[1][1] == 21
+
+        #Role BigBlueButton
+        assert roles_results[1][1] == config.constantes.id_role_bigbluebutton
         assert roles_results[1][2] == 1
-        assert roles_results[2][1] == 2
+
+        #Role créateur de cours dans la catégorie de son établissement
+        assert roles_results[2][1] == config.constantes.id_role_createur_cours
         assert roles_results[2][2] == 1184277
-        assert roles_results[3][1] == 5
+
+        #Role élève dans le contexte forum
+        assert roles_results[3][1] == config.constantes.id_role_eleve
         assert roles_results[3][2] == 1184278
 
+
     def test_maj_user_interetab(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Permet de vérifier la synchronisation des utilisateurs interetablissement
+        """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -223,6 +264,9 @@ class TestEtablissement:
         assert len(roles_results) == 1
 
     def test_maj_usercfa_interetab(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig):
+        """
+        Permet de vérifier la synchronisation des utilisateurs interetablissement
+        """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -249,7 +293,11 @@ class TestEtablissement:
         assert len(roles_results) == 2
         assert roles_results[1][1] == db.get_id_role_admin_local()
 
+
     def test_maj_inspecteur(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Permet de vérifier la synchronisation des inspecteurs dans moodle
+        """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -275,7 +323,8 @@ class TestEtablissement:
                         })
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 1
-        assert roles_results[0][1] == 2
+        #Les inspecteurs ont le rôle créateur de cours
+        assert roles_results[0][1] == config.constantes.id_role_createur_cours
 
         db.mark.execute("SELECT * FROM {entete}user_info_data WHERE userid = %(userid)s".format(entete=db.entete),
                         params={
@@ -284,7 +333,12 @@ class TestEtablissement:
         infos_result = db.mark.fetchone()
         assert infos_result[3] == "lycees.netocentre.fr"
 
+
     def test_eleve_passage_lycee(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Permet de vérifier qu'on enlève bien le rôle "Utilisateurs avec droits limités"
+        quand un élève passe du collège au lycée
+        """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
@@ -300,6 +354,7 @@ class TestEtablissement:
         lycee_context = synchronizer.handle_etablissement(lycee.uai)
         synchronizer.handle_eleve(college_context, eleve)
 
+        #Récupération de l'id de l'élève dans moodle
         db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
                         params={
                             'username': str(eleve.uid).lower()
@@ -310,18 +365,23 @@ class TestEtablissement:
                         params={
                             'userid': eleve_id
                         })
+        #On vérifie qu'il a bien le rôle Utilisateurs avec droits limités
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 1
-        assert roles_results[0][1] == 14
+        assert roles_results[0][1] == config.constantes.id_role_utilisateur_limite
 
+        #On le fait passer au lycée
         eleve.uai_courant = "0290009C"
         synchronizer.handle_eleve(lycee_context, eleve)
         db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
                         params={
                             'userid': eleve_id
                         })
+
+        #On vérifie qu'on lui a bien enlevé le rôle
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 0
+
 
     def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config):
         """
@@ -485,6 +545,7 @@ class TestEtablissement:
         assert 'f1700jym' not in results
         assert len(results) == len(profs_etab_by_cohorts_db["(0290009C)"])-1
 
+
     def test_anonymize_or_delete_eleves(self, ldap: Ldap, db: Database, config: Config, mocker):
         """
         Teste la suppression/anonymisation des élèves devenus inutiles :
@@ -523,7 +584,7 @@ class TestEtablissement:
         #Attention on mock les fonctions dans synchronizer.py et pas dans webserviceutils.py
         #Ici on a .WebService mais c'est pour indiquer l'objet WebService et non pas le fichier
         mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
-         side_effect=fake_get_courses_user_enrolled_test_eleves)
+         side_effect=mock_utils.fake_get_courses_user_enrolled_test_eleves)
         mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
@@ -581,7 +642,7 @@ class TestEtablissement:
 
         #Mocks
         mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
-            side_effect=fake_get_courses_user_enrolled_test_enseignants)
+            side_effect=mock_utils.fake_get_courses_user_enrolled_test_enseignants)
         mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
@@ -636,7 +697,7 @@ class TestEtablissement:
 
         #Mocks
         mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
-            side_effect=fake_get_courses_user_enrolled_test_cours)
+            side_effect=mock_utils.fake_get_courses_user_enrolled_test_cours)
         mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
