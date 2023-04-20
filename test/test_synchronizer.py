@@ -80,7 +80,7 @@ class TestEtablissement:
         assert etab_context.regexp_admin_local == "(esco|clg37):admin:local:.*_0290009C$"
         assert etab_context.etablissement_theme == "0290009c"
         assert etab_context.id_context_categorie is not None
-        assert etab_context.id_zone_privee is not None #Vérification qu'on a bien créé le cours privé
+        assert etab_context.id_zone_privee is not None #Vérification de la création du cours privé
         assert etab_context.id_context_course_forum is not None
 
         #On s'assure qu'une catégorie de cours associée à l'établissement à bien été créée
@@ -254,6 +254,52 @@ class TestEtablissement:
         #Role élève dans le contexte forum
         assert roles_results[3][1] == config.constantes.id_role_eleve
         assert roles_results[3][2] == 1184278
+
+        #Pour la suite on a besoin de rajouter un autre établissement
+        structure_clg = ldap.get_structure("0291595B")
+        etab_context_clg = synchronizer.handle_etablissement(structure_clg.uai)
+        synchronizer.handle_enseignant(etab_context_clg, enseignant)
+
+        #On vérifie aussi ses inscriptions dans les cohortes
+        #Cohorte de la classe des enseignants
+        for classe in enseignant.classes:
+            cohort_name = "Profs de la Classe %s" % classe.classe
+            db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+                            params={
+                                'name': cohort_name
+                            })
+            cohort = db.mark.fetchone()
+            assert cohort != None #On vérifie que la cohorte existe
+            cohort_id = cohort[0]
+            db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
+                            .format(entete=db.entete),
+                            params={
+                                'cohortid': cohort_id,
+                                'userid': enseignant_id
+                            })
+            result_cohort_enrollment = db.mark.fetchone()
+            assert result_cohort_enrollment is not None
+            assert result_cohort_enrollment[2] == enseignant_id
+
+        #Cohorte du niveau de formation des enseignants
+        for enseignant_uai in enseignant.uais:
+            cohort_name = 'Profs de l\'établissement (%s)' % enseignant_uai
+            db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+                            params={
+                                'name': cohort_name
+                            })
+            cohort = db.mark.fetchone()
+            assert cohort != None #On vérifie que la cohorte existe
+            cohort_id = cohort[0]
+            db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
+                            .format(entete=db.entete),
+                            params={
+                                'cohortid': cohort_id,
+                                'userid': enseignant_id
+                            })
+            result_cohort_enrollment = db.mark.fetchone()
+            assert result_cohort_enrollment is not None
+            assert result_cohort_enrollment[2] == enseignant_id
 
 
     def test_maj_user_interetab(self, ldap: Ldap, db: Database, config: Config):
