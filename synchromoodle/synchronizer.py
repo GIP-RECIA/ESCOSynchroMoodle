@@ -966,6 +966,11 @@ class Synchronizer:
         return False
 
     def backup_course(self, courseid, log=getLogger()):
+        """
+        Permet de lancer le backup un cours et de vérifier qu'il s'est bien passé
+        :param courseid: L'id du cours à backup
+        :return: Un booléen a True si le backup s'est bien passé, False sinon
+        """
         log.info("Backup du cours avec l'id %d", courseid)
         cmd = self.__config.webservice.backup_cmd.replace("%courseid%", str(courseid))
         backup_process = os.popen(cmd)
@@ -974,7 +979,10 @@ class Synchronizer:
         return m is not None
 
     def check_and_process_user_courses(self, user_id: int, log=getLogger()):
-
+        """
+        Effectue les traitements nécéssaires sur tous les cours d'un l'enseignant
+        :param user_id: L'enseignant dont on doit traiter les cours
+        """
         #Liste stockant tous les cours à supprimer
         course_ids_to_delete = []
         #Récupère tous les cours de l'utilisateur
