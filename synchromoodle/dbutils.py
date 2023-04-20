@@ -350,14 +350,19 @@ class Database:
                               'cohortid': cohortid
                           })
 
-    def delete_empty_cohorts(self):
+    def get_empty_cohorts(self):
         """
-        Supprime les cohortes de la liste qui n'ont aucun membre
+        Retourne la liste des ids de toutes les cohortes qui n'ont aucun membre
         :return:
         """
-        s = "DELETE FROM {entete}cohort WHERE id NOT IN (SELECT cohortid FROM {entete}cohort_members)" \
+        s = "SELECT id FROM {entete}cohort WHERE id NOT IN (SELECT cohortid FROM {entete}cohort_members)" \
             .format(entete=self.entete)
         self.mark.execute(s)
+        result_set = self.mark.fetchall()
+        if not result_set:
+            return []
+        cohort_ids = [result[0] for result in result_set]
+        return cohort_ids
 
     def get_id_cohort(self, id_context, cohort_name):
         """

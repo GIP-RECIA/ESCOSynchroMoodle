@@ -184,6 +184,14 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
 
         synchronizer.handle_dane(config.constantes.uai_dane)
 
+        # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
+        log.info("Début de la procédure d'anonymisation/suppression des utilisateurs/cours inutiles")
+        ldap_users = ldap.search_personne()
+        db_valid_users = db.get_all_valid_users()
+        synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
+
+        db.connection.commit()
+
         cohort_elv_lycee_en_ldap = []
         cohort_ens_lycee_en_ldap = []
         cohort_dir_lycee_en_ldap = []
@@ -260,19 +268,9 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
                 log.info("Purge de la cohorte dane élèves des lycées de l'éducation national")
                 synchronizer.purge_cohort_dane_elv_lycee_en(cohort_elv_lycee_en_ldap)
 
+        if config.delete.purge_cohorts:
             log.info("Suppression des cohortes vides (sans utilisateur)")
-            db.delete_empty_cohorts()
-
-            # Commit pour libérer les locks pour le webservice moodle
-            db.connection.commit()
-
-        # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
-        log.info("Début de la procédure d'anonymisation/suppression des utilisateurs/cours inutiles")
-        ldap_users = ldap.search_personne()
-        db_valid_users = db.get_all_valid_users()
-        synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
-
-        db.connection.commit()
+            synchronizer.delete_empty_cohorts()
 
         log.info("Fin de l'action de nettoyage")
     finally:

@@ -1153,6 +1153,17 @@ class Synchronizer:
             self.__db.anonymize_users(user_ids_to_anonymize)
             log.info("%d utilisateurs anonymisés", len(user_ids_to_anonymize))
 
+
+    def delete_empty_cohorts(self):
+        """
+        Supprime les cohortes vides
+        """
+        #Récupère les ids des cohortes
+        empty_cohorts_ids = self.__db.get_empty_cohorts()
+        if len(empty_cohorts_ids) > 0:
+            #Fait appel au webservice moodle pour suppression
+            self.__webservice.delete_cohorts(empty_cohorts_ids)
+
     def delete_users(self, userids: List[int], log=getLogger()) -> int:
         """
         Supprime les utilisateurs d'une liste en paginant les appels au webservice

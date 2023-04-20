@@ -451,7 +451,7 @@ class TestEtablissement:
         assert len(roles_results) == 0
 
 
-    def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config):
+    def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config, mocker):
         """
         Teste la purge des cohortes :
             - Récupération des cohortes de moodle
@@ -468,6 +468,9 @@ class TestEtablissement:
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
         ldap_utils.run_ldif('data/default-groups.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        #Mock pour la suppression de cohortes
+        mock_delete_cohorts = mocker.patch('synchromoodle.synchronizer.WebService.delete_cohorts')
 
         #Initialisation du synchronizer
         synchronizer = Synchronizer(ldap, db, config)
@@ -538,20 +541,23 @@ class TestEtablissement:
                                    "Profs de l'établissement %s")
 
         #Suppression des cohortes vides
-        db.delete_empty_cohorts()
+        synchronizer.delete_empty_cohorts()
 
-        #Vérification de la suppression des cohortes 1ERE S2 et TS2
-        s = "SELECT COUNT(cohort_members.id) FROM {entete}cohort_members AS cohort_members" \
-            " INNER JOIN {entete}cohort AS cohort" \
-            " ON cohort_members.cohortid = cohort.id" \
-            " WHERE cohort.name = %(cohortname)s".format(entete=db.entete)
-
-        db.mark.execute(s, params={'cohortname': "Élèves de la Classe 1ERE S2"})
-        result = db.mark.fetchone()
-        assert result[0] == 0
-        db.mark.execute(s, params={'cohortname': "Élèves de la Classe TES3"})
-        result = db.mark.fetchone()
-        assert result[0] == 0
+        #Vérification de la suppression des cohortes 1ERE S2 et TES3
+        cohorts_to_delete_ids = []
+        db.mark.execute("SELECT id FROM {entete}cohort"
+                        " WHERE name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Élèves de la Classe TES3"
+                        })
+        cohorts_to_delete_ids.append(db.mark.fetchone()[0])
+        db.mark.execute("SELECT id FROM {entete}cohort"
+                        " WHERE name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Élèves de la Classe 1ERE S2"
+                        })
+        cohorts_to_delete_ids.append(db.mark.fetchone()[0])
+        mock_delete_cohorts.assert_has_calls([call(cohorts_to_delete_ids)])
 
         #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap ont bien aussi été supprimés des cohortes dans moodle
         #Eleves par classe : récupération des membres de la cohorte d'élèves TS2

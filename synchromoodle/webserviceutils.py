@@ -201,3 +201,38 @@ class WebService:
             raise Exception(json_data['message'])
         else:
             return(json_data)
+
+
+    def delete_cohorts(self, cohortids: list[int]):
+        """
+        Supprime une cohorte de moodle
+        L'utilisateur WebService doit avoir la permission moodle/cohort:manage
+        :param cohortids: La liste des identifiants des cohortes
+        :returns: None si la fonction s'est éxécutée correctement
+        :raises Exception:
+        """
+
+        #Si tous les id sont bien des entiers
+        if all(isinstance(elem, int) for elem in cohortids):
+
+            cohorts_to_delete = {}
+            for i in range(len(cohortids)):
+                cohorts_to_delete["cohortids[%i]" % i] = cohortids[i]
+
+            res = requests.get(url=self.url,
+                               params={
+                                   'wstoken': self.config.token,
+                                   'moodlewsrestformat': "json",
+                                   'wsfunction': "core_cohort_delete_cohorts",
+                                   **cohorts_to_delete
+                               })
+
+            json_data = json.loads(res.text)
+
+            if json_data is not None and 'exception' in json_data:
+                raise Exception(json_data['message'])
+            else:
+                return(json_data)
+
+        else:
+            raise Exception("Mauvais type d'identifiant(s)")

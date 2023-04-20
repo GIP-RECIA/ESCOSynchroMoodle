@@ -19,6 +19,7 @@
 - Ajouter les fonctions:
     - core_user_delete_users
     - core_course_delete_courses
+    - core_cohort_delete_cohorts
     - core_enrol_get_users_courses
     - enrol_manual_unenrol_users
     - core_webservice_get_site_infos
@@ -50,6 +51,7 @@ if (!file_exists($function->classpath)) {
     - moodle/course:view
     - moodle/course:viewparticipants
     - moodle/user:viewdetails
+    - moodle/cohort:manage
     - enrol/manual:unenrol
 - Sauvegarder
 
