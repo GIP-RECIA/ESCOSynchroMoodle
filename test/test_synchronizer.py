@@ -80,7 +80,7 @@ class TestEtablissement:
         assert etab_context.regexp_admin_local == "(esco|clg37):admin:local:.*_0290009C$"
         assert etab_context.etablissement_theme == "0290009c"
         assert etab_context.id_context_categorie is not None
-        assert etab_context.id_zone_privee is not None
+        assert etab_context.id_zone_privee is not None #Vérification qu'on a bien créé le cours privé
         assert etab_context.id_context_course_forum is not None
 
         #On s'assure qu'une catégorie de cours associée à l'établissement à bien été créée
@@ -135,7 +135,7 @@ class TestEtablissement:
         assert result is not None
         assert result[10] == 'Thomas'
 
-        #Vérification des rôles et des inscriptions dans les cohortes
+        #Vérification des rôles
         eleve_id = result[0]
         db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
                         params={
@@ -143,6 +143,9 @@ class TestEtablissement:
                         })
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 0
+
+        #Vérification des inscriptions dans les cohortes
+        #Cohorte de la classe de l'élève
         for classe in eleve.classes:
             cohort_name = "Élèves de la Classe %s" % classe.classe
             db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
@@ -150,7 +153,7 @@ class TestEtablissement:
                                 'name': cohort_name
                             })
             cohort = db.mark.fetchone()
-            assert cohort != None
+            assert cohort != None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
             db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                             .format(entete=db.entete),
@@ -160,7 +163,26 @@ class TestEtablissement:
                             })
             result_cohort_enrollment = db.mark.fetchone()
             assert result_cohort_enrollment is not None
-            assert result_cohort_enrollment[2] == eleve_id
+            assert result_cohort_enrollment[2] == eleve_id #On vérifie que l'élève est bien inscrit dedans
+
+        #Cohorte du niveau de formation de l'élève
+        cohort_name = "Élèves du niveau de formation %s" % eleve.niveau_formation
+        db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+                        params={
+                            'name': cohort_name
+                        })
+        cohort = db.mark.fetchone()
+        assert cohort != None #On vérifie que la cohorte existe
+        cohort_id = cohort[0]
+        db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
+                        .format(entete=db.entete),
+                        params={
+                            'cohortid': cohort_id,
+                            'userid': eleve_id
+                        })
+        result_cohort_enrollment = db.mark.fetchone()
+        assert result_cohort_enrollment is not None
+        assert result_cohort_enrollment[2] == eleve_id
 
 
     def test_maj_enseignant(self, ldap: Ldap, db: Database, config: Config):
