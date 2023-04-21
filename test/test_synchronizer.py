@@ -205,7 +205,7 @@ class TestEtablissement:
         synchronizer.initialize()
 
         #Récupération du lycée, des élèves et des enseignants depuis le ldap
-        structure = ldap.get_structure("0290009C")
+        structure_lyc = ldap.get_structure("0290009C")
         enseignants = ldap.search_enseignant(None, "0290009C")
         eleves = ldap.search_eleve(None, "0290009C")
 
@@ -217,9 +217,19 @@ class TestEtablissement:
         assert enseignant is not None
 
         #Synchronisation de l'établissement et des élèves du lycée et de l'enseignant dans ce contexte
-        etab_context = synchronizer.handle_etablissement(structure.uai)
+        etab_context = synchronizer.handle_etablissement(structure_lyc.uai)
         synchronizer.construct_classe_to_niv_formation(etab_context, eleves)
         synchronizer.handle_enseignant(etab_context, enseignant)
+
+        #Synchronisation aussi du contexte du collège
+        structure_clg = ldap.get_structure("0291595B")
+        etab_context_clg = synchronizer.handle_etablissement(structure_clg.uai)
+        enseignants_clg = ldap.search_enseignant(None, "0291595B")
+        eleves_clg = ldap.search_eleve(None, "0291595B")
+        synchronizer.construct_classe_to_niv_formation(etab_context_clg, eleves_clg)
+
+        #On va inscrire aussi l'enseignant dans les cohortes du niveau de formation correspondant au collège
+        synchronizer.handle_enseignant(etab_context_clg, enseignant)
 
         #On vérifie que les informations correspondent bien
         db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
@@ -253,7 +263,7 @@ class TestEtablissement:
                             'userid': enseignant_id
                         })
         roles_results = db.mark.fetchall()
-        assert len(roles_results) == 4
+        assert len(roles_results) == 6
 
         #Role créateur de cours dans la catégorie interetablissements
         assert roles_results[0][1] == config.constantes.id_role_createur_cours
@@ -267,9 +277,17 @@ class TestEtablissement:
         assert roles_results[2][1] == config.constantes.id_role_createur_cours
         assert roles_results[2][2] == 1184277
 
-        #Role élève dans le contexte forum
+        #Role élève dans le contexte forum (zone privée)
         assert roles_results[3][1] == config.constantes.id_role_eleve
         assert roles_results[3][2] == 1184278
+
+        #Role créateur de cours dans la catégorie de son établissement
+        assert roles_results[4][1] == config.constantes.id_role_createur_cours
+        assert roles_results[4][2] == 1184281
+
+        #Role élève dans le contexte forum (zone privée)
+        assert roles_results[5][1] == config.constantes.id_role_eleve
+        assert roles_results[5][2] == 1184282
 
         #On vérifie aussi ses inscriptions dans les cohortes
         #Cohorte de la classe des enseignants
@@ -312,13 +330,45 @@ class TestEtablissement:
             assert result_cohort_enrollment is not None
             assert result_cohort_enrollment[2] == enseignant_id
 
-        #Cohorte du niveau de formation
-        # TODO: Tester un prof qui enseigne dans un collège et dans un lycée en même temps
+        #Cohorte des niveaux de formation
+        #Partie lycée
         niveaux_formation = set()
         for classe in enseignant.classes:
-            niveaux_formation.add(etab_context.classe_to_niv_formation[classe.classe])
+            if classe.classe in etab_context.classe_to_niv_formation.keys():
+                niveaux_formation.add(etab_context.classe_to_niv_formation[classe.classe])
 
         for niv_formation in niveaux_formation:
+            cohort_name = 'Profs du niveau de formation %s' % niv_formation
+            db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+                            params={
+                                'name': cohort_name
+                            })
+
+            cohort = db.mark.fetchone()
+            assert cohort != None #On vérifie que la cohorte existe
+            cohort_id = cohort[0]
+            db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
+                            .format(entete=db.entete),
+                            params={
+                                'cohortid': cohort_id,
+                                'userid': enseignant_id
+                            })
+            result_cohort_enrollment = db.mark.fetchone()
+            assert result_cohort_enrollment is not None
+            assert result_cohort_enrollment[2] == enseignant_id
+
+        print(etab_context.classe_to_niv_formation)
+        print(etab_context_clg.classe_to_niv_formation)
+        for classe in enseignant.classes:
+            print(classe.classe)
+        #Partie collège
+        niveaux_formation = set()
+        for classe in enseignant.classes:
+            if classe.classe in etab_context_clg.classe_to_niv_formation.keys():
+                niveaux_formation.add(etab_context_clg.classe_to_niv_formation[classe.classe])
+
+        for niv_formation in niveaux_formation:
+            print(niv_formation)
             cohort_name = 'Profs du niveau de formation %s' % niv_formation
             db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
                             params={
