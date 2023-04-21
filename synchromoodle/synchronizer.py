@@ -282,6 +282,7 @@ class Synchronizer:
                 context.id_context_course_forum = self.__db.get_id_context(self.__config.constantes.niveau_ctx_cours, 3,
                                                                            context.id_zone_privee)
             if context.id_context_course_forum is None and not readonly:
+                # TODO: insertion à la main dans la bd manque de dépendandes ?
                 log.info("Création du cours associé à la zone privée")
                 context.id_context_course_forum = self.__db.insert_zone_privee_context(context.id_zone_privee)
 
