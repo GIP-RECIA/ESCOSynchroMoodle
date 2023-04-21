@@ -538,7 +538,10 @@ class Synchronizer:
                 #Il est possible que l'enseignant enseigne dans une classe mais qui n'est pas dans cet établissement
                 #Il sera alors inscrit dans la cohorte du niveau de formation correspondant à la classe lorsqu'on le
                 #traitera avec l'autre établissement en question
-                enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
+                if classe in etablissement_context.classe_to_niv_formation.keys():
+                    enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
+                else:
+                    log.error("Problème avec l'enseignant %s pour l'inscrire dans les cohortes de niveau de formation", enseignant_ldap)
 
             log.info("Inscription de l'enseignant %s dans les cohortes de niveau de formation %s",
                      enseignant_ldap, enseignant_niv_formation)
