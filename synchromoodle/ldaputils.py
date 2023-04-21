@@ -365,6 +365,27 @@ class Ldap:
                                 'ENTAuxEnsClasses'])
         return [EnseignantLdap(entry) for entry in self.connection.entries]
 
+    def search_enseignants_in_niveau(self, niveau: str, uai: str, classe_to_niv_formation):
+        """
+        Recherche les enseignants dans un niveau de formation
+        :param niveau: Le niveau de formation recherché
+        :param uai: L'identifiant de l'établissement dans lequel on effectue la recherche
+        :param classe_to_niv_formation:
+        :return: La liste des enseignants trouvés
+        """
+        all_enseignants = self.search_enseignants_in_etab(uai)
+        enseignants_in_niveau = []
+        for enseignant_ldap in all_enseignants:
+            for classe in enseignant_ldap.classes:
+                #Il est possible qu'on ne trouve pas la classe dans le dictionnaire
+                #Dans ce cas l'enseignant sera traité dans cette cohorte sur le
+                #prochain établissement
+                if classe.classe in classe_to_niv_formation.keys():
+                    if classe_to_niv_formation[classe.classe] == niveau:
+                        if enseignant_ldap not in enseignants_in_niveau:
+                            enseignants_in_niveau.append(enseignant_ldap)
+        return enseignants_in_niveau
+
     def get_domaines_etabs(self) -> Dict[str, List[str]]:
         """
         Obtient la liste des "ESCOUAICourant : Domaine" des établissements

@@ -288,6 +288,22 @@ class Synchronizer:
             context.structure_ldap = structure_ldap
         return context
 
+
+    def construct_classe_to_niv_formation(self, etablissement_context: EtablissementContext, list_eleve_ldap: list[EleveLdap], log=getLogger()):
+        """
+        Associe au contexte de l'établissement un dictionnaire associant une classe à
+        un niveau de formation. Utilisé pour pouvoir récupérer le niveau de formation
+        d'un enseignant comme il n'est pas présent directement dans le ldap
+        """
+        for eleve_ldap in list_eleve_ldap:
+            eleve_classes_for_etab = []
+            for classe in eleve_ldap.classes:
+                if classe.etab_dn == etablissement_context.structure_ldap.dn:
+                    eleve_classes_for_etab.append(classe.classe)
+            for classe in eleve_classes_for_etab:
+                etablissement_context.classe_to_niv_formation[classe] = eleve_ldap.niveau_formation
+
+
     def handle_eleve(self, etablissement_context: EtablissementContext, eleve_ldap: EleveLdap, log=getLogger()):
         """
         Synchronise un élève au sein d'un établissement
@@ -357,10 +373,6 @@ class Synchronizer:
             self.__db.enroll_user_in_cohort(id_formation_cohort, eleve_id, self.context.timestamp_now_sql)
             eleve_cohorts.append(id_formation_cohort)
 
-        # Association entre classes et niveau de formation
-        for classe in eleve_classes_for_etab:
-            etablissement_context.classe_to_niv_formation[classe] = eleve_ldap.niveau_formation
-
         # TODO lvillanne voir l'utilité de cela si on a la purge déjà ailleurs ? et comparer avec le fonctionnement des cohortes de la dane
         log.info("Désinscription de l'élève %s des anciennes cohortes", eleve_ldap)
         self.__db.disenroll_user_from_cohorts(eleve_cohorts, eleve_id)
@@ -390,6 +402,7 @@ class Synchronizer:
                 user_domain = self.context.map_etab_domaine[eleve_ldap.uai_courant][0]
         log.debug("Insertion du Domaine")
         self.__db.set_user_domain(eleve_id, self.context.id_field_domaine, user_domain)
+
 
     def handle_enseignant(self, etablissement_context: EtablissementContext, enseignant_ldap: EnseignantLdap,
                           log=getLogger()):
@@ -1006,6 +1019,40 @@ class Synchronizer:
             profs_by_cohorts_ldap[etab] = []
             for prof in self.__ldap.search_enseignants_in_etab(etab_context.uai):
                 profs_by_cohorts_ldap[etab].append(prof.uid.lower())
+
+        return profs_by_cohorts_db, profs_by_cohorts_ldap
+
+
+    def get_users_by_cohorts_comparators_profs_niveau(self, etab_context: EtablissementContext, cohortname_pattern_re: str,
+                                         cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+        """
+        Renvoie deux dictionnaires listant les profs (uid) dans chacun des niveaux de formation
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
+        :param etab_context: EtablissementContext
+        :param cohortname_pattern_re: str
+        :param cohortname_pattern: str
+        :return:
+        """
+
+        #Construit le dictionnaire pour avoir l'association classe -> niveau de formation
+        self.construct_classe_to_niv_formation(etab_context, self.__ldap.search_eleve(None, etab_context.uai))
+
+        #Récupère les cohortes coté moodle
+        levels_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
+
+        profs_by_cohorts_db = {}
+        for cohort in levels_cohorts:
+            matches = re.search(cohortname_pattern_re, cohort.name)
+            level_name = matches.group(2)
+            profs_by_cohorts_db[level_name] = []
+            for username in self.__db.get_cohort_members(cohort.id):
+                profs_by_cohorts_db[level_name].append(username.lower())
+
+        profs_by_cohorts_ldap = {}
+        for niveau in profs_by_cohorts_db:
+            profs_by_cohorts_ldap[niveau] = []
+            for prof in self.__ldap.search_enseignants_in_niveau(niveau, etab_context.uai, etab_context.classe_to_niv_formation):
+                profs_by_cohorts_ldap[niveau].append(prof.uid.lower())
 
         return profs_by_cohorts_db, profs_by_cohorts_ldap
 

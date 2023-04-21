@@ -43,6 +43,9 @@ def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             etablissement_log.info('Traitement des élèves pour l\'établissement (uai=%s)' % uai)
             since_timestamp = timestamp_store.get_timestamp(uai)
 
+            etablissement_log.debug("Construction du dictionnaire d'association classe -> niveau formation")
+            synchronizer.construct_classe_to_niv_formation(etablissement_context, ldap.search_eleve(None, uai))
+
             for eleve in ldap.search_eleve(since_timestamp, uai):
                 utilisateur_log = etablissement_log.getChild("utilisateur.%s" % eleve.uid)
                 utilisateur_log.info("Traitement de l'élève (uid=%s)" % eleve.uid)
@@ -232,6 +235,10 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
                     get_users_by_cohorts_comparators_profs_etab(etablissement_context, r"(Profs de l'établissement )(.*)$",
                                                      "Profs de l'établissement %")
 
+                profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_niveau(etablissement_context, r"(Profs du niveau de formation )(.*)$",
+                                                     "Profs du niveau de formation %")
+
                 if etablissement_context.college and departement in config.constantes.departements:
                     cohorts_elv_dep_clg_ldap[departement].append(ldap.search_eleve_uid(uai=uai))
                     cohorts_ens_dep_clg_ldap[departement].append(ldap.search_enseignant_uid(uai=uai, tous=True))
@@ -258,6 +265,10 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
                 log.info("Purge des cohortes Profs de l'établissement")
                 synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
                                            "Profs de l'établissement %s")
+
+                log.info("Purge des cohortes Profs du niveau de formation")
+                synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
+                                           "Profs du niveau de formation %s")
 
                 # On commit pour chaque étab afin de libérer rapidement le lock
                 db.connection.commit()

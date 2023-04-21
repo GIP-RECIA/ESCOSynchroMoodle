@@ -215,8 +215,7 @@ class TestEtablissement:
 
         #Synchronisation de l'établissement et des élèves du lycée et de l'enseignant dans ce contexte
         etab_context = synchronizer.handle_etablissement(structure.uai)
-        for eleve in eleves:
-            synchronizer.handle_eleve(etab_context, eleve)
+        synchronizer.construct_classe_to_niv_formation(etab_context, eleves)
         synchronizer.handle_enseignant(etab_context, enseignant)
 
         #On vérifie que les informations correspondent bien
@@ -312,10 +311,11 @@ class TestEtablissement:
 
         #Cohorte du niveau de formation
         # TODO: Tester un prof qui enseigne dans un collège et dans un lycée en même temps
+        niveaux_formation = set()
         for classe in enseignant.classes:
+            niveaux_formation.add(etab_context.classe_to_niv_formation[classe.classe])
 
-            niv_formation = etab_context.classe_to_niv_formation[classe.classe]
-
+        for niv_formation in niveaux_formation:
             cohort_name = 'Profs du niveau de formation %s' % niv_formation
             db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
                             params={
