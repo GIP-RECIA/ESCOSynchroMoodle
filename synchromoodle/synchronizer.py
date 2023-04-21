@@ -527,7 +527,6 @@ class Synchronizer:
                 #traitera avec l'autre établissement en question
                 enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
 
-            print(enseignant_niv_formation)
             log.info("Inscription de l'enseignant %s dans les cohortes de niveau de formation %s",
                      enseignant_ldap, enseignant_niv_formation)
 
