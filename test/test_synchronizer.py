@@ -109,7 +109,10 @@ class TestEtablissement:
         synchronizer.initialize()
         structure = ldap.get_structure("0290009C")
         eleves = ldap.search_eleve(None, "0290009C")
-        eleve = eleves[1]
+        eleve = None
+        for eleve_searched in eleves:
+            if eleve_searched.uid == "F1700ivh":
+                eleve = eleve_searched
         etab_context = synchronizer.handle_etablissement(structure.uai)
         synchronizer.handle_eleve(etab_context, eleve)
 
