@@ -66,6 +66,7 @@ Le tableau ci-dessous répertorie les **identifiants internes** des enseignants 
 |anon < D < backup|(E, 492220)|(F, 492221)|(G, 492222)|(H, 492223)|
 |backup D < delete|(I, 492224)|(J, 492225)|(K, 492226)|(L, 492227)|
 |delete < D|(M, 492228)|(N, 492229)|(O, 492230)|(P, 492231)|
+
 _L'utilisateur n'ayant jamais utilisé moodle porte les identifiants (Q, 492232)._
 
 Le tableau ci-dessous répertorie les **identifiants internes** des cours créés pour les tests de nettoyage des enseignants :
@@ -83,6 +84,7 @@ Le tableau ci-dessous décrit le **comportement attendu** pour les tests de nett
 |anon < D < backup|Anonymiser|Rien|Anonymiser|Anonymiser|
 |backup D < delete|Anonymiser|Traitement|Anonymiser|Anonymiser|
 |delete < D|Anonymiser|Traitement|Anonymiser|Supprimer|
+
 Le cas _"Inscrit à un cours"_ correspondant aux enseignants inscrits à des cours avec des rôles autres que _enseignant_ ou _propriétaire de cours_. Le cas _"Possède un cours"_ correspondant aux enseignants inscrits à des cours avec un rôle _enseignant_ ou _propriétaire de cours_.
 
 ### Cours
@@ -95,6 +97,7 @@ Le tableau ci-dessous répertorie les **identifiants internes** des cours pour l
 |-|-|-|-|
 |D < backup|(1, 37000)|(2, 37001)|(3, 37002)|
 |backup < D|(4, 37003)|(5, 37004)|(6, 37005)|
+
 _L'enseignant X possède l'identifiant 492216, et l'enseignant Y l'identifiant 492217._
 
 Le tableau ci-dessous décrit le **comportement attendu** pour les tests de nettoyage vis à vis des cours :
