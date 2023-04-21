@@ -110,6 +110,7 @@ class EtablissementContext:
         self.etablissement_theme = None  # type: str
         self.eleves_by_cohortes = {}
         self.enseignants_by_cohortes = {}
+        self.classe_to_niv_formation = {}
         self.departement = None  # type: str
         self.college = None  # type: bool
         self.lycee = None  # type: bool
@@ -356,6 +357,10 @@ class Synchronizer:
             self.__db.enroll_user_in_cohort(id_formation_cohort, eleve_id, self.context.timestamp_now_sql)
             eleve_cohorts.append(id_formation_cohort)
 
+        # Association entre classes et niveau de formation
+        for classe in eleve_classes_for_etab:
+            etablissement_context.classe_to_niv_formation[classe] = eleve_ldap.niveau_formation
+
         # TODO lvillanne voir l'utilité de cela si on a la purge déjà ailleurs ? et comparer avec le fonctionnement des cohortes de la dane
         log.info("Désinscription de l'élève %s des anciennes cohortes", eleve_ldap)
         self.__db.disenroll_user_from_cohorts(eleve_cohorts, eleve_id)
@@ -395,6 +400,7 @@ class Synchronizer:
         :param log:
         :return:
         """
+
         enseignant_infos = "%s %s %s" % (enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
 
         if enseignant_ldap.uai_courant and not etablissement_context.etablissement_regroupe:
@@ -488,9 +494,10 @@ class Synchronizer:
                         log.info("Suppression d'un admin local %s %s %s",
                                  enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
 
-        # Inscription dans les cohortes associees aux classes
+        # Inscription dans les cohortes associees aux classes et au niveau de formation
         enseignant_cohorts = []
         enseignant_classes_for_etab = []
+        #Récupération des classes de l'établissement traité actuellement
         for classe in enseignant_ldap.classes:
             if classe.etab_dn == etablissement_context.structure_ldap.dn:
                 enseignant_classes_for_etab.append(classe.classe)
@@ -499,16 +506,43 @@ class Synchronizer:
                      enseignant_ldap, enseignant_classes_for_etab)
             name_pattern = "Profs de la Classe %s"
             desc_pattern = "Profs de la Classe %s"
+            #Création des cohortes de classes
             ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
                                                                      enseignant_classes_for_etab,
                                                                      self.context.timestamp_now_sql,
                                                                      name_pattern=name_pattern,
                                                                      desc_pattern=desc_pattern,
                                                                      log=log)
+            #Inscription dans les cohortes de classe
             for ids_classe_cohorts in ids_classes_cohorts:
                 self.__db.enroll_user_in_cohort(ids_classe_cohorts, id_user, self.context.timestamp_now_sql)
 
             enseignant_cohorts.extend(ids_classes_cohorts)
+
+            #Inscription dans les cohortes de niveau de formation
+            enseignant_niv_formation = set()
+            for classe in enseignant_classes_for_etab:
+                #Il est possible que l'enseignant enseigne dans une classe mais qui n'est pas dans cet établissement
+                #Il sera alors inscrit dans la cohorte du niveau de formation correspondant à la classe lorsqu'on le
+                #traitera avec l'autre établissement en question
+                enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
+
+            print(enseignant_niv_formation)
+            log.info("Inscription de l'enseignant %s dans les cohortes de niveau de formation %s",
+                     enseignant_ldap, enseignant_niv_formation)
+
+            name_pattern = "Profs du niveau de formation %s"
+            desc_pattern = "Profs du niveau de formation %s"
+            #Création des cohortes de niveau de formation
+            ids_niv_formation_cohorts = self.get_or_create_niv_formation_cohorts(etablissement_context.id_context_categorie,
+                                                                                 enseignant_niv_formation,
+                                                                                 self.context.timestamp_now_sql,
+                                                                                 name_pattern=name_pattern,
+                                                                                 desc_pattern=desc_pattern,
+                                                                                 log=log)
+            #Inscription dans les cohortes de niveau de formation
+            for id_cohort_niv_formation in ids_niv_formation_cohorts:
+                self.__db.enroll_user_in_cohort(id_cohort_niv_formation, id_user, self.context.timestamp_now_sql)
 
         log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
         id_prof_etabs_cohort = self.get_or_create_profs_etab_cohort(etablissement_context, log)
@@ -769,6 +803,30 @@ class Synchronizer:
         for class_name in classes_names:
             cohort_name = name_pattern % class_name
             cohort_description = desc_pattern % class_name
+            id_cohort = self.get_or_create_cohort(id_context_etab,
+                                                  cohort_name,
+                                                  cohort_name,
+                                                  cohort_description,
+                                                  time_created,
+                                                  log=log)
+            ids_cohorts.append(id_cohort)
+        return ids_cohorts
+
+    def get_or_create_niv_formation_cohorts(self, id_context_etab, niveaux_formation, time_created, name_pattern, desc_pattern, log=getLogger()):
+        """
+        Charge ou crée des cohortes a partir de niveau de formation liés a un établissement.
+        :param id_context_etab:
+        :param niveaux_formation:
+        :param time_created:
+        :param name_pattern:
+        :param desc_pattern:
+        :return:
+        """
+
+        ids_cohorts = []
+        for niveau_formation in niveaux_formation:
+            cohort_name = name_pattern % niveau_formation
+            cohort_description = desc_pattern % niveau_formation
             id_cohort = self.get_or_create_cohort(id_context_etab,
                                                   cohort_name,
                                                   cohort_name,
