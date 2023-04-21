@@ -373,10 +373,6 @@ class Synchronizer:
             self.__db.enroll_user_in_cohort(id_formation_cohort, eleve_id, self.context.timestamp_now_sql)
             eleve_cohorts.append(id_formation_cohort)
 
-        # TODO lvillanne voir l'utilité de cela si on a la purge déjà ailleurs ? et comparer avec le fonctionnement des cohortes de la dane
-        log.info("Désinscription de l'élève %s des anciennes cohortes", eleve_ldap)
-        self.__db.disenroll_user_from_cohorts(eleve_cohorts, eleve_id)
-
         # Inscription dans les cohortes de la Dane
         if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
             self.__db.enroll_user_in_cohort(self.ids_cohorts_dane_dep_clg[UserType.ELEVE][etablissement_context.departement],

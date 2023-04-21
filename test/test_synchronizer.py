@@ -357,10 +357,6 @@ class TestEtablissement:
             assert result_cohort_enrollment is not None
             assert result_cohort_enrollment[2] == enseignant_id
 
-        print(etab_context.classe_to_niv_formation)
-        print(etab_context_clg.classe_to_niv_formation)
-        for classe in enseignant.classes:
-            print(classe.classe)
         #Partie collège
         niveaux_formation = set()
         for classe in enseignant.classes:
@@ -368,7 +364,6 @@ class TestEtablissement:
                 niveaux_formation.add(etab_context_clg.classe_to_niv_formation[classe.classe])
 
         for niv_formation in niveaux_formation:
-            print(niv_formation)
             cohort_name = 'Profs du niveau de formation %s' % niv_formation
             db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
                             params={
