@@ -48,6 +48,7 @@ Le tableau ci-dessous répertorie les **identifiants internes** des élèves pou
 |anon < D < delete|(J, 492295)|(D, 492289)|(G, 492292)|
 |delete < D < force|(A, 492286)|(B, 492287)|(C, 492288)|
 |force < D|(E, 492290)|(H, 492293)|(I, 492294)|
+
 _L'utilisateur n'ayant jamais utilisé moodle porte les identifiants (F, 492291)._
 
 Le tableau ci-dessous décrit le **comportement attendu** pour les tests de nettoyage vis à vis des élèves :
@@ -89,6 +90,7 @@ Le cas _"Inscrit à un cours"_ correspondant aux enseignants inscrits à des cou
 
 ### Cours
 ⚠ Enseignants créés pour les tests des cours ⚠
+
 _L'enseignant X n'est plus présent dans le LDAP et n'a pas utilisé moodle depuis plus de backup_delay jours._
 _L'enseignant Y est présent dans le LDAP._
 
