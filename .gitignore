@@ -18,8 +18,7 @@ build/
 #dist/
 
 *_precedent.txt
-/dist/*.tar.gz
-/dist/*.whl
+/dist/*
 
 # sauvegarde de l'ancienne version du script de dédoublonage
 traiteDoublonCohorte.pl.sav
