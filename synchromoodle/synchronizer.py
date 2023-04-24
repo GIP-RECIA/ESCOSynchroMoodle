@@ -173,16 +173,20 @@ class Synchronizer:
         self.context.id_field_domaine = self.__db.get_id_user_info_field_by_shortname('Domaine')
 
 
-    def handle_dane(self, uai_dane, log=getLogger()):
+    def handle_dane(self, uai_dane, log=getLogger(), readonly=False):
+        """
+        Synchronise la dane
+        """
         # Récupération des informations de la dane pour les cohortes de la dane
+        context = EtablissementContext(uai_dane)
         log.debug("Recherche de la structure dane dans l'annuaire")
-        structure_ldap = self.__ldap.get_structure(uai_dane)
+        structure_ldap = self.__ldap.search_dane(uai_dane)
         if structure_ldap:
             log.debug("La structure dane a été trouvée")
             etablissement_path = "/1"
 
             # Recuperation du bon theme
-            etablissement_theme = structure_ldap.uai.lower()
+            context.etablissement_theme = structure_ldap.uai.lower()
 
             # Creation de la structure si elle n'existe pas encore
             id_dane_categorie = self.__db.get_id_course_category_by_theme(context.etablissement_theme)
@@ -193,20 +197,28 @@ class Synchronizer:
                                                 structure_ldap.siren, etablissement_theme)
                 id_dane_categorie = self.__db.get_id_course_category_by_id_number(structure_ldap.siren)
 
-            # Récupération des identifiants de 3 cohortes pour les lycées de l'enseignement national
-            for user_type in UserType:
-                self.ids_cohorts_dane_lycee_en[user_type] = \
-                    self.get_or_create_dane_lycee_en_cohort(id_context_dane, user_type, self.context.timestamp_now_sql)
+                #Récupération de l'id du contexte dane
+                context.id_context_categorie = self.__db.get_id_context_categorie(id_dane_categorie)
 
-            # Pour les différents type d'utilisateurs
-            for user_type in UserType:
-                self.ids_cohorts_dane_dep_clg[user_type] = {}
-                # Récupération des identifiants des cohortes pour les collèges par départements
-                for departement in self.__config.constantes.departements:
-                    self.ids_cohorts_dane_dep_clg[user_type][departement] = \
-                        get_or_create_dane_dep_clg_cohort(id_dane_categorie, user_type, departement, self.context.timestamp_now_sql)
+                # Récupération des identifiants de 3 cohortes pour les lycées de l'enseignement national
+                log.info("Création des cohortes dane pour les lycées de l'enseignement national")
+                for user_type in UserType:
+                    self.ids_cohorts_dane_lycee_en[user_type] = \
+                        self.get_or_create_dane_lycee_en_cohort(context.id_context_categorie, user_type, self.context.timestamp_now_sql)
+
+                # Pour les différents type d'utilisateurs
+                log.info("Création des cohortes dane pour les collèges par département")
+                for user_type in UserType:
+                    self.ids_cohorts_dane_dep_clg[user_type] = {}
+                    # Récupération des identifiants des cohortes pour les collèges par départements
+                    for departement in self.__config.constantes.departements:
+                        self.ids_cohorts_dane_dep_clg[user_type][departement] = \
+                            self.get_or_create_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql)
 
             # TODO lvillanne ici avant on avait l'ancien système de purge qui n'est plus valable, donc a réimaginer
+
+        else:
+            log.debug("La structure dane n'a pas été trouvée")
 
 
     def handle_etablissement(self, uai, log=getLogger(), readonly=False) -> EtablissementContext:
@@ -214,7 +226,6 @@ class Synchronizer:
         Synchronise un établissement
         :return: EtabContext
         """
-
         context = EtablissementContext(uai)
         context.gere_admin_local = uai not in self.__action_config.etablissements.listeEtabSansAdmin
         context.etablissement_regroupe = est_grp_etab(uai, self.__action_config.etablissements)
@@ -562,6 +573,7 @@ class Synchronizer:
         self.__db.enroll_user_in_cohort(id_prof_etabs_cohort, id_user, self.context.timestamp_now_sql)
 
         # TODO lvillanne réaliser l'inscription dans les cohortes de la dane
+
 
         # Mise a jour des dictionnaires concernant les cohortes
         for cohort_id in enseignant_cohorts:

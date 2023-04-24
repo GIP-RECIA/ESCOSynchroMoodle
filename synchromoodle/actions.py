@@ -34,6 +34,10 @@ def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         timestamp_store = TimestampStore(action.timestamp_store)
 
         log.info('Traitement des établissements')
+
+        #Avant les autres établissements on s'occupe de celui de la dane
+        synchronizer.handle_dane(config.constantes.uai_dane)
+
         for uai in action.etablissements.listeEtab:
             etablissement_log = log.getChild('etablissement.%s' % uai)
 
@@ -184,8 +188,6 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
 
         synchronizer = Synchronizer(ldap, db, config, action, arguments)
         synchronizer.initialize()
-
-        synchronizer.handle_dane(config.constantes.uai_dane)
 
         # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
         log.info("Début de la procédure d'anonymisation/suppression des utilisateurs/cours inutiles")

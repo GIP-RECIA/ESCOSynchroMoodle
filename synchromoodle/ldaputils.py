@@ -192,6 +192,20 @@ class Ldap:
         structures = self.search_structure(uai)
         return structures[0] if structures else None
 
+    def search_dane(self, uai: str) -> StructureLdap:
+        """
+        Recherche une structure dane
+        :param uai: code établissement
+        :return: L'établissement trouvé, ou None si non trouvé.
+        """
+        ldap_filter = _get_filtre_dane(uai)
+        self.connection.search(self.config.structuresDN, ldap_filter,
+                               search_scope=LEVEL, attributes=
+                               ['ou', 'ENTStructureSIREN', 'ENTStructureTypeStruct', 'ENTStructureJointure',
+                                'postalCode', 'ENTStructureUAI', 'ESCODomaines', '+'])
+        dane = [StructureLdap(entry) for entry in self.connection.entries]
+        return dane[0] if dane else None
+
     def search_structure(self, uai: str = None) -> List[StructureLdap]:
         """
         Recherche de structures.
@@ -508,5 +522,16 @@ def _get_filtre_etablissement(uai=None):
         filtre += "(ENTStructureUAI={uai})".format(uai=ldap_escape(uai))
 
     filtre += ")"
+    return filtre
 
+
+def _get_filtre_dane(uai=None):
+    """Construit le filtre pour la dane."""
+    filtre = "(&(ObjectClass=ENTServAc)" \
+             "(!(ENTStructureSiren=0000000000000A))"
+
+    if uai:
+        filtre += "(ENTStructureUAI={uai})".format(uai=ldap_escape(uai))
+
+    filtre += ")"
     return filtre
