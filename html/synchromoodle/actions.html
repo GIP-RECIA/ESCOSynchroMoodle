@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>synchromoodle.actions API documentation</title>
+<meta name="description" content="Actions" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>synchromoodle.actions</code></h1>
+</header>
+<section id="section-intro">
+<p>Actions</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># coding: utf-8
+&#34;&#34;&#34;
+Actions
+&#34;&#34;&#34;
+
+from logging import getLogger
+
+from synchromoodle.synchronizer import Synchronizer
+from synchromoodle.timestamp import TimestampStore
+from .arguments import DEFAULT_ARGS
+from .config import Config, ActionConfig
+from .dbutils import Database
+from .ldaputils import Ldap
+
+
+def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+    &#34;&#34;&#34;
+    Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
+    :param config: Configuration d&#39;execution
+    :param action: Configuration de l&#39;action
+    :param arguments: Arguments de ligne de commande
+    &#34;&#34;&#34;
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer.initialize()
+
+        timestamp_store = TimestampStore(action.timestamp_store)
+
+        log.info(&#39;Traitement des établissements&#39;)
+        for uai in action.etablissements.listeEtab:
+            etablissement_log = log.getChild(&#39;etablissement.%s&#39; % uai)
+
+            etablissement_log.info(&#39;Traitement de l\&#39;établissement (uai=%s)&#39; % uai)
+            etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log)
+
+            etablissement_log.info(&#39;Traitement des élèves pour l\&#39;établissement (uai=%s)&#39; % uai)
+            since_timestamp = timestamp_store.get_timestamp(uai)
+
+            etablissement_log.debug(&#34;Construction du dictionnaire d&#39;association classe -&gt; niveau formation&#34;)
+            synchronizer.construct_classe_to_niv_formation(etablissement_context, ldap.search_eleve(None, uai))
+
+            for eleve in ldap.search_eleve(since_timestamp, uai):
+                utilisateur_log = etablissement_log.getChild(&#34;utilisateur.%s&#34; % eleve.uid)
+                utilisateur_log.info(&#34;Traitement de l&#39;élève (uid=%s)&#34; % eleve.uid)
+                synchronizer.handle_eleve(etablissement_context, eleve, log=utilisateur_log)
+
+            etablissement_log.info(&#34;Traitement du personnel enseignant pour l&#39;établissement (uai=%s)&#34; % uai)
+            for enseignant in ldap.search_enseignant(since_timestamp=since_timestamp, uai=uai):
+                utilisateur_log = etablissement_log.getChild(&#34;enseignant.%s&#34; % enseignant.uid)
+                utilisateur_log.info(&#34;Traitement de l&#39;enseignant (uid=%s)&#34; % enseignant.uid)
+                synchronizer.handle_enseignant(etablissement_context, enseignant, log=utilisateur_log)
+
+            db.connection.commit()
+
+            timestamp_store.mark(uai)
+            timestamp_store.write()
+
+        log.info(&#34;Fin du traitement des établissements&#34;)
+    finally:
+        db.disconnect()
+        ldap.disconnect()
+
+
+def interetab(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+    &#34;&#34;&#34;
+    Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
+    Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
+    :param config: Configuration globale
+    :param action: Configuration de l&#39;action
+    :param arguments: Arguments de ligne de commande
+    :return:
+    &#34;&#34;&#34;
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer.initialize()
+
+        timestamp_store = TimestampStore(action.timestamp_store)
+
+        log.info(&#39;Traitement des utilisateurs inter-établissements&#39;)
+        personne_filter = {
+            action.inter_etablissements.ldap_attribut_user: action.inter_etablissements.ldap_valeur_attribut_user
+        }
+
+        since_timestamp = timestamp_store.get_timestamp(action.inter_etablissements.cle_timestamp)
+
+        for personne_ldap in ldap.search_personne(since_timestamp=since_timestamp, **personne_filter):
+            utilisateur_log = log.getChild(&#34;utilisateur.%s&#34; % personne_ldap.uid)
+            utilisateur_log.info(&#34;Traitement de l&#39;utilisateur (uid=%s)&#34; % personne_ldap.uid)
+            synchronizer.handle_user_interetab(personne_ldap, log=utilisateur_log)
+
+        log.info(&#39;Mise à jour des cohortes de la categorie inter-établissements&#39;)
+
+        for is_member_of, cohort_name in action.inter_etablissements.cohorts.items():
+            synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, since_timestamp, log=log)
+
+        db.connection.commit()
+
+        timestamp_store.mark(action.inter_etablissements.cle_timestamp)
+        timestamp_store.write()
+
+        log.info(&#34;Fin du traitement des utilisateurs inter-établissements&#34;)
+    finally:
+        db.disconnect()
+        ldap.disconnect()
+
+
+def inspecteurs(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+    &#34;&#34;&#34;
+    Effectue la mise a jour de la BD
+    Moodle via les infos issues du LDAP
+    Cette mise a jour concerne les inspecteurs
+    :param config: Configuration globale
+    :param action: Configuration de l&#39;action
+    :param arguments: Arguments de ligne de commande
+    &#34;&#34;&#34;
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer.initialize()
+
+        log.info(&#39;Traitement des inspecteurs&#39;)
+        timestamp_store = TimestampStore(action.timestamp_store)
+
+        personne_filter = {
+            action.inspecteurs.ldap_attribut_user: action.inspecteurs.ldap_valeur_attribut_user
+        }
+
+        # Traitement des inspecteurs
+        for personne_ldap in ldap.search_personne(timestamp_store.get_timestamp(action.inspecteurs.cle_timestamp),
+                                                  **personne_filter):
+            utilisateur_log = log.getChild(&#34;utilisateur.%s&#34; % personne_ldap.uid)
+            utilisateur_log.info(&#34;Traitement de l&#39;inspecteur (uid=%s)&#34; % personne_ldap.uid)
+            synchronizer.handle_inspecteur(personne_ldap)
+
+        db.connection.commit()
+
+        # Mise a jour de la date de dernier traitement
+        timestamp_store.mark(action.inspecteurs.cle_timestamp)
+        timestamp_store.write()
+
+        log.info(&#39;Fin du traitement des inspecteurs&#39;)
+    finally:
+        db.disconnect()
+        ldap.disconnect()
+
+
+def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+    &#34;&#34;&#34;
+    Effectue une purge des cohortes dans la base de données par rapport
+    au contenu du LDAP et supprime les cohortes inutiles (vides)
+    Anonymisation/suppression des utilisateurs inutiles
+    :param config: Configuration globale
+    :param action: Configuration de l&#39;action
+    :param arguments: Arguments de ligne de commande
+    :return:
+    &#34;&#34;&#34;
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer.initialize()
+
+        synchronizer.handle_dane(config.constantes.uai_dane)
+
+        # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
+        log.info(&#34;Début de la procédure d&#39;anonymisation/suppression des utilisateurs/cours inutiles&#34;)
+        ldap_users = ldap.search_personne()
+        db_valid_users = db.get_all_valid_users()
+        synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
+
+        db.connection.commit()
+
+        cohort_elv_lycee_en_ldap = []
+        cohort_ens_lycee_en_ldap = []
+        cohort_dir_lycee_en_ldap = []
+        cohorts_elv_dep_clg_ldap = {}
+        cohorts_ens_dep_clg_ldap = {}
+        cohorts_dir_dep_clg_ldap = {}
+
+        for departement in config.constantes.departements:
+            cohorts_elv_dep_clg_ldap[departement] = []
+            cohorts_ens_dep_clg_ldap[departement] = []
+            cohorts_dir_dep_clg_ldap[departement] = []
+
+        log.info(&#34;Début de l&#39;action de nettoyage&#34;)
+        # Purge des cohortes pour n&#39;y conserver que les utilisateurs qui doivent encore être dedans
+        #  (correspond à la purge de l&#39;ancien script)
+        for uai in action.etablissements.listeEtab:
+            etablissement_log = log.getChild(&#39;etablissement.%s&#39; % uai)
+
+            etablissement_log.info(&#34;Nettoyage de l&#39;établissement (uai=%s)&#34; % uai)
+            etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
+            departement = etablissement_context.departement
+
+            if config.delete.purge_cohorts:
+
+                eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_eleves_classes(etablissement_context, r&#39;(Élèves de la Classe )(.*)$&#39;,
+                                                     &#39;Élèves de la Classe %&#39;)
+
+                eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_eleves_niveau(etablissement_context, r&#39;(Élèves du Niveau de formation )(.*)$&#39;,
+                                                     &#39;Élèves du Niveau de formation %&#39;)
+
+                profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_classes(etablissement_context, r&#39;(Profs de la Classe )(.*)$&#39;,
+                                                     &#39;Profs de la Classe %&#39;)
+
+                profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_etab(etablissement_context, r&#34;(Profs de l&#39;établissement )(.*)$&#34;,
+                                                     &#34;Profs de l&#39;établissement %&#34;)
+
+                profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_niveau(etablissement_context, r&#34;(Profs du niveau de formation )(.*)$&#34;,
+                                                     &#34;Profs du niveau de formation %&#34;)
+
+                if etablissement_context.college and departement in config.constantes.departements:
+                    cohorts_elv_dep_clg_ldap[departement].append(ldap.search_eleve_uid(uai=uai))
+                    cohorts_ens_dep_clg_ldap[departement].append(ldap.search_enseignant_uid(uai=uai, tous=True))
+                    cohorts_dir_dep_clg_ldap[departement].append(ldap.search_personnel_direction_uid(uai=uai))
+
+                if etablissement_context.lycee and etablissement_context.etablissement_en:
+                    cohort_elv_lycee_en_ldap.append(ldap.search_eleve_uid(uai=uai))
+                    cohort_ens_lycee_en_ldap.append(ldap.search_enseignant_uid(uai=uai, tous=True))
+                    cohort_dir_lycee_en_ldap.append(ldap.search_personnel_direction_uid(uai=uai))
+
+                #Sert à purger les élèves qui ne sont plus présents dans l&#39;annuaire LDAP des cohortes
+                log.info(&#34;Purge des cohortes Elèves de la Classe&#34;)
+                synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
+                                           &#34;Élèves de la Classe %s&#34;)
+
+                log.info(&#34;Purge des cohortes Elèves du Niveau de formation&#34;)
+                synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
+                                           &#39;Élèves du Niveau de formation %s&#39;)
+
+                log.info(&#34;Purge des cohortes Profs de la Classe&#34;)
+                synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
+                                           &#39;Profs de la Classe %s&#39;)
+
+                log.info(&#34;Purge des cohortes Profs de l&#39;établissement&#34;)
+                synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
+                                           &#34;Profs de l&#39;établissement %s&#34;)
+
+                log.info(&#34;Purge des cohortes Profs du niveau de formation&#34;)
+                synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
+                                           &#34;Profs du niveau de formation %s&#34;)
+
+                # On commit pour chaque étab afin de libérer rapidement le lock
+                db.connection.commit()
+
+                # TODO lvillanne mettre en place le système de nettoyage des cohortes dane
+                # TODO lvillanne ceci est un exemple pour un type de cohorte dane
+                #  voir pour rendre la fonction paramétrable pour els 3 cohortes lycee puis pour faire le même genre de chose pour les colleges
+                log.info(&#34;Purge de la cohorte dane élèves des lycées de l&#39;éducation national&#34;)
+                synchronizer.purge_cohort_dane_elv_lycee_en(cohort_elv_lycee_en_ldap)
+
+        if config.delete.purge_cohorts:
+            log.info(&#34;Suppression des cohortes vides (sans utilisateur)&#34;)
+            synchronizer.delete_empty_cohorts()
+
+        log.info(&#34;Fin de l&#39;action de nettoyage&#34;)
+    finally:
+        db.disconnect()
+        ldap.disconnect()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="synchromoodle.actions.default"><code class="name flex">
+<span>def <span class="ident">default</span></span>(<span>config: <a title="synchromoodle.config.Config" href="config.html#synchromoodle.config.Config">Config</a>, action: <a title="synchromoodle.config.ActionConfig" href="config.html#synchromoodle.config.ActionConfig">ActionConfig</a>, arguments=Namespace(config=[]))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
+:param config: Configuration d'execution
+:param action: Configuration de l'action
+:param arguments: Arguments de ligne de commande</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+    &#34;&#34;&#34;
+    Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
+    :param config: Configuration d&#39;execution
+    :param action: Configuration de l&#39;action
+    :param arguments: Arguments de ligne de commande
+    &#34;&#34;&#34;
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer.initialize()
+
+        timestamp_store = TimestampStore(action.timestamp_store)
+
+        log.info(&#39;Traitement des établissements&#39;)
+        for uai in action.etablissements.listeEtab:
+            etablissement_log = log.getChild(&#39;etablissement.%s&#39; % uai)
+
+            etablissement_log.info(&#39;Traitement de l\&#39;établissement (uai=%s)&#39; % uai)
+            etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log)
+
+            etablissement_log.info(&#39;Traitement des élèves pour l\&#39;établissement (uai=%s)&#39; % uai)
+            since_timestamp = timestamp_store.get_timestamp(uai)
+
+            etablissement_log.debug(&#34;Construction du dictionnaire d&#39;association classe -&gt; niveau formation&#34;)
+            synchronizer.construct_classe_to_niv_formation(etablissement_context, ldap.search_eleve(None, uai))
+
+            for eleve in ldap.search_eleve(since_timestamp, uai):
+                utilisateur_log = etablissement_log.getChild(&#34;utilisateur.%s&#34; % eleve.uid)
+                utilisateur_log.info(&#34;Traitement de l&#39;élève (uid=%s)&#34; % eleve.uid)
+                synchronizer.handle_eleve(etablissement_context, eleve, log=utilisateur_log)
+
+            etablissement_log.info(&#34;Traitement du personnel enseignant pour l&#39;établissement (uai=%s)&#34; % uai)
+            for enseignant in ldap.search_enseignant(since_timestamp=since_timestamp, uai=uai):
+                utilisateur_log = etablissement_log.getChild(&#34;enseignant.%s&#34; % enseignant.uid)
+                utilisateur_log.info(&#34;Traitement de l&#39;enseignant (uid=%s)&#34; % enseignant.uid)
+                synchronizer.handle_enseignant(etablissement_context, enseignant, log=utilisateur_log)
+
+            db.connection.commit()
+
+            timestamp_store.mark(uai)
+            timestamp_store.write()
+
+        log.info(&#34;Fin du traitement des établissements&#34;)
+    finally:
+        db.disconnect()
+        ldap.disconnect()</code></pre>
+</details>
+</dd>
+<dt id="synchromoodle.actions.inspecteurs"><code class="name flex">
+<span>def <span class="ident">inspecteurs</span></span>(<span>config: <a title="synchromoodle.config.Config" href="config.html#synchromoodle.config.Config">Config</a>, action: <a title="synchromoodle.config.ActionConfig" href="config.html#synchromoodle.config.ActionConfig">ActionConfig</a>, arguments=Namespace(config=[]))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Effectue la mise a jour de la BD
+Moodle via les infos issues du LDAP
+Cette mise a jour concerne les inspecteurs
+:param config: Configuration globale
+:param action: Configuration de l'action
+:param arguments: Arguments de ligne de commande</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def inspecteurs(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+    &#34;&#34;&#34;
+    Effectue la mise a jour de la BD
+    Moodle via les infos issues du LDAP
+    Cette mise a jour concerne les inspecteurs
+    :param config: Configuration globale
+    :param action: Configuration de l&#39;action
+    :param arguments: Arguments de ligne de commande
+    &#34;&#34;&#34;
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer.initialize()
+
+        log.info(&#39;Traitement des inspecteurs&#39;)
+        timestamp_store = TimestampStore(action.timestamp_store)
+
+        personne_filter = {
+            action.inspecteurs.ldap_attribut_user: action.inspecteurs.ldap_valeur_attribut_user
+        }
+
+        # Traitement des inspecteurs
+        for personne_ldap in ldap.search_personne(timestamp_store.get_timestamp(action.inspecteurs.cle_timestamp),
+                                                  **personne_filter):
+            utilisateur_log = log.getChild(&#34;utilisateur.%s&#34; % personne_ldap.uid)
+            utilisateur_log.info(&#34;Traitement de l&#39;inspecteur (uid=%s)&#34; % personne_ldap.uid)
+            synchronizer.handle_inspecteur(personne_ldap)
+
+        db.connection.commit()
+
+        # Mise a jour de la date de dernier traitement
+        timestamp_store.mark(action.inspecteurs.cle_timestamp)
+        timestamp_store.write()
+
+        log.info(&#39;Fin du traitement des inspecteurs&#39;)
+    finally:
+        db.disconnect()
+        ldap.disconnect()</code></pre>
+</details>
+</dd>
+<dt id="synchromoodle.actions.interetab"><code class="name flex">
+<span>def <span class="ident">interetab</span></span>(<span>config: <a title="synchromoodle.config.Config" href="config.html#synchromoodle.config.Config">Config</a>, action: <a title="synchromoodle.config.ActionConfig" href="config.html#synchromoodle.config.ActionConfig">ActionConfig</a>, arguments=Namespace(config=[]))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
+Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
+:param config: Configuration globale
+:param action: Configuration de l'action
+:param arguments: Arguments de ligne de commande
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def interetab(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+    &#34;&#34;&#34;
+    Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
+    Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
+    :param config: Configuration globale
+    :param action: Configuration de l&#39;action
+    :param arguments: Arguments de ligne de commande
+    :return:
+    &#34;&#34;&#34;
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer.initialize()
+
+        timestamp_store = TimestampStore(action.timestamp_store)
+
+        log.info(&#39;Traitement des utilisateurs inter-établissements&#39;)
+        personne_filter = {
+            action.inter_etablissements.ldap_attribut_user: action.inter_etablissements.ldap_valeur_attribut_user
+        }
+
+        since_timestamp = timestamp_store.get_timestamp(action.inter_etablissements.cle_timestamp)
+
+        for personne_ldap in ldap.search_personne(since_timestamp=since_timestamp, **personne_filter):
+            utilisateur_log = log.getChild(&#34;utilisateur.%s&#34; % personne_ldap.uid)
+            utilisateur_log.info(&#34;Traitement de l&#39;utilisateur (uid=%s)&#34; % personne_ldap.uid)
+            synchronizer.handle_user_interetab(personne_ldap, log=utilisateur_log)
+
+        log.info(&#39;Mise à jour des cohortes de la categorie inter-établissements&#39;)
+
+        for is_member_of, cohort_name in action.inter_etablissements.cohorts.items():
+            synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, since_timestamp, log=log)
+
+        db.connection.commit()
+
+        timestamp_store.mark(action.inter_etablissements.cle_timestamp)
+        timestamp_store.write()
+
+        log.info(&#34;Fin du traitement des utilisateurs inter-établissements&#34;)
+    finally:
+        db.disconnect()
+        ldap.disconnect()</code></pre>
+</details>
+</dd>
+<dt id="synchromoodle.actions.nettoyage"><code class="name flex">
+<span>def <span class="ident">nettoyage</span></span>(<span>config: <a title="synchromoodle.config.Config" href="config.html#synchromoodle.config.Config">Config</a>, action: <a title="synchromoodle.config.ActionConfig" href="config.html#synchromoodle.config.ActionConfig">ActionConfig</a>, arguments=Namespace(config=[]))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Effectue une purge des cohortes dans la base de données par rapport
+au contenu du LDAP et supprime les cohortes inutiles (vides)
+Anonymisation/suppression des utilisateurs inutiles
+:param config: Configuration globale
+:param action: Configuration de l'action
+:param arguments: Arguments de ligne de commande
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+    &#34;&#34;&#34;
+    Effectue une purge des cohortes dans la base de données par rapport
+    au contenu du LDAP et supprime les cohortes inutiles (vides)
+    Anonymisation/suppression des utilisateurs inutiles
+    :param config: Configuration globale
+    :param action: Configuration de l&#39;action
+    :param arguments: Arguments de ligne de commande
+    :return:
+    &#34;&#34;&#34;
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer.initialize()
+
+        synchronizer.handle_dane(config.constantes.uai_dane)
+
+        # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
+        log.info(&#34;Début de la procédure d&#39;anonymisation/suppression des utilisateurs/cours inutiles&#34;)
+        ldap_users = ldap.search_personne()
+        db_valid_users = db.get_all_valid_users()
+        synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
+
+        db.connection.commit()
+
+        cohort_elv_lycee_en_ldap = []
+        cohort_ens_lycee_en_ldap = []
+        cohort_dir_lycee_en_ldap = []
+        cohorts_elv_dep_clg_ldap = {}
+        cohorts_ens_dep_clg_ldap = {}
+        cohorts_dir_dep_clg_ldap = {}
+
+        for departement in config.constantes.departements:
+            cohorts_elv_dep_clg_ldap[departement] = []
+            cohorts_ens_dep_clg_ldap[departement] = []
+            cohorts_dir_dep_clg_ldap[departement] = []
+
+        log.info(&#34;Début de l&#39;action de nettoyage&#34;)
+        # Purge des cohortes pour n&#39;y conserver que les utilisateurs qui doivent encore être dedans
+        #  (correspond à la purge de l&#39;ancien script)
+        for uai in action.etablissements.listeEtab:
+            etablissement_log = log.getChild(&#39;etablissement.%s&#39; % uai)
+
+            etablissement_log.info(&#34;Nettoyage de l&#39;établissement (uai=%s)&#34; % uai)
+            etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
+            departement = etablissement_context.departement
+
+            if config.delete.purge_cohorts:
+
+                eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_eleves_classes(etablissement_context, r&#39;(Élèves de la Classe )(.*)$&#39;,
+                                                     &#39;Élèves de la Classe %&#39;)
+
+                eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_eleves_niveau(etablissement_context, r&#39;(Élèves du Niveau de formation )(.*)$&#39;,
+                                                     &#39;Élèves du Niveau de formation %&#39;)
+
+                profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_classes(etablissement_context, r&#39;(Profs de la Classe )(.*)$&#39;,
+                                                     &#39;Profs de la Classe %&#39;)
+
+                profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_etab(etablissement_context, r&#34;(Profs de l&#39;établissement )(.*)$&#34;,
+                                                     &#34;Profs de l&#39;établissement %&#34;)
+
+                profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
+                    get_users_by_cohorts_comparators_profs_niveau(etablissement_context, r&#34;(Profs du niveau de formation )(.*)$&#34;,
+                                                     &#34;Profs du niveau de formation %&#34;)
+
+                if etablissement_context.college and departement in config.constantes.departements:
+                    cohorts_elv_dep_clg_ldap[departement].append(ldap.search_eleve_uid(uai=uai))
+                    cohorts_ens_dep_clg_ldap[departement].append(ldap.search_enseignant_uid(uai=uai, tous=True))
+                    cohorts_dir_dep_clg_ldap[departement].append(ldap.search_personnel_direction_uid(uai=uai))
+
+                if etablissement_context.lycee and etablissement_context.etablissement_en:
+                    cohort_elv_lycee_en_ldap.append(ldap.search_eleve_uid(uai=uai))
+                    cohort_ens_lycee_en_ldap.append(ldap.search_enseignant_uid(uai=uai, tous=True))
+                    cohort_dir_lycee_en_ldap.append(ldap.search_personnel_direction_uid(uai=uai))
+
+                #Sert à purger les élèves qui ne sont plus présents dans l&#39;annuaire LDAP des cohortes
+                log.info(&#34;Purge des cohortes Elèves de la Classe&#34;)
+                synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
+                                           &#34;Élèves de la Classe %s&#34;)
+
+                log.info(&#34;Purge des cohortes Elèves du Niveau de formation&#34;)
+                synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
+                                           &#39;Élèves du Niveau de formation %s&#39;)
+
+                log.info(&#34;Purge des cohortes Profs de la Classe&#34;)
+                synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
+                                           &#39;Profs de la Classe %s&#39;)
+
+                log.info(&#34;Purge des cohortes Profs de l&#39;établissement&#34;)
+                synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
+                                           &#34;Profs de l&#39;établissement %s&#34;)
+
+                log.info(&#34;Purge des cohortes Profs du niveau de formation&#34;)
+                synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
+                                           &#34;Profs du niveau de formation %s&#34;)
+
+                # On commit pour chaque étab afin de libérer rapidement le lock
+                db.connection.commit()
+
+                # TODO lvillanne mettre en place le système de nettoyage des cohortes dane
+                # TODO lvillanne ceci est un exemple pour un type de cohorte dane
+                #  voir pour rendre la fonction paramétrable pour els 3 cohortes lycee puis pour faire le même genre de chose pour les colleges
+                log.info(&#34;Purge de la cohorte dane élèves des lycées de l&#39;éducation national&#34;)
+                synchronizer.purge_cohort_dane_elv_lycee_en(cohort_elv_lycee_en_ldap)
+
+        if config.delete.purge_cohorts:
+            log.info(&#34;Suppression des cohortes vides (sans utilisateur)&#34;)
+            synchronizer.delete_empty_cohorts()
+
+        log.info(&#34;Fin de l&#39;action de nettoyage&#34;)
+    finally:
+        db.disconnect()
+        ldap.disconnect()</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="synchromoodle" href="index.html">synchromoodle</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="synchromoodle.actions.default" href="#synchromoodle.actions.default">default</a></code></li>
+<li><code><a title="synchromoodle.actions.inspecteurs" href="#synchromoodle.actions.inspecteurs">inspecteurs</a></code></li>
+<li><code><a title="synchromoodle.actions.interetab" href="#synchromoodle.actions.interetab">interetab</a></code></li>
+<li><code><a title="synchromoodle.actions.nettoyage" href="#synchromoodle.actions.nettoyage">nettoyage</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
