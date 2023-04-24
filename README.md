@@ -70,6 +70,14 @@ pip3 install synchromoodle-x.x.x-py3-none-any.whl
 python3 -m synchromoodle -c config/test.yml
 ```
 
+## Documentation
+
+Il est possible de générer une documentation sous forme de fichiers `.html` grâce à pydoc3.
+
+```
+pipenv run python -m pdoc --html synchromoodle
+```
+
 # Usage
 
 ```bash
