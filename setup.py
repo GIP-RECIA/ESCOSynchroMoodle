@@ -20,6 +20,7 @@ dev_require = ['pylint',
 
 tests_require = ['pytest>=4',
                  'pytest-docker',
+                 'pytest-mock',
                  'sqlparse',
                  'cachetools']
 
@@ -28,8 +29,6 @@ entry_points = {
         'synchromoodle = synchromoodle.__main__:main'
     ],
 }
-
-dependency_links = ['https://github.com/Toilal/pytest-docker/tarball/master#egg=pytest-docker']
 
 with open('synchromoodle/__version__.py', 'r') as f:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]$', f.read(), re.MULTILINE).group(1)
@@ -40,13 +39,9 @@ args = dict(name='synchromoodle',
             # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
             classifiers=['Development Status :: 5 - Production/Stable',
                          'Operating System :: OS Independent',
-                         'Programming Language :: Python :: 3',
-                         'Programming Language :: Python :: 3.5',
-                         'Programming Language :: Python :: 3.6',
-                         'Programming Language :: Python :: 3.7'
+                         'Programming Language :: Python :: 3.10'
                          ],
             packages=find_packages(),
-            dependency_links=dependency_links,
             install_requires=install_requires,
             setup_requires=setup_requires,
             tests_require=tests_require,
