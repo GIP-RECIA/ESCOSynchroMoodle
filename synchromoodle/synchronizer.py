@@ -194,7 +194,7 @@ class Synchronizer:
                 log.info("Création de la structure dane")
                 self.insert_moodle_structure(False, structure_ldap.nom,
                                                 etablissement_path, structure_ldap.nom,
-                                                structure_ldap.siren, etablissement_theme)
+                                                structure_ldap.siren, context.etablissement_theme)
                 id_dane_categorie = self.__db.get_id_course_category_by_id_number(structure_ldap.siren)
 
                 #Récupération de l'id du contexte dane
@@ -204,7 +204,7 @@ class Synchronizer:
                 log.info("Création des cohortes dane pour les lycées de l'enseignement national")
                 for user_type in UserType:
                     self.ids_cohorts_dane_lycee_en[user_type] = \
-                        self.get_or_create_dane_lycee_en_cohort(context.id_context_categorie, user_type, self.context.timestamp_now_sql)
+                        self.get_or_create_dane_lycee_en_cohort(context.id_context_categorie, user_type, self.context.timestamp_now_sql, log)
 
                 # Pour les différents type d'utilisateurs
                 log.info("Création des cohortes dane pour les collèges par département")
@@ -213,7 +213,7 @@ class Synchronizer:
                     # Récupération des identifiants des cohortes pour les collèges par départements
                     for departement in self.__config.constantes.departements:
                         self.ids_cohorts_dane_dep_clg[user_type][departement] = \
-                            self.get_or_create_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql)
+                            self.get_or_create_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql, log)
 
             # TODO lvillanne ici avant on avait l'ancien système de purge qui n'est plus valable, donc a réimaginer
 
@@ -759,9 +759,9 @@ class Synchronizer:
         :return:
         """
         all_cohort_name = {
-            UserType.ELEVE: 'Élèves des lycées de l\'éducation national',
-            UserType.ENSEIGNANT: 'Enseignants des lycées de l\'éducation national',
-            UserType.PERSONNEL_DE_DIRECTION: 'Personnel de direction des lycées de l\'éducation national'
+            UserType.ELEVE: 'Élèves des lycées de l\'éducation nationale',
+            UserType.ENSEIGNANT: 'Enseignants des lycées de l\'éducation nationale',
+            UserType.PERSONNEL_DE_DIRECTION: 'Personnel de direction des lycées de l\'éducation nationale'
         }
         cohort_name = all_cohort_name[user_type]
         cohort_description = cohort_name

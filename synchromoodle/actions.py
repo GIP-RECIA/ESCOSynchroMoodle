@@ -36,7 +36,9 @@ def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         log.info('Traitement des établissements')
 
         #Avant les autres établissements on s'occupe de celui de la dane
-        synchronizer.handle_dane(config.constantes.uai_dane)
+        dane_log = log.getChild('dane.%s' % config.constantes.uai_dane)
+        synchronizer.handle_dane(config.constantes.uai_dane, log=dane_log)
+        db.connection.commit()
 
         for uai in action.etablissements.listeEtab:
             etablissement_log = log.getChild('etablissement.%s' % uai)
