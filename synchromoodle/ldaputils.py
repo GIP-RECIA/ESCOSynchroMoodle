@@ -52,7 +52,7 @@ class StructureLdap:
     """
 
     def __init__(self, data):
-        self.nom = data.ou.value.split("-ac")[0]
+        self.nom = data.ou.value.split("-ac")[0].replace("$", " ")
         self.type = data.ENTStructureTypeStruct.value
         self.code_postal = data.postalCode.value[:2]
         self.siren = data.ENTStructureSIREN.value

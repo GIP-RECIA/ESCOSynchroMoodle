@@ -195,25 +195,27 @@ class Synchronizer:
                 self.insert_moodle_structure(False, structure_ldap.nom,
                                                 etablissement_path, structure_ldap.nom,
                                                 structure_ldap.siren, context.etablissement_theme)
-                id_dane_categorie = self.__db.get_id_course_category_by_id_number(structure_ldap.siren)
 
-                #Récupération de l'id du contexte dane
-                context.id_context_categorie = self.__db.get_id_context_categorie(id_dane_categorie)
+            #Récupération de l'id de la catégorie de la structure dane
+            id_dane_categorie = self.__db.get_id_course_category_by_id_number(structure_ldap.siren)
 
-                # Récupération des identifiants de 3 cohortes pour les lycées de l'enseignement national
-                log.info("Création des cohortes dane pour les lycées de l'enseignement national")
-                for user_type in UserType:
-                    self.ids_cohorts_dane_lycee_en[user_type] = \
-                        self.get_or_create_dane_lycee_en_cohort(context.id_context_categorie, user_type, self.context.timestamp_now_sql, log)
+            #Récupération de l'id du contexte dane
+            context.id_context_categorie = self.__db.get_id_context_categorie(id_dane_categorie)
 
-                # Pour les différents type d'utilisateurs
-                log.info("Création des cohortes dane pour les collèges par département")
-                for user_type in UserType:
-                    self.ids_cohorts_dane_dep_clg[user_type] = {}
-                    # Récupération des identifiants des cohortes pour les collèges par départements
-                    for departement in self.__config.constantes.departements:
-                        self.ids_cohorts_dane_dep_clg[user_type][departement] = \
-                            self.get_or_create_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql, log)
+            # Récupération des identifiants de 3 cohortes pour les lycées de l'enseignement national
+            log.info("Création des cohortes dane pour les lycées de l'enseignement national")
+            for user_type in UserType:
+                self.ids_cohorts_dane_lycee_en[user_type] = \
+                    self.get_or_create_dane_lycee_en_cohort(context.id_context_categorie, user_type, self.context.timestamp_now_sql, log)
+
+            # Pour les différents type d'utilisateurs
+            log.info("Création des cohortes dane pour les collèges par département")
+            for user_type in UserType:
+                self.ids_cohorts_dane_dep_clg[user_type] = {}
+                # Récupération des identifiants des cohortes pour les collèges par départements
+                for departement in self.__config.constantes.departements:
+                    self.ids_cohorts_dane_dep_clg[user_type][departement] = \
+                        self.get_or_create_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql, log)
 
             # TODO lvillanne ici avant on avait l'ancien système de purge qui n'est plus valable, donc a réimaginer
 
@@ -572,8 +574,26 @@ class Synchronizer:
         id_user = self.__db.get_user_id(enseignant_ldap.uid)
         self.__db.enroll_user_in_cohort(id_prof_etabs_cohort, id_user, self.context.timestamp_now_sql)
 
-        # TODO lvillanne réaliser l'inscription dans les cohortes de la dane
-
+        # Inscription dans les cohortes de la dane
+        # Enseignants
+        if set(enseignant_ldap.profils).intersection(['National_ENS']):
+            log.info("Inscription de l'enseignant %s dans la cohorte de la dane", enseignant_ldap)
+            if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
+                log.info("Inscription de l'enseignant %s dans la cohorte collège de la dane", enseignant_ldap)
+                self.__db.enroll_user_in_cohort(self.ids_cohorts_dane_dep_clg[UserType.ENSEIGNANT][etablissement_context.departement],
+                    id_user, self.context.timestamp_now_sql)
+            elif etablissement_context.lycee and etablissement_context.etablissement_en:
+                log.info("Inscription de l'enseignant %s dans la cohorte lycée de la dane", enseignant_ldap)
+                self.__db.enroll_user_in_cohort(self.ids_cohorts_dane_lycee_en[UserType.ENSEIGNANT], id_user, self.context.timestamp_now_sql)
+        # Personnel de direction
+        if set(enseignant_ldap.profils).intersection(['National_DIR']):
+            if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
+                log.info("Inscription du personnel de direction %s dans la cohorte collège de la dane", enseignant_ldap)
+                self.__db.enroll_user_in_cohort(self.ids_cohorts_dane_dep_clg[UserType.PERSONNEL_DE_DIRECTION][etablissement_context.departement],
+                    id_user, self.context.timestamp_now_sql)
+            elif etablissement_context.lycee and etablissement_context.etablissement_en:
+                log.info("Inscription du personnel de direction %s dans la cohorte lycée de la dane", enseignant_ldap)
+                self.__db.enroll_user_in_cohort(self.ids_cohorts_dane_lycee_en[UserType.PERSONNEL_DE_DIRECTION], id_user, self.context.timestamp_now_sql)
 
         # Mise a jour des dictionnaires concernant les cohortes
         for cohort_id in enseignant_cohorts:

@@ -58,7 +58,7 @@ def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
                 synchronizer.handle_eleve(etablissement_context, eleve, log=utilisateur_log)
 
             etablissement_log.info("Traitement du personnel enseignant pour l'établissement (uai=%s)" % uai)
-            for enseignant in ldap.search_enseignant(since_timestamp=since_timestamp, uai=uai):
+            for enseignant in ldap.search_enseignant(since_timestamp=since_timestamp, uai=uai, tous=False):
                 utilisateur_log = etablissement_log.getChild("enseignant.%s" % enseignant.uid)
                 utilisateur_log.info("Traitement de l'enseignant (uid=%s)" % enseignant.uid)
                 synchronizer.handle_enseignant(etablissement_context, enseignant, log=utilisateur_log)
