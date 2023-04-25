@@ -496,6 +496,17 @@ attributetype (ENT_globAttPrefixe:127 NAME 'ENTEleveTransport'
 	SYNTAX ENT_UTF8String{1} )
 
 #------------------------------------------#
+# ENTEleveAdresseRel                       #
+#------------------------------------------#
+# Secondaire                               #
+# String DN multivaluee                    #
+#------------------------------------------#
+attributetype (ENT_globAttPrefixe:193 NAME 'ENTEleveAdresseRel'
+	DESC 'Adresse de residence chez un representant legal ou en charge'
+	EQUALITY distinguishedNameMatch
+	SYNTAX ENT_DNString )
+
+#------------------------------------------#
 # ENTEleveStatutEleve                      #
 #------------------------------------------#
 # Secondaire                               #
@@ -793,7 +804,7 @@ objectclass ( ENT_globClassPrefixe:2 NAME 'ENTEleve'
 			  ENTEleveGroupes $ ENTEleveEnsRespStage $ ENTEleveEnsTutStage $
 			  ENTEleveEntrTutStage $ ENTEleveEntrAutres $ ENTEleveDelegClasse $
 			  ENTEleveDelegAutres $ ENTEleveMajeurAnticipe $ ENTEleveStructRattachId $
-			  ENTEleveINE ) )
+			  ENTEleveINE $ ENTEleveAdresseRel ) )
 
 
 

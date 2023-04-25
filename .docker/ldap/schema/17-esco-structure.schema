@@ -100,6 +100,19 @@ attributetype (ENT_globAttPrefixe:304 NAME 'ENTStructureEmail'
 	SYNTAX ENT_UTF8String )
 
 #------------------------------------------#
+# ENTStructureMailSI                        #
+#------------------------------------------#
+# Secondaire                               #
+# String UTF8 monovaluee                   #
+#------------------------------------------#
+attributetype (ENT_globAttPrefixe:325 NAME 'ENTStructureMailSI'
+	DESC 'Adresse e-mail dans le SI non modifiable'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SINGLE-VALUE
+	SYNTAX ENT_UTF8String )
+
+#------------------------------------------#
 # ENTStructureSiteWeb                      #
 #------------------------------------------#
 # Secondaire                               #
@@ -148,7 +161,7 @@ objectclass ( ENT_globClassPrefixe:21 NAME 'ENTStructure'
         MUST ( ENTStructureJointure $ ENTStructureNomCourant $
                ENTStructureSIREN )
         MAY ( ENTStructureTypeStruct $ ENTStructureResponsable $
-              ENTStructureEmail $ ENTStructureSiteWeb $
+              ENTStructureEmail $ ENTStructureMailSI $ ENTStructureSiteWeb $
               ENTStructureContactENT $ ENTStructureUAI $
               ESCODefaultUserProfile $ ESCODomaines $ ESCOStructureNomCourt $
               ESCOStructureLogo $ ESCOStructureServices ) )
