@@ -7,7 +7,7 @@ import json
 from synchromoodle.config import Config, ActionConfig, ConfigLoader
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
-from synchromoodle.synchronizer import Synchronizer
+from synchromoodle.synchronizer import Synchronizer, UserType
 from test.utils import db_utils, ldap_utils, mock_utils
 
 @pytest.fixture(scope='function', name='db')
@@ -725,6 +725,184 @@ class TestEtablissement:
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700jym' not in results
         assert len(results) == len(profs_niveau_by_cohorts_db["TERMINALE GENERALE & TECHNO YC BT"])-1
+
+
+    def test_purge_cohortes_dane(self, ldap: Ldap, db: Database, config: Config, mocker):
+        """
+        Teste la purge des cohortes de la dane :
+            - Récupération des cohortes de la dane de moodle
+            - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
+                - Eleves par classe
+                - Eleves par niveau de formation
+                - Enseignants par classe
+                - Enseignants par établissement
+        """
+
+        #Chargement du ldap et de la bd
+        ldap_utils.run_ldif('data/all.ldif', ldap)
+        ldap_utils.run_ldif('data/college_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/direction_college_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/direction_lycee_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/eleves_college_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/eleves_lycee_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/lycee_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/profs_college_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/profs_lycee_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/structure_dane.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        #Mock pour la suppression de cohortes
+        mock_delete_cohorts = mocker.patch('synchromoodle.synchronizer.WebService.delete_cohorts')
+
+        #Initialisation du synchronizer
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.initialize()
+
+        #Récupération du contexte de la dane et synchronisation de la dane
+        dane_context = synchronizer.handle_dane(config.constantes.uai_dane, readonly=False)
+
+        #UAI de l'établissement qu'on va tester
+        uai = "0180002E"
+
+        #Synchronisation de cet établissement et de ses élèves/enseignants
+        etab_context = synchronizer.handle_etablissement(uai)
+        etab_departement = etab_context.departement
+
+        #Synchronisation des élèves de cet établissement
+        eleves = ldap.search_eleve(None, uai)
+        for eleve in eleves:
+            synchronizer.handle_eleve(etab_context, eleve)
+
+        #Construction du dictionnaire d'association classe -> niveau formation
+        synchronizer.construct_classe_to_niv_formation(etab_context, eleves)
+
+        #Synchronisation des enseignants de cet établissement
+        enseignants = ldap.search_enseignant(None, uai, tous=True)
+        for enseignant in enseignants:
+            synchronizer.handle_enseignant(etab_context, enseignant)
+
+        #Récupération des cohortes dans le ldap pour les collèges
+        cohorts_elv_dep_clg_ldap = {}
+        cohorts_ens_dep_clg_ldap = {}
+        cohorts_dir_dep_clg_ldap = {}
+
+        for departement in config.constantes.departements:
+            cohorts_elv_dep_clg_ldap[departement] = []
+            cohorts_ens_dep_clg_ldap[departement] = []
+            cohorts_dir_dep_clg_ldap[departement] = []
+
+        assert etab_context.college
+        assert etab_departement in config.constantes.departements
+
+        cohorts_elv_dep_clg_ldap[etab_departement].extend(ldap.search_eleve_uid(uai=uai))
+        cohorts_ens_dep_clg_ldap[etab_departement].extend(ldap.search_enseignant_profil_uid(profil="National_ENS",\
+         uai=uai, tous=False))
+        cohorts_dir_dep_clg_ldap[etab_departement].extend(ldap.search_personnel_direction_uid(uai=uai))
+
+        #On vérifie qu'on a bien récupéré les cohortes du ldap
+        assert cohorts_elv_dep_clg_ldap != {}
+        assert cohorts_ens_dep_clg_ldap != {}
+        assert cohorts_dir_dep_clg_ldap != {}
+
+        #Suppression manuelle dans certaines cohortes d'utilisateurs spécifiques dans le ldap
+        #On teste pour un département pour chaque type d'utilisateur
+        #Type Eleve
+        cohorts_elv_dep_clg_ldap[etab_departement].remove("f19105ii")
+        #Type Enseignant
+        cohorts_ens_dep_clg_ldap[etab_departement].remove("f1700drk")
+        #Type personnel de direction
+        cohorts_dir_dep_clg_ldap[etab_departement].remove("f171006i")
+
+        #Récupération des cohortes dane collège dans la BD
+        cohort_dane_clg = {}
+        for departement in config.constantes.departements:
+            cohort_dane_clg[departement] = {UserType.ELEVE:cohorts_elv_dep_clg_ldap[departement],
+                                            UserType.ENSEIGNANT:cohorts_ens_dep_clg_ldap[departement],
+                                            UserType.PERSONNEL_DE_DIRECTION:cohorts_dir_dep_clg_ldap[departement]}
+
+        #Récupération de ce qu'on a en bd avant la supression
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Élèves des collèges du 18"
+                        })
+        cohorts_elv_dep_clg_bd =[result[0] for result in db.mark.fetchall()]
+
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Enseignants des collèges du 18"
+                        })
+        cohorts_ens_dep_clg_bd =[result[0] for result in db.mark.fetchall()]
+
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Personnel de direction des collèges du 18"
+                        })
+        cohorts_dir_dep_clg_bd =[result[0] for result in db.mark.fetchall()]
+
+        #Purge des cohortes Collèges
+        for departement in config.constantes.departements:
+            synchronizer.purge_cohort_dane_clg_dep(cohort_dane_clg[etab_departement], departement, dane_context)
+
+        #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap ont bien aussi été supprimés des cohortes dans moodle
+        #Type élèves : récupération des membres de la cohorte des élèves des collèges du 18
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Élèves des collèges du 18"
+                        })
+
+        results = [result[0] for result in db.mark.fetchall()]
+        assert 'f19105ii' not in results
+        assert len(results) == len(cohorts_elv_dep_clg_bd)-1
+
+        #Type enseignants : récupération des membres de la cohorte des enseignants des collèges du 18
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Enseignants des collèges du 18"
+                        })
+
+        results = [result[0] for result in db.mark.fetchall()]
+        assert 'f1700drk' not in results
+        assert len(results) == len(cohorts_ens_dep_clg_bd)-1
+
+        #Type personnels de direcrtion : récupération des membres de la cohorte des personnels de direction des collèges du 18
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Personnel de direction des collèges du 18"
+                        })
+
+        results = [result[0] for result in db.mark.fetchall()]
+        assert 'f171006i' not in results
+        assert len(results) == len(cohorts_dir_dep_clg_bd)-1
 
 
     def test_anonymize_or_delete_eleves(self, ldap: Ldap, db: Database, config: Config, mocker):
