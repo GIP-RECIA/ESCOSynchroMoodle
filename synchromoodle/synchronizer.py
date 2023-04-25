@@ -232,6 +232,8 @@ class Synchronizer:
         else:
             log.debug("La structure dane n'a pas été trouvée")
 
+        #Mise à jour du contexte dane pour le synchronizer
+        self.context_dane = context
         return context
 
 
@@ -530,7 +532,6 @@ class Synchronizer:
 
         # Inscription dans les cohortes associees aux classes et au niveau de formation si c'est un enseignant
         if set(enseignant_ldap.profils).intersection(['National_ENS']) or len(enseignant_ldap.classes)>0:
-            enseignant_cohorts = []
             enseignant_classes_for_etab = []
             #Récupération des classes de l'établissement traité actuellement
             for classe in enseignant_ldap.classes:
@@ -551,8 +552,6 @@ class Synchronizer:
                 #Inscription dans les cohortes de classe
                 for ids_classe_cohorts in ids_classes_cohorts:
                     self.__db.enroll_user_in_cohort(ids_classe_cohorts, id_user, self.context.timestamp_now_sql)
-
-                enseignant_cohorts.extend(ids_classes_cohorts)
 
                 #Inscription dans les cohortes de niveau de formation
                 enseignant_niv_formation = set()
@@ -580,15 +579,6 @@ class Synchronizer:
                 #Inscription dans les cohortes de niveau de formation
                 for id_cohort_niv_formation in ids_niv_formation_cohorts:
                     self.__db.enroll_user_in_cohort(id_cohort_niv_formation, id_user, self.context.timestamp_now_sql)
-
-            # Mise a jour des dictionnaires concernant les cohortes
-            for cohort_id in enseignant_cohorts:
-                # Si la cohorte est deja connue
-                if cohort_id in etablissement_context.enseignants_by_cohortes:
-                    etablissement_context.enseignants_by_cohortes[cohort_id].append(id_user)
-                # Si la cohorte n'a pas encore ete rencontree
-                else:
-                    etablissement_context.enseignants_by_cohortes[cohort_id] = [id_user]
 
         if set(enseignant_ldap.objectClasses).intersection(["ENTAuxEnseignant"]):
             log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
