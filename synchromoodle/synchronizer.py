@@ -999,39 +999,6 @@ class Synchronizer:
 
         return eleves_by_cohorts_db, eleves_by_cohorts_ldap
 
-    def get_users_by_dane_cohorts(self, cohortname_pattern: str) -> List[str]:
-        """
-        Renvoie un dictionnaire listant les utilisateurs BDD (uid) dans la cohorte dane.
-        :param cohortname_pattern: str
-        :return:
-        """
-        # Récupére les cohortes qui correspondent au pattern et qui sont lié à l'établissement du context
-        classes_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
-
-        # Dictionnaire contenant la liste des élèves par cohorte provenant de la bdd
-        eleves_by_cohorts_db = {}
-        # Pour chaque cohorte de la bdd
-        for cohort in classes_cohorts:
-            matches = re.search(cohortname_pattern_re, cohort.name)
-            # On récupére le nom de la classe (fin du nom de la cohorte qui lui est fixe)
-            classe_name = matches.group(2)
-            # On créé le tableau vide pour y stocker les élèves
-            eleves_by_cohorts_db[classe_name] = []
-            # Et on stocke les élèves de cette cohorte en provenant ce la bdd
-            for username in self.__db.get_cohort_members(cohort.id):
-                eleves_by_cohorts_db[classe_name].append(username.lower())
-
-        # Dictionnaire contenant la liste des élèves par cohorte provenant du ldap
-        eleves_by_cohorts_ldap = {}
-        # Pour chaque cohorte de la bdd
-        for classe in eleves_by_cohorts_db:
-            # On créé le tableau vide pour y stocker les élèves
-            eleves_by_cohorts_ldap[classe] = []
-            # Et on stocke les élèves de cette cohorte en provenant du ldap
-            for eleve in self.__ldap.search_eleves_in_classe(classe, etab_context.uai):
-                eleves_by_cohorts_ldap[classe].append(eleve.uid.lower())
-
-        return eleves_by_cohorts_db, eleves_by_cohorts_ldap
 
     def get_users_by_cohorts_comparators_eleves_niveau(self, etab_context: EtablissementContext, cohortname_pattern_re: str,
                                          cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
