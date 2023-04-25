@@ -95,6 +95,49 @@ class TestEtablissement:
         result = db.mark.fetchone()
         assert result is not None
 
+    def test_maj_dane(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Permet de vérifier la synchronisation de la dane en vérifiant
+        que les cohortes dane ont bien été créées
+        """
+        ldap_utils.run_ldif('data/structure_dane.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        #Synchronisation de la dane
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.initialize()
+        dane_context = synchronizer.handle_dane(config.constantes.uai_dane)
+        assert dane_context.uai == "0450080T"
+        assert dane_context.etablissement_theme == "0450080t"
+        assert dane_context.id_context_categorie is not None
+        assert synchronizer.ids_cohorts_dane_lycee_en != {}
+        assert synchronizer.ids_cohorts_dane_dep_clg != {}
+
+        #On s'assure de la création des cohortes dane
+        #Pour les lycées
+        for user_type in UserType:
+            db.mark.execute("SELECT * FROM {entete}cohort as cohort"
+                                      " INNER JOIN {entete}context as context"
+                                      " ON cohort.contextid = context.id"
+                                      " WHERE cohort.id = %(cohortid)s".format(entete=db.entete),
+                            params={
+                                'cohortid': synchronizer.ids_cohorts_dane_lycee_en[user_type],
+                            })
+            result = db.mark.fetchone()
+            assert result is not None
+
+        #Pour les collèges
+        for departement in config.constantes.departements:
+            for user_type in UserType:
+                db.mark.execute("SELECT * FROM {entete}cohort as cohort"
+                                          " INNER JOIN {entete}context as context"
+                                          " ON cohort.contextid = context.id"
+                                          " WHERE cohort.id = %(cohortid)s".format(entete=db.entete),
+                                params={
+                                    'cohortid': synchronizer.ids_cohorts_dane_dep_clg[user_type][departement],
+                                })
+                result = db.mark.fetchone()
+                assert result is not None
 
     def test_maj_eleve(self, ldap: Ldap, db: Database, config: Config):
         """

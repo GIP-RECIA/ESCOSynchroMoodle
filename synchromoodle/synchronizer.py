@@ -231,6 +231,8 @@ class Synchronizer:
                             self.get_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql, log)
         else:
             log.debug("La structure dane n'a pas été trouvée")
+            
+        return context
 
 
     def handle_etablissement(self, uai, log=getLogger(), readonly=False) -> EtablissementContext:
