@@ -105,8 +105,8 @@ def array_to_safe_sql_list(elements, name=None):
         format_strings = []
         params = {}
         for i, element in enumerate(elements):
-            format_strings.append('%({name}_{i})s'.format(name=name, i=i))
-            params['{name}_{i}'.format(name=name, i=i)] = element
+            format_strings.append(f'%({name}_{i})s')
+            params[f'{name}_{i}'] = element
         return ','.join(format_strings), params
     format_strings = ['%s'] * len(elements)
     params = tuple(elements)
@@ -284,9 +284,7 @@ class Database:
         Récupère l'id maximum present dans la table permettant les enrolments
         :return:
         """
-        s = "SELECT id FROM {entete}enrol" \
-            " ORDER BY id DESC LIMIT 1" \
-            .format(entete=self.entete)
+        s = f"SELECT id FROM {self.entete}enrol ORDER BY id DESC LIMIT 1"
         self.mark.execute(s)
         ligne = self.safe_fetchone()
         if ligne is None:
@@ -390,9 +388,7 @@ class Database:
         :param username: str
         :return:
         """
-        s = "SELECT id FROM {entete}user " \
-            "WHERE username = %(username)s" \
-            .format(entete=self.entete)
+        s = f"SELECT id FROM {self.entete}user WHERE username = %(username)s"
         self.mark.execute(s, params={'username': username.lower()})
         ligne = self.safe_fetchone()
         if ligne is None:
@@ -465,13 +461,11 @@ class Database:
         :param short_name:
         :return:
         """
-        s = "SELECT id FROM {entete}role" \
-            " WHERE shortname = %(short_name)s" \
-            .format(entete=self.entete)
+        s = f"SELECT id FROM {self.entete}role WHERE shortname = %(short_name)s"
         self.mark.execute(s, params={'short_name': short_name})
         ligne = self.safe_fetchone()
         if ligne is None:
-            raise ValueError("Le rôle %s n'existe pas." % short_name)
+            raise ValueError(f"Le rôle {short_name} n'existe pas.")
         return ligne[0]
 
     def delete_moodle_local_admin(self, id_context_categorie, userid):
@@ -579,9 +573,7 @@ class Database:
         """
         # Construction de la liste des ids des roles concernes
         ids_list, ids_list_params = array_to_safe_sql_list(ids_roles, 'ids_list')
-        s = "DELETE FROM {entete}role_assignments" \
-            " WHERE id IN ({ids_list})" \
-            .format(entete=self.entete, ids_list=ids_list)
+        s = f"DELETE FROM {self.entete}role_assignments WHERE id IN ({ids_list})"
         self.mark.execute(s, params={**ids_list_params})
 
     def disenroll_user_from_cohorts(self, ids_cohorts_to_keep, id_user):
@@ -622,9 +614,7 @@ class Database:
         :param id_cohort:
         :return:
         """
-        s = "SELECT name FROM {entete}cohort" \
-            " WHERE id = %(id_cohort)s" \
-            .format(entete=self.entete)
+        s = f"SELECT name FROM {self.entete}cohort WHERE id = %(id_cohort)s"
         self.mark.execute(s, params={'id_cohort': id_cohort})
         ligne = self.safe_fetchone()
         if ligne is None:
@@ -683,9 +673,7 @@ class Database:
         return ligne[0]
 
     def get_course_timemodified(self, course_id: int):
-        s = "SELECT timemodified FROM {entete}course" \
-            " WHERE id = %(course_id)s" \
-            .format(entete=self.entete)
+        s = f"SELECT timemodified FROM {self.entete}course WHERE id = %(course_id)s"
         self.mark.execute(s, params={'course_id': course_id})
         ligne = self.safe_fetchone()
         if ligne is None:
@@ -693,8 +681,7 @@ class Database:
         return ligne[0]
 
     def delete_course(self, course_id: int):
-        s = "DELETE FROM {entete}course WHERE id = %(course_id)s" \
-            .format(entete=self.entete)
+        s = f"DELETE FROM {self.entete}course WHERE id = %(course_id)s"
         self.mark.execute(s, params={
             'course_id': course_id
         })
@@ -750,7 +737,7 @@ class Database:
         :param user_id: L'id de l'utilisateur dont on veut récupére les infos
         :returns: Un tuple représentant la ligne récupérée depuis la BD
         """
-        s = "SELECT * FROM {entete}user WHERE id = %(userid)s".format(entete=self.entete)
+        s = f"SELECT * FROM {self.entete}user WHERE id = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         return self.mark.fetchone()
 
@@ -760,7 +747,7 @@ class Database:
         :param user_id: L'id de l'utilisateur qu'on veut vérifier
         :returns: Un booléen, qui vaut True si l'utilisateur à déjà utilisé moodle, et False sinon
         """
-        s = "SELECT lastlogin FROM {entete}user WHERE id = %(userid)s".format(entete=self.entete)
+        s = f"SELECT lastlogin FROM {self.entete}user WHERE id = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         return self.mark.fetchone()[0] != 0
 
@@ -776,42 +763,42 @@ class Database:
         """
 
         #Dès qu'on trouve une référence on renvoie True
-        s = "SELECT count(*) FROM {entete}forum_posts WHERE userid = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}forum_posts WHERE userid = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
 
-        s = "SELECT count(*) FROM {entete}grade_grades_history WHERE userid = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}grade_grades_history WHERE userid = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
 
-        s = "SELECT count(*) FROM {entete}feedback_completed WHERE userid = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}feedback_completed WHERE userid = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
 
-        s = "SELECT count(*) FROM {entete}chat_messages WHERE userid = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}chat_messages WHERE userid = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
 
-        s = "SELECT count(*) FROM {entete}course_modules_completion WHERE userid = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}course_modules_completion WHERE userid = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
 
-        s = "SELECT count(*) FROM {entete}quiz_attempts WHERE userid = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}quiz_attempts WHERE userid = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
 
-        s = "SELECT count(*) FROM {entete}survey_answers WHERE userid = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}survey_answers WHERE userid = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
 
-        s = "SELECT count(*) FROM {entete}choice_answers WHERE userid = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}choice_answers WHERE userid = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
@@ -827,7 +814,7 @@ class Database:
         :param user_id: L'id de l'utilisateur qu'on veut vérifier
         :returns: Un booléen à vrai si l'utilisateur à des références, faux sinon
         """
-        s = "SELECT count(*) FROM {entete}grade_grades_history WHERE loggeduser = %(userid)s".format(entete=self.entete)
+        s = f"SELECT count(*) FROM {self.entete}grade_grades_history WHERE loggeduser = %(userid)s"
         self.mark.execute(s, params={'userid': user_id})
         if self.mark.fetchone()[0] > 0:
             return True
@@ -920,10 +907,7 @@ class Database:
         :param id_number:
         :return:
         """
-        s = "SELECT id" \
-            " FROM {entete}course" \
-            " WHERE idnumber = %(id)s" \
-            .format(entete=self.entete)
+        s = f"SELECT id FROM {self.entete}course WHERE idnumber = %(id)s"
         self.mark.execute(s, params={'id': id_number})
         ligne = self.safe_fetchone()
         if ligne is None:
@@ -936,11 +920,7 @@ class Database:
         :param id_number:
         :return:
         """
-        s = "SELECT id" \
-            " FROM {entete}course_categories" \
-            " WHERE idnumber" \
-            " LIKE %(id)s" \
-            .format(entete=self.entete)
+        s = f"SELECT id FROM {self.entete}course_categories WHERE idnumber LIKE %(id)s"
         self.mark.execute(s, params={'id': '%' + str(id_number) + '%'})
         ligne = self.safe_fetchone()
         if ligne is None:
@@ -953,10 +933,7 @@ class Database:
         :param theme:
         :return:
         """
-        s = "SELECT id" \
-            " FROM {entete}course_categories" \
-            " WHERE theme = %(theme)s" \
-            .format(entete=self.entete)
+        s = f"SELECT id FROM {self.entete}course_categories WHERE theme = %(theme)s"
         self.mark.execute(s, params={'theme': theme})
         ligne = self.safe_fetchone()
         if ligne is None:
@@ -969,10 +946,7 @@ class Database:
         :param course:
         :return:
         """
-        s = "SELECT id" \
-            " FROM {entete}course_modules" \
-            " WHERE course = %(course)s" \
-            .format(entete=self.entete)
+        s = f"SELECT id FROM {self.entete}course_modules WHERE course = %(course)s"
         self.mark.execute(s, params={'course': course})
         ligne = self.safe_fetchone()
         if ligne is None:
@@ -986,10 +960,7 @@ class Database:
         :param course:
         :return:
         """
-        s = "SELECT id" \
-            " FROM {entete}forum" \
-            " WHERE course = %(course)s" \
-            .format(entete=self.entete)
+        s = f"SELECT id FROM {self.entete}forum WHERE course = %(course)s"
         self.mark.execute(s, params={'course': course})
         ligne = self.safe_fetchone()
         if ligne is None:

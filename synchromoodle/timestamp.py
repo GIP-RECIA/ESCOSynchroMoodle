@@ -10,9 +10,7 @@ from typing import Dict
 
 from synchromoodle.config import TimestampStoreConfig
 
-date_format = '%Y%m%d%H%M%S'
 log = getLogger('timestamp')
-
 
 def fromisoformat(iso: str) -> datetime.datetime:
     """

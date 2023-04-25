@@ -15,7 +15,7 @@ class WebService:
 
     def __init__(self, config: WebServiceConfig):
         self.config = config
-        self.url = "%s/webservice/rest/server.php" % config.moodle_host
+        self.url = f"{config.moodle_host}/webservice/rest/server.php"
 
 
     def delete_users(self, userids: List[int]):
@@ -36,7 +36,8 @@ class WebService:
                                'moodlewsrestformat': "json",
                                'wsfunction': "core_user_delete_users",
                                **users_to_delete
-                           })
+                           },
+                           timeout=10)
         json_data = json.loads(res.text)
 
         if json_data is not None and 'exception' in json_data:
@@ -65,14 +66,14 @@ class WebService:
                                'moodlewsrestformat': "json",
                                'wsfunction': "core_course_delete_courses",
                                **params
-                           })
+                           },
+                           timeout=10)
 
         json_data = json.loads(res.text)
 
         if json_data is not None and 'exception' in json_data:
             raise Exception(json_data['message'])
-        else:
-            return(json_data)
+        return json_data
 
 
     def get_courses_user_enrolled(self, userid: int, returnusercount=0):
@@ -99,14 +100,14 @@ class WebService:
                                'moodlewsrestformat': "json",
                                'wsfunction': "core_enrol_get_users_courses",
                                **params
-                           })
+                           },
+                           timeout=10)
 
         json_data = json.loads(res.text)
 
         if json_data is not None and 'exception' in json_data:
             raise Exception(json_data['message'])
-        else:
-            return(json_data)
+        return json_data
 
 
     def unenrol_user_from_course(self, userid: int, courseid: int):
@@ -129,14 +130,14 @@ class WebService:
                                'moodlewsrestformat': "json",
                                'wsfunction': "enrol_manual_unenrol_users",
                                **params
-                           })
+                           },
+                           timeout=10)
 
         json_data = json.loads(res.text)
 
         if json_data is not None and 'exception' in json_data:
             raise Exception(json_data['message'])
-        else:
-            return(json_data)
+        return json_data
 
 
     def enrol_user_to_course(self, roleid: int, userid: int, courseid: int):
@@ -161,14 +162,14 @@ class WebService:
                                'moodlewsrestformat': "json",
                                'wsfunction': "enrol_manual_enrol_users",
                                **enrolments
-                           })
+                           },
+                           timeout=10)
 
         json_data = json.loads(res.text)
 
         if json_data is not None and 'exception' in json_data:
             raise Exception(json_data['message'])
-        else:
-            return(json_data)
+        return json_data
 
 
     def create_course(self, fullname: str, shortname: str, categoryid: int):
@@ -193,14 +194,14 @@ class WebService:
                                'moodlewsrestformat': "json",
                                'wsfunction': "core_course_create_courses",
                                **params
-                           })
+                           },
+                           timeout=10)
 
         json_data = json.loads(res.text)
 
         if json_data is not None and 'exception' in json_data:
             raise Exception(json_data['message'])
-        else:
-            return(json_data)
+        return json_data
 
 
     def delete_cohorts(self, cohortids: list[int]):
@@ -225,14 +226,13 @@ class WebService:
                                    'moodlewsrestformat': "json",
                                    'wsfunction': "core_cohort_delete_cohorts",
                                    **cohorts_to_delete
-                               })
+                               },
+                               timeout=10)
 
             json_data = json.loads(res.text)
 
             if json_data is not None and 'exception' in json_data:
                 raise Exception(json_data['message'])
-            else:
-                return(json_data)
+            return json_data
 
-        else:
-            raise Exception("Mauvais type d'identifiant(s)")
+        raise Exception("Mauvais type d'identifiant(s)")

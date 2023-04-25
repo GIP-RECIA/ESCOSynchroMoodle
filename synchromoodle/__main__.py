@@ -4,6 +4,8 @@
 Entrypoint
 """
 
+import sys
+
 from logging import getLogger, basicConfig
 from logging.config import dictConfig
 
@@ -43,7 +45,7 @@ def main():
         config.validate()
     except ValueError as e:
         log.error(e)
-        exit(1)
+        sys.exit(1)
 
     log.info("Démarrage")
 
@@ -66,7 +68,7 @@ def main():
 
     log.info("Terminé")
     if errors:
-        exit(errors)
+        sys.exit(errors)
 
 
 if __name__ == "__main__":

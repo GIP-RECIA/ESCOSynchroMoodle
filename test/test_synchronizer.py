@@ -901,7 +901,7 @@ class TestEtablissement:
 
         #Purge des cohortes Collèges
         for departement in config.constantes.departements:
-            synchronizer.purge_cohort_dane_clg_dep(cohort_dane_clg[etab_departement], departement, dane_context)
+            synchronizer.purge_cohort_dane_clg_dep(cohort_dane_clg[etab_departement], departement)
 
         #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap ont bien aussi été supprimés des cohortes dans moodle
         #Type élèves : récupération des membres de la cohorte des élèves des collèges du 18
@@ -1038,7 +1038,7 @@ class TestEtablissement:
         cohorts_dir_lyc_bd =[result[0] for result in db.mark.fetchall()]
 
         #Purge des cohortes lycées
-        synchronizer.purge_cohort_dane_lycee_en(cohort_dane_lycee, etab_context)
+        synchronizer.purge_cohort_dane_lycee_en(cohort_dane_lycee)
 
         #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap ont bien aussi été supprimés des cohortes dans moodle
         #Type élèves : récupération des membres de la cohorte des élèves des lycées

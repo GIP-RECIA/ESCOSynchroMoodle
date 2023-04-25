@@ -4,8 +4,7 @@ Configuration
 """
 from logging import getLogger
 from typing import List, Dict, Union
-
-import ruamel.yaml as yaml
+from ruamel import yaml
 
 log = getLogger('config')
 
@@ -421,7 +420,7 @@ class ActionConfig(_BaseConfig):
         super().update(**entries)
 
     def __str__(self):
-        return self.type + " (id=%s)" % self.id if self.id else ""
+        return self.type + f" (id={self.id})" if self.id else ""
 
 
 class Config(_BaseConfig):
@@ -492,12 +491,12 @@ class ConfigLoader:
         """
         for config_item in config_fp:
             try:
-                with open(config_item) as fp:
+                with open(config_item) as config_file:
                     yaml_config = yaml.YAML(typ='unsafe', pure=True)
-                    data = yaml_config.load(fp)
+                    data = yaml_config.load(config_file)
                     config.update(**data)
-            except FileNotFoundError as e:
-                message = "Le fichier de configuration n'a pas été chargé: " + str(e)
+            except FileNotFoundError as exception:
+                message = "Le fichier de configuration n'a pas été chargé: " + str(exception)
                 if silent:
                     log.debug(message)
                 else:

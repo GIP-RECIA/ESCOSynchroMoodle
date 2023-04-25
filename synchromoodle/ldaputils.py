@@ -11,6 +11,12 @@ from ldap3 import Server, Connection, LEVEL
 from synchromoodle.config import LdapConfig
 
 class ClasseLdap:
+    """
+    Représente une classe d'un enseignant ou élève récupérée depuis le ldap
+    Contient :
+        - L'établissement dans lequel est la classe
+        - Le nom de la classe en elle-même
+    """
     def __init__(self, etab_dn: str, classe: str):
         self.etab_dn = etab_dn
         self.classe = classe
@@ -63,10 +69,10 @@ class StructureLdap:
         self.jointure = data.ENTStructureJointure.value
 
     def __str__(self):
-        return "uai=%s, siren=%s, nom=%s" % (self.uai, self.siren, self.nom)
+        return f"uai={self.uai}, siren={self.siren}, nom={self.nom}"
 
     def __repr__(self):
-        return "[%s] %s" % (self.__class__.__name__, str(self))
+        return f"[{self.__class__.__name__}] {str(self)}"
 
 
 class PersonneLdap:
@@ -91,10 +97,10 @@ class PersonneLdap:
             self.is_member_of = data.isMemberOf.values
 
     def __str__(self):
-        return "uid=%s, given_name=%s, sn=%s" % (self.uid, self.given_name, self.sn)
+        return f"uid={self.uid}, given_name={self.given_name}, sn={self.sn}"
 
     def __repr__(self):
-        return "[%s] %s" % (self.__class__.__name__, str(self))
+        return f"[{self.__class__.__name__}] {str(self)}"
 
 
 class EleveLdap(PersonneLdap):
@@ -270,7 +276,7 @@ class Ldap:
         :param uai:
         :return:
         """
-        ldap_filter = '(&(ENTEleveClasses=*$%s)(ESCOUAI=%s))' % (ldap_escape(classe), ldap_escape(uai))
+        ldap_filter = f'(&(ENTEleveClasses=*${ldap_escape(classe)})(ESCOUAI={ldap_escape(uai)}))'
         self.connection.search(self.config.personnesDN, ldap_filter,
                                search_scope=LEVEL, attributes=
                                ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',
@@ -284,7 +290,7 @@ class Ldap:
         :param uai: L'établissement dans lequel on effectue la recherche
         :return: La liste des élèves trouvés
         """
-        ldap_filter = '(&(objectClass=ENTEleve)(ENTEleveNivFormation=%s)(ESCOUAI=%s))' % (ldap_escape(niveau), ldap_escape(uai))
+        ldap_filter = f'(&(objectClass=ENTEleve)(ENTEleveNivFormation={ldap_escape(niveau)})(ESCOUAI={ldap_escape(uai)}))'
         self.connection.search(self.config.personnesDN, ldap_filter,
                                search_scope=LEVEL, attributes=
                                ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',
@@ -308,8 +314,8 @@ class Ldap:
                                 'ENTAuxEnsClasses'])
         return [EnseignantLdap(entry) for entry in self.connection.entries]
 
-    def search_enseignant_profil_uid(self, since_timestamp: datetime.datetime = None, profil="National_ENS", uai=None, tous=False) \
-            -> List[str]:
+    def search_enseignant_profil_uid(self, since_timestamp: datetime.datetime = None, profil="National_ENS",\
+            uai=None, tous=False) -> List[str]:
         """
         Recherche d'uid d'enseignants un profil spécifique
         :param since_timestamp: datetime.datetime
@@ -360,7 +366,7 @@ class Ldap:
         :param uai: L'établissement dans lequel on effectue la recherche
         :return: La liste des enseignants trouvés
         """
-        ldap_filter = '(&(objectClass=ENTAuxEnseignant)(ENTAuxEnsClasses=*$%s)(ESCOUAI=%s))' % (ldap_escape(classe), ldap_escape(uai))
+        ldap_filter = f'(&(objectClass=ENTAuxEnseignant)(ENTAuxEnsClasses=*${ldap_escape(classe)})(ESCOUAI={ldap_escape(uai)}))'
         self.connection.search(self.config.personnesDN,
                                ldap_filter, LEVEL, attributes=
                                ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',
@@ -374,7 +380,7 @@ class Ldap:
         :param uai: L'établissement recherché
         :return: La liste des enseignants trouvés
         """
-        ldap_filter = '(&(objectClass=ENTAuxEnseignant)(ESCOUAI=%s))' % ldap_escape(uai)
+        ldap_filter = f'(&(objectClass=ENTAuxEnseignant)(ESCOUAI={ldap_escape(uai)}))'
         self.connection.search(self.config.personnesDN,
                                ldap_filter, LEVEL, attributes=
                                ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',
@@ -427,10 +433,9 @@ def _get_filtre_eleves(since_timestamp: datetime.datetime = None, uai: str = Non
     """
     filtre = "(&(objectClass=ENTEleve)"
     if uai:
-        filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))
+        filtre += f"(ESCOUAI={ldap_escape(uai)})"
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})" \
-            .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
+        filtre += f"(modifyTimeStamp>={since_timestamp.strftime('%Y%m%d%H%M%SZ')})"
     filtre = filtre + ")"
     return filtre
 
@@ -456,10 +461,9 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
     filtre += "(!(uid=ADM00000))"
 
     if uai:
-        filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))
+        filtre += f"(ESCOUAI={ldap_escape(uai)})"
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})" \
-            .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
+        filtre += f"(modifyTimeStamp>={since_timestamp.strftime('%Y%m%d%H%M%SZ')})"
 
     filtre = filtre + ")"
 
@@ -485,12 +489,11 @@ def get_filtre_enseignants_profil(since_timestamp: datetime.datetime = None, pro
 
     filtre += "(!(uid=ADM00000))"
 
-    filtre+="(ENTPersonProfils={profil})".format(profil=profil)
+    filtre+=f"(ENTPersonProfils={profil})"
     if uai:
-        filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))
+        filtre += f"(ESCOUAI={ldap_escape(uai)})"
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})" \
-            .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
+        filtre += f"(modifyTimeStamp>={since_timestamp.strftime('%Y%m%d%H%M%SZ')})"
 
     filtre = filtre + ")"
 
@@ -511,10 +514,9 @@ def get_filtre_personnel_direction(since_timestamp: datetime.datetime = None, ua
         "(ENTPersonProfils=National_DIR)"
 
     if uai:
-        filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))
+        filtre += f"(ESCOUAI={ldap_escape(uai)})"
     if since_timestamp:
-        filtre += "(modifyTimeStamp>={since_timestamp})" \
-            .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
+        filtre += f"(modifyTimeStamp>={since_timestamp.strftime('%Y%m%d%H%M%SZ')})"
 
     filtre = filtre + ")"
 
@@ -538,7 +540,7 @@ def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: 
             if not isinstance(v, Iterable) or isinstance(v, str):
                 v = [v]
             for item in v:
-                attribute_filtre = "(%s=%s)" % (ldap_escape(k), ldap_escape(item))
+                attribute_filtre = f"({ldap_escape(k)}={ldap_escape(item)})"
                 filtre = filtre + attribute_filtre
         filtre = filtre + ")"
     if since_timestamp:
@@ -554,7 +556,7 @@ def _get_filtre_etablissement(uai=None):
              "(!(ENTStructureSiren=0000000000000A))"
 
     if uai:
-        filtre += "(ENTStructureUAI={uai})".format(uai=ldap_escape(uai))
+        filtre += f"(ENTStructureUAI={ldap_escape(uai)})"
 
     filtre += ")"
     return filtre
@@ -566,7 +568,7 @@ def _get_filtre_dane(uai=None):
              "(!(ENTStructureSiren=0000000000000A))"
 
     if uai:
-        filtre += "(ENTStructureUAI={uai})".format(uai=ldap_escape(uai))
+        filtre += f"(ENTStructureUAI={ldap_escape(uai)})"
 
     filtre += ")"
     return filtre

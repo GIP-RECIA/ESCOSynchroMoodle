@@ -36,31 +36,31 @@ def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         log.info('Traitement des établissements')
 
         #Avant les autres établissements on s'occupe de celui de la dane
-        dane_log = log.getChild('dane.%s' % config.constantes.uai_dane)
+        dane_log = log.getChild(f'dane.{config.constantes.uai_dane}')
         synchronizer.handle_dane(config.constantes.uai_dane, log=dane_log)
         db.connection.commit()
 
         for uai in action.etablissements.listeEtab:
-            etablissement_log = log.getChild('etablissement.%s' % uai)
+            etablissement_log = log.getChild(f'etablissement.{uai}')
 
-            etablissement_log.info('Traitement de l\'établissement (uai=%s)' % uai)
+            etablissement_log.info(f'Traitement de l\'établissement (uai={uai})')
             etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log)
 
-            etablissement_log.info('Traitement des élèves pour l\'établissement (uai=%s)' % uai)
+            etablissement_log.info(f'Traitement des élèves pour l\'établissement (uai={uai})')
             since_timestamp = timestamp_store.get_timestamp(uai)
 
             etablissement_log.debug("Construction du dictionnaire d'association classe -> niveau formation")
             synchronizer.construct_classe_to_niv_formation(etablissement_context, ldap.search_eleve(None, uai))
 
             for eleve in ldap.search_eleve(since_timestamp, uai):
-                utilisateur_log = etablissement_log.getChild("eleve.%s" % eleve.uid)
-                utilisateur_log.info("Traitement de l'élève (uid=%s)" % eleve.uid)
+                utilisateur_log = etablissement_log.getChild(f"eleve.{eleve.uid}")
+                utilisateur_log.info(f"Traitement de l'élève (uid={eleve.uid})")
                 synchronizer.handle_eleve(etablissement_context, eleve, log=utilisateur_log)
 
-            etablissement_log.info("Traitement du personnel enseignant pour l'établissement (uai=%s)" % uai)
+            etablissement_log.info(f"Traitement du personnel enseignant pour l'établissement (uai={uai})")
             for enseignant in ldap.search_enseignant(since_timestamp=since_timestamp, uai=uai, tous=True):
-                utilisateur_log = etablissement_log.getChild("enseignant.%s" % enseignant.uid)
-                utilisateur_log.info("Traitement de l'enseignant (uid=%s)" % enseignant.uid)
+                utilisateur_log = etablissement_log.getChild(f"enseignant.{enseignant.uid}")
+                utilisateur_log.info(f"Traitement de l'enseignant (uid={enseignant.uid})")
                 synchronizer.handle_enseignant(etablissement_context, enseignant, log=utilisateur_log)
 
             db.connection.commit()
@@ -104,8 +104,8 @@ def interetab(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         since_timestamp = timestamp_store.get_timestamp(action.inter_etablissements.cle_timestamp)
 
         for personne_ldap in ldap.search_personne(since_timestamp=since_timestamp, **personne_filter):
-            utilisateur_log = log.getChild("utilisateur.%s" % personne_ldap.uid)
-            utilisateur_log.info("Traitement de l'utilisateur (uid=%s)" % personne_ldap.uid)
+            utilisateur_log = log.getChild(f"utilisateur.{personne_ldap.uid}")
+            utilisateur_log.info(f"Traitement de l'utilisateur (uid={personne_ldap.uid})")
             synchronizer.handle_user_interetab(personne_ldap, log=utilisateur_log)
 
         log.info('Mise à jour des cohortes de la categorie inter-établissements')
@@ -154,8 +154,8 @@ def inspecteurs(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         # Traitement des inspecteurs
         for personne_ldap in ldap.search_personne(timestamp_store.get_timestamp(action.inspecteurs.cle_timestamp),
                                                   **personne_filter):
-            utilisateur_log = log.getChild("utilisateur.%s" % personne_ldap.uid)
-            utilisateur_log.info("Traitement de l'inspecteur (uid=%s)" % personne_ldap.uid)
+            utilisateur_log = log.getChild(f"utilisateur.{personne_ldap.uid}")
+            utilisateur_log.info(f"Traitement de l'inspecteur (uid={personne_ldap.uid})")
             synchronizer.handle_inspecteur(personne_ldap)
 
         db.connection.commit()
@@ -216,36 +216,37 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         if config.delete.purge_cohorts:
 
             for uai in action.etablissements.listeEtab:
-                etablissement_log = log.getChild('etablissement.%s' % uai)
+                etablissement_log = log.getChild(f'etablissement.{uai}')
 
-                etablissement_log.info("Nettoyage de l'établissement (uai=%s)" % uai)
+                etablissement_log.info(f"Nettoyage de l'établissement (uai={uai})")
                 etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
                 departement = etablissement_context.departement
 
                 eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_eleves_classes(etablissement_context, r'(Élèves de la Classe )(.*)$',
-                                                     'Élèves de la Classe %')
+                    get_users_by_cohorts_comparators_eleves_classes(etablissement_context,
+                     r'(Élèves de la Classe )(.*)$', 'Élèves de la Classe %')
 
                 eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_eleves_niveau(etablissement_context, r'(Élèves du Niveau de formation )(.*)$',
-                                                     'Élèves du Niveau de formation %')
+                    get_users_by_cohorts_comparators_eleves_niveau(etablissement_context,
+                     r'(Élèves du Niveau de formation )(.*)$', 'Élèves du Niveau de formation %')
 
                 profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_profs_classes(etablissement_context, r'(Profs de la Classe )(.*)$',
-                                                     'Profs de la Classe %')
+                    get_users_by_cohorts_comparators_profs_classes(etablissement_context,
+                     r'(Profs de la Classe )(.*)$', 'Profs de la Classe %')
 
                 profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_profs_etab(etablissement_context, r"(Profs de l'établissement )(.*)$",
-                                                     "Profs de l'établissement %")
+                    get_users_by_cohorts_comparators_profs_etab(etablissement_context,
+                     r"(Profs de l'établissement )(.*)$", "Profs de l'établissement %")
 
                 profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_profs_niveau(etablissement_context, r"(Profs du niveau de formation )(.*)$",
-                                                     "Profs du niveau de formation %")
+                    get_users_by_cohorts_comparators_profs_niveau(etablissement_context,
+                     r"(Profs du niveau de formation )(.*)$", "Profs du niveau de formation %")
 
                 if etablissement_context.college and departement in config.constantes.departements:
                     cohorts_elv_dep_clg_ldap[departement].extend(ldap.search_eleve_uid(uai=uai))
-                    cohorts_ens_dep_clg_ldap[departement].extend(ldap.search_enseignant_profil_uid(profil="National_ENS",\
-                     uai=uai, tous=False))
+                    cohorts_ens_dep_clg_ldap[departement].extend(ldap.search_enseignant_profil_uid(
+                        profil="National_ENS", uai=uai, tous=False)
+                    )
                     cohorts_dir_dep_clg_ldap[departement].extend(ldap.search_personnel_direction_uid(uai=uai))
 
                 if etablissement_context.lycee and etablissement_context.etablissement_en:
@@ -282,9 +283,10 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             #--- Fin de la boucle for ---#
 
             #Traitement des cohortes de la dane
-            etablissement_log = log.getChild('dane.%s' % config.constantes.uai_dane)
+            etablissement_log = log.getChild(f'dane.{config.constantes.uai_dane}')
             #Récupération du contexte de la dane
-            etablissement_context = synchronizer.handle_dane(config.constantes.uai_dane, log=etablissement_log, readonly=True)
+            etablissement_context = synchronizer.handle_dane(config.constantes.uai_dane,
+             log=etablissement_log, readonly=True)
 
             #Récupération des cohortes dane lycée dans le ldap
             cohort_dane_lycee = {UserType.ELEVE:cohort_elv_lycee_en_ldap,
@@ -300,11 +302,11 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
 
             #Purge des cohortes Lycées
             etablissement_log.info("Purge des cohortes dane des lycées de l'éducation nationale")
-            synchronizer.purge_cohort_dane_lycee_en(cohort_dane_lycee, etablissement_context, log=etablissement_log)
+            synchronizer.purge_cohort_dane_lycee_en(cohort_dane_lycee, log=etablissement_log)
             #Purge des cohortes  Collèges
             for departement in config.constantes.departements:
                 etablissement_log.info("Purge des cohortes dane des collèges du %s", departement)
-                synchronizer.purge_cohort_dane_clg_dep(cohort_dane_clg[departement], departement, etablissement_context, log=etablissement_log)
+                synchronizer.purge_cohort_dane_clg_dep(cohort_dane_clg[departement], departement, log=etablissement_log)
 
             # On commit afin de libérer le lock
             db.connection.commit()
