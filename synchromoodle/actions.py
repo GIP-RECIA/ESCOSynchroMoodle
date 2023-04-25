@@ -286,12 +286,12 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             #Récupération du contexte de la dane
             etablissement_context = synchronizer.handle_dane(config.constantes.uai_dane, log=etablissement_log, readonly=True)
 
-            #Récupération des cohortes dane lycée dans la BD
+            #Récupération des cohortes dane lycée dans le ldap
             cohort_dane_lycee = {UserType.ELEVE:cohort_elv_lycee_en_ldap,
                                 UserType.ENSEIGNANT:cohort_ens_lycee_en_ldap,
                                 UserType.PERSONNEL_DE_DIRECTION:cohort_dir_lycee_en_ldap}
 
-            #Récupération des cohortes dane collège dans la BD
+            #Récupération des cohortes dane collège dans le ldap
             cohort_dane_clg = {}
             for departement in config.constantes.departements:
                 cohort_dane_clg[departement] = {UserType.ELEVE:cohorts_elv_dep_clg_ldap[departement],
