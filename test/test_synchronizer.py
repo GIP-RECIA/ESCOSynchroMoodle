@@ -611,7 +611,7 @@ class TestEtablissement:
         synchronizer.construct_classe_to_niv_formation(etab_context, eleves)
 
         #Synchronisation des enseignants de cet établissement
-        enseignants = ldap.search_enseignant(None, "0290009C")
+        enseignants = ldap.search_enseignant(None, "0290009C", tous=True)
         for enseignant in enseignants:
             synchronizer.handle_enseignant(etab_context, enseignant)
 

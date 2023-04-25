@@ -231,7 +231,7 @@ class Synchronizer:
                             self.get_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql, log)
         else:
             log.debug("La structure dane n'a pas été trouvée")
-            
+
         return context
 
 
@@ -529,7 +529,7 @@ class Synchronizer:
                                  enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
 
         # Inscription dans les cohortes associees aux classes et au niveau de formation si c'est un enseignant
-        if set(enseignant_ldap.profils).intersection(['National_ENS']):
+        if set(enseignant_ldap.profils).intersection(['National_ENS']) or len(enseignant_ldap.classes)>0:
             enseignant_cohorts = []
             enseignant_classes_for_etab = []
             #Récupération des classes de l'établissement traité actuellement
@@ -581,12 +581,6 @@ class Synchronizer:
                 for id_cohort_niv_formation in ids_niv_formation_cohorts:
                     self.__db.enroll_user_in_cohort(id_cohort_niv_formation, id_user, self.context.timestamp_now_sql)
 
-            log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
-            id_prof_etabs_cohort = self.get_or_create_profs_etab_cohort(etablissement_context, log)
-
-            id_user = self.__db.get_user_id(enseignant_ldap.uid)
-            self.__db.enroll_user_in_cohort(id_prof_etabs_cohort, id_user, self.context.timestamp_now_sql)
-
             # Mise a jour des dictionnaires concernant les cohortes
             for cohort_id in enseignant_cohorts:
                 # Si la cohorte est deja connue
@@ -595,6 +589,13 @@ class Synchronizer:
                 # Si la cohorte n'a pas encore ete rencontree
                 else:
                     etablissement_context.enseignants_by_cohortes[cohort_id] = [id_user]
+
+        if set(enseignant_ldap.objectClasses).intersection(["ENTAuxEnseignant"]):
+            log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
+            id_prof_etabs_cohort = self.get_or_create_profs_etab_cohort(etablissement_context, log)
+
+            id_user = self.__db.get_user_id(enseignant_ldap.uid)
+            self.__db.enroll_user_in_cohort(id_prof_etabs_cohort, id_user, self.context.timestamp_now_sql)
 
         # Inscription dans les cohortes de la dane
         # Enseignants

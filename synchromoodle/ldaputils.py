@@ -131,6 +131,9 @@ class EnseignantLdap(PersonneLdap):
         if 'ESCOUAI' in data:
             self.uais = data.ESCOUAI.values
 
+        if 'ObjectClass' in data:
+            self.objectClasses = data.ObjectClass.values
+
         if 'ENTAuxEnsClasses' in data:
             self.classes = extraire_classes_ldap(data.ENTAuxEnsClasses.values)
 
