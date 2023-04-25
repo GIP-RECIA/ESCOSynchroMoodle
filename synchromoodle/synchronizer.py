@@ -190,7 +190,7 @@ class Synchronizer:
 
             # Creation de la structure si elle n'existe pas encore
             id_dane_categorie = self.__db.get_id_course_category_by_theme(context.etablissement_theme)
-            if id_dane_categorie is None:
+            if id_dane_categorie is None and not readonly:
                 log.info("Création de la structure dane")
                 self.insert_moodle_structure(False, structure_ldap.nom,
                                                 etablissement_path, structure_ldap.nom,
@@ -202,23 +202,33 @@ class Synchronizer:
             #Récupération de l'id du contexte dane
             context.id_context_categorie = self.__db.get_id_context_categorie(id_dane_categorie)
 
-            # Récupération des identifiants de 3 cohortes pour les lycées de l'enseignement national
-            log.info("Création des cohortes dane pour les lycées de l'enseignement national")
-            for user_type in UserType:
-                self.ids_cohorts_dane_lycee_en[user_type] = \
-                    self.get_or_create_dane_lycee_en_cohort(context.id_context_categorie, user_type, self.context.timestamp_now_sql, log)
+            #Cas ou on est en pas en readonly = on peut créer les cohortes si besoin
+            if not readonly:
+                # Récupération des identifiants de 3 cohortes pour les lycées de l'enseignement national
+                log.info("Création des cohortes dane pour les lycées de l'enseignement national")
+                for user_type in UserType:
+                    self.ids_cohorts_dane_lycee_en[user_type] = \
+                        self.get_or_create_dane_lycee_en_cohort(context.id_context_categorie, user_type, self.context.timestamp_now_sql, log)
 
-            # Pour les différents type d'utilisateurs
-            log.info("Création des cohortes dane pour les collèges par département")
-            for user_type in UserType:
-                self.ids_cohorts_dane_dep_clg[user_type] = {}
-                # Récupération des identifiants des cohortes pour les collèges par départements
-                for departement in self.__config.constantes.departements:
-                    self.ids_cohorts_dane_dep_clg[user_type][departement] = \
-                        self.get_or_create_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql, log)
+                # Pour les différents type d'utilisateurs
+                log.info("Création des cohortes dane pour les collèges par département")
+                for user_type in UserType:
+                    self.ids_cohorts_dane_dep_clg[user_type] = {}
+                    # Récupération des identifiants des cohortes pour les collèges par départements
+                    for departement in self.__config.constantes.departements:
+                        self.ids_cohorts_dane_dep_clg[user_type][departement] = \
+                            self.get_or_create_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql, log)
 
-            # TODO lvillanne ici avant on avait l'ancien système de purge qui n'est plus valable, donc a réimaginer
-
+            #Cas ou on est en readonly : on ne fait que récupérer les ids des cohortes
+            else:
+                for user_type in UserType:
+                    self.ids_cohorts_dane_lycee_en[user_type] = \
+                        self.get_dane_lycee_en_cohort(context.id_context_categorie, user_type, self.context.timestamp_now_sql, log)
+                for user_type in UserType:
+                    self.ids_cohorts_dane_dep_clg[user_type] = {}
+                    for departement in self.__config.constantes.departements:
+                        self.ids_cohorts_dane_dep_clg[user_type][departement] = \
+                            self.get_dane_dep_clg_cohort(context.id_context_categorie, user_type, departement, self.context.timestamp_now_sql, log)
         else:
             log.debug("La structure dane n'a pas été trouvée")
 
@@ -416,7 +426,7 @@ class Synchronizer:
     def handle_enseignant(self, etablissement_context: EtablissementContext, enseignant_ldap: EnseignantLdap,
                           log=getLogger()):
         """
-        Met à jour un enseignant au sein d'un établissement
+        Met à jour un enseignant ou un personnel de direction au sein d'un établissement
         :param etablissement_context:
         :param enseignant_ldap:
         :param log:
@@ -516,63 +526,73 @@ class Synchronizer:
                         log.info("Suppression d'un admin local %s %s %s",
                                  enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
 
-        # Inscription dans les cohortes associees aux classes et au niveau de formation
-        enseignant_cohorts = []
-        enseignant_classes_for_etab = []
-        #Récupération des classes de l'établissement traité actuellement
-        for classe in enseignant_ldap.classes:
-            if classe.etab_dn == etablissement_context.structure_ldap.dn:
-                enseignant_classes_for_etab.append(classe.classe)
-        if enseignant_classes_for_etab:
-            log.info("Inscription de l'enseignant %s dans les cohortes de classes %s",
-                     enseignant_ldap, enseignant_classes_for_etab)
-            name_pattern = "Profs de la Classe %s"
-            desc_pattern = "Profs de la Classe %s"
-            #Création des cohortes de classes
-            ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
-                                                                     enseignant_classes_for_etab,
-                                                                     self.context.timestamp_now_sql,
-                                                                     name_pattern=name_pattern,
-                                                                     desc_pattern=desc_pattern,
-                                                                     log=log)
-            #Inscription dans les cohortes de classe
-            for ids_classe_cohorts in ids_classes_cohorts:
-                self.__db.enroll_user_in_cohort(ids_classe_cohorts, id_user, self.context.timestamp_now_sql)
+        # Inscription dans les cohortes associees aux classes et au niveau de formation si c'est un enseignant
+        if set(enseignant_ldap.profils).intersection(['National_ENS']):
+            enseignant_cohorts = []
+            enseignant_classes_for_etab = []
+            #Récupération des classes de l'établissement traité actuellement
+            for classe in enseignant_ldap.classes:
+                if classe.etab_dn == etablissement_context.structure_ldap.dn:
+                    enseignant_classes_for_etab.append(classe.classe)
+            if enseignant_classes_for_etab:
+                log.info("Inscription de l'enseignant %s dans les cohortes de classes %s",
+                         enseignant_ldap, enseignant_classes_for_etab)
+                name_pattern = "Profs de la Classe %s"
+                desc_pattern = "Profs de la Classe %s"
+                #Création des cohortes de classes
+                ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
+                                                                         enseignant_classes_for_etab,
+                                                                         self.context.timestamp_now_sql,
+                                                                         name_pattern=name_pattern,
+                                                                         desc_pattern=desc_pattern,
+                                                                         log=log)
+                #Inscription dans les cohortes de classe
+                for ids_classe_cohorts in ids_classes_cohorts:
+                    self.__db.enroll_user_in_cohort(ids_classe_cohorts, id_user, self.context.timestamp_now_sql)
 
-            enseignant_cohorts.extend(ids_classes_cohorts)
+                enseignant_cohorts.extend(ids_classes_cohorts)
 
-            #Inscription dans les cohortes de niveau de formation
-            enseignant_niv_formation = set()
-            for classe in enseignant_classes_for_etab:
-                #Il est possible que l'enseignant enseigne dans une classe mais qui n'est pas dans cet établissement
-                #Il sera alors inscrit dans la cohorte du niveau de formation correspondant à la classe lorsqu'on le
-                #traitera avec l'autre établissement en question
-                if classe in etablissement_context.classe_to_niv_formation.keys():
-                    enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
+                #Inscription dans les cohortes de niveau de formation
+                enseignant_niv_formation = set()
+                for classe in enseignant_classes_for_etab:
+                    #Il est possible que l'enseignant enseigne dans une classe mais qui n'est pas dans cet établissement
+                    #Il sera alors inscrit dans la cohorte du niveau de formation correspondant à la classe lorsqu'on le
+                    #traitera avec l'autre établissement en question
+                    if classe in etablissement_context.classe_to_niv_formation.keys():
+                        enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
+                    else:
+                        log.error("Problème avec l'enseignant %s pour l'inscrire dans les cohortes de niveau de formation", enseignant_ldap)
+
+                log.info("Inscription de l'enseignant %s dans les cohortes de niveau de formation %s",
+                         enseignant_ldap, enseignant_niv_formation)
+
+                name_pattern = "Profs du niveau de formation %s"
+                desc_pattern = "Profs du niveau de formation %s"
+                #Création des cohortes de niveau de formation
+                ids_niv_formation_cohorts = self.get_or_create_niv_formation_cohorts(etablissement_context.id_context_categorie,
+                                                                                     enseignant_niv_formation,
+                                                                                     self.context.timestamp_now_sql,
+                                                                                     name_pattern=name_pattern,
+                                                                                     desc_pattern=desc_pattern,
+                                                                                     log=log)
+                #Inscription dans les cohortes de niveau de formation
+                for id_cohort_niv_formation in ids_niv_formation_cohorts:
+                    self.__db.enroll_user_in_cohort(id_cohort_niv_formation, id_user, self.context.timestamp_now_sql)
+
+            log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
+            id_prof_etabs_cohort = self.get_or_create_profs_etab_cohort(etablissement_context, log)
+
+            id_user = self.__db.get_user_id(enseignant_ldap.uid)
+            self.__db.enroll_user_in_cohort(id_prof_etabs_cohort, id_user, self.context.timestamp_now_sql)
+
+            # Mise a jour des dictionnaires concernant les cohortes
+            for cohort_id in enseignant_cohorts:
+                # Si la cohorte est deja connue
+                if cohort_id in etablissement_context.enseignants_by_cohortes:
+                    etablissement_context.enseignants_by_cohortes[cohort_id].append(id_user)
+                # Si la cohorte n'a pas encore ete rencontree
                 else:
-                    log.error("Problème avec l'enseignant %s pour l'inscrire dans les cohortes de niveau de formation", enseignant_ldap)
-
-            log.info("Inscription de l'enseignant %s dans les cohortes de niveau de formation %s",
-                     enseignant_ldap, enseignant_niv_formation)
-
-            name_pattern = "Profs du niveau de formation %s"
-            desc_pattern = "Profs du niveau de formation %s"
-            #Création des cohortes de niveau de formation
-            ids_niv_formation_cohorts = self.get_or_create_niv_formation_cohorts(etablissement_context.id_context_categorie,
-                                                                                 enseignant_niv_formation,
-                                                                                 self.context.timestamp_now_sql,
-                                                                                 name_pattern=name_pattern,
-                                                                                 desc_pattern=desc_pattern,
-                                                                                 log=log)
-            #Inscription dans les cohortes de niveau de formation
-            for id_cohort_niv_formation in ids_niv_formation_cohorts:
-                self.__db.enroll_user_in_cohort(id_cohort_niv_formation, id_user, self.context.timestamp_now_sql)
-
-        log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
-        id_prof_etabs_cohort = self.get_or_create_profs_etab_cohort(etablissement_context, log)
-
-        id_user = self.__db.get_user_id(enseignant_ldap.uid)
-        self.__db.enroll_user_in_cohort(id_prof_etabs_cohort, id_user, self.context.timestamp_now_sql)
+                    etablissement_context.enseignants_by_cohortes[cohort_id] = [id_user]
 
         # Inscription dans les cohortes de la dane
         # Enseignants
@@ -595,15 +615,6 @@ class Synchronizer:
                 log.info("Inscription du personnel de direction %s dans la cohorte lycée de la dane", enseignant_ldap)
                 self.__db.enroll_user_in_cohort(self.ids_cohorts_dane_lycee_en[UserType.PERSONNEL_DE_DIRECTION], id_user, self.context.timestamp_now_sql)
 
-        # Mise a jour des dictionnaires concernant les cohortes
-        for cohort_id in enseignant_cohorts:
-            # Si la cohorte est deja connue
-            if cohort_id in etablissement_context.enseignants_by_cohortes:
-                etablissement_context.enseignants_by_cohortes[cohort_id].append(id_user)
-            # Si la cohorte n'a pas encore ete rencontree
-            else:
-                etablissement_context.enseignants_by_cohortes[cohort_id] = [id_user]
-
         # Mise a jour du Domaine
         user_domain = self.__config.constantes.default_domain
         if len(enseignant_ldap.domaines) == 1:
@@ -613,6 +624,7 @@ class Synchronizer:
                 user_domain = self.context.map_etab_domaine[enseignant_ldap.uai_courant][0]
         log.debug("Insertion du Domaine")
         self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
+
 
     def handle_user_interetab(self, personne_ldap: PersonneLdap, log=getLogger()):
         """
@@ -769,6 +781,38 @@ class Synchronizer:
             return self.__db.get_id_cohort(id_context, name)
         return id_cohort
 
+    def get_cohort(self, id_context, name, id_number, description, time_created, log=getLogger()):
+        """
+        Fonction permettant de récupérer l'id d'une cohorte pour un contexte donne.
+        :param id_context:
+        :param name:
+        :param id_number:
+        :param description:
+        :param time_created:
+        :return:
+        """
+        return self.__db.get_id_cohort(id_context, name)
+
+    def get_dane_lycee_en_cohort(self, id_context_dane, user_type: UserType, timestamp_now_sql, log=getLogger()):
+        """
+        Charge une cohorte dane lycee_en soit pour les élèves, les enseignant ou le personnel de direction
+        :param id_context_dane:
+        :param user_type:
+        :param timestamp_now_sql:
+        :param log:
+        :return:
+        """
+        all_cohort_name = {
+            UserType.ELEVE: 'Élèves des lycées de l\'éducation nationale',
+            UserType.ENSEIGNANT: 'Enseignants des lycées de l\'éducation nationale',
+            UserType.PERSONNEL_DE_DIRECTION: 'Personnel de direction des lycées de l\'éducation nationale'
+        }
+        cohort_name = all_cohort_name[user_type]
+        cohort_description = cohort_name
+        id_cohort = self.get_cohort(id_context_dane, cohort_name, cohort_name, cohort_description,
+                                              timestamp_now_sql, log)
+        return id_cohort
+
     def get_or_create_dane_lycee_en_cohort(self, id_context_dane, user_type: UserType, timestamp_now_sql, log=getLogger()):
         """
         Charge ou créer une cohorte dane lycee_en soit pour les élèves, les enseignant ou le personnel de direction
@@ -807,6 +851,27 @@ class Synchronizer:
         cohort_name = all_cohort_name[user_type].format(departement)
         cohort_description = cohort_name
         id_cohort = self.get_or_create_cohort(id_context_dane, cohort_name, cohort_name, cohort_description,
+                                              timestamp_now_sql, log)
+        return id_cohort
+
+    def get_dane_dep_clg_cohort(self, id_context_dane, user_type: UserType, departement, timestamp_now_sql, log=getLogger()):
+        """
+        Charge ou créer une cohorte dane dep_clg soit pour les élèves, les enseignant ou le personnel de direction
+        :param id_context_dane:
+        :param user_type:
+        :param departement:
+        :param timestamp_now_sql:
+        :param log:
+        :return:
+        """
+        all_cohort_name = {
+            UserType.ELEVE: 'Élèves des collèges du {}',
+            UserType.ENSEIGNANT: 'Enseignants des collèges du {}',
+            UserType.PERSONNEL_DE_DIRECTION: 'Personnel de direction des collèges du {}'
+        }
+        cohort_name = all_cohort_name[user_type].format(departement)
+        cohort_description = cohort_name
+        id_cohort = self.get_cohort(id_context_dane, cohort_name, cohort_name, cohort_description,
                                               timestamp_now_sql, log)
         return id_cohort
 
@@ -1388,25 +1453,58 @@ class Synchronizer:
         # On retourne un dictionnaire des utilisateurs désenrolé par cohortes
         return disenrolled_users
 
-    def purge_cohort_dane_elv_lycee_en(self, elv_lycee_en_ldap: list) -> list:
+    def purge_cohort_dane_lycee_en(self, lycee_ldap: list, etablissement_context: EtablissementContext, log=getLogger()) -> dict[str,list[str]]:
+        """
+        Purge les cohortes dane des différents types d'utilisateurs dans les lycées
+        """
+        # Liste des users désenrollés
+        disenrolled_users = {}
 
-        #Si on a des établissements dane
-        if self.ids_cohorts_dane_lycee_en != {}:
+        #Pour chaque cohorte de chaque type d'utilisateur
+        for user_type in UserType:
+
+            #Intialisation d'une liste dans le dictionnaire retournée
+            disenrolled_users[self.ids_cohorts_dane_lycee_en[user_type]] = []
 
             # Récupération des username des utilisateurs de la cohorte en db
-            elv_lycee_en_db = self.__db.get_cohort_members(self.ids_cohorts_dane_lycee_en[UserType.ELEVE])
-            # Liste des users désenrollé
-            disenrolled_users = []
+            lycee_en_db = self.__db.get_cohort_members_list(self.ids_cohorts_dane_lycee_en[user_type])
 
             # Boucle sur chaques user en db et le désenrole si il n'est pas rpésent dans le ldap
-            for username_db in elv_lycee_en_db:
-                if username_db not in elv_lycee_en_ldap:
-                    log.info("Désenrollement de l'utilisateur %s de la cohorte dane elv_lycee_en", username_db)
-                    self.__db.disenroll_user_from_username_and_cohortid(username_db, sself.ids_cohorts_dane_lycee_en[UserType.ELEVE])
-                    disenrolled_users.append(username_db)
+            for username_db in lycee_en_db:
+                if username_db not in lycee_ldap[user_type]:
+                    log.info("Désenrollement de l'utilisateur %s de la cohorte dane lycée %s", username_db, user_type)
+                    self.__db.disenroll_user_from_username_and_cohortid(username_db, self.ids_cohorts_dane_lycee_en[user_type])
+                    disenrolled_users[self.ids_cohorts_dane_lycee_en[user_type]].append(username_db)
 
-            # On retourne un dictionnaire des utilisateurs désenrolé par cohortes
-            return disenrolled_users
+        # On retourne un dictionnaire des utilisateurs désenrolé par cohortes
+        return disenrolled_users
+
+    def purge_cohort_dane_clg_dep(self, clg_ldap: list, departement, etablissement_context: EtablissementContext, log=getLogger()) -> dict[str,list[str]]:
+        """
+        Purge les cohortes dane des différents types d'utilisateurs dans les collèges par département
+        """
+        # Liste des users désenrollés
+        disenrolled_users = {}
+
+        #Pour chaque cohorte de chaque type d'utilisateur
+        for user_type in UserType:
+
+            #Intialisation d'une liste dans le dictionnaire retournée
+            disenrolled_users[self.ids_cohorts_dane_dep_clg[user_type][departement]] = []
+
+            # Récupération des username des utilisateurs de la cohorte en db
+            clg_en_db = self.__db.get_cohort_members_list(self.ids_cohorts_dane_dep_clg[user_type][departement])
+
+            # Boucle sur chaques user en db et le désenrole si il n'est pas rpésent dans le ldap
+            for username_db in clg_en_db:
+                if username_db not in clg_ldap[user_type]:
+                    log.info("Désenrollement de l'utilisateur %s de la cohorte dane collège %s du %s", username_db, user_type, departement)
+                    self.__db.disenroll_user_from_username_and_cohortid(username_db, self.ids_cohorts_dane_dep_clg[user_type][departement])
+                    disenrolled_users[self.ids_cohorts_dane_dep_clg[user_type][departement]].append(username_db)
+
+        # On retourne un dictionnaire des utilisateurs désenrolé par cohortes
+        return disenrolled_users
+
 
     def mise_a_jour_cohorte_interetab(self, is_member_of, cohort_name, since_timestamp: datetime.datetime,
                                       log=getLogger()):

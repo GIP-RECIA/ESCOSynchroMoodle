@@ -258,7 +258,7 @@ class Ldap:
         self.connection.search(self.config.personnesDN, ldap_filter,
                                search_scope=LEVEL, attributes=
                                ['uid'])
-        return [entry.uid.lower() for entry in self.connection.entries]
+        return [entry.uid.value.lower() for entry in self.connection.entries]
 
     def search_eleves_in_classe(self, classe: str, uai):
         """
@@ -305,20 +305,21 @@ class Ldap:
                                 'ENTAuxEnsClasses'])
         return [EnseignantLdap(entry) for entry in self.connection.entries]
 
-    def search_enseignant_uid(self, since_timestamp: datetime.datetime = None, uai=None, tous=False) \
+    def search_enseignant_profil_uid(self, since_timestamp: datetime.datetime = None, profil="National_ENS", uai=None, tous=False) \
             -> List[str]:
         """
-        Recherche d'uid d'enseignants.
+        Recherche d'uid d'enseignants un profil spécifique
         :param since_timestamp: datetime.datetime
+        :param profil: attribut ENTPersonProfils du LDAP
         :param uai: code etablissement
         :param tous: Si True, retourne également le personnel non enseignant
         :return: Liste des uid d'enseignants
         """
-        ldap_filter = get_filtre_enseignants(since_timestamp, uai, tous)
+        ldap_filter = get_filtre_enseignants_profil(since_timestamp, profil, uai, tous)
         self.connection.search(self.config.personnesDN,
                                ldap_filter, LEVEL, attributes=
                                ['uid'])
-        return [entry.uid.lower() for entry in self.connection.entries]
+        return [entry.uid.value.lower() for entry in self.connection.entries]
 
     def search_personnel_direction(self, since_timestamp: datetime.datetime = None, uai=None) \
             -> List[PersonnelDirection]:
@@ -347,7 +348,7 @@ class Ldap:
         self.connection.search(self.config.personnesDN,
                                ldap_filter, LEVEL, attributes=
                                ['uid'])
-        return [entry.uid.lower() for entry in self.connection.entries]
+        return [entry.uid.value.lower() for entry in self.connection.entries]
 
     def search_enseignants_in_classe(self, classe: str, uai):
         """
@@ -461,9 +462,40 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
 
     return filtre
 
+def get_filtre_enseignants_profil(since_timestamp: datetime.datetime = None, profil="National_ENS", uai=None, tous=False) -> str:
+    """
+    Construit le filtre pour récupérer les enseignants au sein du LDAP.
+
+    :param since_timestamp:
+    :param uai: code établissement
+    :param tous:
+    :return: Le filtre
+    """
+    filtre = "(&"
+    if tous:
+        filtre += "(|(objectClass=ENTAuxEnseignant)" \
+                  "(objectClass=ENTAuxNonEnsEtab)" \
+                  "(objectClass=ENTAuxNonEnsCollLoc)" \
+                  ")"
+    else:
+        filtre += "(objectClass=ENTAuxEnseignant)"
+
+    filtre += "(!(uid=ADM00000))"
+
+    filtre+="(ENTPersonProfils={profil})".format(profil=profil)
+    if uai:
+        filtre += "(ESCOUAI={uai})".format(uai=ldap_escape(uai))
+    if since_timestamp:
+        filtre += "(modifyTimeStamp>={since_timestamp})" \
+            .format(since_timestamp=since_timestamp.strftime("%Y%m%d%H%M%SZ"))
+
+    filtre = filtre + ")"
+
+    return filtre
+
 def get_filtre_personnel_direction(since_timestamp: datetime.datetime = None, uai=None) -> str:
     """
-    Construit le filtre pour récupérer les utilisateurs pêrsonne de direction au sein du LDAP.
+    Construit le filtre pour récupérer les utilisateurs personnel de direction au sein du LDAP.
 
     :param since_timestamp:
     :param uai: code établissement

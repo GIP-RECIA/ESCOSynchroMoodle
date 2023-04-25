@@ -1532,6 +1532,25 @@ class Database:
                           })
         return map(lambda r: r[0], self.mark.fetchall())
 
+    def get_cohort_members_list(self, cohortid) -> list:
+        """
+        Obtient les noms d'utilisateurs membres de la cohorte sous forme d'une liste.
+        :param cohortid:
+        :return: list de username
+        """
+        self.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members"
+                          " INNER JOIN {entete}user ON {entete}cohort_members.userid = {entete}user.id"
+                          " WHERE cohortid = %(cohortid)s"
+                          .format(entete=self.entete),
+                          params={
+                              'cohortid': cohortid
+                          })
+        members_list = []
+        for result in self.mark.fetchall():
+            members_list.append(result[0])
+        return members_list
+
+
     def update_context_path(self, id_context, new_path):
         """
         Fonction permettant de mettre a jour le path d'un contexte.
