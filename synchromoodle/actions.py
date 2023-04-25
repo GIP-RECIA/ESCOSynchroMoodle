@@ -255,23 +255,23 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
                     cohort_dir_lycee_en_ldap.extend(ldap.search_personnel_direction_uid(uai=uai))
 
                 #Sert à purger les élèves qui ne sont plus présents dans l'annuaire LDAP des cohortes
-                log.info("Purge des cohortes Elèves de la Classe")
+                etablissement_log.info("Purge des cohortes Elèves de la Classe")
                 synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
                                            "Élèves de la Classe %s")
 
-                log.info("Purge des cohortes Elèves du Niveau de formation")
+                etablissement_log.info("Purge des cohortes Elèves du Niveau de formation")
                 synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
                                            'Élèves du Niveau de formation %s')
 
-                log.info("Purge des cohortes Profs de la Classe")
+                etablissement_log.info("Purge des cohortes Profs de la Classe")
                 synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
                                            'Profs de la Classe %s')
 
-                log.info("Purge des cohortes Profs de l'établissement")
+                etablissement_log.info("Purge des cohortes Profs de l'établissement")
                 synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
                                            "Profs de l'établissement %s")
 
-                log.info("Purge des cohortes Profs du niveau de formation")
+                etablissement_log.info("Purge des cohortes Profs du niveau de formation")
                 synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
                                            "Profs du niveau de formation %s")
 
@@ -282,6 +282,7 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
             #--- Fin de la boucle for ---#
 
             #Traitement des cohortes de la dane
+            etablissement_log = log.getChild('dane.%s' % config.constantes.uai_dane)
             #Récupération du contexte de la dane
             etablissement_context = synchronizer.handle_dane(config.constantes.uai_dane, log=etablissement_log, readonly=True)
 
@@ -298,12 +299,12 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
                                                 UserType.PERSONNEL_DE_DIRECTION:cohorts_dir_dep_clg_ldap[departement]}
 
             #Purge des cohortes Lycées
-            log.info("Purge de la cohorte dane des lycées de l'éducation nationale")
-            synchronizer.purge_cohort_dane_lycee_en(cohort_dane_lycee, etablissement_context)
+            etablissement_log.info("Purge des cohortes dane des lycées de l'éducation nationale")
+            synchronizer.purge_cohort_dane_lycee_en(cohort_dane_lycee, etablissement_context, log=etablissement_log)
             #Purge des cohortes  Collèges
             for departement in config.constantes.departements:
-                log.info("Purge de la cohorte dane des collèges du %s", departement)
-                synchronizer.purge_cohort_dane_clg_dep(cohort_dane_clg[departement], departement, etablissement_context)
+                etablissement_log.info("Purge des cohortes dane des collèges du %s", departement)
+                synchronizer.purge_cohort_dane_clg_dep(cohort_dane_clg[departement], departement, etablissement_context, log=etablissement_log)
 
             # On commit afin de libérer le lock
             db.connection.commit()

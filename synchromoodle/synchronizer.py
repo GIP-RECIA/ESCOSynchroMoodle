@@ -1463,6 +1463,8 @@ class Synchronizer:
         #Pour chaque cohorte de chaque type d'utilisateur
         for user_type in UserType:
 
+            log.info("Purge de la cohorte dane %s", user_type.name.capitalize())
+
             #Intialisation d'une liste dans le dictionnaire retournée
             disenrolled_users[self.ids_cohorts_dane_lycee_en[user_type]] = []
 
@@ -1488,6 +1490,8 @@ class Synchronizer:
 
         #Pour chaque cohorte de chaque type d'utilisateur
         for user_type in UserType:
+
+            log.info("Purge de la cohorte dane %s", user_type.name.capitalize())
 
             #Intialisation d'une liste dans le dictionnaire retournée
             disenrolled_users[self.ids_cohorts_dane_dep_clg[user_type][departement]] = []
