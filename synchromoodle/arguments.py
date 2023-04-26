@@ -1,5 +1,5 @@
 """
-Arguments
+Module permettant le parsing des arguments sur la ligne de commande
 """
 
 from argparse import ArgumentParser
@@ -10,6 +10,7 @@ from synchromoodle.__version__ import __version__
 def parse_args(args=None, namespace=None):
     """
     Parse arguments
+
     :param args:
     :param namespace:
     :return:

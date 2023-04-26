@@ -1,6 +1,7 @@
 # coding: utf-8
 """
-Webservice
+Module comprenant les différentes fonctions permattant de
+faire des appels aux webservices de moodle
 """
 from typing import List
 import json
@@ -20,10 +21,12 @@ class WebService:
 
     def delete_users(self, userids: List[int]):
         """
-        Supprime des utilisateurs via le webservice moodle
-        L'utilisateur WebService doit avoir la permission moodle/user:delete
+        Supprime des utilisateurs via le webservice moodle.
+        L'utilisateur WebService doit avoir la permission moodle/user:delete.
+
         :param userids: La liste des ids des utilisateurs à supprimer
         :return: None si la fonction s'est éxécutée correctement
+        :raises Exception: Si le WebService renvoie une exception
         """
         i = 0
         users_to_delete = {}
@@ -47,12 +50,13 @@ class WebService:
 
     def delete_courses(self, courseids: list[int]):
         """
-        Supprime des cours via le webservice moodle
+        Supprime des cours via le webservice moodle.
         L'utilisateur WebService doit avoir les permissions
-        moodle/course:delete et moodle/course:view
+        moodle/course:delete et moodle/course:view.
+
         :param courseid: La liste des id des cours à supprimer
         :returns: Un dictionnaire avec la liste des warnings
-        :raises Exception:
+        :raises Exception: Si le WebService renvoie une exception
         """
 
         params = {}
@@ -78,16 +82,16 @@ class WebService:
 
     def get_courses_user_enrolled(self, userid: int, returnusercount=0):
         """
-        Récupère la liste de tous les cours auxquels est inscrit un utilisateur
+        Récupère la liste de tous les cours auxquels est inscrit un utilisateur.
         L'utilisateur WebService doit avoir les permissions
-        moodle/course:viewparticipants et moodle/user:viewdetails
+        moodle/course:viewparticipants et moodle/user:viewdetails.
 
         :param userid: L'id de l'utilisateur
         :param returnusercount: - 0 si on ne retourne pas le nombre d'utilisateurs inscrits à un cours
                                 - 1 si on retourne le nombre d'utilisateurs inscrits à un cours
-                                (influe sur le temps de réponse)
+
         :returns: Un dictionnaire contenant les cours de l'utilisateur
-        :raises Exception:
+        :raises Exception: Si le WebService renvoie une exception
         """
 
         params = {}
@@ -112,12 +116,13 @@ class WebService:
 
     def unenrol_user_from_course(self, userid: int, courseid: int):
         """
-        Désinscris un utilisateur à un cours
-        L'utilisateur WebService doit avoir la permission enrol/manual:unenrol
+        Désinscris un utilisateur à un cours.
+        L'utilisateur WebService doit avoir la permission enrol/manual:unenrol.
+
         :param userid: L'id de l'utilisateur à désinscrire
         :param courseid: L'id du cours duquel on déinscrit l'utilisateur
         :returns: None si la fonction s'est éxécutée correctement
-        :raises Exception:
+        :raises Exception: Si le WebService renvoie une exception
         """
 
         params = {}
@@ -142,13 +147,14 @@ class WebService:
 
     def enrol_user_to_course(self, roleid: int, userid: int, courseid: int):
         """
-        Inscris un utilisateur à un cours
-        L'utilisateur WebService doit avoir la permission enrol/manual:enrol
+        Inscris un utilisateur à un cours.
+        L'utilisateur WebService doit avoir la permission enrol/manual:enrol.
+
         :param roleid: Le rôle de l'utilisateur dans le cours
         :param userid: L'id de l'utilisateur à inscrire
         :param courseid: L'id du cours auquel on inscrit l'utilisateur
         :returns: None si la fonction s'est éxécutée correctement
-        :raises Exception:
+        :raises Exception: Si le WebService renvoie une exception
         """
 
         enrolments = {}
@@ -174,13 +180,14 @@ class WebService:
 
     def create_course(self, fullname: str, shortname: str, categoryid: int):
         """
-        Ajoute un nouveau cours
-        L'utilisateur WebService doit avoir la permission moodle/course:create
+        Ajoute un nouveau cours.
+        L'utilisateur WebService doit avoir la permission moodle/course:create.
+
         :param fullname: Le nom complet du cours
         :param shortname: Le nom court du cours
         :param categoryid: L'id de la catégorie dans laquelle va être insérée le cours
         :returns: Un dictionnaire avec les informations du cours créé
-        :raises Exception:
+        :raises Exception: Si le WebService renvoie une exception
         """
 
         params = {}
@@ -206,33 +213,29 @@ class WebService:
 
     def delete_cohorts(self, cohortids: list[int]):
         """
-        Supprime une cohorte de moodle
-        L'utilisateur WebService doit avoir la permission moodle/cohort:manage
+        Supprime une cohorte de moodle.
+        L'utilisateur WebService doit avoir la permission moodle/cohort:manage.
+
         :param cohortids: La liste des identifiants des cohortes
         :returns: None si la fonction s'est éxécutée correctement
-        :raises Exception:
+        :raises Exception: Si le WebService renvoie une exception
         """
 
-        #Si tous les id sont bien des entiers
-        if all(isinstance(elem, int) for elem in cohortids):
+        cohorts_to_delete = {}
+        for i in range(len(cohortids)):
+            cohorts_to_delete[f"cohortids[{i}]"] = cohortids[i]
 
-            cohorts_to_delete = {}
-            for i in range(len(cohortids)):
-                cohorts_to_delete[f"cohortids[{i}]"] = cohortids[i]
+        res = requests.get(url=self.url,
+                           params={
+                               'wstoken': self.config.token,
+                               'moodlewsrestformat': "json",
+                               'wsfunction': "core_cohort_delete_cohorts",
+                               **cohorts_to_delete
+                           },
+                           timeout=10)
 
-            res = requests.get(url=self.url,
-                               params={
-                                   'wstoken': self.config.token,
-                                   'moodlewsrestformat': "json",
-                                   'wsfunction': "core_cohort_delete_cohorts",
-                                   **cohorts_to_delete
-                               },
-                               timeout=10)
+        json_data = json.loads(res.text)
 
-            json_data = json.loads(res.text)
-
-            if json_data is not None and 'exception' in json_data:
-                raise Exception(json_data['message'])
-            return json_data
-
-        raise Exception("Mauvais type d'identifiant(s)")
+        if json_data is not None and 'exception' in json_data:
+            raise Exception(json_data['message'])
+        return json_data

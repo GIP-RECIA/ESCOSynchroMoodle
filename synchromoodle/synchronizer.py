@@ -63,7 +63,8 @@ SECONDS_PER_DAY = 86400
 
 def est_grp_etab(uai: str, etablissements_config: EtablissementsConfig):
     """
-    Indique si un établissement fait partie d'un regroupement d'établissement ou non
+    Indique si un établissement fait partie d'un regroupement d'établissement ou non.
+
     :param uai: code de l'établissement
     :param etablissements_config: EtablissementsConfig
     :return: True si l'établissement fait partie d'un regroupement d'établissement
@@ -137,13 +138,12 @@ class Synchronizer:
             else next(iter(config.actions), ActionConfig())  # type: ActionConfig
         self.context = None  # type: SyncContext
         self.context_dane = None  # type: SyncContext
-        self.ids_cohorts_dane_lycee_en = {}
-        self.ids_cohorts_dane_dep_clg = {}
+        self.ids_cohorts_dane_lycee_en = {} #type: dict
+        self.ids_cohorts_dane_dep_clg = {} #type: dict
 
     def initialize(self):
         """
         Initialise la synchronisation
-        :return:
         """
         self.context = SyncContext()
 
@@ -173,9 +173,14 @@ class Synchronizer:
         self.context.id_field_domaine = self.__db.get_id_user_info_field_by_shortname('Domaine')
 
 
-    def handle_dane(self, uai_dane, log=getLogger(), readonly=False):
+    def handle_dane(self, uai_dane: str, log=getLogger(), readonly=False) -> EtablissementContext:
         """
-        Synchronise la dane
+        Synchronise la dane.
+
+        :param uai_dane: Le code établissement de la dane
+        :param log: Le logger
+        :param readonly: Si True, pas d'insertions/modifications dans la bd
+        :return: Le contexte de l'établissement synchronisé
         """
         # Récupération des informations de la dane pour les cohortes de la dane
         context = EtablissementContext(uai_dane)
@@ -239,10 +244,14 @@ class Synchronizer:
         return context
 
 
-    def handle_etablissement(self, uai, log=getLogger(), readonly=False) -> EtablissementContext:
+    def handle_etablissement(self, uai: str, log=getLogger(), readonly=False) -> EtablissementContext:
         """
-        Synchronise un établissement
-        :return: EtabContext
+        Synchronise un établissement.
+
+        :param uai: Le code établissement
+        :param log: Le logger
+        :param readonly: Si True, pas d'insertions/modifications dans la bd
+        :return: Le contexte de l'établissement synchronisé
         """
         context = EtablissementContext(uai)
         context.gere_admin_local = uai not in self.__action_config.etablissements.liste_etab_sans_admin
@@ -325,7 +334,10 @@ class Synchronizer:
         """
         Associe au contexte de l'établissement un dictionnaire associant une classe à
         un niveau de formation. Utilisé pour pouvoir récupérer le niveau de formation
-        d'un enseignant comme il n'est pas présent directement dans le ldap
+        d'un enseignant comme il n'est pas présent directement dans le ldap.
+
+        :param etablissement_context: Le contexte de l'établissement dans lequel on construit le dictionnaire
+        :param: La liste des élèves dont on va se servir pour construire le dictionnaire
         """
         for eleve_ldap in list_eleve_ldap:
             eleve_classes_for_etab = []
@@ -338,11 +350,11 @@ class Synchronizer:
 
     def handle_eleve(self, etablissement_context: EtablissementContext, eleve_ldap: EleveLdap, log=getLogger()):
         """
-        Synchronise un élève au sein d'un établissement
-        :param etablissement_context:
-        :param eleve_ldap:
-        :param log:
-        :return:
+        Synchronise un élève au sein d'un établissement.
+
+        :param etablissement_context: Le contexte de l'établissement dans lequel on synchronise l'élève
+        :param eleve_ldap: L'élève à synchroniser
+        :param log: Le logger
         """
         mail_display = self.__config.constantes.default_mail_display
         if not eleve_ldap.mail:
@@ -440,11 +452,11 @@ class Synchronizer:
     def handle_enseignant(self, etablissement_context: EtablissementContext, enseignant_ldap: EnseignantLdap,
                           log=getLogger()):
         """
-        Met à jour un enseignant ou un personnel de direction au sein d'un établissement
-        :param etablissement_context:
-        :param enseignant_ldap:
-        :param log:
-        :return:
+        Met à jour un enseignant ou un personnel de direction au sein d'un établissement.
+
+        :param etablissement_context: Le contexte de l'établissement dans lequel on synchronise l'élève
+        :param enseignant_ldap: L'enseignant à synchroniser
+        :param log: Le logger
         """
 
         enseignant_infos = f"{enseignant_ldap.uid} {enseignant_ldap.given_name} {enseignant_ldap.sn}"
@@ -573,7 +585,7 @@ class Synchronizer:
                     if classe in etablissement_context.classe_to_niv_formation.keys():
                         enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
                     else:
-                        log.error(
+                        log.warning(
                         "Problème avec l'enseignant %s pour l'inscrire dans les cohortes de niveau de formation",
                          enseignant_ldap
                          )
@@ -641,10 +653,10 @@ class Synchronizer:
 
     def handle_user_interetab(self, personne_ldap: PersonneLdap, log=getLogger()):
         """
-        Synchronise un utilisateur inter-etablissement
-        :param personne_ldap:
-        :param log:
-        :return:
+        Synchronise un utilisateur inter-établissement.
+
+        :param personne_ldap: L'utilisateur à synchroniser
+        :param log: Le logger
         """
         if not personne_ldap.mail:
             personne_ldap.mail = self.__config.constantes.default_mail
@@ -684,10 +696,10 @@ class Synchronizer:
 
     def handle_inspecteur(self, personne_ldap: PersonneLdap, log=getLogger()):
         """
-        Synchronise un inspecteur
-        :param personne_ldap:
-        :param log:
-        :return:
+        Synchronise un inspecteur.
+
+        :param personne_ldap: L'utilisateur à synchroniser
+        :param log: Le logger
         """
         if not personne_ldap.mail:
             personne_ldap.mail = self.__config.constantes.default_mail
@@ -724,17 +736,18 @@ class Synchronizer:
         log.debug("Insertion du Domaine")
         self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
 
-    def mettre_a_jour_droits_enseignant(self, enseignant_infos, id_enseignant, uais_autorises, log=getLogger()):
+    def mettre_a_jour_droits_enseignant(self, enseignant_infos: str, id_enseignant: int,
+     uais_autorises: list[str], log=getLogger()):
         """
         Fonction permettant de mettre a jour les droits d'un enseignant.
-        Cette mise a jour consiste a :
-          - Supprimer les roles non autorises
-          - ajouter les roles
-        :param enseignant_infos:
-        :param id_enseignant:
-        :param uais_autorises:
-        :param log:
-        :return:
+        Cette mise a jour consiste à :
+        - Supprimer les roles non autorises
+        - Ajouter les roles
+
+        :param enseignant_infos: Les infos de l'enseignant (pour print)
+        :param id_enseignant: L'id de l'enseignant
+        :param uais_autorises: La liste des uai autorisés
+        :param log: Le logger
         """
         # Recuperation des themes autorises pour l'enseignant
         themes_autorises = [uai_autorise.lower() for uai_autorise in uais_autorises]
@@ -777,15 +790,17 @@ class Synchronizer:
                      enseignant_infos, str(forums_summaries))
             log.info("Les seuls établissements autorisés pour cet enseignant sont '%s'", themes_autorises)
 
-    def get_or_create_cohort(self, id_context, name, id_number, description, time_created, log=getLogger()):
+    def get_or_create_cohort(self, id_context: int, name: str, id_number: str,
+     description: str, time_created: int, log=getLogger()) -> int:
         """
-        Fonction permettant de creer une nouvelle cohorte pour un contexte donne.
-        :param id_context:
-        :param name:
-        :param id_number:
-        :param description:
-        :param time_created:
-        :return:
+        Fonction permettant de creer une nouvelle cohorte pour un contexte donné.
+
+        :param id_context: L'id du contexte dans lequel on créé la cohorte
+        :param name: Le nom de la cohorte
+        :param id_number: L'id_number de la cohorte
+        :param description: La description de la cohorte
+        :param time_created: La date de création de la cohorte
+        :return: L'id de la cohorte
         """
         id_cohort = self.__db.get_id_cohort(id_context, name)
         if id_cohort is None:
@@ -794,21 +809,23 @@ class Synchronizer:
             return self.__db.get_id_cohort(id_context, name)
         return id_cohort
 
-    def get_cohort(self, id_context: int, name: str):
+    def get_cohort(self, id_context: int, name: str) -> int:
         """
-        Fonction permettant de récupérer l'id d'une cohorte pour un contexte donne.
+        Fonction permettant de récupérer l'id d'une cohorte pour un contexte donné.
+
         :param id_context: Id du du contexte associé dans la table mdl_context
         :param name: Nom de la cohorte
         :return: L'id de la cohorte
         """
         return self.__db.get_id_cohort(id_context, name)
 
-    def get_dane_lycee_en_cohort(self, id_context_dane: int, user_type: UserType):
+    def get_dane_lycee_en_cohort(self, id_context_dane: int, user_type: UserType) -> int:
         """
-        Charge une cohorte dane lycee_en soit pour les élèves, les enseignant ou le personnel de direction
+        Charge une cohorte dane lycee_en soit pour les élèves, les enseignant ou le personnel de direction.
+
         :param id_context_dane: Id du du contexte associé dans la table mdl_context
         :param user_type: Type d'utilisateurs de la cohorte
-        :return:
+        :return: L'id de la cohorte
         """
         all_cohort_name = {
             UserType.ELEVE: 'Élèves des lycées de l\'éducation nationale',
@@ -819,15 +836,16 @@ class Synchronizer:
         id_cohort = self.get_cohort(id_context_dane, cohort_name)
         return id_cohort
 
-    def get_or_create_dane_lycee_en_cohort(self, id_context_dane, user_type: UserType,
-     timestamp_now_sql, log=getLogger()):
+    def get_or_create_dane_lycee_en_cohort(self, id_context_dane: int, user_type: UserType,
+     timestamp_now_sql: int, log=getLogger()) -> int:
         """
-        Charge ou créer une cohorte dane lycee_en soit pour les élèves, les enseignant ou le personnel de direction
-        :param id_context_dane:
-        :param user_type:
-        :param timestamp_now_sql:
-        :param log:
-        :return:
+        Charge ou créer une cohorte dane lycee_en soit pour les élèves, les enseignant ou le personnel de direction.
+
+        :param id_context_dane: L'id du contexte dans lequel on créé la cohorte
+        :param user_type: Le type d'utilisateur pour lequel on créé la cohorte
+        :param timestamp_now_sql: La timestamp actuel
+        :param log: Le logger
+        :return: L'id de la cohorte récupérée
         """
         all_cohort_name = {
             UserType.ELEVE: 'Élèves des lycées de l\'éducation nationale',
@@ -840,16 +858,17 @@ class Synchronizer:
                                               timestamp_now_sql, log)
         return id_cohort
 
-    def get_or_create_dane_dep_clg_cohort(self, id_context_dane, user_type: UserType,
-     departement, timestamp_now_sql, log=getLogger()):
+    def get_or_create_dane_dep_clg_cohort(self, id_context_dane: int, user_type: UserType,
+     departement: str, timestamp_now_sql: int, log=getLogger()) -> int:
         """
-        Charge ou créer une cohorte dane dep_clg soit pour les élèves, les enseignant ou le personnel de direction
-        :param id_context_dane:
-        :param user_type:
-        :param departement:
-        :param timestamp_now_sql:
-        :param log:
-        :return:
+        Charge ou créer une cohorte dane dep_clg soit pour les élèves, les enseignant ou le personnel de direction.
+
+        :param id_context_dane: L'id du contexte dans lequel on créé la cohorte
+        :param user_type: Le type d'utilisateur pour lequel on créé la cohorte
+        :param departement: Le département associé à la cohorte
+        :param timestamp_now_sql: La timestamp actuel
+        :param log: Le logger
+        :return: L'id de la cohorte récupérée
         """
         all_cohort_name = {
             UserType.ELEVE: 'Élèves des collèges du {}',
@@ -862,13 +881,14 @@ class Synchronizer:
                                               timestamp_now_sql, log)
         return id_cohort
 
-    def get_dane_dep_clg_cohort(self, id_context_dane, user_type: UserType, departement):
+    def get_dane_dep_clg_cohort(self, id_context_dane, user_type: UserType, departement: str) -> int:
         """
-        Charge ou créer une cohorte dane dep_clg soit pour les élèves, les enseignant ou le personnel de direction
-        :param id_context_dane:
-        :param user_type:
-        :param departement:
-        :return:
+        Charge ou créer une cohorte dane dep_clg soit pour les élèves, les enseignant ou le personnel de direction.
+
+        :param id_context_dane: L'id du contexte dans lequel on créé la cohorte
+        :param user_type: Le type d'utilisateur pour lequel on créé la cohorte
+        :param departement: Le département associé à la cohorte
+        :return: L'id de la cohorte créée
         """
         all_cohort_name = {
             UserType.ELEVE: 'Élèves des collèges du {}',
@@ -879,13 +899,15 @@ class Synchronizer:
         id_cohort = self.get_cohort(id_context_dane, cohort_name)
         return id_cohort
 
-    def get_or_create_formation_cohort(self, id_context_etab, niveau_formation, timestamp_now_sql, log=getLogger()):
+    def get_or_create_formation_cohort(self, id_context_etab: int, niveau_formation: str,
+     timestamp_now_sql: int, log=getLogger()) -> int:
         """
-        Charge ou créer une cohorte de formation
-        :param id_context_etab:
-        :param niveau_formation:
-        :param timestamp_now_sql:
-        :param log:
+        Charge ou créer une cohorte de formation.
+
+        :param etab_context: Le contexte de l'établissement
+        :param niveau_formation: Le niveau de formation
+        :param timestamp_now_sql: Le timestamp actuel
+        :param log: Le logger
         :return:
         """
         cohort_name = f'Élèves du Niveau de formation {niveau_formation}'
@@ -895,15 +917,17 @@ class Synchronizer:
         return id_cohort
 
     def get_or_create_classes_cohorts(self, id_context_etab, classes_names, time_created, name_pattern=None,
-                                      desc_pattern=None, log=getLogger()):
+                                      desc_pattern=None, log=getLogger()) -> list[int]:
         """
-        Charge ou crée des cohortes a partir de classes liées a un établissement.
-        :param id_context_etab:
-        :param classes_names:
-        :param time_created:
-        :param name_pattern:
-        :param desc_pattern:
-        :return:
+        Charge ou crée des cohortes a partir de classes liées a un établissement..
+
+        :param id_context_etab: Le contexte de l'établissement dans lequel on crée les cohortes
+        :param classes_names: Les différentes classes dont on veut créer les cohortes
+        :param time_created: La date de création de la cohorte si il y a création
+        :param name_pattern: Le pattern à faire correspondre pour le nom de la cohorte
+        :param desc_pattern: Le pattern à faire correspondre pour la description de la cohorte
+        :param log: Le logger
+        :return: La liste des ids des cohortes créees ou récupérées
         """
 
         if name_pattern is None:
@@ -924,16 +948,18 @@ class Synchronizer:
             ids_cohorts.append(id_cohort)
         return ids_cohorts
 
-    def get_or_create_niv_formation_cohorts(self, id_context_etab, niveaux_formation, time_created,
-     name_pattern, desc_pattern, log=getLogger()):
+    def get_or_create_niv_formation_cohorts(self, id_context_etab: int, niveaux_formation: list[str],
+     time_created: int, name_pattern: str, desc_pattern: str, log=getLogger()) -> list[int]:
         """
         Charge ou crée des cohortes a partir de niveau de formation liés a un établissement.
-        :param id_context_etab:
-        :param niveaux_formation:
-        :param time_created:
-        :param name_pattern:
-        :param desc_pattern:
-        :return:
+
+        :param id_context_etab: Le contexte de l'établissement dans lequel on crée les cohortes
+        :param niveaux_formation: Les différents niveaux de formation dont on veut créer les cohortes
+        :param time_created: La date de création de la cohorte si il y a création
+        :param name_pattern: Le pattern à faire correspondre pour le nom de la cohorte
+        :param desc_pattern: Le pattern à faire correspondre pour la description de la cohorte
+        :param log: Le logger
+        :return: La liste des ids des cohortes créees ou récupérées
         """
 
         ids_cohorts = []
@@ -949,12 +975,13 @@ class Synchronizer:
             ids_cohorts.append(id_cohort)
         return ids_cohorts
 
-    def get_or_create_profs_etab_cohort(self, etab_context: EtablissementContext, log=getLogger()):
+    def get_or_create_profs_etab_cohort(self, etab_context: EtablissementContext, log=getLogger()) -> int:
         """
         Charge ou crée la cohorte d'enseignant de l'établissement.
-        :param etab_context:
-        :param log:
-        :return:
+
+        :param etab_context: Le contexte de l'établissement
+        :param log: Le logger
+        :return: L'id de la cohorte d'enseignants de l'établissement
         """
         cohort_name = f'Profs de l\'établissement ({etab_context.uai})'
         cohort_description = f'Enseignants de l\'établissement {etab_context.uai}'
@@ -970,11 +997,12 @@ class Synchronizer:
             cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les élèves (uid) dans chacune des classes.
-        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
-        :param etab_context: EtablissementContext
-        :param cohortname_pattern_re: str
-        :param cohortname_pattern: str
-        :return:
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
+
+        :param etab_context: Le contexte de l'établissement dans lequel on recherche les cohortes
+        :param cohortname_pattern_re: Le pattern à faire correspondre pour le nom de la cohorte
+        :param cohortname_pattern: Le pattern à faire correspondre pour le nom de la cohorte
+        :return: Un tuple contenant les deux dictionnaires
         """
         # Récupére les cohortes qui correspondent au pattern et qui sont lié à l'établissement du context
         classes_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
@@ -1008,17 +1036,18 @@ class Synchronizer:
     def get_users_by_cohorts_comparators_eleves_niveau(self, etab_context: EtablissementContext,
             cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
-        Renvoie deux dictionnaires listant les élèves (uid) dans chacun des niveaux de formation
-        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
-        :param etab_context: EtablissementContext
-        :param cohortname_pattern_re: str
-        :param cohortname_pattern: str
-        :return:
+        Renvoie deux dictionnaires listant les élèves (uid) dans chacun des niveaux de formation.
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
+
+        :param etab_context: Le contexte de l'établissement dans lequel on recherche les cohortes
+        :param cohortname_pattern_re: Le pattern à faire correspondre pour le nom de la cohorte
+        :param cohortname_pattern: Le pattern à faire correspondre pour le nom de la cohorte
+        :return: Un tuple contenant les deux dictionnaires
         """
-        classes_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
+        level_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
 
         eleves_by_cohorts_db = {}
-        for cohort in classes_cohorts:
+        for cohort in level_cohorts:
             matches = re.search(cohortname_pattern_re, cohort.name)
             classe_name = matches.group(2)
             eleves_by_cohorts_db[classe_name] = []
@@ -1036,12 +1065,13 @@ class Synchronizer:
     def get_users_by_cohorts_comparators_profs_classes(self, etab_context: EtablissementContext,
             cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
-        Renvoie deux dictionnaires listant les profs (uid) dans chacune des classes
-        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
-        :param etab_context: EtablissementContext
-        :param cohortname_pattern_re: str
-        :param cohortname_pattern: str
-        :return:
+        Renvoie deux dictionnaires listant les profs (uid) dans chacune des classes.
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
+
+        :param etab_context: Le contexte de l'établissement dans lequel on recherche les cohortes
+        :param cohortname_pattern_re: Le pattern à faire correspondre pour le nom de la cohorte
+        :param cohortname_pattern: Le pattern à faire correspondre pour le nom de la cohorte
+        :return: Un tuple contenant les deux dictionnaires
         """
         classes_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
 
@@ -1065,12 +1095,13 @@ class Synchronizer:
     def get_users_by_cohorts_comparators_profs_etab(self, etab_context: EtablissementContext,
             cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
-        Renvoie deux dictionnaires listant les profs (uid) dans chacun des établissement
-        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
-        :param etab_context: EtablissementContext
-        :param cohortname_pattern_re: str
-        :param cohortname_pattern: str
-        :return:
+        Renvoie deux dictionnaires listant les profs (uid) dans chacun des établissement.
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
+
+        :param etab_context: Le contexte de l'établissement dans lequel on recherche les cohortes
+        :param cohortname_pattern_re: Le pattern à faire correspondre pour le nom de la cohorte
+        :param cohortname_pattern: Le pattern à faire correspondre pour le nom de la cohorte
+        :return: Un tuple contenant les deux dictionnaires
         """
         etab_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)
 
@@ -1094,12 +1125,13 @@ class Synchronizer:
     def get_users_by_cohorts_comparators_profs_niveau(self, etab_context: EtablissementContext,
             cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
-        Renvoie deux dictionnaires listant les profs (uid) dans chacun des niveaux de formation
-        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP
-        :param etab_context: EtablissementContext
-        :param cohortname_pattern_re: str
-        :param cohortname_pattern: str
-        :return:
+        Renvoie deux dictionnaires listant les profs (uid) dans chacun des niveaux de formation.
+        Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
+
+        :param etab_context: Le contexte de l'établissement dans lequel on recherche les cohortes
+        :param cohortname_pattern_re: Le pattern à faire correspondre pour le nom de la cohorte
+        :param cohortname_pattern: Le pattern à faire correspondre pour le nom de la cohorte
+        :return: Un tuple contenant les deux dictionnaires
         """
 
         #Construit le dictionnaire pour avoir l'association classe -> niveau de formation
@@ -1126,21 +1158,23 @@ class Synchronizer:
         return profs_by_cohorts_db, profs_by_cohorts_ldap
 
 
-    def list_contains_username(self, ldap_users: List[PersonneLdap], username: str):
+    def list_contains_username(self, ldap_users: List[PersonneLdap], username: str) -> bool:
         """
-        Vérifie si une liste d'utilisateurs ldap contient un utilisateur via son username
-        :param ldap_users:
-        :param username:
-        :return:
+        Vérifie si une liste d'utilisateurs ldap contient un utilisateur via son username.
+
+        :param ldap_users: La liste des utilisateurs du ldap
+        :param username: Le nom d'utilisateur à tester
+        :return: Vrai ou faux si la liste contient l'utilisateur ou non
         """
         for ldap_user in ldap_users:
             if ldap_user.uid.lower() == username.lower():
                 return True
         return False
 
-    def backup_course(self, courseid, log=getLogger()):
+    def backup_course(self, courseid: int, log=getLogger()) -> bool:
         """
-        Permet de lancer le backup un cours et de vérifier qu'il s'est bien passé
+        Permet de lancer le backup un cours et de vérifier qu'il s'est bien passé.
+
         :param courseid: L'id du cours à backup
         :return: Un booléen a True si le backup s'est bien passé, False sinon
         """
@@ -1153,8 +1187,10 @@ class Synchronizer:
 
     def check_and_process_user_courses(self, user_id: int, log=getLogger()):
         """
-        Effectue les traitements nécéssaires sur tous les cours d'un l'enseignant
+        Effectue les traitements nécéssaires sur tous les cours d'un l'enseignant.
+
         :param user_id: L'enseignant dont on doit traiter les cours
+        :param log: Le logger
         """
         #Liste stockant tous les cours à supprimer
         course_ids_to_delete = []
@@ -1198,13 +1234,13 @@ class Synchronizer:
         if course_ids_to_delete:
             self.delete_courses(course_ids_to_delete)
 
-    def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: List, log=getLogger()):
+    def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: list[tuple], log=getLogger()):
         """
-        Anonymise ou Supprime les utilisateurs devenus inutiles
+        Anonymise ou supprime les utilisateurs devenus inutiles.
+
         :param ldap_users: La liste de toutes les personnes du ldap
         :param db_users: La liste de toutes les personnes dans moodle
-        :param log:
-        :return:
+        :param log: Le logger
         """
         user_ids_to_delete = [] #Utilisateurs à supprimer
         user_ids_to_anonymize = [] #Utilisateurs à anonymiser
@@ -1340,7 +1376,7 @@ class Synchronizer:
 
     def delete_empty_cohorts(self):
         """
-        Supprime les cohortes vides
+        Supprime les cohortes vides.
         """
         #Récupère les ids des cohortes
         empty_cohorts_ids = self.__db.get_empty_cohorts()
@@ -1348,13 +1384,13 @@ class Synchronizer:
             #Fait appel au webservice moodle pour suppression
             self.__webservice.delete_cohorts(empty_cohorts_ids)
 
-    def delete_users(self, userids: List[int], log=getLogger()) -> int:
+    def delete_users(self, userids: List[int], log=getLogger()):
         """
-        Supprime les utilisateurs d'une liste en paginant les appels au webservice
+        Supprime les utilisateurs d'une liste en paginant les appels au webservice.
+
         :param userids: La liste des id des utilisateurs à supprimer
-        :param pagesize:  Le nombre d'utilisateurs supprimés en un seul appel au webservice
-        :param log:
-        :return:
+        :param pagesize: Le nombre d'utilisateurs supprimés en un seul appel au webservice
+        :param log: Le logger
         """
         pagesize = self.__config.webservice.user_delete_pagesize
         i = 0
@@ -1370,16 +1406,15 @@ class Synchronizer:
         if i % pagesize > 0:
             self.__webservice.delete_users(userids_page)
             log.info("%d / %d utilisateurs supprimés", i, total)
-        return i
 
 
-    def delete_courses(self, courseids: List[int], log=getLogger()) -> int:
+    def delete_courses(self, courseids: List[int], log=getLogger()):
         """
-        Supprime les cours d'une liste en paginant les appels au webservice
+        Supprime les cours d'une liste en paginant les appels au webservice.
+
         :param courseids: La liste des id de cours à supprimer
         :param pagesize: Le nombre de cours supprimés en un seul appel au webservice
-        :param log:
-        :return:
+        :param log: Le logger
         """
         pagesize = self.__config.webservice.course_delete_pagesize
         i = 0
@@ -1395,7 +1430,6 @@ class Synchronizer:
         if i % pagesize > 0:
             self.__webservice.delete_courses(courseids_page)
             log.info("%d / %d cours supprimés", i, total)
-        return i
 
 
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],
@@ -1403,12 +1437,12 @@ class Synchronizer:
                       cohortname_pattern: str,
                       log=getLogger()):
         """
-        Vide les cohortes d'utilisateurs conformément à l'annuaire LDAP
-        :param users_by_cohorts_db:
-        :param users_by_cohorts_ldap:
-        :param cohortname_pattern:
-        :param log:
-        :return:
+        Vide les cohortes d'utilisateurs conformément à l'annuaire LDAP.
+
+        :param users_by_cohorts_db: Un dictionnaire associant des noms de cohortes à la liste de ses utilisateures dans moodle
+        :param users_by_cohorts_ldap: Un dictionnaire associant des noms de cohortes à la liste de ses utilisateures dans le ldap
+        :param cohortname_pattern: Le pattern à faire correspondre pour le nom des cohortes
+        :param log: Le logger
         """
         # On boucle avec à chaque fois une cohorte et son tableau d'élèves de la bdd
         for cohort_db, eleves_db in users_by_cohorts_db.items():
@@ -1428,9 +1462,12 @@ class Synchronizer:
                         log.info("Désenrollement de l'utilisateur %s de la cohorte \"%s\"", username_db, cohort_db)
                         self.__db.disenroll_user_from_username_and_cohortname(username_db, cohortname)
 
-    def purge_cohort_dane_lycee_en(self, lycee_ldap: list, log=getLogger()) -> dict[str,list[str]]:
+    def purge_cohort_dane_lycee_en(self, lycee_ldap: dict, log=getLogger()) -> dict[str,list[str]]:
         """
-        Purge les cohortes dane des différents types d'utilisateurs dans les lycées
+        Purge les cohortes dane des différents types d'utilisateurs dans les lycées.
+
+        :param lycee_ldap: Un dictionnaire contenant les listes des utilisateurs contenus dans les cohortes des lycées danse dans le ldap par type d'utilisateur
+        :param log: Le logger
         """
         #Pour chaque cohorte de chaque type d'utilisateur
         for user_type in UserType:
@@ -1447,9 +1484,12 @@ class Synchronizer:
                      username_db, user_type)
                     self.__db.disenroll_user_from_username_and_cohortid(username_db, self.ids_cohorts_dane_lycee_en[user_type])
 
-    def purge_cohort_dane_clg_dep(self, clg_ldap: list, departement, log=getLogger()) -> dict[str,list[str]]:
+    def purge_cohort_dane_clg_dep(self, clg_ldap: dict, departement: str, log=getLogger()) -> dict[str,list[str]]:
         """
-        Purge les cohortes dane des différents types d'utilisateurs dans les collèges par département
+        Purge les cohortes dane des différents types d'utilisateurs dans les collèges par département.
+
+        :param lycee_ldap: Un dictionnaire contenant les listes des utilisateurs contenus dans les cohortes des lycées dans dans le ldap par type d'utilisateur et par département
+        :param log: Le logger
         """
         #Pour chaque cohorte de chaque type d'utilisateur
         for user_type in UserType:
@@ -1469,15 +1509,14 @@ class Synchronizer:
                         self.ids_cohorts_dane_dep_clg[user_type][departement]
                     )
 
-    def mise_a_jour_cohorte_interetab(self, is_member_of, cohort_name, since_timestamp: datetime.datetime,
+    def mise_a_jour_cohorte_interetab(self, is_member_of: str, cohort_name: str, since_timestamp: datetime.datetime,
                                       log=getLogger()):
         """
         Met à jour la cohorte inter-etablissement.
-        :param is_member_of:
-        :param cohort_name:
-        :param since_timestamp:
-        :param log:
-        :return:
+        :param is_member_of: La filtre pour identifier des utilisateurs interEtablissements
+        :param cohort_name: Le nom de la cohorte d'utilisateures inter_etabs
+        :param since_timestamp: Le timestamp au delà duquel on ne traite pas les utilisateurs
+        :param log: Le logger
         """
         # Creation de la cohort si necessaire
         self.get_or_create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name,
@@ -1503,16 +1542,17 @@ class Synchronizer:
                 log.warning("Impossible d'inserer l'utilisateur %s dans la cohorte %s, "
                             "car il n'est pas connu dans Moodle", personne_ldap, cohort_name)
 
-    def insert_moodle_structure(self, grp, nom_structure, path, ou, siren, uai):
+    def insert_moodle_structure(self, grp: bool, nom_structure: str, path: str,
+     ou: str, siren: str, uai: str):
         """
         Fonction permettant d'inserer une structure dans Moodle.
-        :param grp:
-        :param nom_structure:
-        :param path:
-        :param ou:
-        :param siren:
-        :param uai:
-        :return:
+
+        :param grp: Si la strucutre fait partie d'un groupement
+        :param nom_structure: Le nom de la structure
+        :param path: Le path de la structure
+        :param ou: L'ou path de la structure
+        :param siren: Le siren de la structure
+        :param uai: L'uai path de la structure
         """
         # Recuperation du timestamp
         now = self.__db.get_timestamp_now()

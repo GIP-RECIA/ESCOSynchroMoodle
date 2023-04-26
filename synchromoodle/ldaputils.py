@@ -12,21 +12,20 @@ from synchromoodle.config import LdapConfig
 
 class ClasseLdap:
     """
-    Représente une classe d'un enseignant ou élève récupérée depuis le ldap
-    Contient :
-    - L'établissement dans lequel est la classe
-    - Le nom de la classe en elle-même
+    Représente une classe d'un enseignant ou élève récupérée depuis le ldap.
+    Contient l'établissement dans lequel est la classe
+    et le nom de la classe en elle-même
     """
     def __init__(self, etab_dn: str, classe: str):
         self.etab_dn = etab_dn
         self.classe = classe
 
-def extraire_classes_ldap(classes_ldap: List[str]):
+def extraire_classes_ldap(classes_ldap: List[str]) -> list[ClasseLdap]:
     """
     Extrait le nom des classes à partir de l'entrée issue de l'annuaire ldap.
 
     :param classes_ldap:  entrée issue du LDAP.
-    :return:
+    :return: La liste des classes.
     """
     classes = []
     for classe_ldap in classes_ldap:
@@ -38,10 +37,10 @@ def extraire_classes_ldap(classes_ldap: List[str]):
 
 def ldap_escape(ldapstr: str) -> str:
     """
-    Echappe les caractères specifiques pour les filtres LDAP
+    Echappe les caractères specifiques pour les filtres LDAP.
 
-    :param ldapstr:
-    :return:
+    :param ldapstr: La chaine à traiter
+    :return: La chaine traitée
     """
     if ldapstr is None:
         return ""
@@ -205,7 +204,7 @@ class Ldap:
 
     def search_dane(self, uai: str) -> StructureLdap:
         """
-        Recherche une structure dane
+        Recherche une structure dane.
 
         :param uai: code établissement
         :return: L'établissement trouvé, ou None si non trouvé.
@@ -236,7 +235,7 @@ class Ldap:
         """
         Recherche de personnes.
 
-        :param since_timestamp: datetime.datetime
+        :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les personnes.
         :param filters: Filtres à appliquer
         :return: Liste des personnes
         """
@@ -251,7 +250,7 @@ class Ldap:
         """
         Recherche d'étudiants.
 
-        :param since_timestamp: datetime.datetime
+        :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les élèves.
         :param uai: code établissement
         :return: Liste des étudiants correspondant
         """
@@ -266,7 +265,7 @@ class Ldap:
         """
         Recherche d'uid d'étudiants.
 
-        :param since_timestamp: datetime.datetime
+        :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les élèves.
         :param uai: code établissement
         :return: Liste des uid d'étudiants correspondant
         """
@@ -276,13 +275,13 @@ class Ldap:
                                ['uid'])
         return [entry.uid.value.lower() for entry in self.connection.entries]
 
-    def search_eleves_in_classe(self, classe: str, uai):
+    def search_eleves_in_classe(self, classe: str, uai: str) -> list[EleveLdap]:
         """
         Recherche les élèves dans une classe.
 
-        :param classe:
-        :param uai:
-        :return:
+        :param classe: Le nom de la classe
+        :param uai: L'uai de l'établissement dans lequel on effectue la recherche
+        :return: La liste des élèves dans la classe
         """
         ldap_filter = f'(&(ENTEleveClasses=*${ldap_escape(classe)})(ESCOUAI={ldap_escape(uai)}))'
         self.connection.search(self.config.personnes_dn, ldap_filter,
@@ -291,7 +290,7 @@ class Ldap:
                                 'ESCODomaines', 'ESCOUAICourant', '+'])
         return [EleveLdap(entry) for entry in self.connection.entries]
 
-    def search_eleves_in_niveau(self, niveau: str, uai):
+    def search_eleves_in_niveau(self, niveau: str, uai: str) -> list[EleveLdap]:
         """
         Recherche les élèves dans une niveau.
 
@@ -311,7 +310,7 @@ class Ldap:
         """
         Recherche d'enseignants.
 
-        :param since_timestamp: datetime.datetime
+        :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les enseignants.
         :param uai: code etablissement
         :param tous: Si True, retourne également le personnel non enseignant
         :return: Liste des enseignants
@@ -327,9 +326,9 @@ class Ldap:
     def search_enseignant_profil_uid(self, since_timestamp: datetime.datetime = None, profil="National_ENS",\
             uai=None, tous=False) -> List[str]:
         """
-        Recherche d'uid d'enseignants un profil spécifique
+        Recherche d'uid d'enseignants d'un profil spécifique.
 
-        :param since_timestamp: datetime.datetime
+        :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les enseignants.
         :param profil: attribut ENTPersonProfils du LDAP
         :param uai: code etablissement
         :param tous: Si True, retourne également le personnel non enseignant
@@ -372,7 +371,7 @@ class Ldap:
                                ['uid'])
         return [entry.uid.value.lower() for entry in self.connection.entries]
 
-    def search_enseignants_in_classe(self, classe: str, uai):
+    def search_enseignants_in_classe(self, classe: str, uai: str) -> list[EnseignantLdap]:
         """
         Recherche les enseignants dans une classe.
 
@@ -388,7 +387,7 @@ class Ldap:
                                 'ENTAuxEnsClasses'])
         return [EnseignantLdap(entry) for entry in self.connection.entries]
 
-    def search_enseignants_in_etab(self, uai: str):
+    def search_enseignants_in_etab(self, uai: str) -> list[EnseignantLdap]:
         """
         Recherche les enseignants dans un établissement.
 
@@ -403,13 +402,13 @@ class Ldap:
                                 'ENTAuxEnsClasses'])
         return [EnseignantLdap(entry) for entry in self.connection.entries]
 
-    def search_enseignants_in_niveau(self, niveau: str, uai: str, classe_to_niv_formation):
+    def search_enseignants_in_niveau(self, niveau: str, uai: str, classe_to_niv_formation: dict[str,str]) -> list[EnseignantLdap]:
         """
-        Recherche les enseignants dans un niveau de formation
+        Recherche les enseignants dans un niveau de formation.
 
         :param niveau: Le niveau de formation recherché
         :param uai: L'identifiant de l'établissement dans lequel on effectue la recherche
-        :param classe_to_niv_formation:
+        :param classe_to_niv_formation: Un dictionnaire associant des classes à des niveaux de formation
         :return: La liste des enseignants trouvés
         """
         all_enseignants = self.search_enseignants_in_etab(uai)
@@ -427,7 +426,7 @@ class Ldap:
 
     def get_domaines_etabs(self) -> Dict[str, List[str]]:
         """
-        Obtient la liste des "ESCOUAICourant : Domaine" des établissements
+        Obtient la liste des "ESCOUAICourant : Domaine" des établissements.
 
         :return: Dictionnaire uai/list de domaines
         """
@@ -442,9 +441,9 @@ class Ldap:
 
 def _get_filtre_eleves(since_timestamp: datetime.datetime = None, uai: str = None) -> str:
     """
-    Construit le filtre pour récupérer les élèves au sein du LDAP
+    Construit le filtre pour récupérer les élèves au sein du LDAP.
 
-    :param since_timestamp:
+    :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les élèves
     :param uai: code établissement
     :return: Le filtre
     """
@@ -461,9 +460,9 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
     """
     Construit le filtre pour récupérer les enseignants au sein du LDAP.
 
-    :param since_timestamp:
+    :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les enseignants
     :param uai: code établissement
-    :param tous:
+    :param tous: Si on ne prend que les enseignants ou si on prend aussi tous les personnels de l'établissement
     :return: Le filtre
     """
     filtre = "(&"
@@ -490,9 +489,9 @@ def get_filtre_enseignants_profil(since_timestamp: datetime.datetime = None, pro
     """
     Construit le filtre pour récupérer les enseignants au sein du LDAP.
 
-    :param since_timestamp:
+    :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les enseignants
     :param uai: code établissement
-    :param tous:
+    :param tous: Si on ne prend que les enseignants ou si on prend aussi tous les personnels de l'établissement
     :return: Le filtre
     """
     filtre = "(&"
@@ -520,7 +519,7 @@ def get_filtre_personnel_direction(since_timestamp: datetime.datetime = None, ua
     """
     Construit le filtre pour récupérer les utilisateurs personnel de direction au sein du LDAP.
 
-    :param since_timestamp:
+    :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les personnels
     :param uai: code établissement
     :return: Le filtre
     """
@@ -542,9 +541,9 @@ def get_filtre_personnel_direction(since_timestamp: datetime.datetime = None, ua
 
 def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: Union[str, List[str]]) -> str:
     """
-    Construit le filtre pour récupérer les personnes
+    Construit le filtre pour récupérer les personnes.
 
-    :param modify_time_stamp:
+    :param modify_time_stamp: Le temps de dernière modification au delà duquel on ne récupère pas les personnes
     :param filters: Filtres spécifiques à appliquer
     :return: Le filtre
     """
@@ -569,7 +568,12 @@ def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: 
 
 
 def _get_filtre_etablissement(uai=None):
-    """Construit le filtre pour les établissements."""
+    """
+    Construit le filtre pour les établissements.
+
+    :param uai: code établissement
+    :return: Le filtre
+    """
     filtre = "(&(ObjectClass=ENTEtablissement)" \
              "(!(ENTStructureSiren=0000000000000A))"
 
@@ -580,13 +584,17 @@ def _get_filtre_etablissement(uai=None):
     return filtre
 
 
-def _get_filtre_dane(uai=None):
-    """Construit le filtre pour la dane."""
+def _get_filtre_dane(uai):
+    """
+    Construit le filtre pour la dane.
+
+    :param uai: code établissement
+    :return: Le filtre
+    """
     filtre = "(&(ObjectClass=ENTServAc)" \
              "(!(ENTStructureSiren=0000000000000A))"
 
-    if uai:
-        filtre += f"(ENTStructureUAI={ldap_escape(uai)})"
-
+    filtre += f"(ENTStructureUAI={ldap_escape(uai)})"
     filtre += ")"
+
     return filtre

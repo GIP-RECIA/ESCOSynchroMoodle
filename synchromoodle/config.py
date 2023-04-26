@@ -16,8 +16,8 @@ class _BaseConfig:
     def update(self, **entries):
         """
         Met à jour les données de l'objet de configuration.
+
         :param entries:
-        :return:
         """
         self.__dict__.update(entries)
 
@@ -28,23 +28,23 @@ class WebServiceConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
-        self.token = ""
+        self.token = ""  # type: str
         """Token d'accès au webservice Moodle"""
 
-        self.moodle_host = ""
+        self.moodle_host = ""  # type: str
         """Host HTTP cible pour accéder au webservice Moodle"""
 
-        self.backup_cmd = "php backup.php --courseid=%courseid% --destination=/MoodleBackups"
+        self.backup_cmd = "php backup.php --courseid=%courseid% --destination=/MoodleBackups" # type: str
         """Commande à executer pour lancer la backup d'un cours"""
 
-        self.backup_success_re = "Backup completed"
+        self.backup_success_re = "Backup completed" # type: str
         """Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le
         succès de l'opération"""
 
-        self.user_delete_pagesize = 50
+        self.user_delete_pagesize = 50 # type: int
         """Nombre d'utilisateurs qu'on supprime en 1 seul appel au web service"""
 
-        self.course_delete_pagesize = 50
+        self.course_delete_pagesize = 50 # type: int
         """Nombre de cours qu'on supprime en 1 seul appel au web service"""
 
         super().__init__(**entries)
@@ -56,31 +56,31 @@ class DeleteConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
-        self.ids_users_undeletable = [1, 2, 3]
+        self.ids_users_undeletable = [1, 2, 3]  # type: list[int]
         """Ids des utilisateurs qui ne doivent en aucun cas être supprimés"""
 
-        self.ids_roles_teachers = [2]
+        self.ids_roles_teachers = [2]  # type: list[int]
         """Ids des roles considérés comme enseignants pour la suppression"""
 
-        self.delay_anonymize_student = 60
+        self.delay_anonymize_student = 60  # type: int
         """Délai, en jours, avant de anonymiser un élève qui n'est plus présent dans l'annuaire LDAP"""
 
-        self.delay_delete_student = 90
+        self.delay_delete_student = 90  # type: int
         """Délai, en jours, avant de supprimer un élève qui n'est plus présent dans l'annuaire LDAP"""
 
-        self.delay_anonymize_teacher = 90
+        self.delay_anonymize_teacher = 90  # type: int
         """Délai, en jours, avant d'anonymiser un enseignant qui n'est plus présent dans l'annuaire LDAP"""
 
-        self.delay_delete_teacher = 395
+        self.delay_delete_teacher = 395  # type: int
         """Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP"""
 
-        self.delay_backup_course = 365
+        self.delay_backup_course = 365  # type: int
         """Délai, en jours, avant de sauvegarder un cours inutilisé"""
 
-        self.delay_force_delete = 1095
+        self.delay_force_delete = 1095  # type: int
         """Délai, en jours, avant de supprimer un compte qui n'est plus présent dans l'annuaire LDAP peut importe ses références"""
 
-        self.purge_cohorts = False
+        self.purge_cohorts = False  # type: bool
         """Booléen indiquant si on purge les cohortes s'il y a une action de suppression"""
 
         super().__init__(**entries)
@@ -92,13 +92,13 @@ class ConstantesConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
-        self.anonymous_phone = "0606060606"
+        self.anonymous_phone = "0606060606"  # type: str
         """Valeur assignée aux numeros de telephones des utilisateurs anonymisés"""
 
-        self.anonymous_name = "Anonyme"
+        self.anonymous_name = "Anonyme"  # type: str
         """Valeur assignée aux champs divers du profil des utilisateurs anonymisés"""
 
-        self.anonymous_mail = "anonyme@email.com"
+        self.anonymous_mail = "anonyme@email.com"  # type: str
         """Adresse email assignée aux utilisateurs anonymisés"""
 
         self.default_moodle_theme = "netocentre"  # type: str
@@ -175,7 +175,7 @@ class ConstantesConfig(_BaseConfig):
         self.uai_dane = "0450080T"  # type: string
         """Uai de la dane"""
 
-        self.departements = ['18', '28', '36', '37', '41', '45']
+        self.departements = ['18', '28', '36', '37', '41', '45']  # type: list[int]
         """Liste des départements pour les cohortes de la dane"""
 
 
@@ -394,8 +394,8 @@ class ActionConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
-        self.id = None
-        self.type = "default"
+        self.id = None  # type: str
+        self.type = "default"  # type: str
         self.timestamp_store = TimestampStoreConfig()  # type: TimestampStoreConfig
         self.etablissements = EtablissementsConfig()  # type: EtablissementsConfig
         self.inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
@@ -470,7 +470,8 @@ class Config(_BaseConfig):
     def validate(self):
         """
         Valide la configuration.
-        :return:
+
+        :raises ValueError: Si aucune action n'est définie dans la configuration
         """
         if not self.actions:
             raise ValueError("Au moins une action doit être définie dans la configuration.")
@@ -484,10 +485,12 @@ class ConfigLoader:
     def update(self, config: Config, config_fp: List[str], silent=False) -> Config:
         """
         Met à jour la configuration avec le chargement d'une une liste de fichier de configuration.
-        :param config:
-        :param config_fp:
-        :param silent:
-        :return:
+
+        :param config: L'objet représentant la configuration
+        :param config_fp: La liste des noms de fichier pour la configuration
+        :param silent: Afficher les excepetion en tant que debug ou warning dans les logs
+        :raises FileNotFoundError: Si un des fichiers spécifiés n'existe pas
+        :return: La configuration mise à jour
         """
         for config_item in config_fp:
             try:
@@ -506,9 +509,10 @@ class ConfigLoader:
     def load(self, config: List[str], silent=False) -> Config:
         """
         Charge une configuration à partir d'une liste de fichier de configuration.
-        :param config:
-        :param silent:
-        :return:
+
+        :param config: La liste des noms de fichier pour la configuration
+        :param silent: Afficher les excepetion en tant que debug ou warning dans les logs
+        :return: La configuration créée
         """
         loaded_config = Config()
         loaded_config = self.update(loaded_config, config, silent)

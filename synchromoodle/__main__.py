@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 """
-Entrypoint
+Point d'entrée du programme
 """
 
 import sys
@@ -16,7 +16,7 @@ from synchromoodle.config import ConfigLoader
 
 def main():
     """
-    Main function
+    Fonction principale appelée lorsqu'on lance le script
     """
     arguments = parse_args()
 

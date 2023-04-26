@@ -1,6 +1,7 @@
 # coding: utf-8
 """
-Actions
+Module décrivant le comportement des différentes
+actions qu'il est possible de configurer
 """
 
 from logging import getLogger
@@ -15,6 +16,7 @@ from .ldaputils import Ldap
 def default(config: Config, action: ActionConfig):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
+
     :param config: Configuration d'execution
     :param action: Configuration de l'action
     """
@@ -76,9 +78,9 @@ def interetab(config: Config, action: ActionConfig):
     """
     Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
     Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
+
     :param config: Configuration globale
     :param action: Configuration de l'action
-    :return:
     """
     log = getLogger()
 
@@ -123,9 +125,9 @@ def interetab(config: Config, action: ActionConfig):
 
 def inspecteurs(config: Config, action: ActionConfig):
     """
-    Effectue la mise a jour de la BD
-    Moodle via les infos issues du LDAP
+    Effectue la mise a jour de la BD moodle via les infos issues du LDAP
     Cette mise a jour concerne les inspecteurs
+
     :param config: Configuration globale
     :param action: Configuration de l'action
     """
@@ -171,9 +173,9 @@ def nettoyage(config: Config, action: ActionConfig):
     Effectue une purge des cohortes dans la base de données par rapport
     au contenu du LDAP et supprime les cohortes inutiles (vides)
     Anonymisation/suppression des utilisateurs inutiles
+
     :param config: Configuration globale
     :param action: Configuration de l'action
-    :return:
     """
     log = getLogger()
 
