@@ -18,9 +18,9 @@ ldap:
   admin_rdn: "ou=administrateurs"
 
 webservice:
-  token: "cd4ab10e5cdd9c81d49d5aec9097a685"
+  token: "8171f8af9b393be7e4d0e984b39c4223"
   moodle_host: "http://localhost:8080"
-  backup_cmd: sudo docker exec -it mde_php php admin/cli/backup.php --courseid=%courseid% --destination=../../MoodleBackups
+  backup_cmd: docker exec -it mde_php php admin/cli/backup.php --courseid=%courseid% --destination=../../MoodleBackups
 
 constantes:
   id_role_enseignant : 4
