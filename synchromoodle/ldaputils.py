@@ -14,8 +14,8 @@ class ClasseLdap:
     """
     Représente une classe d'un enseignant ou élève récupérée depuis le ldap
     Contient :
-        - L'établissement dans lequel est la classe
-        - Le nom de la classe en elle-même
+    - L'établissement dans lequel est la classe
+    - Le nom de la classe en elle-même
     """
     def __init__(self, etab_dn: str, classe: str):
         self.etab_dn = etab_dn
@@ -26,7 +26,7 @@ def extraire_classes_ldap(classes_ldap: List[str]):
     Extrait le nom des classes à partir de l'entrée issue de l'annuaire ldap.
 
     :param classes_ldap:  entrée issue du LDAP.
-    :return
+    :return:
     """
     classes = []
     for classe_ldap in classes_ldap:
@@ -39,6 +39,7 @@ def extraire_classes_ldap(classes_ldap: List[str]):
 def ldap_escape(ldapstr: str) -> str:
     """
     Echappe les caractères specifiques pour les filtres LDAP
+
     :param ldapstr:
     :return:
     """
@@ -195,6 +196,7 @@ class Ldap:
     def get_structure(self, uai: str) -> StructureLdap:
         """
         Recherche de structures.
+
         :param uai: code établissement
         :return: L'établissement trouvé, ou None si non trouvé.
         """
@@ -204,6 +206,7 @@ class Ldap:
     def search_dane(self, uai: str) -> StructureLdap:
         """
         Recherche une structure dane
+
         :param uai: code établissement
         :return: L'établissement trouvé, ou None si non trouvé.
         """
@@ -218,6 +221,7 @@ class Ldap:
     def search_structure(self, uai: str = None) -> List[StructureLdap]:
         """
         Recherche de structures.
+
         :param uai: code établissement
         :return: Liste des structures trouvées
         """
@@ -231,6 +235,7 @@ class Ldap:
     def search_personne(self, since_timestamp: datetime.datetime = None, **filters) -> List[PersonneLdap]:
         """
         Recherche de personnes.
+
         :param since_timestamp: datetime.datetime
         :param filters: Filtres à appliquer
         :return: Liste des personnes
@@ -245,6 +250,7 @@ class Ldap:
     def search_eleve(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[EleveLdap]:
         """
         Recherche d'étudiants.
+
         :param since_timestamp: datetime.datetime
         :param uai: code établissement
         :return: Liste des étudiants correspondant
@@ -259,6 +265,7 @@ class Ldap:
     def search_eleve_uid(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[str]:
         """
         Recherche d'uid d'étudiants.
+
         :param since_timestamp: datetime.datetime
         :param uai: code établissement
         :return: Liste des uid d'étudiants correspondant
@@ -272,6 +279,7 @@ class Ldap:
     def search_eleves_in_classe(self, classe: str, uai):
         """
         Recherche les élèves dans une classe.
+
         :param classe:
         :param uai:
         :return:
@@ -286,6 +294,7 @@ class Ldap:
     def search_eleves_in_niveau(self, niveau: str, uai):
         """
         Recherche les élèves dans une niveau.
+
         :param niveau: Le niveau de formation recherché
         :param uai: L'établissement dans lequel on effectue la recherche
         :return: La liste des élèves trouvés
@@ -301,6 +310,7 @@ class Ldap:
             -> List[EnseignantLdap]:
         """
         Recherche d'enseignants.
+
         :param since_timestamp: datetime.datetime
         :param uai: code etablissement
         :param tous: Si True, retourne également le personnel non enseignant
@@ -318,6 +328,7 @@ class Ldap:
             uai=None, tous=False) -> List[str]:
         """
         Recherche d'uid d'enseignants un profil spécifique
+
         :param since_timestamp: datetime.datetime
         :param profil: attribut ENTPersonProfils du LDAP
         :param uai: code etablissement
@@ -334,6 +345,7 @@ class Ldap:
             -> List[PersonnelDirection]:
         """
         Recherche du personnel de direction.
+
         :param since_timestamp: datetime.datetime
         :param uai: code etablissement
         :return: Liste du personnel de direction
@@ -349,6 +361,7 @@ class Ldap:
             -> List[str]:
         """
         Recherche des uid du personnel de direction.
+
         :param since_timestamp: datetime.datetime
         :param uai: code etablissement
         :return: Liste des uid du personnel de direction
@@ -362,6 +375,7 @@ class Ldap:
     def search_enseignants_in_classe(self, classe: str, uai):
         """
         Recherche les enseignants dans une classe.
+
         :param classe: La classe recherchée
         :param uai: L'établissement dans lequel on effectue la recherche
         :return: La liste des enseignants trouvés
@@ -377,6 +391,7 @@ class Ldap:
     def search_enseignants_in_etab(self, uai: str):
         """
         Recherche les enseignants dans un établissement.
+
         :param uai: L'établissement recherché
         :return: La liste des enseignants trouvés
         """
@@ -391,6 +406,7 @@ class Ldap:
     def search_enseignants_in_niveau(self, niveau: str, uai: str, classe_to_niv_formation):
         """
         Recherche les enseignants dans un niveau de formation
+
         :param niveau: Le niveau de formation recherché
         :param uai: L'identifiant de l'établissement dans lequel on effectue la recherche
         :param classe_to_niv_formation:
@@ -412,6 +428,7 @@ class Ldap:
     def get_domaines_etabs(self) -> Dict[str, List[str]]:
         """
         Obtient la liste des "ESCOUAICourant : Domaine" des établissements
+
         :return: Dictionnaire uai/list de domaines
         """
         structures = self.search_structure()
@@ -526,6 +543,7 @@ def get_filtre_personnel_direction(since_timestamp: datetime.datetime = None, ua
 def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: Union[str, List[str]]) -> str:
     """
     Construit le filtre pour récupérer les personnes
+
     :param modify_time_stamp:
     :param filters: Filtres spécifiques à appliquer
     :return: Le filtre

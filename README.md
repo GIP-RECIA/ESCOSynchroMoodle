@@ -9,7 +9,7 @@ Ce script permet la synchronisation des données de l'annuaire LDAP avec Moodle.
 
 ### Prérequis
 
- - Python 3.5+
+ - Python 3.10+
  - [Pipenv](https://github.com/pypa/pipenv)
 
 ##### Note sous windows
@@ -72,10 +72,10 @@ python3 -m synchromoodle -c config/test.yml
 
 ## Documentation
 
-Il est possible de générer une documentation sous forme de fichiers `.html` grâce à pydoc3.
+Il est possible de générer une documentation sous forme de fichiers `.html` grâce à Sphinx. Il faut se placer dans le répertoire autodocs et taper la commande :
 
 ```
-pipenv run python -m pdoc --html synchromoodle
+pipenv run make html
 ```
 
 # Usage

@@ -10,7 +10,7 @@ coverage = "*"
 sqlparse = "*"
 cachetools = "*"
 pex = "*"
-pdoc3 = "*"
+sphinx = "*"
 
 [packages]
 mysql-connector-python = "*"

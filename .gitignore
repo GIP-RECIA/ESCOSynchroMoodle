@@ -19,6 +19,7 @@ build/
 
 *_precedent.txt
 /dist/*
+autodocs/_build
 
 # sauvegarde de l'ancienne version du script de dédoublonage
 traiteDoublonCohorte.pl.sav
