@@ -7,18 +7,16 @@ from logging import getLogger
 
 from synchromoodle.synchronizer import Synchronizer,UserType
 from synchromoodle.timestamp import TimestampStore
-from .arguments import DEFAULT_ARGS
 from .config import Config, ActionConfig
 from .dbutils import Database
 from .ldaputils import Ldap
 
 
-def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+def default(config: Config, action: ActionConfig):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
     :param config: Configuration d'execution
     :param action: Configuration de l'action
-    :param arguments: Arguments de ligne de commande
     """
     log = getLogger()
 
@@ -28,7 +26,7 @@ def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer = Synchronizer(ldap, db, config, action)
         synchronizer.initialize()
 
         timestamp_store = TimestampStore(action.timestamp_store)
@@ -40,7 +38,7 @@ def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         synchronizer.handle_dane(config.constantes.uai_dane, log=dane_log)
         db.connection.commit()
 
-        for uai in action.etablissements.listeEtab:
+        for uai in action.etablissements.liste_etab:
             etablissement_log = log.getChild(f'etablissement.{uai}')
 
             etablissement_log.info(f'Traitement de l\'établissement (uai={uai})')
@@ -74,13 +72,12 @@ def default(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         ldap.disconnect()
 
 
-def interetab(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+def interetab(config: Config, action: ActionConfig):
     """
     Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
     Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
     :param config: Configuration globale
     :param action: Configuration de l'action
-    :param arguments: Arguments de ligne de commande
     :return:
     """
     log = getLogger()
@@ -91,7 +88,7 @@ def interetab(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer = Synchronizer(ldap, db, config, action)
         synchronizer.initialize()
 
         timestamp_store = TimestampStore(action.timestamp_store)
@@ -124,14 +121,13 @@ def interetab(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         ldap.disconnect()
 
 
-def inspecteurs(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+def inspecteurs(config: Config, action: ActionConfig):
     """
     Effectue la mise a jour de la BD
     Moodle via les infos issues du LDAP
     Cette mise a jour concerne les inspecteurs
     :param config: Configuration globale
     :param action: Configuration de l'action
-    :param arguments: Arguments de ligne de commande
     """
     log = getLogger()
 
@@ -141,7 +137,7 @@ def inspecteurs(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer = Synchronizer(ldap, db, config, action)
         synchronizer.initialize()
 
         log.info('Traitement des inspecteurs')
@@ -170,14 +166,13 @@ def inspecteurs(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         ldap.disconnect()
 
 
-def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
+def nettoyage(config: Config, action: ActionConfig):
     """
     Effectue une purge des cohortes dans la base de données par rapport
     au contenu du LDAP et supprime les cohortes inutiles (vides)
     Anonymisation/suppression des utilisateurs inutiles
     :param config: Configuration globale
     :param action: Configuration de l'action
-    :param arguments: Arguments de ligne de commande
     :return:
     """
     log = getLogger()
@@ -188,7 +183,7 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         db.connect()
         ldap.connect()
 
-        synchronizer = Synchronizer(ldap, db, config, action, arguments)
+        synchronizer = Synchronizer(ldap, db, config, action)
         synchronizer.initialize()
 
         # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
@@ -215,7 +210,7 @@ def nettoyage(config: Config, action: ActionConfig, arguments=DEFAULT_ARGS):
         # Purge des cohortes pour n'y conserver que les utilisateurs qui doivent encore être dedans
         if config.delete.purge_cohorts:
 
-            for uai in action.etablissements.listeEtab:
+            for uai in action.etablissements.liste_etab:
                 etablissement_log = log.getChild(f'etablissement.{uai}')
 
                 etablissement_log.info(f"Nettoyage de l'établissement (uai={uai})")

@@ -28,7 +28,7 @@ class WebService:
         i = 0
         users_to_delete = {}
         for userid in userids:
-            users_to_delete["userids[%d]" % i] = userid
+            users_to_delete[f"userids[{i}]"] = userid
             i += 1
         res = requests.get(url=self.url,
                            params={
@@ -58,7 +58,7 @@ class WebService:
         params = {}
 
         for i in range(len(courseids)):
-            params["courseids[%i]" % i] = courseids[i]
+            params[f"courseids[{i}]"] = courseids[i]
 
         res = requests.get(url=self.url,
                            params={
@@ -218,7 +218,7 @@ class WebService:
 
             cohorts_to_delete = {}
             for i in range(len(cohortids)):
-                cohorts_to_delete["cohortids[%i]" % i] = cohortids[i]
+                cohorts_to_delete[f"cohortids[{i}]"] = cohortids[i]
 
             res = requests.get(url=self.url,
                                params={

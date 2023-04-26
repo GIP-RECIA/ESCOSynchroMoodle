@@ -29,11 +29,11 @@ class TestConfig:
 
         assert config.constantes.foo == "constante test foo 2"
         assert config.constantes.bar == "constante test bar 1"
-        assert config_action_1.etablissements.prefixAdminMoodleLocal == "config_test1:admin:Moodle:local:"
-        assert config_action_1.etablissements.prefixAdminLocal == "config_test1:admin:local:"
-        assert len(config_action_1.etablissements.listeEtab) == 3
-        assert config_action_1.etablissements.etabRgp[1].nom == "ETAB RGP DE TEST 2"
-        assert len(config_action_1.etablissements.etabRgp[2].uais) == 10
+        assert config_action_1.etablissements.prefix_admin_moodle_local == "config_test1:admin:Moodle:local:"
+        assert config_action_1.etablissements.prefix_admin_local == "config_test1:admin:local:"
+        assert len(config_action_1.etablissements.liste_etab) == 3
+        assert config_action_1.etablissements.etab_rgp[1].nom == "ETAB RGP DE TEST 2"
+        assert len(config_action_1.etablissements.etab_rgp[2].uais) == 10
 
     def test_config_update_same_id(self):
         config_loader = ConfigLoader()
@@ -56,8 +56,8 @@ class TestConfig:
         assert config_action.timestamp_store.file == "config_test2_precedent.txt"
         assert config.constantes.foo == "constante test foo 2"
         assert config.constantes.bar == "constante test bar 1"
-        assert config_action.etablissements.prefixAdminMoodleLocal == "config_test1:admin:Moodle:local:"
-        assert config_action.etablissements.prefixAdminLocal == "config_test1:admin:local:"
-        assert len(config_action.etablissements.listeEtab) == 3
-        assert config_action.etablissements.etabRgp[1].nom == "ETAB RGP DE TEST 2"
-        assert len(config_action.etablissements.etabRgp[2].uais) == 10
+        assert config_action.etablissements.prefix_admin_moodle_local == "config_test1:admin:Moodle:local:"
+        assert config_action.etablissements.prefix_admin_local == "config_test1:admin:local:"
+        assert len(config_action.etablissements.liste_etab) == 3
+        assert config_action.etablissements.etab_rgp[1].nom == "ETAB RGP DE TEST 2"
+        assert len(config_action.etablissements.etab_rgp[2].uais) == 10

@@ -172,11 +172,11 @@ La structure de la configuration est modélisée par les classes situées dans
 | uri           | URI du serveur LDAP         | "ldap://192.168.1.100:9889"                        | Chaine de caractères |
 | username      | Utilisateur                 | "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr" | Chaine de caractères |
 | password      | Mot de passe                | "admin"                                            | Chaine de caractères |
-| baseDN        | DN de base                  | "dc=esco-centre,dc=fr"                             | Chaine de caractères |
-| structuresRDN | OU pour les structures      | "ou=structures"                                    | Chaine de caractères |
-| personnesRDN  | OU pour les personnes       | "ou=people"                                        | Chaine de caractères |
-| groupsRDN     | OU pour les groupes         | "ou=groups"                                        | Chaine de caractères |
-| adminRDN      | OU pour les administrateurs | "ou=administrateurs"                               | Chaine de caractères |
+| base_dn        | DN de base                  | "dc=esco-centre,dc=fr"                             | Chaine de caractères |
+| structures_rdn | OU pour les structures      | "ou=structures"                                    | Chaine de caractères |
+| personnes_rdn  | OU pour les personnes       | "ou=people"                                        | Chaine de caractères |
+| groups_rdn     | OU pour les groupes         | "ou=groups"                                        | Chaine de caractères |
+| admin_rdn      | OU pour les administrateurs | "ou=administrateurs"                               | Chaine de caractères |
 
 ###### delete
 
@@ -213,14 +213,14 @@ La structure de la configuration est modélisée par les classes situées dans
 
 | Propriété                     | Description                                                                                          | Valeur par défaut                  |                   Type                  |
 |-------------------------------|------------------------------------------------------------------------------------------------------|------------------------------------|:---------------------------------------:|
-| etabRgp                       | Regroupement d'etablissements                                                                        | []                                 | Liste de regroupements d'etablissements |
+| etab_rgp                       | Regroupement d'etablissements                                                                        | []                                 | Liste de regroupements d'etablissements |
 | inter_etab_categorie_name     | Nom de la catégorie inter-etablissement                                                              | "Catégorie Inter-Établissements"   |           Chaine de caractères          |
 | inter_etab_categorie_name_cfa | Nom de la catégorie inter-etablissement pour les CFA                                                 | "Catégorie Inter-CFA"              |           Chaine de caractères          |
-| listeEtab                     | Liste des établissements                                                                             | []                                 |      Liste de chaines de caractères     |
-| listeEtabSansAdmin            | Etablissements sans administrateurs                                                                  | []                                 |      Liste de chaines de caractères     |
-| listeEtabSansMail             | Etablissements dont le mail des professeurs n'est pas synchronise                                    | []                                 |      Liste de chaines de caractères     |
-| prefixAdminMoodleLocal        | Préfixe de l'attribut "isMemberOf" indiquant que l'utilisateur est un administrateur local de Moodle | "(esco&#124;clg37):admin:Moodle:local:" |           Chaine de caractères          |
-| prefixAdminLocal              | Prefix de l'attribut "isMemberOf" indiquant que l'utilisateur est un administrateur local            | "(esco&#124;clg37):admin:local:"        |           Chaine de caractères          |
+| liste_etab                     | Liste des établissements                                                                             | []                                 |      Liste de chaines de caractères     |
+| liste_etab_sans_admin            | Etablissements sans administrateurs                                                                  | []                                 |      Liste de chaines de caractères     |
+| liste_etab_sans_mail             | Etablissements dont le mail des professeurs n'est pas synchronise                                    | []                                 |      Liste de chaines de caractères     |
+| prefix_admin_moodle_local        | Préfixe de l'attribut "isMemberOf" indiquant que l'utilisateur est un administrateur local de Moodle | "(esco&#124;clg37):admin:Moodle:local:" |           Chaine de caractères          |
+| prefix_admin_local              | Prefix de l'attribut "isMemberOf" indiquant que l'utilisateur est un administrateur local            | "(esco&#124;clg37):admin:local:"        |           Chaine de caractères          |
 
 ###### Regroupement d'etablissements
 

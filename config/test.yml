@@ -33,10 +33,10 @@ actions:
   timestampStore:
     file: "trtAcademique_precedent.txt"
   etablissements:
-    listeEtab: ["0290009C", "0291595B"]
+    liste_etab: ["0290009C", "0291595B"]
 #- id: nettoyage
 #  type: nettoyage
 #  timestampStore:
 #    file: "trtNettoyage_precedent.txt"
 #  etablissements:
-#    listeEtab: ["0290009C", "0291595B"]
+#    liste_etab: ["0290009C", "0291595B"]

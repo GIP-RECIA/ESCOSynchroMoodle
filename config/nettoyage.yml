@@ -11,11 +11,11 @@ ldap:
   uri: "ldap://localhost:389"
   username: "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr"
   password: "admin"
-  baseDN: "dc=esco-centre,dc=fr"
-  structuresRDN: "ou=structures"
-  personnesRDN: "ou=people"
-  groupsRDN: "ou=groups"
-  adminRDN: "ou=administrateurs"
+  base_dn: "dc=esco-centre,dc=fr"
+  structures_rdn: "ou=structures"
+  personnes_rdn: "ou=people"
+  groups_rdn: "ou=groups"
+  admin_rdn: "ou=administrateurs"
 
 webservice:
   token: "cd4ab10e5cdd9c81d49d5aec9097a685"
@@ -64,7 +64,7 @@ actions:
   timestampStore:
     file: "trtAcademique_precedent.txt"
   etablissements:
-    listeEtab: ["0290009C", "0291595B", "0180005H", "0180002E"]
+    liste_etab: ["0290009C", "0291595B", "0180005H", "0180002E"]
 - id: interetab-all
   type: interetab
   timestampStore:
@@ -76,4 +76,4 @@ actions:
 - id: nettoyage
   type: nettoyage
   etablissements:
-    listeEtab: ["0290009C", "0291595B", "0180005H", "0180002E"]
+    liste_etab: ["0290009C", "0291595B", "0180005H", "0180002E"]

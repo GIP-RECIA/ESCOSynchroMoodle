@@ -5,10 +5,10 @@ actions:
 - timestampStore:
     file: "config_test1_precedent.txt"
   etablissements:
-    prefixAdminMoodleLocal: "config_test1:admin:Moodle:local:"
-    prefixAdminLocal: "config_test1:admin:local:"
-    listeEtab: ["0180755y", "0180939y", "0180865t"]
-    etabRgp:
+    prefix_admin_moodle_local: "config_test1:admin:Moodle:local:"
+    prefix_admin_local: "config_test1:admin:local:"
+    liste_etab: ["0180755y", "0180939y", "0180865t"]
+    etab_rgp:
       - nom: "ETAB RGP DE TEST 1"
         uais: ["0180755y", "0180939y", "0410892y"]
       - nom: "ETAB RGP DE TEST 2"

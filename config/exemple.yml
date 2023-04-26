@@ -10,11 +10,11 @@ ldap:
   uri: "ldap://192.168.1.100:9889"
   username: "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr"
   password: "admin"
-  baseDN: "dc=esco-centre,dc=fr"
-  structuresRDN: "ou=structures"
-  personnesRDN: "ou=people"
-  groupsRDN: "ou=groups"
-  adminRDN: "ou=administrateurs"
+  base_dn: "dc=esco-centre,dc=fr"
+  structures_rdn: "ou=structures"
+  personnes_rdn: "ou=people"
+  groups_rdn: "ou=groups"
+  admin_rdn: "ou=administrateurs"
 logging:
   formatters:
     console:
@@ -44,7 +44,7 @@ actions:
   timestampStore:
     file: "trtAcademique_precedent.txt"
   etablissements:
-    listeEtab: ["0450822X", "0410031L", "0371122U", "0450066C", "0451483T", "0410593X", "0410030K", "0370001A", "0360003H",
+    liste_etab: ["0450822X", "0410031L", "0371122U", "0450066C", "0451483T", "0410593X", "0410030K", "0370001A", "0360003H",
                 "0370040T", "0370036N", "0451304Y", "0450051L", "0180008L", "0360011S", "0280657M", "0280036M", "0450062Y",
                 "0280021W", "0360024F", "0410959V", "0371417P", "0280864M", "0450042B", "0370009J", "0360002G", "0370039S",
                 "0180006J", "0410017W", "0450790P", "0451442Y", "0281047L", "0450064A", "0280925D", "0180007K", "0180042Y",
@@ -60,26 +60,26 @@ actions:
                 "0371101W", "0371158H", "0371191U", "0371248F", "0371391L", "0371397T", "0371403Z", "0371124W", "0370995F",
                 "0370007G", "0370010K", "0371098T", "0370013N", "0371378X", "0370993D", "0370022Y", "0370034L", "0370766G",
                 "0370044X", "0370045Y", "0370769K", "0370886M", "0370884K", "0371189S", "0370024A"]
-    listeEtabSansMail: ["0371204H", "0371159J", "0370011L", "0370041U", "0370991B", "0371316E"]
+    liste_etab_sans_mail: ["0371204H", "0371159J", "0370011L", "0370041U", "0370991B", "0371316E"]
 - id: agricole
   timestampStore:
     file: "trtAgricole_precedent.txt"
   etablissements:
-    prefixAdminMoodleLocal: "agri:admin:Moodle:local:"
-    prefixAdminLocal: "agri:admin:local:"
-    listeEtab: ["0410018X", "0180585N", "0280706R", "0370878D", "0450094H", "0451535Z", "0450027K", "0410629L", "0370781Y",
+    prefix_admin_moodle_local: "agri:admin:Moodle:local:"
+    prefix_admin_local: "agri:admin:local:"
+    liste_etab: ["0410018X", "0180585N", "0280706R", "0370878D", "0450094H", "0451535Z", "0450027K", "0410629L", "0370781Y",
                 "0360017Y", "0370794M", "0410626H"]
 - id: cfa
   timestampStore:
     file: "trtCfa_precedent.txt"
   etablissements:
-    prefixAdminMoodleLocal: "cfa:admin:Moodle:local:"
-    prefixAdminLocal: "cfa:admin:local:"
-    listeEtab: ["0180755y", "0180939y", "0180865t", "0180877f", "0280738a", "0280904f", "0281155d", "0333333y", "0360548a",
+    prefix_admin_moodle_local: "cfa:admin:Moodle:local:"
+    prefix_admin_local: "cfa:admin:local:"
+    liste_etab: ["0180755y", "0180939y", "0180865t", "0180877f", "0280738a", "0280904f", "0281155d", "0333333y", "0360548a",
                 "0360777z", "0360709a", "0370811f", "0370983t", "0370984u", "0371686g", "0371710h", "0371711j", "0371723x",
                 "0410590u", "0410592w", "0410892y", "0411059d", "0411064j", "0450807h", "0450808j", "0450809k", "0450810l",
                 "0450810q", "0451583b", "0451691u", "0451693w", "0451694x", "0451715v"]
-    etabRgp:
+    etab_rgp:
       - nom: "CFA DU CHER"
         uais: ["0180755y", "0180939y", "0410892y"]
       - nom: "FORMASAT CFA Sport Animation Tourisme"

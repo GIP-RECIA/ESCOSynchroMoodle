@@ -673,18 +673,17 @@ class Database:
         return ligne[0]
 
     def get_course_timemodified(self, course_id: int):
+        """
+        Permet de récupérer la date de dernière modification d'un cours
+        :param course_id: L'id du cours recherché
+        :return: La date de dernière modification
+        """
         s = f"SELECT timemodified FROM {self.entete}course WHERE id = %(course_id)s"
         self.mark.execute(s, params={'course_id': course_id})
         ligne = self.safe_fetchone()
         if ligne is None:
             return None
         return ligne[0]
-
-    def delete_course(self, course_id: int):
-        s = f"DELETE FROM {self.entete}course WHERE id = %(course_id)s"
-        self.mark.execute(s, params={
-            'course_id': course_id
-        })
 
     def get_courses_ids_owned_by(self, user_id: int):
         """

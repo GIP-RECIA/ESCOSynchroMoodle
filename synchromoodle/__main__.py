@@ -25,8 +25,6 @@ def main():
 
     config = config_loader.update(config, arguments.config)
     if config.logging is not False:
-        # pylint is not that smart with union type conditional inference
-        # pylint: disable=no-member,not-a-mapping,unsupported-membership-test,unsupported-assignment-operation
         if isinstance(config.logging, dict):
             if config.logging.pop('basic', None):
                 basicConfig(**config.logging)
@@ -43,8 +41,8 @@ def main():
 
     try:
         config.validate()
-    except ValueError as e:
-        log.error(e)
+    except ValueError as exception:
+        log.error(exception)
         sys.exit(1)
 
     log.info("Démarrage")
@@ -60,8 +58,8 @@ def main():
             continue
         log.info("Démarrage de l'action %s", action)
         try:
-            action_func(config, action, arguments)
-        except Exception:  # pylint: disable=broad-except
+            action_func(config, action)
+        except Exception:
             errors += 1
             log.exception("Une erreur inattendue s'est produite")
         log.info("Fin de l'action %s", action)

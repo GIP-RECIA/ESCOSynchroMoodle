@@ -227,50 +227,50 @@ class LdapConfig(_BaseConfig):
         self.password = "admin"  # type: str
         """Mot de passe"""
 
-        self.baseDN = "dc=esco-centre,dc=fr"  # type: str
+        self.base_dn = "dc=esco-centre,dc=fr"  # type: str
         """DN de base"""
 
-        self.structuresRDN = "ou=structures"  # type: str
+        self.structures_rdn = "ou=structures"  # type: str
         """OU pour les structures"""
 
-        self.personnesRDN = "ou=people"  # type: str
+        self.personnes_rdn = "ou=people"  # type: str
         """OU pour les personnes"""
 
-        self.groupsRDN = "ou=groups"  # type: str
+        self.groups_rdn = "ou=groups"  # type: str
         """OU pour les groupes"""
 
-        self.adminRDN = "ou=administrateurs"  # type: str
+        self.admin_rdn = "ou=administrateurs"  # type: str
         """OU pour les administrateurs"""
 
         super().__init__(**entries)
 
     @property
-    def structuresDN(self) -> str:
+    def structures_dn(self) -> str:
         """
         DN pour les structures
         """
-        return self.structuresRDN + ',' + self.baseDN
+        return self.structures_rdn + ',' + self.base_dn
 
     @property
-    def personnesDN(self) -> str:
+    def personnes_dn(self) -> str:
         """
         DN pour les personnes
         """
-        return self.personnesRDN + ',' + self.baseDN
+        return self.personnes_rdn + ',' + self.base_dn
 
     @property
-    def groupsDN(self) -> str:
+    def groups_dn(self) -> str:
         """
         DN pour les personnes
         """
-        return self.groupsRDN + ',' + self.baseDN
+        return self.groups_rdn + ',' + self.base_dn
 
     @property
-    def adminDN(self) -> str:
+    def admin_dn(self) -> str:
         """
         DN pour les admins
         """
-        return self.adminRDN + ',' + self.baseDN
+        return self.admin_rdn + ',' + self.base_dn
 
 
 class EtablissementRegroupement(_BaseConfig):
@@ -294,7 +294,7 @@ class EtablissementsConfig(_BaseConfig):
     """
 
     def __init__(self, **entries):
-        self.etabRgp = []  # type: List[EtablissementRegroupement]
+        self.etab_rgp = []  # type: List[EtablissementRegroupement]
         """Regroupement d'etablissements"""
 
         self.inter_etab_categorie_name = 'Catégorie Inter-Établissements'  # type: str
@@ -303,26 +303,26 @@ class EtablissementsConfig(_BaseConfig):
         self.inter_etab_categorie_name_cfa = 'Catégorie Inter-CFA'  # type: str
         """Nom de la catégorie inter-etablissement pour les CFA"""
 
-        self.listeEtab = []  # type: List[str]
+        self.liste_etab = []  # type: List[str]
         """Liste des établissements"""
 
-        self.listeEtabSansAdmin = []  # type: List[str]
+        self.liste_etab_sans_admin = []  # type: List[str]
         """Etablissements sans administrateurs"""
 
-        self.listeEtabSansMail = []  # type: List[str]
+        self.liste_etab_sans_mail = []  # type: List[str]
         """Etablissements dont le mail des professeurs n'est pas synchronise"""
 
-        self.prefixAdminMoodleLocal = "(esco|clg37):admin:Moodle:local:"  # type: str
+        self.prefix_admin_moodle_local = "(esco|clg37):admin:Moodle:local:"  # type: str
         """Préfixe de l'attribut "isMemberOf" indiquant que l'utilisateur est un administrateur local de Moodle"""
 
-        self.prefixAdminLocal = "(esco|clg37):admin:local:"  # type: str
+        self.prefix_admin_local = "(esco|clg37):admin:local:"  # type: str
         """Prefix de l'attribut "isMemberOf" indiquant que l'utilisateur est un administrateur local"""
 
         super().__init__(**entries)
 
     def update(self, **entries):
-        if 'etabRgp' in entries:
-            entries['etabRgp'] = list(map(lambda d: EtablissementRegroupement(**d), entries['etabRgp']))
+        if 'etab_rgp' in entries:
+            entries['etab_rgp'] = list(map(lambda d: EtablissementRegroupement(**d), entries['etab_rgp']))
 
         super().update(**entries)
 

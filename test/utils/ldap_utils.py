@@ -22,9 +22,9 @@ def reset(l: Ldap):
     l.connect()
     connection = l.connection
     try:
-        _remove_all_in(connection, l.config.groupsDN)
-        _remove_all_in(connection, l.config.personnesDN)
-        _remove_all_in(connection, l.config.structuresDN)
+        _remove_all_in(connection, l.config.groups_dn)
+        _remove_all_in(connection, l.config.personnes_dn)
+        _remove_all_in(connection, l.config.structures_dn)
     finally:
         l.disconnect()
 
