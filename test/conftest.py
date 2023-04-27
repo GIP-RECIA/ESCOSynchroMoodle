@@ -68,7 +68,7 @@ def docker_config(config: Config, docker_ip: str, docker_services: pytest_docker
     timeout = 60
 
     while True:
-        docker_config.ldap.uri = "ldap://%s:%s" % (docker_ip, docker_services.port_for('ldap-test', 389))
+        docker_config.ldap.uri = f"ldap://{docker_ip}:{docker_services.port_for('ldap-test', 389)}"
         # Ensure ldap is available
         ldap = Ldap(docker_config.ldap)
 

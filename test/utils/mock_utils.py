@@ -27,11 +27,10 @@ def fake_get_courses_user_enrolled_test_enseignants(userid: int):
         return []
     return return_values[userid]
 
-def fake_get_courses_user_enrolled_test_cours(userid: int):
+def fake_get_courses_user_enrolled_test_cours():
     """
-    Retourne les cours auxquels est inscrit l'utilisateur passé en paramètre.
+    Retourne les cours auxquels sont inscrits les utilisateurs pour les test des cours
 
-    :param userid: L'id de l'enseignant
     :return: La liste des ids des cours
     """
     return [37000,37001,37002,37003,37004,37005]

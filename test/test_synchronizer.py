@@ -15,7 +15,7 @@ from synchromoodle.synchronizer import Synchronizer, UserType
 from test.utils import db_utils, ldap_utils, mock_utils
 
 @pytest.fixture(scope='function', name='db')
-def db(docker_config: Config) -> Database:
+def fixture_db(docker_config: Config) -> Database:
     """
     Créé la base de données utilisée cette session de tests
 
@@ -27,7 +27,7 @@ def db(docker_config: Config) -> Database:
 
 
 @pytest.fixture(scope='function', name='ldap')
-def ldap(docker_config: Config) -> Ldap:
+def fixture_ldap(docker_config: Config) -> Ldap:
     """
     Créé le ldap utilisé cette session de tests
 
@@ -206,7 +206,7 @@ class TestEtablissement:
         synchronizer.handle_eleve(etab_context, eleve)
 
         #On vérifie si les infos de moodle correspondent bien avec celles du ldap
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(eleve.uid).lower()
                         })
@@ -219,7 +219,7 @@ class TestEtablissement:
         #On modifie l'élève dans le ldap et on vérifie que la modification s'est bien reportée
         eleve.given_name = "Thomas"
         synchronizer.handle_eleve(etab_context, eleve)
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(eleve.uid).lower()
                         })
@@ -229,7 +229,7 @@ class TestEtablissement:
 
         #Vérification des rôles
         eleve_id = result[0]
-        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
                         params={
                             'userid': eleve_id
                         })
@@ -239,8 +239,8 @@ class TestEtablissement:
         #Vérification des inscriptions dans les cohortes
         #Cohorte de la classe de l'élève
         for classe in eleve.classes:
-            cohort_name = "Élèves de la Classe %s" % classe.classe
-            db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+            cohort_name = f"Élèves de la Classe {classe.classe}"
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
                             })
@@ -258,8 +258,8 @@ class TestEtablissement:
             assert result_cohort_enrollment[2] == eleve_id #On vérifie que l'élève est bien inscrit dedans
 
         #Cohorte du niveau de formation de l'élève
-        cohort_name = "Élèves du niveau de formation %s" % eleve.niveau_formation
-        db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+        cohort_name = f"Élèves du niveau de formation {eleve.niveau_formation}"
+        db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                         params={
                             'name': cohort_name
                         })
@@ -325,7 +325,7 @@ class TestEtablissement:
         synchronizer.handle_enseignant(etab_context_clg, enseignant)
 
         #On vérifie que les informations correspondent bien
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(enseignant.uid).lower()
                         })
@@ -340,7 +340,7 @@ class TestEtablissement:
         enseignant.sn = "JEANNE"
         synchronizer.handle_enseignant(etab_context, enseignant)
         #On vérifie qu'il s'est bien reporté dans moodle
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(enseignant.uid).lower()
                         })
@@ -351,7 +351,7 @@ class TestEtablissement:
         assert result[11] == 'JEANNE'
 
         #On vérifie qu'il a les bons rôles
-        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
                         params={
                             'userid': enseignant_id
                         })
@@ -385,8 +385,8 @@ class TestEtablissement:
         #On vérifie aussi ses inscriptions dans les cohortes
         #Cohorte de la classe des enseignants
         for classe in enseignant.classes:
-            cohort_name = "Profs de la Classe %s" % classe.classe
-            db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+            cohort_name = f"Profs de la Classe {classe.classe}"
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
                             })
@@ -405,8 +405,8 @@ class TestEtablissement:
 
         #Cohorte de profs de l'établissement
         for enseignant_uai in enseignant.uais:
-            cohort_name = 'Profs de l\'établissement (%s)' % enseignant_uai
-            db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+            cohort_name = f'Profs de l\'établissement ({enseignant_uai})'
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
                             })
@@ -431,8 +431,8 @@ class TestEtablissement:
                 niveaux_formation.add(etab_context.classe_to_niv_formation[classe.classe])
 
         for niv_formation in niveaux_formation:
-            cohort_name = 'Profs du niveau de formation %s' % niv_formation
-            db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+            cohort_name = f'Profs du niveau de formation {niv_formation}'
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
                             })
@@ -457,8 +457,8 @@ class TestEtablissement:
                 niveaux_formation.add(etab_context_clg.classe_to_niv_formation[classe.classe])
 
         for niv_formation in niveaux_formation:
-            cohort_name = 'Profs du niveau de formation %s' % niv_formation
-            db.mark.execute("SELECT * FROM {entete}cohort WHERE name = %(name)s".format(entete=db.entete),
+            cohort_name = f'Profs du niveau de formation {niv_formation}'
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
                             })
@@ -496,14 +496,14 @@ class TestEtablissement:
         user = users[0]
         synchronizer.handle_user_interetab(user)
 
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(user.uid).lower()
                         })
         result = db.mark.fetchone()
         user_id = result[0]
 
-        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
                         params={
                             'userid': user_id
                         })
@@ -531,13 +531,13 @@ class TestEtablissement:
         user.is_member_of = [action_config.inter_etablissements.ldap_valeur_attribut_admin]
         synchronizer.handle_user_interetab(user)
 
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(user.uid).lower()
                         })
         result = db.mark.fetchone()
         user_id = result[0]
-        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
                         params={
                             'userid': user_id
                         })
@@ -565,7 +565,7 @@ class TestEtablissement:
         user = users[0]
         synchronizer.handle_inspecteur(user)
 
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(user.uid).lower()
                         })
@@ -573,7 +573,7 @@ class TestEtablissement:
         user_id = result[0]
         assert result is not None
 
-        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
                         params={
                             'userid': user_id
                         })
@@ -582,7 +582,7 @@ class TestEtablissement:
         #Les inspecteurs ont le rôle créateur de cours
         assert roles_results[0][1] == config.constantes.id_role_createur_cours
 
-        db.mark.execute("SELECT * FROM {entete}user_info_data WHERE userid = %(userid)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user_info_data WHERE userid = %(userid)s",
                         params={
                             'userid': user_id
                         })
@@ -615,13 +615,13 @@ class TestEtablissement:
         synchronizer.handle_eleve(college_context, eleve)
 
         #Récupération de l'id de l'élève dans moodle
-        db.mark.execute("SELECT * FROM {entete}user WHERE username = %(username)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(eleve.uid).lower()
                         })
         result = db.mark.fetchone()
         eleve_id = result[0]
-        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
                         params={
                             'userid': eleve_id
                         })
@@ -633,7 +633,7 @@ class TestEtablissement:
         #On le fait passer au lycée
         eleve.uai_courant = "0290009C"
         synchronizer.handle_eleve(lycee_context, eleve)
-        db.mark.execute("SELECT * FROM {entete}role_assignments WHERE userid = %(userid)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
                         params={
                             'userid': eleve_id
                         })
@@ -753,14 +753,12 @@ class TestEtablissement:
 
         #Vérification de la suppression des cohortes 1ERE S2 et TES3
         cohorts_to_delete_ids = []
-        db.mark.execute("SELECT id FROM {entete}cohort"
-                        " WHERE name = %(cohortname)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT id FROM {db.entete}cohort WHERE name = %(cohortname)s",
                         params={
                             'cohortname': "Élèves de la Classe TES3"
                         })
         cohorts_to_delete_ids.append(db.mark.fetchone()[0])
-        db.mark.execute("SELECT id FROM {entete}cohort"
-                        " WHERE name = %(cohortname)s".format(entete=db.entete),
+        db.mark.execute(f"SELECT id FROM {db.entete}cohort WHERE name = %(cohortname)s",
                         params={
                             'cohortname': "Élèves de la Classe 1ERE S2"
                         })

@@ -56,7 +56,8 @@ def run_script(script: str, db: Database, connect=True):
         if connect:
             db.disconnect()
 
-def insert_fake_user(db: Database, username: str, first_name: str, last_name: str, email: str, mail_display: int, theme: str):
+def insert_fake_user(db: Database, username: str, first_name: str, last_name: str,
+                     email: str, mail_display: int, theme: str):
     """
     Fonction permettant d'insérer un utilisateur de test.
 
@@ -107,7 +108,8 @@ def insert_fake_course(db: Database, id_category: int, full_name: str, id_number
     :returns: L'id du faux cours inséré
     """
     #Insertion du cours
-    db.insert_moodle_course(id_category, full_name, id_number, short_name, summary, format_, visible, start_date, time_created, time_modified)
+    db.insert_moodle_course(id_category, full_name, id_number, short_name, summary,
+                            format_, visible, start_date, time_created, time_modified)
     id_course = db.mark.lastrowid
     #Insertion du contexte correspondant au cours
     db.insert_moodle_context(db.constantes.niveau_ctx_cours, 3, id_course)
@@ -123,7 +125,11 @@ def insert_fake_course_reference_eleve(db: Database, userid: int):
     :param userid: L'id de l'utilisateur dont on veut créer les fausses références
     :returns: L'id de la fausse référence insérée
     """
-    s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser, itemid, userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade, hidden, locked, locktime, exported, overridden, excluded, feedback, feedbackformat, information, informationformat) VALUES (1, 0, 'mod/assign', 0, 0, 0, %(userid)s, 50, 100.00000, 0.00000, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
+    s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser,"\
+        " itemid, userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade,"\
+        " hidden, locked, locktime, exported, overridden, excluded, feedback, feedbackformat, information,"\
+        " informationformat) VALUES (1, 0, 'mod/assign', 0, 0, 0, %(userid)s, 50, 100.00000, 0.00000, NULL,"\
+        " NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
     db.mark.execute(s, params={'userid': userid})
     return db.mark.lastrowid
 
@@ -137,7 +143,11 @@ def insert_fake_course_reference_enseignant(db: Database, loggeduser: int):
     :param loggeduser: L'id de l'utilisateur dont on veut créer les fausses références
     :returns: L'id de la fausse référence insérée
     """
-    s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser, itemid, userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade, hidden, locked, locktime, exported, overridden, excluded, feedback, feedbackformat, information, informationformat) VALUES (1, 0, 'mod/assign', 0, %(loggeduser)s, 0, 0, 50, 100.00000, 0.00000, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
+    s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser, itemid,"\
+        " userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade, hidden, locked,"\
+        " locktime, exported, overridden, excluded, feedback, feedbackformat, information, informationformat)"\
+        " VALUES (1, 0, 'mod/assign', 0, %(loggeduser)s, 0, 0, 50, 100.00000, 0.00000, NULL, NULL, NULL, 0,"\
+        " 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
     db.mark.execute(s, params={'loggeduser': loggeduser})
     return db.mark.lastrowid
 
@@ -149,7 +159,7 @@ def update_lastlogin_user(db: Database, userid: int, lastlogin):
     :param userid: L'id de l'utilisateur à modifier
     :param lastlogin: Le timestamp (en s) représentant la date de dernière connexion de l'utilisateur
     """
-    s = "UPDATE {entete}user SET lastlogin = %(lastlogin)s WHERE id = %(userid)s".format(entete=db.entete)
+    s = f"UPDATE {db.entete}user SET lastlogin = %(lastlogin)s WHERE id = %(userid)s"
     db.mark.execute(s, params={'lastlogin': lastlogin, 'userid': userid})
 
 def update_timemodified_course(db: Database, courseid: int, timemodified):
@@ -160,7 +170,7 @@ def update_timemodified_course(db: Database, courseid: int, timemodified):
     :param courseid: L'id du cours à modifier
     :param timemodified: Le timestamp (en s) représentant la date de dernière modification du cours
     """
-    s = "UPDATE {entete}course SET timemodified = %(timemodified)s WHERE id = %(courseid)s".format(entete=db.entete)
+    s = f"UPDATE {db.entete}course SET timemodified = %(timemodified)s WHERE id = %(courseid)s"
     db.mark.execute(s, params={'timemodified': timemodified, 'courseid': courseid})
 
 def insert_eleves(db: Database, config: Config):
@@ -179,7 +189,6 @@ def insert_eleves(db: Database, config: Config):
     eleveid_c = insert_fake_user(db, "F1700tsc", "testeleve", "C", "testeleve.C@netocentre.fr", 2, "0290009c")
     eleveid_d = insert_fake_user(db, "F1700tsd", "testeleve", "D", "testeleve.D@netocentre.fr", 2, "0290009c")
     eleveid_e = insert_fake_user(db, "F1700tse", "testeleve", "E", "testeleve.E@netocentre.fr", 2, "0290009c")
-    eleveid_f = insert_fake_user(db, "F1700tsf", "testeleve", "F", "testeleve.F@netocentre.fr", 2, "0290009c")
     eleveid_g = insert_fake_user(db, "F1700tsg", "testeleve", "G", "testeleve.G@netocentre.fr", 2, "0290009c")
     eleveid_h = insert_fake_user(db, "F1700tsh", "testeleve", "H", "testeleve.H@netocentre.fr", 2, "0290009c")
     eleveid_i = insert_fake_user(db, "F1700tsi", "testeleve", "I", "testeleve.I@netocentre.fr", 2, "0290009c")
@@ -187,6 +196,7 @@ def insert_eleves(db: Database, config: Config):
     eleveid_k = insert_fake_user(db, "F1700tsk", "testeleve", "K", "testeleve.K@netocentre.fr", 2, "0290009c")
     eleveid_l = insert_fake_user(db, "F1700tsl", "testeleve", "L", "testeleve.L@netocentre.fr", 2, "0290009c")
     eleveid_m = insert_fake_user(db, "F1700tsm", "testeleve", "M", "testeleve.M@netocentre.fr", 2, "0290009c")
+    insert_fake_user(db, "F1700tsf", "testeleve", "F", "testeleve.F@netocentre.fr", 2, "0290009c")
 
     #Changement des dates de dernière connexions
     update_lastlogin_user(db, eleveid_a, now - (config.delete.delay_delete_student + 1) * SECONDS_PER_DAY)
@@ -216,10 +226,10 @@ def insert_eleves(db: Database, config: Config):
     db.enroll_user_in_course(config.constantes.id_role_eleve, course_test_id, eleveid_j)
 
     #Création de fausses références dans des cours
-    refid_b = insert_fake_course_reference_eleve(db, eleveid_b)
-    refid_d = insert_fake_course_reference_eleve(db, eleveid_d)
-    refid_h = insert_fake_course_reference_eleve(db, eleveid_h)
-    refid_l = insert_fake_course_reference_eleve(db, eleveid_l)
+    insert_fake_course_reference_eleve(db, eleveid_b)
+    insert_fake_course_reference_eleve(db, eleveid_d)
+    insert_fake_course_reference_eleve(db, eleveid_h)
+    insert_fake_course_reference_eleve(db, eleveid_l)
 
     #Mise à jour BD
     db.connection.commit()
@@ -297,37 +307,45 @@ def insert_enseignants(db: Database, config: Config):
     db.connection.commit()
 
     #Création de cours factices pour y inscire les éventuels utilisateurs
-    courseA_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageA", 0, "testnettoyageA", "", "", 1, 0, 0, 0)
-    courseB_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageB", 0, "testnettoyageB", "", "", 1, 0, 0, 0)
-    courseE_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageE", 0, "testnettoyageE", "", "", 1, 0, 0, 0)
-    courseF_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageF", 0, "testnettoyageF", "", "", 1, 0, 0, 0)
-    courseI_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageI", 0, "testnettoyageI", "", "", 1, 0, 0, 0)
-    courseJ_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageJ", 0, "testnettoyageJ", "", "", 1, 0, 0, 0)
-    courseM_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageM", 0, "testnettoyageM", "", "", 1, 0, 0, 0)
-    courseN_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageN", 0, "testnettoyageN", "", "", 1, 0, 0, 0)
+    course_a_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageA",
+                                             0, "testnettoyageA", "", "", 1, 0, 0, 0)
+    course_b_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageB",
+                                             0, "testnettoyageB", "", "", 1, 0, 0, 0)
+    course_e_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageE",
+                                             0, "testnettoyageE", "", "", 1, 0, 0, 0)
+    course_f_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageF",
+                                             0, "testnettoyageF", "", "", 1, 0, 0, 0)
+    course_i_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageI",
+                                             0, "testnettoyageI", "", "", 1, 0, 0, 0)
+    course_j_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageJ",
+                                             0, "testnettoyageJ", "", "", 1, 0, 0, 0)
+    course_m_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageM",
+                                             0, "testnettoyageM", "", "", 1, 0, 0, 0)
+    course_n_testprof_id = insert_fake_course(db, ID_TEST_CATEGORY, "testnettoyageN",
+                                             0, "testnettoyageN", "", "", 1, 0, 0, 0)
 
     #Changement des dates de dernière modification des cours
-    update_timemodified_course(db, courseJ_testprof_id, 0)
-    update_timemodified_course(db, courseN_testprof_id, 0)
+    update_timemodified_course(db, course_j_testprof_id, 0)
+    update_timemodified_course(db, course_n_testprof_id, 0)
 
     #Inscription des utilisateurs aux cours factices
     #Inscriptions simples hors enseignant
-    enrol_user_to_fake_course(db, config.constantes.id_role_eleve, courseA_testprof_id, profid_a)
-    enrol_user_to_fake_course(db, config.constantes.id_role_eleve, courseE_testprof_id, profid_e)
-    enrol_user_to_fake_course(db, config.constantes.id_role_eleve, courseI_testprof_id, profid_i)
-    enrol_user_to_fake_course(db, config.constantes.id_role_eleve, courseM_testprof_id, profid_m)
+    enrol_user_to_fake_course(db, config.constantes.id_role_eleve, course_a_testprof_id, profid_a)
+    enrol_user_to_fake_course(db, config.constantes.id_role_eleve, course_e_testprof_id, profid_e)
+    enrol_user_to_fake_course(db, config.constantes.id_role_eleve, course_i_testprof_id, profid_i)
+    enrol_user_to_fake_course(db, config.constantes.id_role_eleve, course_m_testprof_id, profid_m)
 
     #Inscriptions en tant que propriétaire de cours
-    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, courseB_testprof_id, profid_b)
-    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, courseF_testprof_id, profid_f)
-    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, courseJ_testprof_id, profid_j)
-    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, courseN_testprof_id, profid_n)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course_b_testprof_id, profid_b)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course_f_testprof_id, profid_f)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course_j_testprof_id, profid_j)
+    enrol_user_to_fake_course(db, config.constantes.id_role_proprietaire_cours, course_n_testprof_id, profid_n)
 
     #Création de fausses références dans des cours
-    refidprof_c = insert_fake_course_reference_enseignant(db, profid_c)
-    refidprof_g = insert_fake_course_reference_enseignant(db, profid_g)
-    refidprof_k = insert_fake_course_reference_enseignant(db, profid_k)
-    refidprof_o = insert_fake_course_reference_enseignant(db, profid_o)
+    insert_fake_course_reference_enseignant(db, profid_c)
+    insert_fake_course_reference_enseignant(db, profid_g)
+    insert_fake_course_reference_enseignant(db, profid_k)
+    insert_fake_course_reference_enseignant(db, profid_o)
 
     #Mise à jour BD
     db.connection.commit()

@@ -7,10 +7,9 @@ mise en place du ldap pour les tests
 from io import StringIO
 from pkgutil import get_data
 
+from test.utils import ldif
 from ldap3 import Connection, LEVEL
 from ldap3.core.exceptions import LDAPNoSuchObjectResult
-
-import test.utils.ldif as ldif
 from synchromoodle.ldaputils import Ldap
 
 def _remove_all_in(connection: Connection, dn: str):
@@ -23,18 +22,20 @@ def _remove_all_in(connection: Connection, dn: str):
         connection.delete(entry.entry_dn)
 
 
-def reset(l: Ldap):
-    l.connect()
-    connection = l.connection
+def reset(ldap: Ldap):
+    """Remet à jour le ldap passé en paramètre"""
+    ldap.connect()
+    connection = ldap.connection
     try:
-        _remove_all_in(connection, l.config.groups_dn)
-        _remove_all_in(connection, l.config.personnes_dn)
-        _remove_all_in(connection, l.config.structures_dn)
+        _remove_all_in(connection, ldap.config.groups_dn)
+        _remove_all_in(connection, ldap.config.personnes_dn)
+        _remove_all_in(connection, ldap.config.structures_dn)
     finally:
-        l.disconnect()
+        ldap.disconnect()
 
 
 class LDIFLoader(ldif.LDIFRecordList):
+    """Classe LDIFLoader"""
     def __init__(self, connection: Connection,
                  input_file, ignored_attr_types=None, max_entries=0, process_url_schemes=None):
         super().__init__(input_file, ignored_attr_types, max_entries, process_url_schemes)

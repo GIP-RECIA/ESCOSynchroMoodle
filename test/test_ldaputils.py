@@ -17,8 +17,8 @@ from test.utils import ldap_utils
 datetime_value = datetime(2019, 4, 9, 21, 42, 1)
 
 
-@pytest.fixture(scope='function')
-def ldap(docker_config: Config):
+@pytest.fixture(scope='function', name='ldap')
+def fixture_ldap(docker_config: Config):
     """
     Créé l'objet LDAP pour intéragir avec le LDAP dans le container docker.
 
