@@ -739,10 +739,9 @@ class Synchronizer:
     def mettre_a_jour_droits_enseignant(self, enseignant_infos: str, id_enseignant: int,
      uais_autorises: list[str], log=getLogger()):
         """
-        Fonction permettant de mettre a jour les droits d'un enseignant.
-        Cette mise a jour consiste à :
-        - Supprimer les roles non autorises
-        - Ajouter les roles
+        Fonction permettant de mettre à jour les droits d'un enseignant.
+        Cette mise à jour consiste à supprimer les roles non autorises puis
+        ajouter les roles autorisés.
 
         :param enseignant_infos: Les infos de l'enseignant (pour print)
         :param id_enseignant: L'id de l'enseignant
@@ -821,7 +820,7 @@ class Synchronizer:
 
     def get_dane_lycee_en_cohort(self, id_context_dane: int, user_type: UserType) -> int:
         """
-        Charge une cohorte dane lycee_en soit pour les élèves, les enseignant ou le personnel de direction.
+        Charge une cohorte dane lycee_en soit pour les élèves, les enseignants ou le personnel de direction.
 
         :param id_context_dane: Id du du contexte associé dans la table mdl_context
         :param user_type: Type d'utilisateurs de la cohorte
@@ -1513,6 +1512,7 @@ class Synchronizer:
                                       log=getLogger()):
         """
         Met à jour la cohorte inter-etablissement.
+
         :param is_member_of: La filtre pour identifier des utilisateurs interEtablissements
         :param cohort_name: Le nom de la cohorte d'utilisateures inter_etabs
         :param since_timestamp: Le timestamp au delà duquel on ne traite pas les utilisateurs

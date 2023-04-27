@@ -76,8 +76,8 @@ def default(config: Config, action: ActionConfig):
 
 def interetab(config: Config, action: ActionConfig):
     """
-    Effectue la mise a jour de la BD Moodle via les infos issues du LDAP
-    Cette mise a jour concerne les utilisateurs et administrateurs inter-etablissements
+    Effectue la mise à jour de la BD Moodle via les infos issues du LDAP.
+    Cette mise à jour concerne les utilisateurs et administrateurs inter-etablissements.
 
     :param config: Configuration globale
     :param action: Configuration de l'action
@@ -125,8 +125,8 @@ def interetab(config: Config, action: ActionConfig):
 
 def inspecteurs(config: Config, action: ActionConfig):
     """
-    Effectue la mise a jour de la BD moodle via les infos issues du LDAP
-    Cette mise a jour concerne les inspecteurs
+    Effectue la mise à jour de la BD moodle via les infos issues du LDAP.
+    Cette mise à jour concerne les inspecteurs.
 
     :param config: Configuration globale
     :param action: Configuration de l'action
@@ -171,8 +171,8 @@ def inspecteurs(config: Config, action: ActionConfig):
 def nettoyage(config: Config, action: ActionConfig):
     """
     Effectue une purge des cohortes dans la base de données par rapport
-    au contenu du LDAP et supprime les cohortes inutiles (vides)
-    Anonymisation/suppression des utilisateurs inutiles
+    au contenu du LDAP et supprime les cohortes inutiles (vides).
+    Anonymise ou supprime les utilisateurs devenus inutiles.
 
     :param config: Configuration globale
     :param action: Configuration de l'action

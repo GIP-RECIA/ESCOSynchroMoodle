@@ -28,3 +28,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+html_theme_options = {
+    'sidebar_width':'400px',
+    'page_width':'90%',
+    'fixed_sidebar': True
+}

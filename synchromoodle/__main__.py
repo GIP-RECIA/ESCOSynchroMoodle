@@ -16,7 +16,7 @@ from synchromoodle.config import ConfigLoader
 
 def main():
     """
-    Fonction principale appelée lorsqu'on lance le script
+    Fonction principale appelée lorsqu'on lance le script.
     """
     arguments = parse_args()
 

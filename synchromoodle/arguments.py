@@ -9,11 +9,7 @@ from synchromoodle.__version__ import __version__
 
 def parse_args(args=None, namespace=None):
     """
-    Parse arguments
-
-    :param args:
-    :param namespace:
-    :return:
+    Parse les arguments donnés sur la ligne de commande.
     """
     parser = ArgumentParser(description="Scrit de synchronisation de moodle depuis l'annuaire LDAP.")
     parser.add_argument("-v", "--version", action="version", version='%(prog)s ' + __version__)

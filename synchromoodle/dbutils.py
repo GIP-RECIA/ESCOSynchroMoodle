@@ -1524,7 +1524,7 @@ class Database:
 
     def update_context_path(self, id_context: int, new_path: str):
         """
-        Fonction permettant de mettre a jour le path d'un contexte.
+        Fonction permettant de mettre à jour le path d'un contexte.
 
         :param id_context: L'id du contexte
         :param new_path: Le nouveau path
@@ -1538,7 +1538,7 @@ class Database:
 
     def update_course_category_description(self, id_category: int, new_description: str):
         """
-        Fonction permettant de mettre a jour la description d'une categorie.
+        Fonction permettant de mettre à jour la description d'une categorie.
 
         :param id_category: L'id de la catégorie
         :param new_description: La nouvelle description
@@ -1551,7 +1551,7 @@ class Database:
 
     def update_course_category_name(self, id_category: int, new_name: str):
         """
-        Fonction permettant de mettre a jour le nom d'une categorie.
+        Fonction permettant de mettre à jour le nom d'une categorie.
 
         :param id_category: L'id de la catégorie
         :param new_name: Le nouveau nom
@@ -1564,7 +1564,7 @@ class Database:
 
     def update_course_category_path(self, id_category: int, new_path: str):
         """
-        Fonction permettant de mettre a jour le path d'une catégorie.
+        Fonction permettant de mettre à jour le path d'une catégorie.
 
         :param id_category: L'id de la catégorie
         :param new_path: Le nouveau path
@@ -1607,7 +1607,7 @@ class Database:
 
     def update_user_info_data(self, id_user: int, id_field: int, new_data: str):
         """
-        Fonction permettant de mettre a jour le data d'un user info data.
+        Fonction permettant de mettre à jour le data d'un user info data.
 
         :param id_user: L'id de l'utilisateur
         :param id_field: L'id du field

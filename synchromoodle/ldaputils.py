@@ -13,8 +13,7 @@ from synchromoodle.config import LdapConfig
 class ClasseLdap:
     """
     Représente une classe d'un enseignant ou élève récupérée depuis le ldap.
-    Contient l'établissement dans lequel est la classe
-    et le nom de la classe en elle-même
+    Contient l'établissement dans lequel est la classe et le nom de la classe en elle-même
     """
     def __init__(self, etab_dn: str, classe: str):
         self.etab_dn = etab_dn
@@ -24,7 +23,7 @@ def extraire_classes_ldap(classes_ldap: List[str]) -> list[ClasseLdap]:
     """
     Extrait le nom des classes à partir de l'entrée issue de l'annuaire ldap.
 
-    :param classes_ldap:  entrée issue du LDAP.
+    :param classes_ldap: entrée issue du LDAP.
     :return: La liste des classes.
     """
     classes = []
