@@ -27,7 +27,7 @@ def fake_get_courses_user_enrolled_test_enseignants(userid: int):
         return []
     return return_values[userid]
 
-def fake_get_courses_user_enrolled_test_cours():
+def fake_get_courses_user_enrolled_test_cours(notused):
     """
     Retourne les cours auxquels sont inscrits les utilisateurs pour les test des cours
 
