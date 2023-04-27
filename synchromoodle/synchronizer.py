@@ -1302,14 +1302,14 @@ class Synchronizer:
                                 #Différence de traitement au niveau des références entre un enseignant et un élève
                                 if is_teacher:
                                     if not self.__db.enseignant_has_references(db_user[0]): #si pas de références
-                                        log.info("L'élève %s ne s'est pas connecté depuis au moins %s jours"
+                                        log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours"
                                          " et n'est pas inscrit à un cours, ni ne possède de référénces."
                                          " Il va être supprimé",
                                           db_user[1], delete_delay)
                                         user_ids_to_delete.append(db_user[0])
                                 else:
                                     if not self.__db.eleve_has_references(db_user[0]): #si pas de références
-                                        log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours"
+                                        log.info("L'élève %s ne s'est pas connecté depuis au moins %s jours"
                                          " et n'est pas inscrit à un cours, ni ne possède de référénces."
                                          " Il va être supprimé", db_user[1], delete_delay)
                                         user_ids_to_delete.append(db_user[0])

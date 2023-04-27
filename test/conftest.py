@@ -1,4 +1,8 @@
 # coding: utf-8
+"""
+Module pour charger la configuration des tests
+"""
+
 import datetime
 import json
 import os
@@ -22,11 +26,12 @@ def docker_compose_file(pytestconfig):
 
 @pytest.fixture(scope='session')
 def docker_compose_subprocess_kwargs():
+    """Retourne un dictionnaire vide"""
     return {}
 
 
-@pytest.fixture(scope="session")
-def action_config() -> ActionConfig:
+@pytest.fixture(scope="session", name="action_config")
+def fixture_action_config() -> ActionConfig:
     """
     Créée une configuration d'action avec les valeurs de base.
 
@@ -36,8 +41,8 @@ def action_config() -> ActionConfig:
     return action_config
 
 
-@pytest.fixture(scope="session")
-def config(action_config: ActionConfig) -> Config:
+@pytest.fixture(scope="session", name="config")
+def fixture_config(action_config: ActionConfig) -> Config:
     """
     Charge la configuration de base pour la session de tests.
 
@@ -49,7 +54,7 @@ def config(action_config: ActionConfig) -> Config:
     return config
 
 @pytest.fixture(scope="session", name="docker_config")
-def docker_config(config: Config, docker_ip: str, docker_services: pytest_docker.plugin.Services) -> Config:
+def fixture_docker_config(config: Config, docker_ip: str, docker_services: pytest_docker.plugin.Services) -> Config:
     """
     Configure l'application pour se connecter au container de test.
     S'assure également que les containers sont disponibles.
@@ -74,10 +79,10 @@ def docker_config(config: Config, docker_ip: str, docker_services: pytest_docker
 
         try:
             ldap.connect()
-        except Exception as e:
+        except Exception as exception:
             time.sleep(1)
             if (datetime.datetime.now() - now).seconds > timeout:
-                raise e
+                raise exception
             continue
         ldap.disconnect()
         break
@@ -89,12 +94,12 @@ def docker_config(config: Config, docker_ip: str, docker_services: pytest_docker
 
         try:
             db.connect()
-        except Exception as e:
+        except Exception as exception:
             time.sleep(1)
             docker_config.database.host = docker_ip
             docker_config.database.port = docker_services.port_for('moodle-db-test', 3306)
             if (datetime.datetime.now() - now).seconds > timeout:
-                raise e
+                raise exception
             continue
         db.disconnect()
         break

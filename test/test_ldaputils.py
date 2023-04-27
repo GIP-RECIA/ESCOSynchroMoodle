@@ -1,18 +1,18 @@
 # coding: utf-8
+#pylint: disable=protected-access
 """
 Module pour les tests vis à vis de l'accès et de la récupération
 de données depuis le ldap
 """
 
 from datetime import datetime
-
-import pytest
+from test.utils import ldap_utils
 from ldap3 import Connection
-
+import pytest
 from synchromoodle import ldaputils
 from synchromoodle.config import Config
 from synchromoodle.ldaputils import Ldap, StructureLdap, PersonneLdap, EleveLdap, EnseignantLdap
-from test.utils import ldap_utils
+
 
 datetime_value = datetime(2019, 4, 9, 21, 42, 1)
 

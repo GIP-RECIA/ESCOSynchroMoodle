@@ -3,16 +3,15 @@
 Module pour les tests par rapport au comportement de la synchronisation
 """
 
+from test.utils import db_utils, ldap_utils, mock_utils
+from unittest.mock import call
 import pytest
 import pytest_mock
-from unittest.mock import call
-import platform
-import json
-from synchromoodle.config import Config, ActionConfig, ConfigLoader
+from synchromoodle.config import Config, ActionConfig
 from synchromoodle.dbutils import Database
 from synchromoodle.ldaputils import Ldap
 from synchromoodle.synchronizer import Synchronizer, UserType
-from test.utils import db_utils, ldap_utils, mock_utils
+
 
 @pytest.fixture(scope='function', name='db')
 def fixture_db(docker_config: Config) -> Database:
@@ -152,8 +151,8 @@ class TestEtablissement:
         assert dane_context.uai == "0450080T"
         assert dane_context.etablissement_theme == "0450080t"
         assert dane_context.id_context_categorie is not None
-        assert synchronizer.ids_cohorts_dane_lycee_en != {}
-        assert synchronizer.ids_cohorts_dane_dep_clg != {}
+        assert synchronizer.ids_cohorts_dane_lycee_en
+        assert synchronizer.ids_cohorts_dane_dep_clg
 
         #On s'assure de la création des cohortes dane
         #Pour les lycées
@@ -245,7 +244,7 @@ class TestEtablissement:
                                 'name': cohort_name
                             })
             cohort = db.mark.fetchone()
-            assert cohort != None #On vérifie que la cohorte existe
+            assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
             db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                             .format(entete=db.entete),
@@ -264,7 +263,7 @@ class TestEtablissement:
                             'name': cohort_name
                         })
         cohort = db.mark.fetchone()
-        assert cohort != None #On vérifie que la cohorte existe
+        assert cohort is not None #On vérifie que la cohorte existe
         cohort_id = cohort[0]
         db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                         .format(entete=db.entete),
@@ -317,7 +316,6 @@ class TestEtablissement:
         #Synchronisation aussi du contexte du collège
         structure_clg = ldap.get_structure("0291595B")
         etab_context_clg = synchronizer.handle_etablissement(structure_clg.uai)
-        enseignants_clg = ldap.search_enseignant(None, "0291595B")
         eleves_clg = ldap.search_eleve(None, "0291595B")
         synchronizer.construct_classe_to_niv_formation(etab_context_clg, eleves_clg)
 
@@ -391,7 +389,7 @@ class TestEtablissement:
                                 'name': cohort_name
                             })
             cohort = db.mark.fetchone()
-            assert cohort != None #On vérifie que la cohorte existe
+            assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
             db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                             .format(entete=db.entete),
@@ -411,7 +409,7 @@ class TestEtablissement:
                                 'name': cohort_name
                             })
             cohort = db.mark.fetchone()
-            assert cohort != None #On vérifie que la cohorte existe
+            assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
             db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                             .format(entete=db.entete),
@@ -438,7 +436,7 @@ class TestEtablissement:
                             })
 
             cohort = db.mark.fetchone()
-            assert cohort != None #On vérifie que la cohorte existe
+            assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
             db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                             .format(entete=db.entete),
@@ -464,7 +462,7 @@ class TestEtablissement:
                             })
 
             cohort = db.mark.fetchone()
-            assert cohort != None #On vérifie que la cohorte existe
+            assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
             db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
                             .format(entete=db.entete),
@@ -765,7 +763,8 @@ class TestEtablissement:
         cohorts_to_delete_ids.append(db.mark.fetchone()[0])
         mock_delete_cohorts.assert_has_calls([call(cohorts_to_delete_ids)])
 
-        #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap ont bien aussi été supprimés des cohortes dans moodle
+        #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap
+        #ont bien aussi été supprimés des cohortes dans moodle
         #Eleves par classe : récupération des membres de la cohorte d'élèves TS2
         db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
                         " INNER JOIN {entete}cohort AS cohort"
@@ -840,7 +839,8 @@ class TestEtablissement:
         assert len(results) == len(profs_niveau_by_cohorts_db["TERMINALE GENERALE & TECHNO YC BT"])-1
 
 
-    def test_purge_cohortes_dane(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
+    def test_purge_cohortes_dane(self, ldap: Ldap, db: Database, config: Config,
+                                 mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la purge des cohortes de la dane :
         - Récupération des cohortes de la dane de moodle
@@ -870,14 +870,14 @@ class TestEtablissement:
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
         #Mock pour la suppression de cohortes
-        mock_delete_cohorts = mocker.patch('synchromoodle.synchronizer.WebService.delete_cohorts')
+        mocker.patch('synchromoodle.synchronizer.WebService.delete_cohorts')
 
         #Initialisation du synchronizer
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
 
         #Récupération du contexte de la dane et synchronisation de la dane
-        dane_context = synchronizer.handle_dane(config.constantes.uai_dane, readonly=False)
+        synchronizer.handle_dane(config.constantes.uai_dane, readonly=False)
 
         #--- PARTIE COLLEGE ---#
 
@@ -920,9 +920,9 @@ class TestEtablissement:
         cohorts_dir_dep_clg_ldap[etab_departement].extend(ldap.search_personnel_direction_uid(uai=uai))
 
         #On vérifie qu'on a bien récupéré les cohortes du ldap
-        assert cohorts_elv_dep_clg_ldap != {}
-        assert cohorts_ens_dep_clg_ldap != {}
-        assert cohorts_dir_dep_clg_ldap != {}
+        assert cohorts_elv_dep_clg_ldap
+        assert cohorts_ens_dep_clg_ldap
+        assert cohorts_dir_dep_clg_ldap
 
         #Suppression manuelle dans certaines cohortes d'utilisateurs spécifiques dans le ldap
         #On teste pour un département pour chaque type d'utilisateur
@@ -978,7 +978,8 @@ class TestEtablissement:
         for departement in config.constantes.departements:
             synchronizer.purge_cohort_dane_clg_dep(cohort_dane_clg[etab_departement], departement)
 
-        #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap ont bien aussi été supprimés des cohortes dans moodle
+        #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap
+        #ont bien aussi été supprimés des cohortes dans moodle
         #Type élèves : récupération des membres de la cohorte des élèves des collèges du 18
         db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
                         " INNER JOIN {entete}cohort AS cohort"
@@ -1009,7 +1010,7 @@ class TestEtablissement:
         assert 'f1700drk' not in results
         assert len(results) == len(cohorts_ens_dep_clg_bd)-1
 
-        #Type personnels de direcrtion : récupération des membres de la cohorte des personnels de direction des collèges du 18
+        #Type personnels de direction : membres de la cohorte des personnels de direction des collèges du 18
         db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
                         " INNER JOIN {entete}cohort AS cohort"
                         " ON cohort_members.cohortid = cohort.id"
@@ -1060,9 +1061,9 @@ class TestEtablissement:
         cohort_dir_lycee_en_ldap.extend(ldap.search_personnel_direction_uid(uai=uai))
 
         #On vérifie qu'on a bien récupéré les cohortes du ldap
-        assert cohort_elv_lycee_en_ldap != {}
-        assert cohort_ens_lycee_en_ldap != {}
-        assert cohort_dir_lycee_en_ldap != {}
+        assert cohort_elv_lycee_en_ldap
+        assert cohort_ens_lycee_en_ldap
+        assert cohort_dir_lycee_en_ldap
 
         #Suppression manuelle dans certaines cohortes d'utilisateurs spécifiques dans le ldap
         #On teste pour chaque type d'utilisateur
@@ -1115,7 +1116,8 @@ class TestEtablissement:
         #Purge des cohortes lycées
         synchronizer.purge_cohort_dane_lycee_en(cohort_dane_lycee)
 
-        #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap ont bien aussi été supprimés des cohortes dans moodle
+        #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap
+        #ont bien aussi été supprimés des cohortes dans moodle
         #Type élèves : récupération des membres de la cohorte des élèves des lycées
         db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
                         " INNER JOIN {entete}cohort AS cohort"
@@ -1162,7 +1164,8 @@ class TestEtablissement:
         assert len(results) == len(cohorts_dir_lyc_bd)-1
 
 
-    def test_anonymize_or_delete_eleves(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
+    def test_anonymize_or_delete_eleves(self, ldap: Ldap, db: Database, config: Config,
+                                        mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la suppression/anonymisation des élèves devenus inutiles :
             - Ajout d'utilisateurs directement dans moodle qui ne sont pas présents dans le ldap
@@ -1204,7 +1207,7 @@ class TestEtablissement:
         #Mocks
         #Attention on mock les fonctions dans synchronizer.py et pas dans webserviceutils.py
         #Ici on a .WebService mais c'est pour indiquer l'objet WebService et non pas le fichier
-        mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
+        mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
          side_effect=mock_utils.fake_get_courses_user_enrolled_test_eleves)
         mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
@@ -1229,7 +1232,8 @@ class TestEtablissement:
         mock_unenrol_user_from_course.assert_not_called()
 
 
-    def test_anonymize_or_delete_enseignants(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
+    def test_anonymize_or_delete_enseignants(self, ldap: Ldap, db: Database, config: Config,
+                                             mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la suppression/anonymisation des enseignants devenus inutiles :
             - Ajout d'utilisateurs directement dans moodle qui ne sont pas présents dans le ldap
@@ -1270,13 +1274,13 @@ class TestEtablissement:
         db_valid_users = db.get_all_valid_users()
 
         #Mocks
-        mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
+        mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
             side_effect=mock_utils.fake_get_courses_user_enrolled_test_enseignants)
-        mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
+        mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
-        mock_backup_course = mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
+        mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
             return_value=config.webservice.backup_success_re)
 
         #Suppression d'un enseignant dans le ldap
@@ -1333,13 +1337,13 @@ class TestEtablissement:
         db_valid_users = db.get_all_valid_users()
 
         #Mocks
-        mock_get_users_enrolled = mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
+        mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
             side_effect=mock_utils.fake_get_courses_user_enrolled_test_cours)
         mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
-        mock_backup_course = mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
+        mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
             return_value=config.webservice.backup_success_re)
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
@@ -1349,7 +1353,8 @@ class TestEtablissement:
         mock_delete_courses.assert_has_calls([call([37003])])
 
         #Cours dont doit être désinscrit l'utilisateur
-        mock_unenrol_user_from_course.assert_has_calls([call(492216,37001),call(492216,37002),call(492216,37004),call(492216,37005)])
+        mock_unenrol_user_from_course.assert_has_calls([call(492216,37001),call(492216,37002),
+                                                        call(492216,37004),call(492216,37005)])
 
         #On n'est pas censé anonymiser ou supprimer des utilisateurs dans les cas testés
         mock_anon_users.assert_not_called()

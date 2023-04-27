@@ -1,10 +1,11 @@
 # coding: utf-8
+#pylint: disable=no-member
 """
 Module pour les tests vis à vis de la configuration
 """
 
-from synchromoodle.config import ConfigLoader
 from os import path
+from synchromoodle.config import ConfigLoader
 
 
 class TestConfig:
