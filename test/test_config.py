@@ -1,10 +1,17 @@
 # coding: utf-8
+"""
+Module pour les tests vis à vis de la configuration
+"""
+
 from synchromoodle.config import ConfigLoader
 from os import path
 
 
 class TestConfig:
+    """Teste le module de config"""
+
     def test_config_update_no_id(self):
+        """Teste une mise à jour d'une config par chargement de fichiers"""
         config_loader = ConfigLoader()
         config = config_loader.load([
             path.join(path.dirname(__file__), 'data/config_test_no_id_1.yml'),
@@ -36,6 +43,7 @@ class TestConfig:
         assert len(config_action_1.etablissements.etab_rgp[2].uais) == 10
 
     def test_config_update_same_id(self):
+        """Teste une mise à jour d'une config par chargement de fichiers"""
         config_loader = ConfigLoader()
         config = config_loader.load([
             path.join(path.dirname(__file__), 'data/config_test_same_id_1.yml'),

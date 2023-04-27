@@ -1,4 +1,9 @@
 # coding: utf-8
+"""
+Moduel permettant les opérations nécéssaires à la
+mise en place du ldap pour les tests
+"""
+
 from io import StringIO
 from pkgutil import get_data
 

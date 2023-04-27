@@ -1,6 +1,12 @@
+"""
+Module permettant de retourner les valeurs de test
+pour les fonctions mockées
+"""
+
 def fake_get_courses_user_enrolled_test_eleves(userid: int):
     """
-    Retourne les cours auxquels est inscrit l'utilisateur passé en paramètre
+    Retourne les cours auxquels est inscrit l'utilisateur passé en paramètre.
+
     :param userid: L'id de l'élève
     :return: La liste des ids des cours
     """
@@ -10,7 +16,8 @@ def fake_get_courses_user_enrolled_test_eleves(userid: int):
 
 def fake_get_courses_user_enrolled_test_enseignants(userid: int):
     """
-    Retourne les cours auxquels est inscrit l'utilisateur passé en paramètre
+    Retourne les cours auxquels est inscrit l'utilisateur passé en paramètre.
+
     :param userid: L'id de l'enseignant
     :return: La liste des ids des cours
     """
@@ -22,7 +29,8 @@ def fake_get_courses_user_enrolled_test_enseignants(userid: int):
 
 def fake_get_courses_user_enrolled_test_cours(userid: int):
     """
-    Retourne les cours auxquels est inscrit l'utilisateur passé en paramètre
+    Retourne les cours auxquels est inscrit l'utilisateur passé en paramètre.
+
     :param userid: L'id de l'enseignant
     :return: La liste des ids des cours
     """

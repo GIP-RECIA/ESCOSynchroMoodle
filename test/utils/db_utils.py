@@ -1,4 +1,8 @@
 # coding: utf-8
+"""
+Moduel permettant les intéractions nécéssaires à la base de données
+moodle pour les tests
+"""
 
 import re
 from pkgutil import get_data
@@ -14,10 +18,12 @@ ID_TEST_CATEGORY = 1
 __statements_cache = Cache(maxsize=100)
 
 def init(db: Database):
+    """Initialise la base de données"""
     run_script('data/ddl.sql', db)
 
 
 def reset(db: Database):
+    """Réinitialise la base de données"""
     run_script('data/ddl.sql', db)
 
 
@@ -30,6 +36,13 @@ def _get_statements(path: str):
 
 
 def run_script(script: str, db: Database, connect=True):
+    """
+    Permet de lancer un script sur la base de données moodle.
+
+    :param script: Le chemin d'accès vers le fichier contenant le script .sql
+    :param db: L'objet Database pour intéragir avec la bd
+    :param connect: Si on est déjà connecté ou non à la base de données
+    """
     if connect:
         db.connect()
     try:
@@ -45,15 +58,28 @@ def run_script(script: str, db: Database, connect=True):
 
 def insert_fake_user(db: Database, username: str, first_name: str, last_name: str, email: str, mail_display: int, theme: str):
     """
-    Fonction permettant d'insérer un utilisateur de test
+    Fonction permettant d'insérer un utilisateur de test.
+
+    :param db: L'objet Database pour intéragir avec la bd
+    :param username: Le username de l'utilisateur factice
+    :param first_name: Le prénom de l'utilisateur factice
+    :param last_name: Le nom de l'utilisateur factice
+    :param email: L'e-mail de l'utilisateur factice
+    :param mail_display: Le mail display de l'utilisateur factice
+    :param theme: Le theme de l'utilisateur factice
     :returns: L'id de l'utilisateur inséré
     """
     db.insert_moodle_user(username, first_name, last_name, email, mail_display, theme)
     return db.get_user_id(username)
 
-def enrol_user_to_fake_course(db: Database, roleid, courseid, userid):
+def enrol_user_to_fake_course(db: Database, roleid: int, courseid: int, userid: int):
     """
-    Fonction permettant d'inscrire un utilisateur à un cours factice
+    Fonction permettant d'inscrire un utilisateur à un cours factice.
+
+    :param db: L'objet Database pour intéragir avec la bd
+    :param roleid: L'id du rôle avec lequel on inscrit l'utilisateur au cours
+    :param courseid: L'id du cours dans lequel on inscrit l'utilisateur
+    :param userid: L'id de l'utilisateur à inscrire
     """
     #Inscription au cours
     db.enroll_user_in_course(roleid, courseid, userid)
@@ -62,22 +88,40 @@ def enrol_user_to_fake_course(db: Database, roleid, courseid, userid):
     #Ajout du rôle désiré dans le contexte du cours
     db.add_role_to_user(roleid, context_course_id, userid)
 
-def insert_fake_course(db: Database, id_category, full_name, id_number, short_name, summary, format_, visible, start_date, time_created, time_modified):
+def insert_fake_course(db: Database, id_category: int, full_name: str, id_number: str, short_name: str, summary: str,
+ format_: str, visible: int, start_date: int, time_created: int, time_modified: int):
     """
-    Fonction permattant de créer un cours factice
+    Fonction permattant de créer un cours factice.
+
+    :param db: L'objet Database pour intéragir avec la bd
+    :param id_category: L'id de la catégorie dans laquelle va être créée le cours
+    :param full_name: Le nom du cours
+    :param id_number: L'id_number du cours
+    :param short_name: Le nom court du cours
+    :param summary: Le sommaire du cours
+    :param format_: Le format du cours
+    :param visible: Si le cours est visible ou non
+    :param start_date: La date de démarrge du cours
+    :param time_created: La date de création du cours
+    :param time_modified: La date de dernière modification du cours
+    :returns: L'id du faux cours inséré
     """
     #Insertion du cours
     db.insert_moodle_course(id_category, full_name, id_number, short_name, summary, format_, visible, start_date, time_created, time_modified)
     id_course = db.mark.lastrowid
-    #Insertion du contexte corespondant au cours
+    #Insertion du contexte correspondant au cours
     db.insert_moodle_context(db.constantes.niveau_ctx_cours, 3, id_course)
     return id_course
 
 def insert_fake_course_reference_eleve(db: Database, userid: int):
     """
-    Fonction permettant de donner une référence à un élève dans un cours
+    Fonction permettant de donner une référence à un élève dans un cours.
     On ne se préoccupe pas des dépendances car ici la table de l'historique des notes
-    peut de toute manière faire référence à des cours qui n'éxistent plus
+    peut de toute manière faire référence à des cours qui n'existent plus.
+
+    :param db: L'objet Database pour intéragir avec la bd
+    :param userid: L'id de l'utilisateur dont on veut créer les fausses références
+    :returns: L'id de la fausse référence insérée
     """
     s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser, itemid, userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade, hidden, locked, locktime, exported, overridden, excluded, feedback, feedbackformat, information, informationformat) VALUES (1, 0, 'mod/assign', 0, 0, 0, %(userid)s, 50, 100.00000, 0.00000, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
     db.mark.execute(s, params={'userid': userid})
@@ -85,9 +129,13 @@ def insert_fake_course_reference_eleve(db: Database, userid: int):
 
 def insert_fake_course_reference_enseignant(db: Database, loggeduser: int):
     """
-    Fonction permettant de donner une référence à un enseignant dans un cours
+    Fonction permettant de donner une référence à un enseignant dans un cours.
     On ne se préoccupe pas des dépendances car ici la table de l'historique des notes
-    peut de toute manière faire référence à des cours qui n'éxistent plus
+    peut de toute manière faire référence à des cours qui n'existent plus.
+
+    :param db: L'objet Database pour intéragir avec la bd
+    :param loggeduser: L'id de l'utilisateur dont on veut créer les fausses références
+    :returns: L'id de la fausse référence insérée
     """
     s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser, itemid, userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade, hidden, locked, locktime, exported, overridden, excluded, feedback, feedbackformat, information, informationformat) VALUES (1, 0, 'mod/assign', 0, %(loggeduser)s, 0, 0, 50, 100.00000, 0.00000, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
     db.mark.execute(s, params={'loggeduser': loggeduser})
@@ -95,30 +143,32 @@ def insert_fake_course_reference_enseignant(db: Database, loggeduser: int):
 
 def update_lastlogin_user(db: Database, userid: int, lastlogin):
     """
-    Fonction permettant de mettre a jour la date de dernière connexion d'un utilisateur
+    Fonction permettant de mettre a jour la date de dernière connexion d'un utilisateur.
+
     :param db: L'objet Database représentant la base de données moodle
     :param userid: L'id de l'utilisateur à modifier
     :param lastlogin: Le timestamp (en s) représentant la date de dernière connexion de l'utilisateur
-    :return:
     """
     s = "UPDATE {entete}user SET lastlogin = %(lastlogin)s WHERE id = %(userid)s".format(entete=db.entete)
     db.mark.execute(s, params={'lastlogin': lastlogin, 'userid': userid})
 
 def update_timemodified_course(db: Database, courseid: int, timemodified):
     """
-    Fonction permettant de mettre a jour la date de dernière modification d'un cours
+    Fonction permettant de mettre a jour la date de dernière modification d'un cours.
+
     :param db: L'objet Database représentant la base de données moodle
     :param courseid: L'id du cours à modifier
     :param timemodified: Le timestamp (en s) représentant la date de dernière modification du cours
-    :return:
     """
     s = "UPDATE {entete}course SET timemodified = %(timemodified)s WHERE id = %(courseid)s".format(entete=db.entete)
     db.mark.execute(s, params={'timemodified': timemodified, 'courseid': courseid})
 
 def insert_eleves(db: Database, config: Config):
     """
-    Insérère toutes les données nécéssaisres aux tests
-    des élèves dans la base de données moodle
+    Insérère toutes les données nécéssaisres aux tests des élèves dans la base de données moodle.
+
+    :param db: L'objet Database représentant la base de données moodle
+    :param config: La configuration générale de type Config
     """
     #Récupération du timestamp actuel
     now = db.get_timestamp_now()
@@ -177,8 +227,10 @@ def insert_eleves(db: Database, config: Config):
 
 def insert_enseignants(db: Database, config: Config):
     """
-    Insérère toutes les données nécéssaisres aux tests
-    des enseignants dans la base de données moodle
+    Insérère toutes les données nécéssaisres aux tests des enseignants dans la base de données moodle.
+
+    :param db: L'objet Database représentant la base de données moodle
+    :param config: La configuration générale de type Config
     """
     #Récupération du timestamp actuel
     now = db.get_timestamp_now()
@@ -283,8 +335,10 @@ def insert_enseignants(db: Database, config: Config):
 
 def insert_courses(db: Database, config: Config):
     """
-    Insérère toutes les données nécéssaisres aux tests
-    des cours dans la base de données moodle
+    Insérère toutes les données nécéssaisres aux tests des cours dans la base de données moodle.
+
+    :param db: L'objet Database représentant la base de données moodle
+    :param config: La configuration générale de type Config
     """
     #Récupération du timestamp actuel
     now = db.get_timestamp_now()

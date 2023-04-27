@@ -5,6 +5,7 @@ import os
 import time
 
 import pytest
+import pytest_docker
 
 from synchromoodle.config import Config, ActionConfig
 from synchromoodle.dbutils import Database
@@ -15,6 +16,7 @@ pytest_plugins = ["docker"]
 
 @pytest.fixture(scope='session')
 def docker_compose_file(pytestconfig):
+    """Retourne le chemin vers le fichier de configuration pour les containers docker."""
     return os.path.join(str(pytestconfig.rootdir), 'docker-compose.pytest.yml')
 
 
@@ -24,28 +26,38 @@ def docker_compose_subprocess_kwargs():
 
 
 @pytest.fixture(scope="session")
-def action_config():
+def action_config() -> ActionConfig:
+    """
+    Créée une configuration d'action avec les valeurs de base.
+
+    :returns: La configuration créée
+    """
     action_config = ActionConfig()
     return action_config
 
 
 @pytest.fixture(scope="session")
-def config(action_config: ActionConfig):
+def config(action_config: ActionConfig) -> Config:
+    """
+    Charge la configuration de base pour la session de tests.
+
+    :param action_config: Une configuration d'action
+    :returns: La configuration globale
+    """
     config = Config()
     config.actions.append(action_config)
     return config
 
 @pytest.fixture(scope="session", name="docker_config")
-def docker_config(config, docker_ip, docker_services):
+def docker_config(config: Config, docker_ip: str, docker_services: pytest_docker.plugin.Services) -> Config:
     """
     Configure l'application pour se connecter au container de test.
-
     S'assure également que les containers sont disponibles.
 
-    :param config:
-    :param docker_ip:
-    :param docker_services:
-    :return:
+    :param config: La configuration de base pour la session de tests
+    :param docker_ip: L'ip utilisé pour les containers docker
+    :param docker_services: Les services docker
+    :returns: La configuration pour la session de tests mise à jour
     """
     docker_config = Config()
     docker_config.update(**json.loads(json.dumps(config, default=lambda o: getattr(o, '__dict__', str(o)))))

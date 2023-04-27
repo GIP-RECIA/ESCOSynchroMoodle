@@ -10,7 +10,8 @@ Welcome to Synchro Moodle's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-modules
+   synchromoodle
+   test
 
 Indices and tables
 ==================

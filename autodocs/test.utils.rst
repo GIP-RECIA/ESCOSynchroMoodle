@@ -20,14 +20,6 @@ test.utils.ldap\_utils module
    :undoc-members:
    :show-inheritance:
 
-test.utils.ldif module
-----------------------
-
-.. automodule:: test.utils.ldif
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 test.utils.mock\_utils module
 -----------------------------
 

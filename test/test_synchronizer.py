@@ -1,6 +1,10 @@
 # coding: utf-8
+"""
+Module pour les tests par rapport au comportement de la synchronisation
+"""
 
 import pytest
+import pytest_mock
 from unittest.mock import call
 import platform
 import json
@@ -11,21 +15,39 @@ from synchromoodle.synchronizer import Synchronizer, UserType
 from test.utils import db_utils, ldap_utils, mock_utils
 
 @pytest.fixture(scope='function', name='db')
-def db(docker_config: Config):
+def db(docker_config: Config) -> Database:
+    """
+    Créé la base de données utilisée cette session de tests
+
+    :returns: L'objet Database permettant d'intéragir avec le docker contenant le mariadb
+    """
     db = Database(docker_config.database, docker_config.constantes)
     db_utils.init(db)
     return db
 
 
 @pytest.fixture(scope='function', name='ldap')
-def ldap(docker_config: Config):
+def ldap(docker_config: Config) -> Ldap:
+    """
+    Créé le ldap utilisé cette session de tests
+
+    :returns: L'objet Ldap permettant d'intéragir avec le docker contenant le ldap
+    """
     ldap = Ldap(docker_config.ldap)
     ldap_utils.reset(ldap)
     return ldap
 
 class TestEtablissement:
+    """Classe de tests pour vérifier la synchro d'un établissement
+    et de ses élèves et enseignants."""
+
     @pytest.fixture(autouse=True)
     def manage_ldap(self, ldap: Ldap):
+        """
+        Se connecte au ldap.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        """
         ldap.connect()
         try:
             yield
@@ -34,6 +56,11 @@ class TestEtablissement:
 
     @pytest.fixture(autouse=True)
     def manage_db(self, db: Database):
+        """
+        Se connecte au mariadb.
+
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        """
         db.connect()
         try:
             yield
@@ -41,6 +68,13 @@ class TestEtablissement:
             db.disconnect()
 
     def test_should_load_context(self, ldap: Ldap, db: Database, docker_config: Config):
+        """
+        Vérifie que le contexte par défaut d'un établissement se charge bien.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param docker_config: La configuration globale pendant la session de tests
+        """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
@@ -60,7 +94,11 @@ class TestEtablissement:
 
     def test_maj_etab(self, ldap: Ldap, db: Database, config: Config):
         """
-        Permet de vérifier la synchronisation des établissements dans moodle
+        Permet de vérifier la synchronisation des établissements dans moodle.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
         """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -98,7 +136,11 @@ class TestEtablissement:
     def test_maj_dane(self, ldap: Ldap, db: Database, config: Config):
         """
         Permet de vérifier la synchronisation de la dane en vérifiant
-        que les cohortes dane ont bien été créées
+        que les cohortes dane ont bien été créées.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
         """
         ldap_utils.run_ldif('data/structure_dane.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
@@ -141,7 +183,11 @@ class TestEtablissement:
 
     def test_maj_eleve(self, ldap: Ldap, db: Database, config: Config):
         """
-        Permet de vérifier la synchronisation des élèves dans moodle
+        Permet de vérifier la synchronisation des élèves dans moodle.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
         """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -233,10 +279,14 @@ class TestEtablissement:
 
     def test_maj_enseignant(self, ldap: Ldap, db: Database, config: Config):
         """
-        Permet de vérifier la synchronisation des enseignants dans moodle
+        Permet de vérifier la synchronisation des enseignants dans moodle.
         - Charge un enseignant depuis le LDAP et l'ajoute dans moodle
         - Modifie un enseignant dans le LDAP et vérifie que les informations
-          sont bien reportées dans mooodle
+        sont bien reportées dans mooodle
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
         """
 
         #Chargement de la bd et du ldap
@@ -429,7 +479,11 @@ class TestEtablissement:
 
     def test_maj_user_interetab(self, ldap: Ldap, db: Database, config: Config):
         """
-        Permet de vérifier la synchronisation des utilisateurs interetablissement
+        Permet de vérifier la synchronisation des utilisateurs interetablissement.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
         """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -458,7 +512,12 @@ class TestEtablissement:
 
     def test_maj_usercfa_interetab(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig):
         """
-        Permet de vérifier la synchronisation des utilisateurs interetablissement
+        Permet de vérifier la synchronisation des utilisateurs interetablissement.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        :param action_config: La configuration de l'action cfa interetab
         """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -489,7 +548,11 @@ class TestEtablissement:
 
     def test_maj_inspecteur(self, ldap: Ldap, db: Database, config: Config):
         """
-        Permet de vérifier la synchronisation des inspecteurs dans moodle
+        Permet de vérifier la synchronisation des inspecteurs dans moodle.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
         """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -530,7 +593,11 @@ class TestEtablissement:
     def test_eleve_passage_lycee(self, ldap: Ldap, db: Database, config: Config):
         """
         Permet de vérifier qu'on enlève bien le rôle "Utilisateurs avec droits limités"
-        quand un élève passe du collège au lycée
+        quand un élève passe du collège au lycée.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
         """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -576,16 +643,21 @@ class TestEtablissement:
         assert len(roles_results) == 0
 
 
-    def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config, mocker):
+    def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la purge des cohortes :
-            - Récupération des cohortes de moodle
-            - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
-                - Eleves par classe
-                - Eleves par niveau de formation
-                - Enseignants par classe
-                - Enseignants par établissement
-            - Suppression des cohortes vides
+        - Récupération des cohortes de moodle
+        - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
+        - Eleves par classe
+        - Eleves par niveau de formation
+        - Enseignants par classe
+        - Enseignants par établissement
+        - Suppression des cohortes vides
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        :param mocker: L'objet permettant de mocker des fonctions
         """
 
         #Chargement du ldap et de la bd
@@ -770,15 +842,20 @@ class TestEtablissement:
         assert len(results) == len(profs_niveau_by_cohorts_db["TERMINALE GENERALE & TECHNO YC BT"])-1
 
 
-    def test_purge_cohortes_dane(self, ldap: Ldap, db: Database, config: Config, mocker):
+    def test_purge_cohortes_dane(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la purge des cohortes de la dane :
-            - Récupération des cohortes de la dane de moodle
-            - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
-                - Eleves par classe
-                - Eleves par niveau de formation
-                - Enseignants par classe
-                - Enseignants par établissement
+        - Récupération des cohortes de la dane de moodle
+        - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
+        - Eleves par classe
+        - Eleves par niveau de formation
+        - Enseignants par classe
+        - Enseignants par établissement
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        :param mocker: L'objet permettant de mocker des fonctions
         """
 
         #Chargement du ldap et de la bd
@@ -1087,7 +1164,7 @@ class TestEtablissement:
         assert len(results) == len(cohorts_dir_lyc_bd)-1
 
 
-    def test_anonymize_or_delete_eleves(self, ldap: Ldap, db: Database, config: Config, mocker):
+    def test_anonymize_or_delete_eleves(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la suppression/anonymisation des élèves devenus inutiles :
             - Ajout d'utilisateurs directement dans moodle qui ne sont pas présents dans le ldap
@@ -1095,6 +1172,11 @@ class TestEtablissement:
                 - Inscriptions ou non à des cours
                 - Références ou non à des cours
             - Suppression d'un utilisateur dans le ldap qui est présent dans moodle
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        :param mocker: L'objet permettant de mocker des fonctions
         """
 
         #Chargement du ldap et de la bd
@@ -1149,7 +1231,7 @@ class TestEtablissement:
         mock_unenrol_user_from_course.assert_not_called()
 
 
-    def test_anonymize_or_delete_enseignants(self, ldap: Ldap, db: Database, config: Config, mocker):
+    def test_anonymize_or_delete_enseignants(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la suppression/anonymisation des enseignants devenus inutiles :
             - Ajout d'utilisateurs directement dans moodle qui ne sont pas présents dans le ldap
@@ -1158,6 +1240,11 @@ class TestEtablissement:
                 - Références ou non à des cours
                 - Possession de cours (rôles enseignant ou propriétaire de cours)
             - Suppression d'un utilisateur dans le ldap qui est présent dans moodle
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        :param mocker: L'objet permettant de mocker des fonctions
         """
 
         #Chargement du ldap et de la bd
@@ -1210,12 +1297,17 @@ class TestEtablissement:
         mock_delete_courses.assert_has_calls([call([37005]),call([37007])])
 
 
-    def test_course_backup(self, ldap: Ldap, db: Database, config: Config, mocker):
+    def test_course_backup(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste le traitement des cours des enseignants devenus inutiles :
             - Ajout d'enseignants directement dans moodle qui ne sont pas présents dans le ldap
             - Création de cours pour ces enseignants
             - Inscription ou non aux cours avec des rôles différents (propriétaire ou simple enseignant)
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        :param mocker: L'objet permettant de mocker des fonctions
         """
 
         #Chargement du ldap et de la bd

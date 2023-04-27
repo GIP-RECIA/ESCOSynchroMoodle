@@ -464,7 +464,6 @@ class Database:
         :param id_context_category: L'id du contexte
         :param userid: L'id de l'utilisateur
         :param roleid: L'id du rôle
-        :return:
         """
         s = "DELETE FROM {entete}role_assignments" \
             " WHERE contextid = %(id_context_category)s" \
@@ -1195,7 +1194,7 @@ class Database:
         """
         Fonction permettant d'insérer un cours.
 
-        :param id_category: L'id de la catégorie dans laquelle va être créé le cours
+        :param id_category: L'id de la catégorie dans laquelle va être créée le cours
         :param full_name: Le nom du cours
         :param id_number: L'id_number du cours
         :param short_name: Le nom court du cours
@@ -1271,7 +1270,7 @@ class Database:
      max_attachements: int, time_modified: int):
         """
         Fonction permettant d'insérer un forum.
-        
+
         :param course: L'id du cours associé
         :param name: Le nom du forum
         :param intro: L'intro du forum
