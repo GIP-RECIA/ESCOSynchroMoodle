@@ -189,6 +189,7 @@ def insert_eleves(db: Database, config: Config):
     eleveid_c = insert_fake_user(db, "F1700tsc", "testeleve", "C", "testeleve.C@netocentre.fr", 2, "0290009c")
     eleveid_d = insert_fake_user(db, "F1700tsd", "testeleve", "D", "testeleve.D@netocentre.fr", 2, "0290009c")
     eleveid_e = insert_fake_user(db, "F1700tse", "testeleve", "E", "testeleve.E@netocentre.fr", 2, "0290009c")
+    insert_fake_user(db, "F1700tsf", "testeleve", "F", "testeleve.F@netocentre.fr", 2, "0290009c")
     eleveid_g = insert_fake_user(db, "F1700tsg", "testeleve", "G", "testeleve.G@netocentre.fr", 2, "0290009c")
     eleveid_h = insert_fake_user(db, "F1700tsh", "testeleve", "H", "testeleve.H@netocentre.fr", 2, "0290009c")
     eleveid_i = insert_fake_user(db, "F1700tsi", "testeleve", "I", "testeleve.I@netocentre.fr", 2, "0290009c")
@@ -196,7 +197,7 @@ def insert_eleves(db: Database, config: Config):
     eleveid_k = insert_fake_user(db, "F1700tsk", "testeleve", "K", "testeleve.K@netocentre.fr", 2, "0290009c")
     eleveid_l = insert_fake_user(db, "F1700tsl", "testeleve", "L", "testeleve.L@netocentre.fr", 2, "0290009c")
     eleveid_m = insert_fake_user(db, "F1700tsm", "testeleve", "M", "testeleve.M@netocentre.fr", 2, "0290009c")
-    insert_fake_user(db, "F1700tsf", "testeleve", "F", "testeleve.F@netocentre.fr", 2, "0290009c")
+
 
     #Changement des dates de dernière connexions
     update_lastlogin_user(db, eleveid_a, now - (config.delete.delay_delete_student + 1) * SECONDS_PER_DAY)
