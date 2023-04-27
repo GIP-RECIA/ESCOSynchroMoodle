@@ -1,0 +1,37 @@
+# extended LDIF
+#
+# LDAPv3
+# base <ou=structures,dc=esco-centre,dc=fr> with scope subtree
+# filter: (&(ObjectClass=ENTStructure)(ENTStructureUAI=0450080T))
+# requesting: ALL
+#
+
+# 17450430800019, structures, esco-centre.fr
+dn: ENTStructureSIREN=17450430800019,ou=structures,dc=esco-centre,dc=fr
+objectClass: ENTServAc
+objectClass: ENTStructure
+objectClass: organizationalUnit
+ENTStructureSIREN: 17450430800019
+ENTServAcAcademie: ORLEANS-TOURS
+ENTStructureNomCourant: RECTORAT$ACADEMIE D'ORLEANS-TOURS$ORLEANS
+ou: RECTORAT$ACADEMIE D'ORLEANS-TOURS$ORLEANS
+ENTStructureUAI: 0450080T
+ENTStructureTypeStruct: RECTORAT
+ENTStructureJointure: AC-ORLEANS-TOURS$3361
+telephoneNumber: +33 2 38 79 38 79
+postalCode: 45043
+l: ORLEANS CEDEX 1
+ESCODomaines: www.touraine-eschool.fr
+ESCODomaines: www.colleges-eureliens.fr
+ESCODomaines: www.chercan.fr
+ESCODomaines: mon-e-college.loiret.fr
+ESCODomaines: e-college.indre.fr
+ESCODomaines: ent.colleges41.fr
+ESCODomaines: lycees.netocentre.fr
+facsimileTelephoneNumber: +33 2 38 62 41 79
+ENTStructureMailSI: ce.0450080T@ac-orleans-tours.fr
+ESCOStructureNomCourt: RECTORAT ACADEMIE D'ORLEANS-TOURS ORLEANS
+street: 21 rue Saint-Etienne
+
+# numResponses: 2
+# numEntries: 1

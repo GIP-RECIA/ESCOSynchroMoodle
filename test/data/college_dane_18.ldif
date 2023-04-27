@@ -1,0 +1,34 @@
+# extended LDIF
+#
+# LDAPv3
+# base <ou=structures,dc=esco-centre,dc=fr> with scope subtree
+# filter: (&(ObjectClass=ENTStructure)(ENTStructureUAI=0180002E))
+# requesting: ALL
+#
+
+# 19180002800026, structures, esco-centre.fr
+dn: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre,dc=fr
+objectClass: ENTEtablissement
+objectClass: ENTStructure
+objectClass: organizationalUnit
+ENTStructureSIREN: 19180002800026
+ENTEtablissementMinistereTutelle: MINISTERE DE L'EDUCATION NATIONALE
+ENTEtablissementContrat: PU
+ENTStructureNomCourant: CLG$GERARD PHILIPE$AUBIGNY-SUR-NERE
+ou: CLG$GERARD PHILIPE$AUBIGNY-SUR-NERE
+ENTStructureTypeStruct: COLLEGE
+ENTStructureJointure: AC-ORLEANS-TOURS$2356
+ESCOStructureNomCourt: CLG GERARD PHILIPE AUBIGNY-SUR-NERE
+ENTEtablissementBassin: 18A18$BASSIN DU CHER
+street: 27 ter avenue hippodrome de Vogu
+telephoneNumber: +33 2 48 58 03 28
+ESCOStructureLogo: /annuaire_images/logos/19180002800026/logoportail1.jpg?1
+l: AUBIGNY SUR NERE
+ENTStructureUAI: 0180002E
+ESCODomaines: www.chercan.fr
+facsimileTelephoneNumber: +33 2 48 58 14 45
+postalCode: 18700
+ENTStructureMailSI: ce.0180002E@ac-orleans-tours.fr
+
+# numResponses: 2
+# numEntries: 1

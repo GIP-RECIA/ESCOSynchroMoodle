@@ -1,0 +1,1257 @@
+# F1700drk, people, esco-centre.fr
+dn: uid=F1700drk,ou=people,dc=esco-centre,dc=fr
+uid: F1700drk
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:LANGUES
+  ET CULTURES DE L ANTIQUITE LATIN
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:FRANCAI
+ S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME2
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:LANGUES
+  ET CULTURES DE L ANTIQUITE GREC
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+ESCOUAICourant: 0180002E
+givenName: Issi
+sn: Bonas
+ENTPersonJointure: AC-ORLEANS-TOURS$2817032
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Issi.Bonas
+cn: Bonas Issi
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME1
+ESCODomaines: www.chercan.fr
+mail: Issi.Bonas@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F1710038, people, esco-centre.fr
+dn: uid=F1710038,ou=people,dc=esco-centre,dc=fr
+uid: F1710038
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_3SEGPA
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:PHYSIQU
+ E-CHIMIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_4SEGPA
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:SCIENCE
+ S ET TECHNOLOGIE
+givenName: Nonah
+sn: Aven
+ENTPersonJointure: AC-ORLEANS-TOURS$1003
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Nonah.Aven
+cn: Aven Nonah
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3SEGPA
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4SEGPA
+ESCODomaines: www.chercan.fr
+mail: Nonah.Aven@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F1710059, people, esco-centre.fr
+dn: uid=F1710059,ou=people,dc=esco-centre,dc=fr
+uid: F1710059
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:SCIENCE
+ S DE LA VIE ET DE LA TERRE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME4
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME5
+givenName: Sven
+sn: Tales
+ENTPersonJointure: AC-ORLEANS-TOURS$2100
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Sven.Tales
+cn: Tales Sven
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME5
+ESCODomaines: www.chercan.fr
+mail: Sven.Tales@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F171005g, people, esco-centre.fr
+dn: uid=F171005g,ou=people,dc=esco-centre,dc=fr
+uid: F171005g
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:FRANCAI
+ S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_6S-5S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs Principaux
+givenName: Petronella
+sn: Tommei
+ENTPersonJointure: AC-ORLEANS-TOURS$2225
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Petronella.Tommei
+cn: Tommei Petronella
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME3
+ESCODomaines: www.chercan.fr
+mail: Petronella.Tommei@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F1710062, people, esco-centre.fr
+dn: uid=F1710062,ou=people,dc=esco-centre,dc=fr
+uid: F1710062
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:ENSEIGN
+ EMENT MORAL ET CIVIQUE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:HISTOIR
+ E-GEOGRAPHIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_6S-5S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+givenName: Tye
+sn: Risbridger
+ENTPersonJointure: AC-ORLEANS-TOURS$2945
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Tye.Risbridger
+cn: Risbridger Tye
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME1
+ESCODomaines: www.chercan.fr
+mail: Tye.Risbridger@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F171008s, people, esco-centre.fr
+dn: uid=F171008s,ou=people,dc=esco-centre,dc=fr
+uid: F171008s
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:HISTOIR
+ E-GEOGRAPHIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:ENSEIGN
+ EMENT MORAL ET CIVIQUE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs Principaux
+givenName: Cristionna
+sn: Wing
+ENTPersonJointure: AC-ORLEANS-TOURS$5959
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Cristionna.Wing
+cn: Wing Cristionna
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME3
+ESCODomaines: www.chercan.fr
+mail: Cristionna.Wing@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100a7, people, esco-centre.fr
+dn: uid=F17100a7,ou=people,dc=esco-centre,dc=fr
+uid: F17100a7
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:SCIENCE
+ S DE LA VIE ET DE LA TERRE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_6S-5S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME1
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:SCIENCE
+ S ET TECHNOLOGIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+givenName: Robinette
+sn: Stacy
+ENTPersonJointure: AC-ORLEANS-TOURS$11357
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Robinette.Stacy
+cn: Stacy Robinette
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6S-5S
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME2
+ESCODomaines: www.chercan.fr
+mail: Robinette.Stacy@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100aa, people, esco-centre.fr
+dn: uid=F17100aa,ou=people,dc=esco-centre,dc=fr
+uid: F17100aa
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:ANGLAIS
+  LV1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME1
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s Principaux
+givenName: Mae
+sn: Mouget
+ENTPersonJointure: AC-ORLEANS-TOURS$12230
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Mae.Mouget
+cn: Mouget Mae
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME1
+ESCODomaines: www.chercan.fr
+mail: Mae.Mouget@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100an, people, esco-centre.fr
+dn: uid=F17100an,ou=people,dc=esco-centre,dc=fr
+uid: F17100an
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:MATHEMA
+ TIQUES
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_6S-5S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME4
+givenName: Ricky
+sn: Fruchon
+ENTPersonJointure: AC-ORLEANS-TOURS$13915
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Ricky.Fruchon
+cn: Fruchon Ricky
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME4
+ESCODomaines: www.chercan.fr
+mail: Ricky.Fruchon@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100ao, people, esco-centre.fr
+dn: uid=F17100ao,ou=people,dc=esco-centre,dc=fr
+uid: F17100ao
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:MATHEMA
+ TIQUES
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+givenName: Sigfrid
+sn: Selcraig
+ENTPersonJointure: AC-ORLEANS-TOURS$14046
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Sigfrid.Selcraig
+cn: Selcraig Sigfrid
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME4
+ESCODomaines: www.chercan.fr
+mail: Sigfrid.Selcraig@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100b2, people, esco-centre.fr
+dn: uid=F17100b2,ou=people,dc=esco-centre,dc=fr
+uid: F17100b2
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:HISTOIR
+ E-GEOGRAPHIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+givenName: Noby
+sn: Sheldrake
+ENTPersonJointure: AC-ORLEANS-TOURS$16582
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Noby.Sheldrake
+cn: Sheldrake Noby
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME4
+ESCODomaines: www.chercan.fr
+mail: Noby.Sheldrake@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100by, people, esco-centre.fr
+dn: uid=F17100by,ou=people,dc=esco-centre,dc=fr
+uid: F17100by
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:HISTOIR
+ E-GEOGRAPHIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME5
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:ENSEIGN
+ EMENT MORAL ET CIVIQUE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+givenName: Blair
+sn: Siddell
+ENTPersonJointure: AC-ORLEANS-TOURS$19664
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Blair.Siddell
+cn: Siddell Blair
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME2
+ESCODomaines: www.chercan.fr
+mail: Blair.Siddell@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100cu, people, esco-centre.fr
+dn: uid=F17100cu,ou=people,dc=esco-centre,dc=fr
+uid: F17100cu
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:FRANCAI
+ S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_6S-5S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs Principaux
+givenName: Chrysa
+sn: Beauvais
+ENTPersonJointure: AC-ORLEANS-TOURS$20890
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Chrysa.Beauvais
+cn: Beauvais Chrysa
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME5
+ESCODomaines: www.chercan.fr
+mail: Chrysa.Beauvais@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100ei, people, esco-centre.fr
+dn: uid=F17100ei,ou=people,dc=esco-centre,dc=fr
+uid: F17100ei
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:TECHNOL
+ OGIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+givenName: Joachim
+sn: Hembrow
+ENTPersonJointure: AC-ORLEANS-TOURS$22981
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Joachim.Hembrow
+cn: Hembrow Joachim
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME3
+ESCODomaines: www.chercan.fr
+mail: Joachim.Hembrow@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100ev, people, esco-centre.fr
+dn: uid=F17100ev,ou=people,dc=esco-centre,dc=fr
+uid: F17100ev
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:MATHEMA
+ TIQUES
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+givenName: Cale
+sn: Strelitz
+ENTPersonJointure: AC-ORLEANS-TOURS$23357
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Cale.Strelitz
+cn: Strelitz Cale
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME1
+ESCODomaines: www.chercan.fr
+mail: Cale.Strelitz@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100ex, people, esco-centre.fr
+dn: uid=F17100ex,ou=people,dc=esco-centre,dc=fr
+uid: F17100ex
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:EDUCATI
+ ON MUSICALE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_4SEGPA
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_6S-5S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:CHANT C
+ HORAL COLLECTIF
+givenName: Klarrisa
+sn: McWhin
+ENTPersonJointure: AC-ORLEANS-TOURS$23486
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Klarrisa.McWhin
+cn: McWhin Klarrisa
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME5
+ESCODomaines: www.chercan.fr
+mail: Klarrisa.McWhin@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100f0, people, esco-centre.fr
+dn: uid=F17100f0,ou=people,dc=esco-centre,dc=fr
+uid: F17100f0
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:FRANCAI
+ S
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+givenName: Zonnya
+sn: Lewing
+ENTPersonJointure: AC-ORLEANS-TOURS$23535
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Zonnya.Lewing
+cn: Lewing Zonnya
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME2
+ESCODomaines: www.chercan.fr
+mail: Zonnya.Lewing@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100f7, people, esco-centre.fr
+dn: uid=F17100f7,ou=people,dc=esco-centre,dc=fr
+uid: F17100f7
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs_6EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:FRANCAI
+ S
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME:Profs Principaux
+givenName: Coralie
+sn: Starling
+ENTPersonJointure: AC-ORLEANS-TOURS$23770
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Coralie.Starling
+cn: Starling Coralie
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6EME2
+ESCODomaines: www.chercan.fr
+mail: Coralie.Starling@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100fv, people, esco-centre.fr
+dn: uid=F17100fv,ou=people,dc=esco-centre,dc=fr
+uid: F17100fv
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:ITSM:poweruser:GERARD PHILIPE_0180002E
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_4SEGPA
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:TECHNOL
+ OGIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_3SEGPA
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:6EME - SECTION D ENSG
+ T GENE et PRO ADAPTE:Profs_6S-5S
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs_3EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:PRODUCT
+ ION INDUSTRIELLE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:SCIENCE
+ S ET TECHNOLOGIE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+givenName: Morgen
+sn: De Lascy
+ENTPersonJointure: AC-ORLEANS-TOURS$24136
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Morgen.De Lascy
+cn: De Lascy Morgen
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3SEGPA
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$6S-5S
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$3EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME3
+ESCODomaines: www.chercan.fr
+mail: Morgen.De Lascy@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS
+
+# F17100ll, people, esco-centre.fr
+dn: uid=F17100ll,ou=people,dc=esco-centre,dc=fr
+uid: F17100ll
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:Moodle:local:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Listes_Diffusion:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:GRR:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME4
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME2
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:EDUCATI
+ ON PHYSIQUE ET SPORTIVE
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:4EME (NC 4E AES):Prof
+ s_4EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME5
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME1
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs_5EME3
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:5EME:Profs Principaux
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Enseignements:Autre
+givenName: Leon
+sn: Chappel
+ENTPersonJointure: AC-ORLEANS-TOURS$1210422
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Leon.Chappel
+cn: Chappel Leon
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME2
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME1
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$4EME5
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME3
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME4
+ENTAuxEnsClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centr
+ e,dc=fr$5EME5
+ESCODomaines: www.chercan.fr
+mail: Leon.Chappel@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_ENS

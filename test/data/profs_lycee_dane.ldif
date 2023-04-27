@@ -1,0 +1,1322 @@
+# F08004gz, people, esco-centre.fr
+dn: uid=F08004gz,ou=people,dc=esco-centre,dc=fr
+uid: F08004gz
+isMemberOf: esco:Etablissements:DURZY_0450042B:Tous_DURZY
+isMemberOf: esco:Applications:Pronote:DURZY_0450042B
+isMemberOf: esco:Etablissements:DURZY_0450042B:Profs
+isMemberOf: esco:Applications:Espace_Moodle:DURZY_0450042B
+isMemberOf: esco:Applications:Esidoc:DURZY_0450042B
+isMemberOf: esco:Applications:Folios:DURZY_0450042B
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:DURZY_0450042B
+isMemberOf: esco:admin:Publication_contenus:DURZY_0450042B:LOOKOVER
+isMemberOf: esco:Applications:Publication_contenus:DURZY_0450042B
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:DURZY_0450042B
+isMemberOf: esco:Etablissements:DURZY_0450042B:Enseignements:CONCEPTION DES SY
+ STEMES AUTOMATIQUES
+isMemberOf: esco:Etablissements:DURZY_0450042B:Enseignements:ACCOMPAGNEMENT PE
+ RSONNALISE
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Applications:ITSM:DURZY_0450042B
+isMemberOf: esco:admin:ITSM:user:DURZY_0450042B
+isMemberOf: esco:Etablissements:DURZY_0450042B:BREVET DE TECH SUP EN 2 ANS 1ER
+ E ANN:Profs_CRSA1
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Profs_801
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Profs_901
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:SCIENCES
+  INDUSTRIELLES
+givenName: Issi
+sn: Bonas
+ENTPersonJointure: AC-ORLEANS-TOURS$16433
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Issi.Bonas
+cn: Bonas Issi
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$801
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$901
+ENTAuxEnsClasses: ENTStructureSIREN=19450042700035,ou=structures,dc=esco-centr
+ e,dc=fr$CRSA1
+ESCODomaines: lycees.netocentre.fr
+mail: Issi.Bonas@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19450042700035,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0450042B
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+ESCOUAICourant: 0450042B
+
+# F0900en1, people, esco-centre.fr
+dn: uid=F0900en1,ou=people,dc=esco-centre,dc=fr
+uid: F0900en1
+isMemberOf: esco:admin:ITSM:user:VAUVERT_0180823X
+isMemberOf: esco:Applications:ITSM:VAUVERT_0180823X
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:admin:mediacentre:GAR:RESPONSABLE_AFFECTATION:ALAIN FOURNIER_
+ 0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:DOCUMENT
+ ATION
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+ESCOUAICourant: 0180005H
+givenName: Nonah
+sn: Aven
+ENTPersonJointure: AC-ORLEANS-TOURS$1311
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Nonah.Aven
+cn: Aven Nonah
+ESCODomaines: lycees.netocentre.fr
+mail: Nonah.Aven@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_DOC
+
+# F0900ena, people, esco-centre.fr
+dn: uid=F0900ena,ou=people,dc=esco-centre,dc=fr
+uid: F0900ena
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:PHILOSOP
+ HIE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Profs_800
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_608
+isMemberOf:: ZXNjbzpFdGFibGlzc2VtZW50czpBTEFJTiBGT1VSTklFUl8wMTgwMDA1SDpFbnNla
+ WduZW1lbnRzOkhVTUFOSVRFUyBMSVRUw4lSQVRVUkUgRVQgUEhJTE9TT1BISUU=
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_605
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_708
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+ESCOUAICourant: 0180005H
+givenName: Sven
+sn: Tales
+ENTPersonJointure: AC-ORLEANS-TOURS$1652
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Sven.Tales
+cn: Tales Sven
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$708
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$800
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$706
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$702
+ESCODomaines: lycees.netocentre.fr
+mail: Sven.Tales@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F0900f26, people, esco-centre.fr
+dn: uid=F0900f26,ou=people,dc=esco-centre,dc=fr
+uid: F0900f26
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:PHYSIQUE
+ -CHIMIE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ACCOMPAG
+ NEMENT AU CHOIX DE L ORIENTATION
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_605
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_608
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_501
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:NUMERIQU
+ E ET SCIENCES INFORMATIQUES
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Profs_800
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Petronella
+sn: Tommei
+ENTPersonJointure: AC-ORLEANS-TOURS$25024
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Petronella.Tommei
+cn: Tommei Petronella
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$501
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$800
+ESCODomaines: lycees.netocentre.fr
+mail: Petronella.Tommei@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F0900f2q, people, esco-centre.fr
+dn: uid=F0900f2q,ou=people,dc=esco-centre,dc=fr
+uid: F0900f2q
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_605
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:SCIENCES
+  NUMERIQUES ET TECHNOLOGIE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ENSEIGNE
+ MENT SCIENTIFIQUE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:PHYSIQUE
+ -CHIMIE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_503
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_510
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_509
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_608
+ESCOUAICourant: 0180005H
+givenName: Tye
+sn: Risbridger
+ENTPersonJointure: AC-ORLEANS-TOURS$25570
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Tye.Risbridger
+cn: Risbridger Tye
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$509
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$503
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$510
+ESCODomaines: lycees.netocentre.fr
+mail: Tye.Risbridger@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F10008vw, people, esco-centre.fr
+dn: uid=F10008vw,ou=people,dc=esco-centre,dc=fr
+uid: F10008vw
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_605
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:HISTOIRE
+ -GEOGRAPHIE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:HIST -GE
+ O GEOPOLITIQUE et SC POLITIQUES
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_510
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ENSEIGNE
+ MENT MORAL ET CIVIQUE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_509
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_608
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Cristionna
+sn: Wing
+ENTPersonJointure: AC-ORLEANS-TOURS$3474
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Cristionna.Wing
+cn: Wing Cristionna
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$509
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$707
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$510
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$701
+ESCODomaines: lycees.netocentre.fr
+mail: Cristionna.Wing@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F10008zf, people, esco-centre.fr
+dn: uid=F10008zf,ou=people,dc=esco-centre,dc=fr
+uid: F10008zf
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Applications:Pearltrees:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Folios:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Pronote:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Espace_Moodle:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Espaces_stockage:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Esidoc:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Tous_MARGUERITE
+  DE NAVARRE
+isMemberOf: esco:Applications:Listes_Diffusion:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Profs
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:SECONDE GENERAL
+ E et TECHNO YC BT:Profs_2ND05
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:SECONDE GENERAL
+ E et TECHNO YC BT:Profs_2ND08
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Enseignements:A
+ LLEMAND LV2
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:SECONDE GENERAL
+ E et TECHNO YC BT:Profs_2ND04
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:SECONDE GENERAL
+ E et TECHNO YC BT:Profs_2ND07
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:SECONDE GENERAL
+ E et TECHNO YC BT:Profs_2ND06
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_506
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Profs_901
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ALLEMAND
+  LV2
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_502
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_503
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Profs_801
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_703
+givenName: Robinette
+sn: Stacy
+ENTPersonJointure: AC-ORLEANS-TOURS$22363
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Robinette.Stacy
+cn: Stacy Robinette
+ESCODomaines: lycees.netocentre.fr
+mail: Robinette.Stacy@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ESCOUAI: 0180006J
+ENTPersonProfils: National_ENS
+ESCOUAICourant: 0180005H
+
+# F090098j, people, esco-centre.fr
+dn: uid=F090098j,ou=people,dc=esco-centre,dc=fr
+uid: F090098j
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_605
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_504
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ACCOMPAG
+ NEMENT PERSONNALISE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_708
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_509
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_703
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:FRANCAIS
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf:: ZXNjbzpFdGFibGlzc2VtZW50czpBTEFJTiBGT1VSTklFUl8wMTgwMDA1SDpFbnNla
+ WduZW1lbnRzOkhVTUFOSVRFUyBMSVRUw4lSQVRVUkUgRVQgUEhJTE9TT1BISUU=
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+ESCOUAICourant: 0180005H
+givenName: Mae
+sn: Mouget
+ENTPersonJointure: AC-ORLEANS-TOURS$3401
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Mae.Mouget
+cn: Mouget Mae
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$605
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$504
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$509
+ESCODomaines: lycees.netocentre.fr
+mail: Mae.Mouget@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F08005rt, people, esco-centre.fr
+dn: uid=F08005rt,ou=people,dc=esco-centre,dc=fr
+uid: F08005rt
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Applications:Pronote:EDOUARD VAILLANT_0180035R
+isMemberOf: esco:Applications:Esidoc:EDOUARD VAILLANT_0180035R
+isMemberOf: esco:Etablissements:EDOUARD VAILLANT_0180035R:Tous_EDOUARD VAILLAN
+ T
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Applications:Espace_Moodle:EDOUARD VAILLANT_0180035R
+isMemberOf: esco:Applications:Folios:EDOUARD VAILLANT_0180035R
+isMemberOf: esco:Applications:Espaces_stockage:EDOUARD VAILLANT_0180035R
+isMemberOf: esco:Applications:Listes_Diffusion:EDOUARD VAILLANT_0180035R
+isMemberOf: esco:Etablissements:EDOUARD VAILLANT_0180035R:Profs
+isMemberOf: esco:Applications:SACoche:EDOUARD VAILLANT_0180035R
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_505
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:PORTUGAI
+ S LV3
+isMemberOf: esco:Etablissements:EDOUARD VAILLANT_0180035R:SECONDE GENERALE et 
+ TECHNO YC BT:Profs_S1
+isMemberOf: esco:Etablissements:EDOUARD VAILLANT_0180035R:PREMIERE GENERALE et
+  TECHNO YC BT:Profs_P1
+isMemberOf: esco:Etablissements:EDOUARD VAILLANT_0180035R:Enseignements:PORTUG
+ AIS LV3
+isMemberOf: esco:Etablissements:EDOUARD VAILLANT_0180035R:TERMINALE GENERALE e
+ t TECHNO YC BT:Profs_T1
+isMemberOf: esco:Etablissements:EDOUARD VAILLANT_0180035R:SECONDE GENERALE et 
+ TECHNO YC BT:Profs_S6
+isMemberOf: esco:Etablissements:EDOUARD VAILLANT_0180035R:TERMINALE GENERALE e
+ t TECHNO YC BT:Profs_T5
+givenName: Ricky
+sn: Fruchon
+ENTPersonJointure: AC-ORLEANS-TOURS$22275
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Ricky.Fruchon
+cn: Fruchon Ricky
+ESCODomaines: lycees.netocentre.fr
+mail: Ricky.Fruchon@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180035R
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+ESCOUAICourant: 0180005H
+
+# F0900f72, people, esco-centre.fr
+dn: uid=F0900f72,ou=people,dc=esco-centre,dc=fr
+uid: F0900f72
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Profs_901
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ANGLAIS 
+ LV1
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Profs_800
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Profs_801
+ESCOUAICourant: 0180005H
+givenName: Sigfrid
+sn: Selcraig
+ENTPersonJointure: AC-ORLEANS-TOURS$781249
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Sigfrid.Selcraig
+cn: Selcraig Sigfrid
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$901
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$800
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$801
+ESCODomaines: lycees.netocentre.fr
+mail: Sigfrid.Selcraig@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000rq4, people, esco-centre.fr
+dn: uid=F1000rq4,ou=people,dc=esco-centre,dc=fr
+uid: F1000rq4
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_608
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:HISTOIRE
+  DES ARTS
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Profs_800
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_505
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:FRANCAIS
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ANGLAIS 
+ LANGUE DE SECTION
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_504
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_605
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ACCOMPAG
+ NEMENT PERSONNALISE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Noby
+sn: Sheldrake
+ENTPersonJointure: AC-ORLEANS-TOURS$229
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Noby.Sheldrake
+cn: Sheldrake Noby
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$505
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$602
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$504
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$800
+ESCODomaines: lycees.netocentre.fr
+mail: Noby.Sheldrake@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000rqs, people, esco-centre.fr
+dn: uid=F1000rqs,ou=people,dc=esco-centre,dc=fr
+uid: F1000rqs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:HISTOIRE
+ -GEOGRAPHIE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_503
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ENSEIGNE
+ MENT MORAL ET CIVIQUE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Blair
+sn: Siddell
+ENTPersonJointure: AC-ORLEANS-TOURS$522
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Blair.Siddell
+cn: Siddell Blair
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$607
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$503
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$604
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$706
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$705
+ESCODomaines: lycees.netocentre.fr
+mail: Blair.Siddell@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000rsd, people, esco-centre.fr
+dn: uid=F1000rsd,ou=people,dc=esco-centre,dc=fr
+uid: F1000rsd
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_502
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_608
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_703
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_509
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ESPAGNOL
+  LV2
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_708
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:LITTERAT
+ URE EN ESPAGNOL
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Chrysa
+sn: Beauvais
+ENTPersonJointure: AC-ORLEANS-TOURS$1345
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Chrysa.Beauvais
+cn: Beauvais Chrysa
+ESCODomaines: lycees.netocentre.fr
+mail: Chrysa.Beauvais@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000rto, people, esco-centre.fr
+dn: uid=F1000rto,ou=people,dc=esco-centre,dc=fr
+uid: F1000rto
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_605
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ACCOMPAG
+ NEMENT AU CHOIX DE L ORIENTATION
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Profs_800
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:HISTOIRE
+  DE L ART
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_608
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:HISTOIRE
+  DES ARTS
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Joachim
+sn: Hembrow
+ENTPersonJointure: AC-ORLEANS-TOURS$1931
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Joachim.Hembrow
+cn: Hembrow Joachim
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$800
+ESCODomaines: lycees.netocentre.fr
+mail: Joachim.Hembrow@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000ruj, people, esco-centre.fr
+dn: uid=F1000ruj,ou=people,dc=esco-centre,dc=fr
+uid: F1000ruj
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_703
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_708
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:SCIENCES
+  DE LA VIE ET DE LA TERRE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ENSEIGNE
+ MENT SCIENTIFIQUE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_506
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_510
+ESCOUAICourant: 0180005H
+givenName: Cale
+sn: Strelitz
+ENTPersonJointure: AC-ORLEANS-TOURS$2142
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Cale.Strelitz
+cn: Strelitz Cale
+ESCODomaines: lycees.netocentre.fr
+mail: Cale.Strelitz@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000rw5, people, esco-centre.fr
+dn: uid=F1000rw5,ou=people,dc=esco-centre,dc=fr
+uid: F1000rw5
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_703
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:SCIENCES
+  ECONOMIQUES ET SOCIALES
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_502
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_504
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_708
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Klarrisa
+sn: McWhin
+ENTPersonJointure: AC-ORLEANS-TOURS$2724
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Klarrisa.McWhin
+cn: McWhin Klarrisa
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$502
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$504
+ESCODomaines: lycees.netocentre.fr
+mail: Klarrisa.McWhin@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000rxd, people, esco-centre.fr
+dn: uid=F1000rxd,ou=people,dc=esco-centre,dc=fr
+uid: F1000rxd
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ENSEIGNE
+ MENT SCIENTIFIQUE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:SCIENCES
+  DE LA VIE ET DE LA TERRE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_708
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_703
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_504
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_507
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Zonnya
+sn: Lewing
+ENTPersonJointure: AC-ORLEANS-TOURS$3285
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Zonnya.Lewing
+cn: Lewing Zonnya
+ESCODomaines: lycees.netocentre.fr
+mail: Zonnya.Lewing@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000rya, people, esco-centre.fr
+dn: uid=F1000rya,ou=people,dc=esco-centre,dc=fr
+uid: F1000rya
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_507
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:FRANCAIS
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ACCOMPAG
+ NEMENT PERSONNALISE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_503
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+ESCOUAICourant: 0180005H
+givenName: Coralie
+sn: Starling
+ENTPersonJointure: AC-ORLEANS-TOURS$3841
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Coralie.Starling
+cn: Starling Coralie
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$607
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$606
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$503
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$507
+ESCODomaines: lycees.netocentre.fr
+mail: Coralie.Starling@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000ryn, people, esco-centre.fr
+dn: uid=F1000ryn,ou=people,dc=esco-centre,dc=fr
+uid: F1000ryn
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_508
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_703
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ENSEIGNE
+ MENT SCIENTIFIQUE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ACCOMPAG
+ NEMENT PERSONNALISE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_708
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ACCOMPAG
+ NEMENT AU CHOIX DE L ORIENTATION
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:MATHEMAT
+ IQUES
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:SCIENCES
+  NUMERIQUES ET TECHNOLOGIE
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_504
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Morgen
+sn: De Lascy
+ENTPersonJointure: AC-ORLEANS-TOURS$3983
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Morgen.De Lascy
+cn: De Lascy Morgen
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$508
+ENTAuxEnsClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centr
+ e,dc=fr$504
+ESCODomaines: lycees.netocentre.fr
+mail: Morgen.De Lascy@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS
+
+# F1000rz4, people, esco-centre.fr
+dn: uid=F1000rz4,ou=people,dc=esco-centre,dc=fr
+uid: F1000rz4
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_603
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_704
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_607
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_510
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:LITTERAT
+ URE EN ANGLAIS
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_506
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_601
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_608
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_703
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_505
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_707
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_606
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Profs_507
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_605
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_708
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_604
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_705
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_702
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_701
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:ANGLAIS 
+ LV1
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Profs_602
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs_706
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Profs Principaux
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Enseignements:Autre
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:TERMINALE GENERALE et 
+ TECHNO YC BT:Profs Principaux
+ESCOUAICourant: 0180005H
+givenName: Leon
+sn: Chappel
+ENTPersonJointure: AC-ORLEANS-TOURS$4090
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Leon.Chappel
+cn: Chappel Leon
+ESCODomaines: lycees.netocentre.fr
+mail: Leon.Chappel@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_ENS

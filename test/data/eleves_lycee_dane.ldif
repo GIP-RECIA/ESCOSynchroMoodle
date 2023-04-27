@@ -1,0 +1,818 @@
+# F154039k, people, esco-centre.fr
+dn: uid=F154039k,ou=people,dc=esco-centre,dc=fr
+uid: F154039k
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Eleves_801
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Goober.Gromley
+givenName: Goober
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 1ERE ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE1 MPSI (MATH. PHYS. SC.INGENIEUR)
+cn: Gromley Goober
+ENTPersonJointure: AC-ORLEANS-TOURS$3266537
+ENTEleveMEF: 30111018210
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$801
+sn: Gromley
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Goober.Gromley@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: lola.buet2712@gmail.com
+
+# F1700790, people, esco-centre.fr
+dn: uid=F1700790,ou=people,dc=esco-centre,dc=fr
+uid: F1700790
+ESCOUAICourant: 0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+ENTPersonLogin: Maighdiln.Beare
+givenName: Maighdiln
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Beare Maighdiln
+ENTPersonJointure: AC-ORLEANS-TOURS$2415683
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Beare
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Maighdiln.Beare@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: lalamnt18@gmail.com
+
+# F17009rp, people, esco-centre.fr
+dn: uid=F17009rp,ou=people,dc=esco-centre,dc=fr
+uid: F17009rp
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Antonia.Betho
+givenName: Antonia
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Betho Antonia
+ENTPersonJointure: AC-ORLEANS-TOURS$2542072
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Betho
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Antonia.Betho@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: baptistejosserand@gmail.com
+
+# F172002o, people, esco-centre.fr
+dn: uid=F172002o,ou=people,dc=esco-centre,dc=fr
+uid: F172002o
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:PREMIERE GENERALE et T
+ ECHNO YC BT:Eleves_608
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Cliff.Moryson
+givenName: Cliff
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: PREMIERE GENERALE & TECHNO YC BT
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: PREMIERE GENERALE
+cn: Moryson Cliff
+ENTPersonJointure: AC-ORLEANS-TOURS$4545034
+ENTEleveMEF: 20110019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$608
+sn: Moryson
+ENTEleveFiliere: 1ERE GENERALE
+ESCODomaines: lycees.netocentre.fr
+mail: Cliff.Moryson@chercan.fr
+ESCOUAI: 0180005H
+
+# F17101mv, people, esco-centre.fr
+dn: uid=F17101mv,ou=people,dc=esco-centre,dc=fr
+uid: F17101mv
+ESCOUAICourant: 0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+ENTPersonLogin: Johnath.Reilingen
+givenName: Johnath
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Reilingen Johnath
+ENTPersonJointure: AC-ORLEANS-TOURS$2988111
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn:: Qk9VQ0hBw49C
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Johnath.Reilingen@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: bouchaib.carl84@gmail.com
+
+# F18003lf, people, esco-centre.fr
+dn: uid=F18003lf,ou=people,dc=esco-centre,dc=fr
+uid: F18003lf
+ESCOUAICourant: 0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+ENTPersonLogin: Bee.Coultar
+givenName: Bee
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Coultar Bee
+ENTPersonJointure: AC-ORLEANS-TOURS$2840982
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Coultar
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Bee.Coultar@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: mathis.loupot@gmail.com
+
+# F180068g, people, esco-centre.fr
+dn: uid=F180068g,ou=people,dc=esco-centre,dc=fr
+uid: F180068g
+ESCOUAICourant: 0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+ENTPersonLogin: Torin.Robertot
+givenName: Torin
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Robertot Torin
+ENTPersonJointure: AC-ORLEANS-TOURS$2848822
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Robertot
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Torin.Robertot@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: mantzo2003@icloud.com
+
+# F180068i, people, esco-centre.fr
+dn: uid=F180068i,ou=people,dc=esco-centre,dc=fr
+uid: F180068i
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Kimmy.Jonk
+givenName: Kimmy
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Jonk Kimmy
+ENTPersonJointure: AC-ORLEANS-TOURS$2848824
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Jonk
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Kimmy.Jonk@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: moulianathan@gmail.com
+
+# F18006ao, people, esco-centre.fr
+dn: uid=F18006ao,ou=people,dc=esco-centre,dc=fr
+uid: F18006ao
+ESCOUAICourant: 0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+ENTPersonLogin: Jewell.Kennler
+givenName: Jewell
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Kennler Jewell
+ENTPersonJointure: AC-ORLEANS-TOURS$2848947
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Kennler
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Jewell.Kennler@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: camille.caullier@orange.fr
+
+# F18006b6, people, esco-centre.fr
+dn: uid=F18006b6,ou=people,dc=esco-centre,dc=fr
+uid: F18006b6
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Karol.Bautiste
+givenName: Karol
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Bautiste Karol
+ENTPersonJointure: AC-ORLEANS-TOURS$2848979
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Bautiste
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Karol.Bautiste@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: pir.le.rx@gmail.com
+
+# F18007fv, people, esco-centre.fr
+dn: uid=F18007fv,ou=people,dc=esco-centre,dc=fr
+uid: F18007fv
+ESCOUAICourant: 0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+ENTPersonLogin: Tyrus.Stirman
+givenName:: TWHDq2xsZQ==
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Stirman Tyrus
+ENTPersonJointure: AC-ORLEANS-TOURS$2851969
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Stirman
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Tyrus.Stirman@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: guillemotmaelle@gmail.com
+
+# F18007x6, people, esco-centre.fr
+dn: uid=F18007x6,ou=people,dc=esco-centre,dc=fr
+uid: F18007x6
+ESCOUAICourant: 0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 2EME ANNEE:Eleves_901
+ENTPersonLogin: Paige.Greger
+givenName: Paige
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 2EME ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE2 MP (MATHEMATIQUE ET PHYSIQUE)
+cn: Greger Paige
+ENTPersonJointure: AC-ORLEANS-TOURS$2853628
+ENTEleveMEF: 30111027220
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$901
+sn: Greger
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Paige.Greger@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: alix.velluet@gmail.com
+
+# F18400i3, people, esco-centre.fr
+dn: uid=F18400i3,ou=people,dc=esco-centre,dc=fr
+uid: F18400i3
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Eleves_503
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Haydon.Dalgardno
+givenName:: QW5hw69z
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: SECONDE GENERALE & TECHNO YC BT
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 2NDE GT (SPORT-FRANCE)
+cn: Dalgardno Haydon
+ENTPersonJointure: AC-ORLEANS-TOURS$4920697
+ENTEleveMEF: 2001000F116
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$503
+sn: Dalgardno
+ENTEleveFiliere: SECONDE GENERALE
+ESCODomaines: lycees.netocentre.fr
+mail: Haydon.Dalgardno@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: anais45g@gmail.com
+
+# F1840104, people, esco-centre.fr
+dn: uid=F1840104,ou=people,dc=esco-centre,dc=fr
+uid: F1840104
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:SECONDE GENERALE et TE
+ CHNO YC BT:Eleves_503
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Maddalena.Endecott
+givenName: Maddalena
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: SECONDE GENERALE & TECHNO YC BT
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 2NDE GT HAUT NIVEAU (SPORT ESPOIR)
+cn: Endecott Maddalena
+ENTPersonJointure: AC-ORLEANS-TOURS$4925561
+ENTEleveMEF: 2001000E116
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$503
+sn: Endecott
+ENTEleveFiliere: SECONDE GENERALE
+ESCODomaines: lycees.netocentre.fr
+mail: Maddalena.Endecott@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: valentin.roulleau@orange.fr
+
+# F190010t, people, esco-centre.fr
+dn: uid=F190010t,ou=people,dc=esco-centre,dc=fr
+uid: F190010t
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Eleves_800
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Tammi.Pessel
+givenName: Tammi
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 1ERE ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CLASSE PREPA. ETUDES SUPERIEURES-ARTS
+cn: Pessel Tammi
+ENTPersonJointure: AC-ORLEANS-TOURS$3247511
+ENTEleveMEF: 3001000A11A
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$800
+sn: Pessel
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Tammi.Pessel@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: sara.diass6395@gmail.com
+
+# F1900138, people, esco-centre.fr
+dn: uid=F1900138,ou=people,dc=esco-centre,dc=fr
+uid: F1900138
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Eleves_800
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Randolf.Dyne
+givenName: Randolf
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 1ERE ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CLASSE PREPA. ETUDES SUPERIEURES-ARTS
+cn: Dyne Randolf
+ENTPersonJointure: AC-ORLEANS-TOURS$3247668
+ENTEleveMEF: 3001000A11A
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$800
+sn: Dyne
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Randolf.Dyne@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: cha.lucas45@gmail.com
+
+# F19003uv, people, esco-centre.fr
+dn: uid=F19003uv,ou=people,dc=esco-centre,dc=fr
+uid: F19003uv
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Eleves_800
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Dona.Jirka
+givenName:: TMOpb25pZQ==
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 1ERE ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CLASSE PREPA. ETUDES SUPERIEURES-ARTS
+cn: Jirka Dona
+ENTPersonJointure: AC-ORLEANS-TOURS$3255045
+ENTEleveMEF: 3001000A11A
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$800
+sn: Jirka
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Dona.Jirka@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: leonie.dagaud@gmail.com
+
+# F19005g9, people, esco-centre.fr
+dn: uid=F19005g9,ou=people,dc=esco-centre,dc=fr
+uid: F19005g9
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Eleves_800
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Mariele.Mooreed
+givenName: Mariele
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 1ERE ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CLASSE PREPA. ETUDES SUPERIEURES-ARTS
+cn: Mooreed Mariele
+ENTPersonJointure: AC-ORLEANS-TOURS$3260680
+ENTEleveMEF: 3001000A11A
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$800
+sn: Mooreed
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Mariele.Mooreed@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: alexia.isaffo@free.fr
+
+# F19005h8, people, esco-centre.fr
+dn: uid=F19005h8,ou=people,dc=esco-centre,dc=fr
+uid: F19005h8
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Eleves_801
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Jsandye.Macveigh
+givenName: Jsandye
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 1ERE ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE1 MPSI (MATH. PHYS. SC.INGENIEUR)
+cn: Macveigh Jsandye
+ENTPersonJointure: AC-ORLEANS-TOURS$3260729
+ENTEleveMEF: 30111018210
+ENTEleveMajeur: O
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$801
+sn: Macveigh
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Jsandye.Macveigh@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: ilyesjamal23@outlook.fr
+
+# F19005om, people, esco-centre.fr
+dn: uid=F19005om,ou=people,dc=esco-centre,dc=fr
+uid: F19005om
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Eleves
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:CLASSE PREPA GRANDES E
+ COLES 1ERE ANNEE:Eleves_801
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Eleves
+ESCOUAICourant: 0180005H
+ENTPersonLogin: Raimund.Calrow
+givenName: Raimund
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: CLASSE PREPA.GRANDES ECOLES : 1ERE ANNEE
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: CPGE1 MPSI (MATH. PHYS. SC.INGENIEUR)
+cn: Calrow Raimund
+ENTPersonJointure: AC-ORLEANS-TOURS$3261183
+ENTEleveMEF: 30111018210
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre
+ ,dc=fr$801
+sn: Calrow
+ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
+ESCODomaines: lycees.netocentre.fr
+mail: Raimund.Calrow@chercan.fr
+ESCOUAI: 0180005H
+ENTPersonAutresMails: esteban.clemente333@gmail.com

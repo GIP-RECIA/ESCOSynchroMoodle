@@ -1,0 +1,81 @@
+# F171006i, people, esco-centre.fr
+dn: uid=F171006i,ou=people,dc=esco-centre,dc=fr
+uid: F171006i
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:admin:ITSM:poweruser:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Administratifs:Tous_A
+ dministratifs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Administratifs:DIRECT
+ ION
+isMemberOf: clg18:Inter_etablissements:Administratifs:Tous_DIRECTION
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:admin:local:admin_GERARD PHILIPE_0180002E
+isMemberOf: clg18:admin:sarapis:local:sarapis_GERARD PHILIPE_0180002E
+isMemberOf: clg18:admin:Publication_contenus:GERARD PHILIPE_0180002E:MANAGER
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:RTX:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Administratifs
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Applications:Indicateurs:GERARD PHILIPE_0180002E
+ESCOUAICourant: 0180002E
+givenName: Belva
+sn: Matusevich
+ENTPersonJointure: AC-ORLEANS-TOURS$3576
+objectClass: ENTAuxNonEnsEtab
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Belva.Matusevich
+cn: Matusevich Belva
+ESCODomaines: www.chercan.fr
+mail: Belva.Matusevich@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_DIR
+
+# F2060pxd, people, esco-centre.fr
+dn: uid=F2060pxd,ou=people,dc=esco-centre,dc=fr
+uid: F2060pxd
+isMemberOf: acad:Applications:Nextcloud:ACADEMIE D ORLEANS-TOURS_0450080T
+isMemberOf: acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:Groupes
+  locaux:DANE
+isMemberOf: acad:Applications:Espace_Moodle:RECTORAT
+isMemberOf: acad:Applications:Espace_Moodle:ACADEMIE D ORLEANS-TOURS_0450080T
+isMemberOf: acad:admin:Indicateurs:central
+isMemberOf: acad:Applications:Indicateurs:RECTORAT
+isMemberOf: clg18:admin:local:admin_GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Administratifs:DIRECT
+ ION
+isMemberOf: clg18:Inter_etablissements:Tous_Administratifs
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:admin:ITSM:poweruser:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Administratifs:Tous_DIRECTION
+isMemberOf: clg18:admin:sarapis:local:sarapis_GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Indicateurs:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Applications:RTX:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Administratifs:Tous_A
+ dministratifs
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:admin:Publication_contenus:GERARD PHILIPE_0180002E:MANAGER
+ESCOUAICourant: 0180002E
+givenName: Chlo
+sn: Denyakin
+ENTPersonJointure: AC-ORLEANS-TOURS$3029020
+objectClass: ENTAuxNonEnsEtab
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Chlo.Denyakin
+cn: Denyakin Chlo
+ESCODomaines: www.chercan.fr
+mail: Chlo.Denyakin@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180002800026,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180002E
+ENTPersonProfils: National_DIR

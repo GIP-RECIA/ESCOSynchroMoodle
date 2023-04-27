@@ -1,0 +1,719 @@
+# F19105ii, people, esco-centre.fr
+dn: uid=F19105ii,ou=people,dc=esco-centre,dc=fr
+uid: F19105ii
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME2
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+ESCOUAICourant: 0180002E
+ENTPersonLogin: Goober.Gromley
+givenName:: RWzDqWE=
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Gromley Goober
+ENTPersonJointure: AC-ORLEANS-TOURS$4933592
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME2
+sn: Gromley
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Goober.Gromley@chercan.fr
+ESCOUAI: 0180002E
+
+# F19107hp, people, esco-centre.fr
+dn: uid=F19107hp,ou=people,dc=esco-centre,dc=fr
+uid: F19107hp
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME1
+ESCOUAICourant: 0180002E
+ENTPersonLogin: Maighdiln.Beare
+givenName: Maighdiln
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Beare Maighdiln
+ENTPersonJointure: AC-ORLEANS-TOURS$5430258
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME1
+sn: Beare
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Maighdiln.Beare@chercan.fr
+ESCOUAI: 0180002E
+
+# F1910889, people, esco-centre.fr
+dn: uid=F1910889,ou=people,dc=esco-centre,dc=fr
+uid: F1910889
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME3
+ESCOUAICourant: 0180002E
+ENTPersonLogin: Antonia.Betho
+givenName:: TcOpbHVzaW5l
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Betho Antonia
+ENTPersonJointure: AC-ORLEANS-TOURS$5438809
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME3
+sn: Betho
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Antonia.Betho@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108hz, people, esco-centre.fr
+dn: uid=F19108hz,ou=people,dc=esco-centre,dc=fr
+uid: F19108hz
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME3
+ENTPersonLogin: Cliff.Moryson
+givenName: Cliff
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Moryson Cliff
+ENTPersonJointure: AC-ORLEANS-TOURS$5440533
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME3
+sn: Moryson
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Cliff.Moryson@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108i1, people, esco-centre.fr
+dn: uid=F19108i1,ou=people,dc=esco-centre,dc=fr
+uid: F19108i1
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME2
+ENTPersonLogin: Johnath.Reilingen
+givenName: Johnath
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Reilingen Johnath
+ENTPersonJointure: AC-ORLEANS-TOURS$5440535
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME2
+sn:: QUxWw4hTLS1GQVVWRUFV
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Johnath.Reilingen@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108i4, people, esco-centre.fr
+dn: uid=F19108i4,ou=people,dc=esco-centre,dc=fr
+uid: F19108i4
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME2
+ENTPersonLogin: Bee.Coultar
+givenName: Bee
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Coultar Bee
+ENTPersonJointure: AC-ORLEANS-TOURS$5440538
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME2
+sn: Coultar
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Bee.Coultar@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108i5, people, esco-centre.fr
+dn: uid=F19108i5,ou=people,dc=esco-centre,dc=fr
+uid: F19108i5
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME1
+ENTPersonLogin: Torin.Robertot
+givenName: Torin
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Robertot Torin
+ENTPersonJointure: AC-ORLEANS-TOURS$5440539
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME1
+sn: Robertot
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Torin.Robertot@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108i8, people, esco-centre.fr
+dn: uid=F19108i8,ou=people,dc=esco-centre,dc=fr
+uid: F19108i8
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME1
+ENTPersonLogin: Kimmy.Jonk
+givenName: Kimmy
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Jonk Kimmy
+ENTPersonJointure: AC-ORLEANS-TOURS$5440542
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME1
+sn: Jonk
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Kimmy.Jonk@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ia, people, esco-centre.fr
+dn: uid=F19108ia,ou=people,dc=esco-centre,dc=fr
+uid: F19108ia
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME4
+ENTPersonLogin: Jewell.Kennler
+givenName: Jewell
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Kennler Jewell
+ENTPersonJointure: AC-ORLEANS-TOURS$5440544
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME4
+sn: Kennler
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Jewell.Kennler@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ib, people, esco-centre.fr
+dn: uid=F19108ib,ou=people,dc=esco-centre,dc=fr
+uid: F19108ib
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME4
+ENTPersonLogin: Karol.Bautiste
+givenName: Karol
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Bautiste Karol
+ENTPersonJointure: AC-ORLEANS-TOURS$5440545
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME4
+sn: Bautiste
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Karol.Bautiste@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ic, people, esco-centre.fr
+dn: uid=F19108ic,ou=people,dc=esco-centre,dc=fr
+uid: F19108ic
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME3
+ENTPersonLogin: Tyrus.Stirman
+givenName: Tyrus
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Stirman Tyrus
+ENTPersonJointure: AC-ORLEANS-TOURS$5440546
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME3
+sn: Stirman
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Tyrus.Stirman@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ie, people, esco-centre.fr
+dn: uid=F19108ie,ou=people,dc=esco-centre,dc=fr
+uid: F19108ie
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME5
+ENTPersonLogin: Paige.Greger
+givenName: Paige
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Greger Paige
+ENTPersonJointure: AC-ORLEANS-TOURS$5440548
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME5
+sn: Greger
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Paige.Greger@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108if, people, esco-centre.fr
+dn: uid=F19108if,ou=people,dc=esco-centre,dc=fr
+uid: F19108if
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME2
+ENTPersonLogin: Haydon.Dalgardno
+givenName: Haydon
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Dalgardno Haydon
+ENTPersonJointure: AC-ORLEANS-TOURS$5440549
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME2
+sn: Dalgardno
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Haydon.Dalgardno@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ig, people, esco-centre.fr
+dn: uid=F19108ig,ou=people,dc=esco-centre,dc=fr
+uid: F19108ig
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME3
+ENTPersonLogin: Maddalena.Endecott
+givenName: Maddalena
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Endecott Maddalena
+ENTPersonJointure: AC-ORLEANS-TOURS$5440550
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME3
+sn: Endecott
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Maddalena.Endecott@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ih, people, esco-centre.fr
+dn: uid=F19108ih,ou=people,dc=esco-centre,dc=fr
+uid: F19108ih
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME2
+ENTPersonLogin: Tammi.Pessel
+givenName:: Q8OpbGVzdGlu
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Pessel Tammi
+ENTPersonJointure: AC-ORLEANS-TOURS$5440551
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME2
+sn: Pessel
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Tammi.Pessel@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ii, people, esco-centre.fr
+dn: uid=F19108ii,ou=people,dc=esco-centre,dc=fr
+uid: F19108ii
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME3
+ENTPersonLogin: Randolf.Dyne
+givenName: Randolf
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Dyne Randolf
+ENTPersonJointure: AC-ORLEANS-TOURS$5440552
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME3
+sn: Dyne
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Randolf.Dyne@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ij, people, esco-centre.fr
+dn: uid=F19108ij,ou=people,dc=esco-centre,dc=fr
+uid: F19108ij
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME5
+ENTPersonLogin: Dona.Jirka
+givenName: Dona
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Jirka Dona
+ENTPersonJointure: AC-ORLEANS-TOURS$5440553
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME5
+sn: Jirka
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Dona.Jirka@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108ik, people, esco-centre.fr
+dn: uid=F19108ik,ou=people,dc=esco-centre,dc=fr
+uid: F19108ik
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME1
+ENTPersonLogin: Mariele.Mooreed
+givenName:: Sm/DqWxpZW4=
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Mooreed Mariele
+ENTPersonJointure: AC-ORLEANS-TOURS$5440554
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME1
+sn: Mooreed
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Mariele.Mooreed@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108il, people, esco-centre.fr
+dn: uid=F19108il,ou=people,dc=esco-centre,dc=fr
+uid: F19108il
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME3
+ENTPersonLogin: Jsandye.Macveigh
+givenName:: Q2hsb8Op
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Macveigh Jsandye
+ENTPersonJointure: AC-ORLEANS-TOURS$5440555
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME3
+sn: Macveigh
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Jsandye.Macveigh@chercan.fr
+ESCOUAI: 0180002E
+
+# F19108in, people, esco-centre.fr
+dn: uid=F19108in,ou=people,dc=esco-centre,dc=fr
+uid: F19108in
+ESCOUAICourant: 0180002E
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Tous_GERARD PHILIPE
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:Eleves
+isMemberOf: clg18:Applications:Pronote:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espace_Moodle:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Pix:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Applications:Espaces_stockage:GERARD PHILIPE_0180002E
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Eleves
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Etablissements:GERARD PHILIPE_0180002E:3EME:Eleves_3EME4
+ENTPersonLogin: Raimund.Calrow
+givenName: Raimund
+ENTEleveStatutEleve: SCOLAIRE
+ENTEleveNivFormation: 3EME
+objectClass: ENTEleve
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: ESCOEleveAddons
+objectClass: eduMember
+ENTEleveLibelleMEF: 3EME
+cn: Calrow Raimund
+ENTPersonJointure: AC-ORLEANS-TOURS$5440557
+ENTEleveMEF: 10310019110
+ENTEleveMajeur: N
+ENTEleveClasses: ENTStructureSIREN=19180002800026,ou=structures,dc=esco-centre
+ ,dc=fr$3EME4
+sn: Calrow
+ENTEleveFiliere: 3EME
+ESCODomaines: www.chercan.fr
+mail: Raimund.Calrow@chercan.fr
+ESCOUAI: 0180002E

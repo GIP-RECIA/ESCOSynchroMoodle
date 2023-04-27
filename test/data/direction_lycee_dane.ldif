@@ -1,0 +1,772 @@
+# F08005nl, people, esco-centre.fr
+dn: uid=F08005nl,ou=people,dc=esco-centre,dc=fr
+uid: F08005nl
+isMemberOf: esco:Etablissements:PIERRE-EMILE MARTIN_0180008L:Administratifs:PS
+ YCHOLOGUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Etablissements:VAUVERT_0180823X:Administratifs:Tous_Administr
+ atifs
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180042Y:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180007K:Tous_JACQUES COEUR
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Ressources_Editoriales:mondesk:PIERRE-EMILE MART
+ IN_0180008L
+isMemberOf: esco:Etablissements:JEAN MERMOZ_0180010N:Administratifs:PSYCHOLOGU
+ E DE L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Listes_Diffusion:JACQUES COEUR_0180042Y
+isMemberOf: esco:Etablissements:VAUVERT_0180823X:Administratifs:PSYCHOLOGUE DE
+  L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Folios:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:SACoche:JACQUES COEUR_0180007K
+isMemberOf: esco:Applications:Espace_Moodle:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Folios:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180042Y:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Applications:VieScolaire_net:JEAN MERMOZ_0180010N
+isMemberOf: esco:Applications:Folios:VAUVERT_0180823X
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:GRR:JACQUES COEUR_0180007K
+isMemberOf: esco:Etablissements:PIERRE-EMILE MARTIN_0180008L:Administratifs:To
+ us_Administratifs
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:SACoche:JACQUES COEUR_0180042Y
+isMemberOf: esco:Applications:Esidoc:JACQUES COEUR_0180007K
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: esco:Applications:Pronote:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Folios:JACQUES COEUR_0180007K
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180007K:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Administratifs:
+ Tous_Administratifs
+isMemberOf: esco:Applications:Pronote:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Folios:JACQUES COEUR_0180042Y
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:PSYCHOL
+ OGUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Etablissements:JEAN MERMOZ_0180010N:Tous_JEAN MERMOZ
+isMemberOf: esco:Applications:Esidoc:JACQUES COEUR_0180042Y
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Etablissements:VAUVERT_0180823X:Tous_VAUVERT
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180042Y:Tous_JACQUES COEUR
+isMemberOf: esco:Applications:GRR:VAUVERT_0180823X
+isMemberOf: esco:Etablissements:JEAN MERMOZ_0180010N:Administratifs:Tous_Admin
+ istratifs
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180007K:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Administratifs:
+ PSYCHOLOGUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Tous_JEAN DE BERRY
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:PIERRE-EMILE MARTIN_0180008L:Tous_PIERRE-EMILE
+  MARTIN
+isMemberOf: esco:Applications:Pronote:VAUVERT_0180823X
+isMemberOf: esco:Applications:GRR:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Esidoc:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Pronote:JEAN MERMOZ_0180010N
+isMemberOf: esco:Applications:Listes_Diffusion:JACQUES COEUR_0180007K
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Tous_MARGUERITE
+  DE NAVARRE
+isMemberOf: esco:Applications:Folios:JEAN MERMOZ_0180010N
+isMemberOf: clg18:Etablissements:VOLTAIRE_0180028H:Administratifs:Tous_Adminis
+ tratifs
+isMemberOf: clg18:Etablissements:JEAN RENOIR_0180777X:Administratifs:Tous_Admi
+ nistratifs
+isMemberOf: clg18:Etablissements:BETHUNE-SULLY_0180019Y:Administratifs:PSYCHOL
+ OGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:LE GRAND MEAULNES_0180766K:Administratifs:PSY
+ CHOLOGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JEAN ROSTAND_0180732Y:Tous_JEAN ROSTAND
+isMemberOf: clg18:Etablissements:JULIEN DUMAS_0180023C:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JULES VERNE_0180673J:Administratifs:Tous_Admi
+ nistratifs
+isMemberOf: clg18:Etablissements:FRANCINE LECA_0180031L:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: clg18:Etablissements:LOUIS ARMAND_0180643B:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: clg18:Etablissements:LE GRAND MEAULNES_0180766K:Tous_LE GRAND MEAU
+ LNES
+isMemberOf: clg18:Etablissements:CLAUDE DEBUSSY_0180710Z:Tous_CLAUDE DEBUSSY
+isMemberOf: clg18:Etablissements:VICTOR HUGO_0180593X:Tous_VICTOR HUGO
+isMemberOf: clg18:Etablissements:GEORGE SAND_0180004G:Tous_GEORGE SAND
+isMemberOf: clg18:Etablissements:GEORGE SAND_0180004G:Administratifs:PSYCHOLOG
+ UE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:SAINT-EXUPERY_0180591V:Tous_SAINT-EXUPERY
+isMemberOf: clg18:Etablissements:JEAN RENOIR_0180777X:Tous_JEAN RENOIR
+isMemberOf: clg18:Etablissements:JULES VERNE_0180673J:Administratifs:PSYCHOLOG
+ UE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:VOLTAIRE_0180028H:Administratifs:PSYCHOLOGUE 
+ DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:ROGER MARTIN DU GARD_0180745M:Administratifs:
+ PSYCHOLOGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:FRANCINE LECA_0180031L:Tous_FRANCINE LECA
+isMemberOf: clg18:Etablissements:CLAUDE DEBUSSY_0180710Z:Administratifs:PSYCHO
+ LOGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:BETHUNE-SULLY_0180019Y:Tous_BETHUNE-SULLY
+isMemberOf: clg18:Etablissements:VICTOR HUGO_0180593X:Administratifs:PSYCHOLOG
+ UE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JEAN ROSTAND_0180732Y:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:SAINT-EXUPERY_0180591V:Administratifs:PSYCHOL
+ OGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:ROGER MARTIN DU GARD_0180745M:Administratifs:
+ Tous_Administratifs
+isMemberOf: clg18:Etablissements:VOLTAIRE_0180028H:Tous_VOLTAIRE
+isMemberOf: clg18:Etablissements:JULIEN DUMAS_0180023C:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: clg18:Etablissements:JULIEN DUMAS_0180023C:Tous_JULIEN DUMAS
+isMemberOf: clg18:Etablissements:SAINT-EXUPERY_0180591V:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: clg18:Etablissements:GEORGE SAND_0180004G:Administratifs:Tous_Admi
+ nistratifs
+isMemberOf: clg18:Etablissements:JEAN RENOIR_0180777X:Administratifs:PSYCHOLOG
+ UE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:VICTOR HUGO_0180593X:Administratifs:Tous_Admi
+ nistratifs
+isMemberOf: clg18:Etablissements:ROGER MARTIN DU GARD_0180745M:Tous_ROGER MART
+ IN DU GARD
+isMemberOf: clg18:Etablissements:FRANCINE LECA_0180031L:Administratifs:PSYCHOL
+ OGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:BETHUNE-SULLY_0180019Y:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: clg18:Etablissements:LOUIS ARMAND_0180643B:Tous_LOUIS ARMAND
+isMemberOf: clg18:Etablissements:LOUIS ARMAND_0180643B:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JULES VERNE_0180673J:Tous_JULES VERNE
+isMemberOf: clg18:Etablissements:LE GRAND MEAULNES_0180766K:Administratifs:Tou
+ s_Administratifs
+isMemberOf: clg18:Etablissements:CLAUDE DEBUSSY_0180710Z:Administratifs:Tous_A
+ dministratifs
+isMemberOf: clg18:Etablissements:JEAN ROSTAND_0180732Y:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Applications:GRR:JACQUES COEUR_0180042Y
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180007K:groupes_locaux:GRR_elev
+ es
+isMemberOf: clg18:Etablissements:EMILE LITTRE_0180721L:Tous_EMILE LITTRE
+isMemberOf: clg18:Etablissements:EMILE LITTRE_0180721L:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: clg18:Etablissements:EMILE LITTRE_0180721L:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Pearltrees:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Listes_Diffusion:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Listes_Diffusion:VAUVERT_0180823X
+isMemberOf: esco:Applications:Listes_Diffusion:JEAN MERMOZ_0180010N
+isMemberOf: esco:Applications:Listes_Diffusion:JEAN DE BERRY_0180009M
+isMemberOf: clg18:Applications:GRR:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Folios:LE GRAND MEAULNES_0180766K
+isMemberOf: clg18:Applications:Espace_Moodle:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:GRR:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Pronote:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Esidoc:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Folios:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Listes_Diffusion:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Pronote:EMILE LITTRE_0180721L
+isMemberOf: clg18:Applications:Folios:JULIEN DUMAS_0180023C
+isMemberOf: clg18:Applications:Listes_Diffusion:JULIEN DUMAS_0180023C
+isMemberOf: clg18:Applications:Esidoc:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Pronote:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Pronote:LOUIS ARMAND_0180643B
+isMemberOf: clg18:Applications:Pronote:CLAUDE DEBUSSY_0180710Z
+isMemberOf: clg18:Applications:Pronote:ROGER MARTIN DU GARD_0180745M
+isMemberOf: clg18:Applications:Esidoc:GEORGE SAND_0180004G
+isMemberOf: clg18:Applications:GRR:GEORGE SAND_0180004G
+isMemberOf: clg18:Applications:Pronote:GEORGE SAND_0180004G
+isMemberOf: clg18:Applications:Pronote:JULIEN DUMAS_0180023C
+isMemberOf: clg18:Applications:Pronote:BETHUNE-SULLY_0180019Y
+isMemberOf: clg18:Applications:Pronote:SAINT-EXUPERY_0180591V
+isMemberOf: clg18:Applications:GRR:JEAN ROSTAND_0180732Y
+isMemberOf: clg18:Applications:Pronote:JEAN ROSTAND_0180732Y
+isMemberOf: clg18:Applications:Esidoc:BETHUNE-SULLY_0180019Y
+isMemberOf: clg18:Applications:Pronote:FRANCINE LECA_0180031L
+isMemberOf: clg18:Applications:GRR:FRANCINE LECA_0180031L
+isMemberOf: clg18:Applications:Pix:FRANCINE LECA_0180031L
+isMemberOf: clg18:Applications:Esidoc:FRANCINE LECA_0180031L
+isMemberOf: esco:Applications:Cerise_STI:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Cerise_PRO:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Pix:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: clg18:Applications:Folios:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Listes_Diffusion:SAINT-EXUPERY_0180591V
+isMemberOf: clg18:Applications:Espaces_stockage:SAINT-EXUPERY_0180591V
+isMemberOf: clg18:Applications:Espaces_stockage:GEORGE SAND_0180004G
+isMemberOf: clg18:Applications:Espaces_stockage:JULIEN DUMAS_0180023C
+isMemberOf: clg18:Applications:Espaces_stockage:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Espaces_stockage:ROGER MARTIN DU GARD_0180745M
+isMemberOf: clg18:Applications:Espaces_stockage:CLAUDE DEBUSSY_0180710Z
+isMemberOf: clg18:Applications:Espaces_stockage:JEAN RENOIR_0180777X
+isMemberOf: clg18:Applications:Espaces_stockage:JEAN ROSTAND_0180732Y
+isMemberOf: clg18:Applications:Espaces_stockage:LOUIS ARMAND_0180643B
+isMemberOf: clg18:Applications:Espaces_stockage:EMILE LITTRE_0180721L
+isMemberOf: clg18:Applications:Espaces_stockage:BETHUNE-SULLY_0180019Y
+isMemberOf: clg18:Applications:Espaces_stockage:FRANCINE LECA_0180031L
+isMemberOf: clg18:Applications:Espaces_stockage:VOLTAIRE_0180028H
+isMemberOf: clg18:Applications:Espaces_stockage:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Espaces_stockage:LE GRAND MEAULNES_0180766K
+isMemberOf: clg18:Applications:Esidoc:LOUIS ARMAND_0180643B
+isMemberOf: acad:Services_Academique:CIO ETAT BOURGES_0180044A:PSYCHOLOGUE DE 
+ L EDUCATION NATIONALE
+isMemberOf: acad:Services_Academique:CIO ETAT BOURGES_0180044A:Tous_CIO ETAT B
+ OURGES
+isMemberOf: esco:Applications:Espaces_stockage:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Espaces_stockage:JACQUES COEUR_0180007K
+isMemberOf: esco:Applications:Espaces_stockage:JACQUES COEUR_0180042Y
+isMemberOf: esco:Applications:Espaces_stockage:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Espaces_stockage:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Espaces_stockage:VAUVERT_0180823X
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:JEAN MERMOZ_0180010N
+isMemberOf: acad:Services_Academique:CIO ETAT VIERZON_0180046C:DIRECTION
+isMemberOf: acad:Services_Academique:CIO ETAT ST AMAND MONTROND_0180045B:Tous_
+ CIO ETAT ST AMAND MONTROND
+isMemberOf: acad:Services_Academique:CIO ETAT ST AMAND MONTROND_0180045B:DIREC
+ TION
+isMemberOf: acad:Services_Academique:CIO ETAT VIERZON_0180046C:Tous_CIO ETAT V
+ IERZON
+isMemberOf: clg18:admin:Publication_contenus:EMILE LITTRE_0180721L:LOOKOVER
+isMemberOf: clg18:Applications:Publication_contenus:EMILE LITTRE_0180721L
+isMemberOf: clg18:Applications:Espace_Moodle:EMILE LITTRE_0180721L
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Administratifs
+isMemberOf: esco:Inter_etablissements:Tous_Administratifs
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+ESCOUAICourant: 0180023C
+givenName: Belva
+sn: Matusevich
+ENTPersonJointure: AC-ORLEANS-TOURS$153
+objectClass: ENTAuxNonEnsEtab
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Belva.Matusevich
+cn: Matusevich Belva
+ESCODomaines: www.chercan.fr
+ESCODomaines: lycees.netocentre.fr
+mail: Belva.Matusevich@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=17180431300145,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180019Y
+ESCOUAI: 0180004G
+ESCOUAI: 0180023C
+ESCOUAI: 0180006J
+ESCOUAI: 0180710Z
+ESCOUAI: 0180042Y
+ESCOUAI: 0180008L
+ESCOUAI: 0180745M
+ESCOUAI: 0180766K
+ESCOUAI: 0180673J
+ESCOUAI: 0180010N
+ESCOUAI: 0180591V
+ESCOUAI: 0180593X
+ESCOUAI: 0180005H
+ESCOUAI: 0180777X
+ESCOUAI: 0180031L
+ESCOUAI: 0180823X
+ESCOUAI: 0180007K
+ESCOUAI: 0180721L
+ESCOUAI: 0180028H
+ESCOUAI: 0180732Y
+ESCOUAI: 0180009M
+ESCOUAI: 0180046C
+ESCOUAI: 0180643B
+ESCOUAI: 0180044A
+ESCOUAI: 0180045B
+ENTPersonProfils: National_ETA
+ENTPersonProfils: National_DIR
+
+# F090096j, people, esco-centre.fr
+dn: uid=F090096j,ou=people,dc=esco-centre,dc=fr
+uid: F090096j
+isMemberOf: esco:Applications:SACoche:JACQUES COEUR_0180042Y
+isMemberOf: esco:Applications:Esidoc:JACQUES COEUR_0180042Y
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180042Y:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Applications:Folios:JACQUES COEUR_0180007K
+isMemberOf: esco:Applications:Folios:JACQUES COEUR_0180042Y
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180007K:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Applications:GRR:JACQUES COEUR_0180007K
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180007K:Tous_JACQUES COEUR
+isMemberOf: esco:Applications:SACoche:JACQUES COEUR_0180007K
+isMemberOf: esco:Applications:Listes_Diffusion:JACQUES COEUR_0180042Y
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180042Y:Tous_JACQUES COEUR
+isMemberOf: esco:Applications:Listes_Diffusion:JACQUES COEUR_0180007K
+isMemberOf: esco:Applications:Esidoc:JACQUES COEUR_0180007K
+isMemberOf: esco:Etablissements:VAUVERT_0180823X:Administratifs:Tous_Administr
+ atifs
+isMemberOf: esco:Etablissements:PIERRE-EMILE MARTIN_0180008L:Administratifs:PS
+ YCHOLOGUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Esidoc:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Ressources_Editoriales:mondesk:PIERRE-EMILE MART
+ IN_0180008L
+isMemberOf: esco:Etablissements:JEAN MERMOZ_0180010N:Administratifs:PSYCHOLOGU
+ E DE L EDUCATION NATIONALE
+isMemberOf: esco:Etablissements:VAUVERT_0180823X:Administratifs:PSYCHOLOGUE DE
+  L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Folios:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Espace_Moodle:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Folios:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180042Y:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Applications:VieScolaire_net:JEAN MERMOZ_0180010N
+isMemberOf: esco:Applications:Folios:VAUVERT_0180823X
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Etablissements:PIERRE-EMILE MARTIN_0180008L:Administratifs:To
+ us_Administratifs
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: esco:Applications:Pronote:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180007K:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Administratifs:
+ Tous_Administratifs
+isMemberOf: esco:Applications:Pronote:JEAN DE BERRY_0180009M
+isMemberOf: esco:Etablissements:JEAN MERMOZ_0180010N:Tous_JEAN MERMOZ
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:PSYCHOL
+ OGUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Etablissements:VAUVERT_0180823X:Tous_VAUVERT
+isMemberOf: esco:Applications:GRR:VAUVERT_0180823X
+isMemberOf: esco:Etablissements:JEAN MERMOZ_0180010N:Administratifs:Tous_Admin
+ istratifs
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Administratifs:
+ PSYCHOLOGUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Tous_JEAN DE BERRY
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:PIERRE-EMILE MARTIN_0180008L:Tous_PIERRE-EMILE
+  MARTIN
+isMemberOf: esco:Applications:Pronote:VAUVERT_0180823X
+isMemberOf: esco:Applications:GRR:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Esidoc:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Pronote:JEAN MERMOZ_0180010N
+isMemberOf: esco:Etablissements:MARGUERITE DE NAVARRE_0180006J:Tous_MARGUERITE
+  DE NAVARRE
+isMemberOf: esco:Applications:Folios:JEAN MERMOZ_0180010N
+isMemberOf: clg18:Etablissements:VOLTAIRE_0180028H:Administratifs:Tous_Adminis
+ tratifs
+isMemberOf: clg18:Etablissements:JEAN RENOIR_0180777X:Administratifs:Tous_Admi
+ nistratifs
+isMemberOf: clg18:Etablissements:BETHUNE-SULLY_0180019Y:Administratifs:PSYCHOL
+ OGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:LE GRAND MEAULNES_0180766K:Administratifs:PSY
+ CHOLOGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JEAN ROSTAND_0180732Y:Tous_JEAN ROSTAND
+isMemberOf: clg18:Etablissements:JULIEN DUMAS_0180023C:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JULES VERNE_0180673J:Administratifs:Tous_Admi
+ nistratifs
+isMemberOf: clg18:Etablissements:LOUIS ARMAND_0180643B:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: clg18:Etablissements:FRANCINE LECA_0180031L:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: clg18:Etablissements:LE GRAND MEAULNES_0180766K:Tous_LE GRAND MEAU
+ LNES
+isMemberOf: clg18:Etablissements:CLAUDE DEBUSSY_0180710Z:Tous_CLAUDE DEBUSSY
+isMemberOf: clg18:Etablissements:GEORGE SAND_0180004G:Tous_GEORGE SAND
+isMemberOf: clg18:Etablissements:VICTOR HUGO_0180593X:Tous_VICTOR HUGO
+isMemberOf: clg18:Etablissements:GEORGE SAND_0180004G:Administratifs:PSYCHOLOG
+ UE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:SAINT-EXUPERY_0180591V:Tous_SAINT-EXUPERY
+isMemberOf: clg18:Etablissements:JULES VERNE_0180673J:Administratifs:PSYCHOLOG
+ UE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JEAN RENOIR_0180777X:Tous_JEAN RENOIR
+isMemberOf: clg18:Etablissements:VOLTAIRE_0180028H:Administratifs:PSYCHOLOGUE 
+ DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:ROGER MARTIN DU GARD_0180745M:Administratifs:
+ PSYCHOLOGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:FRANCINE LECA_0180031L:Tous_FRANCINE LECA
+isMemberOf: clg18:Etablissements:CLAUDE DEBUSSY_0180710Z:Administratifs:PSYCHO
+ LOGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:BETHUNE-SULLY_0180019Y:Tous_BETHUNE-SULLY
+isMemberOf: clg18:Etablissements:VICTOR HUGO_0180593X:Administratifs:PSYCHOLOG
+ UE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JEAN ROSTAND_0180732Y:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:SAINT-EXUPERY_0180591V:Administratifs:PSYCHOL
+ OGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:ROGER MARTIN DU GARD_0180745M:Administratifs:
+ Tous_Administratifs
+isMemberOf: clg18:Etablissements:VOLTAIRE_0180028H:Tous_VOLTAIRE
+isMemberOf: clg18:Etablissements:JULIEN DUMAS_0180023C:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: clg18:Etablissements:JULIEN DUMAS_0180023C:Tous_JULIEN DUMAS
+isMemberOf: clg18:Etablissements:SAINT-EXUPERY_0180591V:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: clg18:Etablissements:GEORGE SAND_0180004G:Administratifs:Tous_Admi
+ nistratifs
+isMemberOf: clg18:Etablissements:JEAN RENOIR_0180777X:Administratifs:PSYCHOLOG
+ UE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:VICTOR HUGO_0180593X:Administratifs:Tous_Admi
+ nistratifs
+isMemberOf: clg18:Etablissements:ROGER MARTIN DU GARD_0180745M:Tous_ROGER MART
+ IN DU GARD
+isMemberOf: clg18:Etablissements:FRANCINE LECA_0180031L:Administratifs:PSYCHOL
+ OGUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:LOUIS ARMAND_0180643B:Tous_LOUIS ARMAND
+isMemberOf: clg18:Etablissements:BETHUNE-SULLY_0180019Y:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: clg18:Etablissements:LOUIS ARMAND_0180643B:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: clg18:Etablissements:JULES VERNE_0180673J:Tous_JULES VERNE
+isMemberOf: clg18:Etablissements:LE GRAND MEAULNES_0180766K:Administratifs:Tou
+ s_Administratifs
+isMemberOf: clg18:Etablissements:CLAUDE DEBUSSY_0180710Z:Administratifs:Tous_A
+ dministratifs
+isMemberOf: clg18:Etablissements:JEAN ROSTAND_0180732Y:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Applications:GRR:JACQUES COEUR_0180042Y
+isMemberOf: esco:Etablissements:JACQUES COEUR_0180007K:groupes_locaux:GRR_elev
+ es
+isMemberOf: clg18:Etablissements:EMILE LITTRE_0180721L:Tous_EMILE LITTRE
+isMemberOf: clg18:Etablissements:EMILE LITTRE_0180721L:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: clg18:Etablissements:EMILE LITTRE_0180721L:Administratifs:PSYCHOLO
+ GUE DE L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Pearltrees:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Listes_Diffusion:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Listes_Diffusion:VAUVERT_0180823X
+isMemberOf: esco:Applications:Listes_Diffusion:JEAN MERMOZ_0180010N
+isMemberOf: esco:Applications:Listes_Diffusion:JEAN DE BERRY_0180009M
+isMemberOf: clg18:Applications:GRR:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Folios:LE GRAND MEAULNES_0180766K
+isMemberOf: clg18:Applications:Espace_Moodle:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:GRR:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Pronote:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Esidoc:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Folios:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Listes_Diffusion:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Pronote:EMILE LITTRE_0180721L
+isMemberOf: clg18:Applications:Folios:JULIEN DUMAS_0180023C
+isMemberOf: clg18:Applications:Listes_Diffusion:JULIEN DUMAS_0180023C
+isMemberOf: clg18:Applications:Esidoc:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Pronote:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Pronote:LOUIS ARMAND_0180643B
+isMemberOf: clg18:Applications:Pronote:CLAUDE DEBUSSY_0180710Z
+isMemberOf: clg18:Applications:Pronote:ROGER MARTIN DU GARD_0180745M
+isMemberOf: clg18:Applications:Esidoc:GEORGE SAND_0180004G
+isMemberOf: clg18:Applications:GRR:GEORGE SAND_0180004G
+isMemberOf: clg18:Applications:Pronote:GEORGE SAND_0180004G
+isMemberOf: clg18:Applications:Pronote:JULIEN DUMAS_0180023C
+isMemberOf: clg18:Applications:Pronote:BETHUNE-SULLY_0180019Y
+isMemberOf: clg18:Applications:Pronote:SAINT-EXUPERY_0180591V
+isMemberOf: clg18:Applications:GRR:JEAN ROSTAND_0180732Y
+isMemberOf: clg18:Applications:Pronote:JEAN ROSTAND_0180732Y
+isMemberOf: clg18:Applications:Esidoc:BETHUNE-SULLY_0180019Y
+isMemberOf: clg18:Applications:Pronote:FRANCINE LECA_0180031L
+isMemberOf: clg18:Applications:Pix:FRANCINE LECA_0180031L
+isMemberOf: clg18:Applications:GRR:FRANCINE LECA_0180031L
+isMemberOf: clg18:Applications:Esidoc:FRANCINE LECA_0180031L
+isMemberOf: esco:Applications:Cerise_STI:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Cerise_PRO:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Pix:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: clg18:Applications:Folios:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Listes_Diffusion:SAINT-EXUPERY_0180591V
+isMemberOf: clg18:Applications:Espaces_stockage:JULIEN DUMAS_0180023C
+isMemberOf: clg18:Applications:Espaces_stockage:GEORGE SAND_0180004G
+isMemberOf: clg18:Applications:Espaces_stockage:SAINT-EXUPERY_0180591V
+isMemberOf: clg18:Applications:Espaces_stockage:VICTOR HUGO_0180593X
+isMemberOf: clg18:Applications:Espaces_stockage:ROGER MARTIN DU GARD_0180745M
+isMemberOf: clg18:Applications:Espaces_stockage:CLAUDE DEBUSSY_0180710Z
+isMemberOf: clg18:Applications:Espaces_stockage:JEAN ROSTAND_0180732Y
+isMemberOf: clg18:Applications:Espaces_stockage:JEAN RENOIR_0180777X
+isMemberOf: clg18:Applications:Espaces_stockage:LOUIS ARMAND_0180643B
+isMemberOf: clg18:Applications:Espaces_stockage:EMILE LITTRE_0180721L
+isMemberOf: clg18:Applications:Espaces_stockage:BETHUNE-SULLY_0180019Y
+isMemberOf: clg18:Applications:Espaces_stockage:FRANCINE LECA_0180031L
+isMemberOf: clg18:Applications:Espaces_stockage:VOLTAIRE_0180028H
+isMemberOf: clg18:Applications:Espaces_stockage:JULES VERNE_0180673J
+isMemberOf: clg18:Applications:Espaces_stockage:LE GRAND MEAULNES_0180766K
+isMemberOf: clg18:Applications:Esidoc:LOUIS ARMAND_0180643B
+isMemberOf: acad:Services_Academique:CIO ETAT BOURGES_0180044A:Tous_CIO ETAT B
+ OURGES
+isMemberOf: acad:Services_Academique:CIO ETAT BOURGES_0180044A:PSYCHOLOGUE DE 
+ L EDUCATION NATIONALE
+isMemberOf: esco:Applications:Espaces_stockage:VAUVERT_0180823X
+isMemberOf: esco:Applications:Espaces_stockage:MARGUERITE DE NAVARRE_0180006J
+isMemberOf: esco:Applications:Espaces_stockage:JEAN MERMOZ_0180010N
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Espaces_stockage:PIERRE-EMILE MARTIN_0180008L
+isMemberOf: esco:Applications:Espaces_stockage:JACQUES COEUR_0180007K
+isMemberOf: esco:Applications:Espaces_stockage:JACQUES COEUR_0180042Y
+isMemberOf: clg18:admin:Publication_contenus:EMILE LITTRE_0180721L:LOOKOVER
+isMemberOf: clg18:Applications:Publication_contenus:EMILE LITTRE_0180721L
+isMemberOf: clg18:Applications:Espace_Moodle:EMILE LITTRE_0180721L
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Administratifs
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Administratifs
+isMemberOf: esco:Applications:Indicateurs:JEAN MOULIN_0180026F
+isMemberOf: esco:Applications:GRR:JEAN MOULIN_0180026F
+isMemberOf: esco:Etablissements:JEAN MOULIN_0180024D:Administratifs:DIRECTION
+isMemberOf: esco:Applications:Espaces_stockage:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:local:admin_JEAN MOULIN_0180024D
+isMemberOf: esco:Etablissements:JEAN MOULIN_0180024D:Administratifs:Tous_Admin
+ istratifs
+isMemberOf: esco:Applications:RTX:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:mediacentre:GAR:RESPONSABLE_AFFECTATION:JEAN MOULIN_018
+ 0024D
+isMemberOf: esco:Applications:Pix:JEAN MOULIN_0180024D
+isMemberOf: esco:Applications:Pearltrees:JEAN MOULIN_0180024D
+isMemberOf: esco:Applications:Pix:JEAN MOULIN_0180026F
+isMemberOf: esco:admin:Publication_contenus:JEAN MOULIN_0180024D:MANAGER
+isMemberOf: esco:Applications:Espace_Moodle:JEAN MOULIN_0180024D
+isMemberOf: esco:Applications:Indicateurs:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:sarapis:local:sarapis_JEAN MOULIN_0180024D
+isMemberOf: esco:Applications:Publication_contenus:JEAN MOULIN_0180026F
+isMemberOf: esco:admin:Listes_Diffusion:local:JEAN MOULIN_0180026F
+isMemberOf: esco:admin:local:admin_JEAN MOULIN_0180026F
+isMemberOf: esco:admin:GRR:local:JEAN MOULIN_0180024D
+isMemberOf: esco:Applications:Pronote:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:GRR:local:JEAN MOULIN_0180026F
+isMemberOf: esco:admin:mediacentre:GAR:RESPONSABLE_AFFECTATION:JEAN MOULIN_018
+ 0026F
+isMemberOf: esco:admin:Publication_contenus:JEAN MOULIN_0180026F:MANAGER
+isMemberOf: esco:Applications:GRR:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:ITSM:poweruser:JEAN MOULIN_0180026F
+isMemberOf: esco:Applications:Corely:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:Publication_contenus:JEAN MOULIN_0180024D:LOOKOVER
+isMemberOf: esco:Inter_etablissements:Administratifs:Tous_DIRECTION
+isMemberOf: esco:Etablissements:JEAN MOULIN_0180024D:Tous_JEAN MOULIN
+isMemberOf: esco:admin:sarapis:local:sarapis_JEAN MOULIN_0180026F
+isMemberOf: esco:Applications:Publication_contenus:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:ITSM:poweruser:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:Publication_contenus:JEAN MOULIN_0180026F:LOOKOVER
+isMemberOf: esco:Applications:Pronote:JEAN MOULIN_0180026F
+isMemberOf: esco:Applications:Listes_Diffusion:JEAN MOULIN_0180024D
+isMemberOf: esco:admin:Listes_Diffusion:local:JEAN MOULIN_0180024D
+givenName: Chlo
+sn: Denyakin
+ENTPersonJointure: AC-ORLEANS-TOURS$1763
+objectClass: ENTAuxNonEnsEtab
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Chlo.Denyakin
+cn: Denyakin Chlo
+ESCODomaines: www.chercan.fr
+ESCODomaines: lycees.netocentre.fr
+mail: Chlo.Denyakin@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180024200015,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180019Y
+ESCOUAI: 0180004G
+ESCOUAI: 0180023C
+ESCOUAI: 0180006J
+ESCOUAI: 0180710Z
+ESCOUAI: 0180042Y
+ESCOUAI: 0180008L
+ESCOUAI: 0180745M
+ESCOUAI: 0180766K
+ESCOUAI: 0180673J
+ESCOUAI: 0180010N
+ESCOUAI: 0180591V
+ESCOUAI: 0180593X
+ESCOUAI: 0180024D
+ESCOUAI: 0180005H
+ESCOUAI: 0180777X
+ESCOUAI: 0180031L
+ESCOUAI: 0180823X
+ESCOUAI: 0180007K
+ESCOUAI: 0180721L
+ESCOUAI: 0180028H
+ESCOUAI: 0180732Y
+ESCOUAI: 0180009M
+ESCOUAI: 0180643B
+ESCOUAI: 0180044A
+ENTPersonProfils: National_ETA
+ENTPersonProfils: National_DIR
+ESCOUAICourant: 0180024D
+
+# F1100z6q, people, esco-centre.fr
+dn: uid=F1100z6q,ou=people,dc=esco-centre,dc=fr
+uid: F1100z6q
+isMemberOf: clg37:admin:Publication_contenus:HENRI BECQUEREL_0370994E:MANAGER
+isMemberOf: clg37:Applications:Listes_Diffusion:HENRI BECQUEREL_0370994E
+isMemberOf: clg37:admin:Listes_Diffusion:local:HENRI BECQUEREL_0370994E
+isMemberOf: clg37:Applications:Indicateurs:HENRI BECQUEREL_0370994E
+isMemberOf: clg37:Applications:Pronote:HENRI BECQUEREL_0370994E
+isMemberOf: clg37:admin:local:admin_HENRI BECQUEREL_0370994E
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Administratifs:Tous_DIRECTION
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:RTX:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: esco:Applications:Corely:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:admin:local:admin_ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Administratifs
+isMemberOf: esco:admin:mediacentre:GAR:RESPONSABLE_AFFECTATION:ALAIN FOURNIER_
+ 0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:DIRECTI
+ ON
+isMemberOf: esco:Applications:Indicateurs:ALAIN FOURNIER_0180005H
+isMemberOf: esco:admin:ITSM:poweruser:ALAIN FOURNIER_0180005H
+isMemberOf: esco:admin:Publication_contenus:ALAIN FOURNIER_0180005H:MANAGER
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+ESCOUAICourant: 0180005H
+givenName: Emalia
+sn: Danelutti
+ENTPersonJointure: AC-ORLEANS-TOURS$21130
+objectClass: ENTAuxNonEnsEtab
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Emalia.Danelutti
+cn: Danelutti Emalia
+ESCODomaines: lycees.netocentre.fr
+mail: Emalia.Danelutti@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ENTPersonProfils: National_DIR
+
+# F1000ukw, people, esco-centre.fr
+dn: uid=F1000ukw,ou=people,dc=esco-centre,dc=fr
+uid: F1000ukw
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:EDUCATI
+ ON
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Pearltrees:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Inter_etablissements:Tous_Administratifs
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Administratifs:Tous_Adm
+ inistratifs
+isMemberOf: esco:Applications:Pronote:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:VieScolaire_net:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Esidoc:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Listes_Diffusion:JEAN DE BERRY_0180009M
+isMemberOf: esco:admin:Publication_contenus:JEAN DE BERRY_0180009M:MANAGER
+isMemberOf: esco:Inter_etablissements:Administratifs:Tous_DIRECTION
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Administratifs:DIRECTIO
+ N
+isMemberOf: esco:admin:ITSM:poweruser:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Sconet_notes:chefetab:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Corely:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Espaces_stockage:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:RTX:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:SiecleVieScolaire:JEAN DE BERRY_0180009M
+isMemberOf: esco:admin:mediacentre:GAR:RESPONSABLE_AFFECTATION:JEAN DE BERRY_0
+ 180009M
+isMemberOf: esco:Applications:Sconet_notes:enseignant:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Sconet_notes:viesco:JEAN DE BERRY_0180009M
+isMemberOf: esco:admin:local:admin_JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:GRR:JEAN DE BERRY_0180009M
+isMemberOf: esco:Applications:Sconet_notes:peda:JEAN DE BERRY_0180009M
+isMemberOf: esco:Etablissements:JEAN DE BERRY_0180009M:Tous_JEAN DE BERRY
+givenName: Pattie
+sn: Cockitt
+ENTPersonJointure: AC-ORLEANS-TOURS$1568002
+objectClass: ENTAuxNonEnsEtab
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Pattie.Cockitt
+cn: Cockitt Pattie
+ESCODomaines: lycees.netocentre.fr
+mail: Pattie.Cockitt@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180009300012,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180009M
+ESCOUAI: 0180005H
+ENTPersonProfils: National_EVS
+ENTPersonProfils: National_DIR
+ESCOUAICourant: 0180009M
+
+# F17100gv, people, esco-centre.fr
+dn: uid=F17100gv,ou=people,dc=esco-centre,dc=fr
+uid: F17100gv
+isMemberOf: clg18:Etablissements:LE COLOMBIER_0180736C:Tous_LE COLOMBIER
+isMemberOf: clg18:Etablissements:LE COLOMBIER_0180736C:Profs
+isMemberOf: clg18:Applications:Esidoc:LE COLOMBIER_0180736C
+isMemberOf: clg18:Applications:Pronote:LE COLOMBIER_0180736C
+isMemberOf: clg18:Applications:Espace_Moodle:LE COLOMBIER_0180736C
+isMemberOf: clg18:Applications:Folios:LE COLOMBIER_0180736C
+isMemberOf: clg18:Applications:Publication_contenus:LE COLOMBIER_0180736C
+isMemberOf: clg18:admin:Publication_contenus:LE COLOMBIER_0180736C:LOOKOVER
+isMemberOf: clg18:Applications:Espaces_stockage:LE COLOMBIER_0180736C
+isMemberOf: clg18:Applications:Listes_Diffusion:LE COLOMBIER_0180736C
+isMemberOf: clg18:Etablissements:LE COLOMBIER_0180736C:Enseignements:Autre
+isMemberOf: clg18:Applications:Pearltrees:JEAN RENOIR_0180777X
+isMemberOf: clg18:Inter_etablissements:Tous_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: clg18:Inter_etablissements:Tous_Profs
+isMemberOf: esco:Applications:Indicateurs:ALAIN FOURNIER_0180005H
+isMemberOf: esco:admin:mediacentre:GAR:RESPONSABLE_AFFECTATION:ALAIN FOURNIER_
+ 0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Administratifs
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:DIRECTI
+ ON
+isMemberOf: esco:Applications:Listes_Diffusion:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espaces_stockage:ALAIN FOURNIER_0180005H
+isMemberOf: esco:admin:ITSM:poweruser:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:Espace_Moodle:ALAIN FOURNIER_0180005H
+isMemberOf: esco:admin:Publication_contenus:ALAIN FOURNIER_0180005H:MANAGER
+isMemberOf: esco:Applications:Esidoc:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Etablissements
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Tous_ALAIN FOURNIER
+isMemberOf: esco:Applications:Folios:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Administratifs:Tous_DIRECTION
+isMemberOf: esco:Applications:Pronote:ALAIN FOURNIER_0180005H
+isMemberOf: esco:admin:local:admin_ALAIN FOURNIER_0180005H
+isMemberOf: esco:Inter_etablissements:Tous_Profils_Etablissements
+isMemberOf: esco:Applications:Corely:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Etablissements:ALAIN FOURNIER_0180005H:Administratifs:Tous_Ad
+ ministratifs
+isMemberOf: esco:Applications:RTX:ALAIN FOURNIER_0180005H
+isMemberOf: esco:Applications:GRR:ALAIN FOURNIER_0180005H
+ESCOUAICourant: 0180005H
+givenName: Barn
+sn: Aloshikin
+ENTPersonJointure: AC-ORLEANS-TOURS$25703
+objectClass: ENTAuxEnseignant
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: Barn.Aloshikin
+cn: Aloshikin Barn
+ESCODomaines: www.chercan.fr
+ESCODomaines: lycees.netocentre.fr
+mail: Barn.Aloshikin@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=19180005100010,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0180005H
+ESCOUAI: 0180736C
+ENTPersonProfils: National_DIR
+ENTPersonProfils: National_ENS

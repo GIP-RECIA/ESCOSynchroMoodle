@@ -859,13 +859,13 @@ class TestEtablissement:
         #Chargement du ldap et de la bd
         ldap_utils.run_ldif('data/all.ldif', ldap)
         ldap_utils.run_ldif('data/college_dane_18.ldif', ldap)
-        ldap_utils.run_ldif('data/direction_college_dane_18.ldif', ldap)
-        ldap_utils.run_ldif('data/direction_lycee_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/lycee_dane.ldif', ldap)
         ldap_utils.run_ldif('data/eleves_college_dane_18.ldif', ldap)
-        ldap_utils.run_ldif('data/eleves_lycee_dane_18.ldif', ldap)
-        ldap_utils.run_ldif('data/lycee_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/eleves_lycee_dane.ldif', ldap)
+        ldap_utils.run_ldif('data/direction_college_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/direction_lycee_dane.ldif', ldap)
         ldap_utils.run_ldif('data/profs_college_dane_18.ldif', ldap)
-        ldap_utils.run_ldif('data/profs_lycee_dane_18.ldif', ldap)
+        ldap_utils.run_ldif('data/profs_lycee_dane.ldif', ldap)
         ldap_utils.run_ldif('data/structure_dane.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
 

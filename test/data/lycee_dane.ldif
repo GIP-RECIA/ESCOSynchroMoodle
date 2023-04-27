@@ -1,0 +1,37 @@
+# extended LDIF
+#
+# LDAPv3
+# base <ou=structures,dc=esco-centre,dc=fr> with scope subtree
+# filter: (&(ObjectClass=ENTStructure)(ENTStructureUAI=0180005H))
+# requesting: ALL
+#
+
+# 19180005100010, structures, esco-centre.fr
+dn: ENTStructureSIREN=19180005100010,ou=structures,dc=esco-centre,dc=fr
+objectClass: ENTEtablissement
+objectClass: ENTStructure
+objectClass: organizationalUnit
+ENTStructureSIREN: 19180005100010
+ENTEtablissementMinistereTutelle: MINISTERE DE L'EDUCATION NATIONALE
+ENTEtablissementContrat: PU
+ENTStructureNomCourant: LG$ALAIN FOURNIER$BOURGES
+ou: LG$ALAIN FOURNIER$BOURGES
+ENTStructureTypeStruct: LYCEE D ENSEIGNEMENT GENERAL
+ENTStructureJointure: AC-ORLEANS-TOURS$2358
+ESCOStructureNomCourt:: THljw6llIEFMQUlOLUZPVVJOSUVSICAgIHNlY3Rpb25zIGfDqW7DqX
+ JhbGVzIGV0IFBvc3QtQmFjIChDUEdFIGV0IENQRVMtQ0FBUCk=
+ENTEtablissementBassin: 18A18$BASSIN DU CHER
+street:: NTAgcnVlIFN0w6lwaGFuZSBNYWxsYXJtw6k=
+telephoneNumber: +33 2 48 23 11 88
+ESCOStructureLogo: /annuaire_images/logos/19180005100010/logoportail0.jpg?4
+l: BOURGES CEDEX
+ENTStructureUAI: 0180005H
+ESCODomaines: lycees.netocentre.fr
+facsimileTelephoneNumber: +33 2 48 23 11 80
+ENTEtablissementStructRattachFctl: ENTStructureSIREN=19180005100010,ou=structu
+ res,dc=esco-centre,dc=fr
+postalCode: 18016
+ENTStructureMailSI: ce.0180005H@ac-orleans-tours.fr
+
+# numResponses: 2
+# numEntries: 1
