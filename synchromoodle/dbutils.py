@@ -717,9 +717,10 @@ class Database:
         """
         Indique si un élève dipose de références dans des exercices ou des notations moodle.
         Les références comprennent :
-        - des notes obtenues dans n'importe quelle activité (historique de notes)
-        - des réponses à une activité (feedback, test, consultation, sondage)
-        - des participations à une activités (forum, chat)
+
+        - Des notes obtenues dans n'importe quelle activité (historique de notes)
+        - Des réponses à une activité (feedback, test, consultation, sondage)
+        - Des participations à une activités (forum, chat)
 
         :param user_id: L'id de l'utilisateur qu'on veut vérifier
         :returns: Un booléen à vrai si l'utilisateur à des références, faux sinon

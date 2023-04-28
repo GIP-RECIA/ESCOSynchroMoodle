@@ -356,6 +356,7 @@ class Synchronizer:
         :param eleve_ldap: L'élève à synchroniser
         :param log: Le logger
         """
+
         mail_display = self.__config.constantes.default_mail_display
         if not eleve_ldap.mail:
             eleve_ldap.mail = self.__config.constantes.default_mail
@@ -1435,8 +1436,8 @@ class Synchronizer:
         """
         Vide les cohortes d'utilisateurs conformément à l'annuaire LDAP.
 
-        :param users_by_cohorts_db: L'association nom de cohorte moodle -> liste de ses utilisateurs
-        :param users_by_cohorts_ldap:L'association nom de cohorte ldap -> liste de ses utilisateurs
+        :param users_by_cohorts_db: L'association nom de cohorte moodle et liste de ses utilisateurs
+        :param users_by_cohorts_ldap: L'association nom de cohorte ldap et liste de ses utilisateurs
         :param cohortname_pattern: Le pattern à faire correspondre pour le nom des cohortes
         :param log: Le logger
         """
@@ -1547,9 +1548,9 @@ class Synchronizer:
         :param grp: Si la strucutre fait partie d'un groupement
         :param nom_structure: Le nom de la structure
         :param path: Le path de la structure
-        :param ou: L'ou path de la structure
+        :param ou: L'ou de la structure
         :param siren: Le siren de la structure
-        :param uai: L'uai path de la structure
+        :param uai: L'uai de la structure
         """
         # Recuperation du timestamp
         now = self.__db.get_timestamp_now()

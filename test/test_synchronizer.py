@@ -644,6 +644,7 @@ class TestEtablissement:
     def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la purge des cohortes :
+
         - Récupération des cohortes de moodle
         - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
         - Eleves par classe
@@ -843,6 +844,7 @@ class TestEtablissement:
                                  mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la purge des cohortes de la dane :
+
         - Récupération des cohortes de la dane de moodle
         - Suppression d'un utilisateur d'une cohorte dans le ldap repercutée dans moodle
         - Eleves par classe
