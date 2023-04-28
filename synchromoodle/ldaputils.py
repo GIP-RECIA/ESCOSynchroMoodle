@@ -297,7 +297,8 @@ class Ldap:
         :param uai: L'établissement dans lequel on effectue la recherche
         :return: La liste des élèves trouvés
         """
-        ldap_filter = f'(&(objectClass=ENTEleve)(ENTEleveNivFormation={ldap_escape(niveau)})(ESCOUAI={ldap_escape(uai)}))'
+        ldap_filter = f"(&(objectClass=ENTEleve)(ENTEleveNivFormation={ldap_escape(niveau)})"\
+                      f"(ESCOUAI={ldap_escape(uai)}))"
         self.connection.search(self.config.personnes_dn, ldap_filter,
                                search_scope=LEVEL, attributes=
                                ['uid', 'sn', 'givenName', 'mail', 'ENTEleveClasses', 'ENTEleveNivFormation',
@@ -378,7 +379,8 @@ class Ldap:
         :param uai: L'établissement dans lequel on effectue la recherche
         :return: La liste des enseignants trouvés
         """
-        ldap_filter = f'(&(objectClass=ENTAuxEnseignant)(ENTAuxEnsClasses=*${ldap_escape(classe)})(ESCOUAI={ldap_escape(uai)}))'
+        ldap_filter = f"(&(objectClass=ENTAuxEnseignant)(ENTAuxEnsClasses=*${ldap_escape(classe)})"\
+                      f"(ESCOUAI={ldap_escape(uai)}))"
         self.connection.search(self.config.personnes_dn,
                                ldap_filter, LEVEL, attributes=
                                ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCOUAI', 'ESCODomaines',
@@ -401,7 +403,8 @@ class Ldap:
                                 'ENTAuxEnsClasses'])
         return [EnseignantLdap(entry) for entry in self.connection.entries]
 
-    def search_enseignants_in_niveau(self, niveau: str, uai: str, classe_to_niv_formation: dict[str,str]) -> list[EnseignantLdap]:
+    def search_enseignants_in_niveau(self, niveau: str, uai: str,
+                                     classe_to_niv_formation: dict[str,str]) -> list[EnseignantLdap]:
         """
         Recherche les enseignants dans un niveau de formation.
 
@@ -484,7 +487,8 @@ def get_filtre_enseignants(since_timestamp: datetime.datetime = None, uai=None, 
 
     return filtre
 
-def get_filtre_enseignants_profil(since_timestamp: datetime.datetime = None, profil="National_ENS", uai=None, tous=False) -> str:
+def get_filtre_enseignants_profil(since_timestamp: datetime.datetime = None,
+                                  profil="National_ENS", uai=None, tous=False) -> str:
     """
     Construit le filtre pour récupérer les enseignants au sein du LDAP.
 

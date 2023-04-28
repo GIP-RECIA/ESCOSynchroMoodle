@@ -122,9 +122,9 @@ class TestEtablissement:
 
         #On s'assure qu'une catégorie de cours associée à l'établissement à bien été créée
         etablissement_ou = ldap.get_structure("0290009C").nom
-        db.mark.execute("SELECT * FROM {entete}course_categories "
+        db.mark.execute(f"SELECT * FROM {db.entete}course_categories "
                         "WHERE name = %(name)s "
-                        "AND theme = %(theme)s".format(entete=db.entete),
+                        "AND theme = %(theme)s",
                         params={
                             'name': etablissement_ou,
                             'theme': etab_context.uai
@@ -246,8 +246,8 @@ class TestEtablissement:
             cohort = db.mark.fetchone()
             assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
-            db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
-                            .format(entete=db.entete),
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort_members"
+                            " WHERE cohortid = %(cohortid)s AND userid = %(userid)s",
                             params={
                                 'cohortid': cohort_id,
                                 'userid': eleve_id
@@ -265,8 +265,8 @@ class TestEtablissement:
         cohort = db.mark.fetchone()
         assert cohort is not None #On vérifie que la cohorte existe
         cohort_id = cohort[0]
-        db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
-                        .format(entete=db.entete),
+        db.mark.execute(f"SELECT * FROM {db.entete}cohort_members"
+                        " WHERE cohortid = %(cohortid)s AND userid = %(userid)s",
                         params={
                             'cohortid': cohort_id,
                             'userid': eleve_id
@@ -391,8 +391,8 @@ class TestEtablissement:
             cohort = db.mark.fetchone()
             assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
-            db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
-                            .format(entete=db.entete),
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort_members"
+                            " WHERE cohortid = %(cohortid)s AND userid = %(userid)s",
                             params={
                                 'cohortid': cohort_id,
                                 'userid': enseignant_id
@@ -411,8 +411,8 @@ class TestEtablissement:
             cohort = db.mark.fetchone()
             assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
-            db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
-                            .format(entete=db.entete),
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort_members"
+                            " WHERE cohortid = %(cohortid)s AND userid = %(userid)s",
                             params={
                                 'cohortid': cohort_id,
                                 'userid': enseignant_id
@@ -438,8 +438,8 @@ class TestEtablissement:
             cohort = db.mark.fetchone()
             assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
-            db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
-                            .format(entete=db.entete),
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort_members"
+                            " WHERE cohortid = %(cohortid)s AND userid = %(userid)s",
                             params={
                                 'cohortid': cohort_id,
                                 'userid': enseignant_id
@@ -464,8 +464,8 @@ class TestEtablissement:
             cohort = db.mark.fetchone()
             assert cohort is not None #On vérifie que la cohorte existe
             cohort_id = cohort[0]
-            db.mark.execute("SELECT * FROM {entete}cohort_members WHERE cohortid = %(cohortid)s AND userid = %(userid)s"
-                            .format(entete=db.entete),
+            db.mark.execute(f"SELECT * FROM {db.entete}cohort_members"
+                            " WHERE cohortid = %(cohortid)s AND userid = %(userid)s",
                             params={
                                 'cohortid': cohort_id,
                                 'userid': enseignant_id

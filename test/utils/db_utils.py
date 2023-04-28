@@ -125,11 +125,11 @@ def insert_fake_course_reference_eleve(db: Database, userid: int):
     :param userid: L'id de l'utilisateur dont on veut créer les fausses références
     :returns: L'id de la fausse référence insérée
     """
-    s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser,"\
+    s = f"INSERT INTO {db.entete}grade_grades_history (action, oldid, source, timemodified, loggeduser,"\
         " itemid, userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade,"\
         " hidden, locked, locktime, exported, overridden, excluded, feedback, feedbackformat, information,"\
         " informationformat) VALUES (1, 0, 'mod/assign', 0, 0, 0, %(userid)s, 50, 100.00000, 0.00000, NULL,"\
-        " NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
+        " NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, 0, NULL, 0)"
     db.mark.execute(s, params={'userid': userid})
     return db.mark.lastrowid
 
@@ -143,11 +143,11 @@ def insert_fake_course_reference_enseignant(db: Database, loggeduser: int):
     :param loggeduser: L'id de l'utilisateur dont on veut créer les fausses références
     :returns: L'id de la fausse référence insérée
     """
-    s = "INSERT INTO {entete}grade_grades_history (action, oldid, source, timemodified, loggeduser, itemid,"\
+    s = f"INSERT INTO {db.entete}grade_grades_history (action, oldid, source, timemodified, loggeduser, itemid,"\
         " userid, rawgrade, rawgrademax, rawgrademin, rawscaleid, usermodified, finalgrade, hidden, locked,"\
         " locktime, exported, overridden, excluded, feedback, feedbackformat, information, informationformat)"\
         " VALUES (1, 0, 'mod/assign', 0, %(loggeduser)s, 0, 0, 50, 100.00000, 0.00000, NULL, NULL, NULL, 0,"\
-        " 0, 0, 0, 0, 0, NULL, 0, NULL, 0)".format(entete=db.entete)
+        " 0, 0, 0, 0, 0, NULL, 0, NULL, 0)"
     db.mark.execute(s, params={'loggeduser': loggeduser})
     return db.mark.lastrowid
 

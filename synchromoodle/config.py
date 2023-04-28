@@ -1,4 +1,5 @@
 # coding: utf-8
+# pylint: disable=too-few-public-methods, too-many-instance-attributes
 """
 Configuration
 """
@@ -78,7 +79,8 @@ class DeleteConfig(_BaseConfig):
         """Délai, en jours, avant de sauvegarder un cours inutilisé"""
 
         self.delay_force_delete = 1095  # type: int
-        """Délai, en jours, avant de supprimer un compte qui n'est plus présent dans l'annuaire LDAP peut importe ses références"""
+        """Délai, en jours, avant de supprimer un compte qui n'est plus présent
+         dans l'annuaire LDAP peu importe ses références"""
 
         self.purge_cohorts = False  # type: bool
         """Booléen indiquant si on purge les cohortes s'il y a une action de suppression"""

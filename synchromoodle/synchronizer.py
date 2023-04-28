@@ -330,7 +330,7 @@ class Synchronizer:
 
 
     def construct_classe_to_niv_formation(self, etablissement_context: EtablissementContext,
-     list_eleve_ldap: list[EleveLdap]):
+                                          list_eleve_ldap: list[EleveLdap]):
         """
         Associe au contexte de l'établissement un dictionnaire associant une classe à
         un niveau de formation. Utilisé pour pouvoir récupérer le niveau de formation
@@ -449,8 +449,8 @@ class Synchronizer:
         self.__db.set_user_domain(eleve_id, self.context.id_field_domaine, user_domain)
 
 
-    def handle_enseignant(self, etablissement_context: EtablissementContext, enseignant_ldap: EnseignantLdap,
-                          log=getLogger()):
+    def handle_enseignant(self, etablissement_context: EtablissementContext,
+                          enseignant_ldap: EnseignantLdap, log=getLogger()):
         """
         Met à jour un enseignant ou un personnel de direction au sein d'un établissement.
 
@@ -507,7 +507,7 @@ class Synchronizer:
                 or ( etablissement_context.structure_ldap.type.startswith('COLLEGE') \
                 or etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_cfa_agricole):
                 if set(enseignant_ldap.profils).intersection(['National_ENS','National_DOC','National_DIR',\
-                 'National_ETA', 'National_EVS']):
+                                                              'National_ETA', 'National_EVS']):
                     log.info("Ajout du rôle bigbluebutton pour l'utilisateur %s", id_user)
                     self.__db.add_role_to_user(self.__config.constantes.id_role_bigbluebutton,
                                                self.__config.constantes.id_instance_moodle, id_user)
@@ -547,11 +547,10 @@ class Synchronizer:
                     if not self.__db.is_enseignant_avance(id_user, self.context.id_role_advanced_teacher):
                         self.__db.add_role_to_user(self.context.id_role_advanced_teacher, 1, id_user)
                     break
-                else:
-                    delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
-                    if delete:
-                        log.info("Suppression d'un admin local %s %s %s",
-                                 enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
+                delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
+                if delete:
+                    log.info("Suppression d'un admin local %s %s %s",
+                             enseignant_ldap.uid, enseignant_ldap.given_name, enseignant_ldap.sn)
 
         # Inscription dans les cohortes associees aux classes et au niveau de formation si c'est un enseignant
         if set(enseignant_ldap.profils).intersection(['National_ENS']) or len(enseignant_ldap.classes)>0:
@@ -688,11 +687,10 @@ class Synchronizer:
                     log.info("Insertion d'un admin local %s %s %s",
                              personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn)
                 break
-            else:
-                delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
-                if delete:
-                    log.info("Suppression d'un admin local %s %s %s",
-                             personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn)
+            delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
+            if delete:
+                log.info("Suppression d'un admin local %s %s %s",
+                         personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn)
 
     def handle_inspecteur(self, personne_ldap: PersonneLdap, log=getLogger()):
         """
@@ -737,7 +735,7 @@ class Synchronizer:
         self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
 
     def mettre_a_jour_droits_enseignant(self, enseignant_infos: str, id_enseignant: int,
-     uais_autorises: list[str], log=getLogger()):
+                                        uais_autorises: list[str], log=getLogger()):
         """
         Fonction permettant de mettre à jour les droits d'un enseignant.
         Cette mise à jour consiste à supprimer les roles non autorises puis
@@ -790,7 +788,7 @@ class Synchronizer:
             log.info("Les seuls établissements autorisés pour cet enseignant sont '%s'", themes_autorises)
 
     def get_or_create_cohort(self, id_context: int, name: str, id_number: str,
-     description: str, time_created: int, log=getLogger()) -> int:
+                             description: str, time_created: int, log=getLogger()) -> int:
         """
         Fonction permettant de creer une nouvelle cohorte pour un contexte donné.
 
@@ -836,7 +834,7 @@ class Synchronizer:
         return id_cohort
 
     def get_or_create_dane_lycee_en_cohort(self, id_context_dane: int, user_type: UserType,
-     timestamp_now_sql: int, log=getLogger()) -> int:
+                                           timestamp_now_sql: int, log=getLogger()) -> int:
         """
         Charge ou créer une cohorte dane lycee_en soit pour les élèves, les enseignant ou le personnel de direction.
 
@@ -858,7 +856,7 @@ class Synchronizer:
         return id_cohort
 
     def get_or_create_dane_dep_clg_cohort(self, id_context_dane: int, user_type: UserType,
-     departement: str, timestamp_now_sql: int, log=getLogger()) -> int:
+                                          departement: str, timestamp_now_sql: int, log=getLogger()) -> int:
         """
         Charge ou créer une cohorte dane dep_clg soit pour les élèves, les enseignant ou le personnel de direction.
 
@@ -899,7 +897,7 @@ class Synchronizer:
         return id_cohort
 
     def get_or_create_formation_cohort(self, id_context_etab: int, niveau_formation: str,
-     timestamp_now_sql: int, log=getLogger()) -> int:
+                                       timestamp_now_sql: int, log=getLogger()) -> int:
         """
         Charge ou créer une cohorte de formation.
 
@@ -993,7 +991,7 @@ class Synchronizer:
         return id_cohort_enseignants
 
     def get_users_by_cohorts_comparators_eleves_classes(self, etab_context: EtablissementContext,
-            cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+     cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les élèves (uid) dans chacune des classes.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
@@ -1033,7 +1031,7 @@ class Synchronizer:
 
 
     def get_users_by_cohorts_comparators_eleves_niveau(self, etab_context: EtablissementContext,
-            cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+     cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les élèves (uid) dans chacun des niveaux de formation.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
@@ -1062,7 +1060,7 @@ class Synchronizer:
         return eleves_by_cohorts_db, eleves_by_cohorts_ldap
 
     def get_users_by_cohorts_comparators_profs_classes(self, etab_context: EtablissementContext,
-            cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+     cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les profs (uid) dans chacune des classes.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
@@ -1092,7 +1090,7 @@ class Synchronizer:
 
 
     def get_users_by_cohorts_comparators_profs_etab(self, etab_context: EtablissementContext,
-            cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+     cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les profs (uid) dans chacun des établissement.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
@@ -1122,7 +1120,7 @@ class Synchronizer:
 
 
     def get_users_by_cohorts_comparators_profs_niveau(self, etab_context: EtablissementContext,
-            cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+     cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les profs (uid) dans chacun des niveaux de formation.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
@@ -1302,15 +1300,14 @@ class Synchronizer:
                                 if is_teacher:
                                     if not self.__db.enseignant_has_references(db_user[0]): #si pas de références
                                         log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours"
-                                         " et n'est pas inscrit à un cours, ni ne possède de référénces."
-                                         " Il va être supprimé",
-                                          db_user[1], delete_delay)
+                                                 " et n'est pas inscrit à un cours, ni ne possède de référénces."
+                                                 " Il va être supprimé", db_user[1], delete_delay)
                                         user_ids_to_delete.append(db_user[0])
                                 else:
                                     if not self.__db.eleve_has_references(db_user[0]): #si pas de références
                                         log.info("L'élève %s ne s'est pas connecté depuis au moins %s jours"
-                                         " et n'est pas inscrit à un cours, ni ne possède de référénces."
-                                         " Il va être supprimé", db_user[1], delete_delay)
+                                                 " et n'est pas inscrit à un cours, ni ne possède de référénces."
+                                                 " Il va être supprimé", db_user[1], delete_delay)
                                         user_ids_to_delete.append(db_user[0])
 
                         if db_user[0] not in user_ids_to_delete:
@@ -1326,8 +1323,8 @@ class Synchronizer:
                                         #S'il doit être anonymisé, on vérifie qu'il ne l'est pas déjà
                                         if self.__db.get_user_data(db_user[0])[10] != self.__config.constantes.anonymous_name:
                                             log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours"
-                                             " et est inscrit à des cours ou possèdes des références."
-                                             " Il va être anonymisé", db_user[1], anon_delay)
+                                                     " et est inscrit à des cours ou possèdes des références."
+                                                     " Il va être anonymisé", db_user[1], anon_delay)
                                             user_ids_to_anonymize.append(db_user[0])
                                         else:
                                             log.info("L'enseignant %s doit être anonymisé, mais il est déja anonymisé",
@@ -1336,12 +1333,12 @@ class Synchronizer:
                                     #Même principe pour les élèves
                                     if self.__db.get_user_data(db_user[0])[10] != self.__config.constantes.anonymous_name:
                                         log.info("L'élève %s ne s'est pas connecté depuis au moins %s jours"
-                                         " et est inscrit à des cours ou possèdes des références."
-                                         " Il va être anonymisé", db_user[1], anon_delay)
+                                                 " et est inscrit à des cours ou possèdes des références."
+                                                 " Il va être anonymisé", db_user[1], anon_delay)
                                         user_ids_to_anonymize.append(db_user[0])
                                     else:
                                         log.info("L'élève %s doit être anonymisé, mais il est déja anonymisé",
-                                         db_user[1])
+                                                 db_user[1])
 
                             #Cas ou on doit effectuer un traitement sur les cours d'un prof : plus présent dans le ldap,
                             #inscrit avec le role propriétaire de cours
@@ -1351,8 +1348,8 @@ class Synchronizer:
                                 owned_or_teach_courses = [user_course[0] for user_course in self.__db.get_courses_ids_owned_or_teach(db_user[0])]
                                 if len(owned_or_teach_courses) > 0:
                                     log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours."
-                                     "Un traitement va être effectué sur ses cours",
-                                      db_user[1], self.__config.delete.delay_backup_course)
+                                             "Un traitement va être effectué sur ses cours",
+                                             db_user[1], self.__config.delete.delay_backup_course)
                                     user_ids_to_process_courses.append(db_user[0])
 
         #Traitement sur les cours des enseignants
@@ -1438,8 +1435,8 @@ class Synchronizer:
         """
         Vide les cohortes d'utilisateurs conformément à l'annuaire LDAP.
 
-        :param users_by_cohorts_db: Un dictionnaire associant des noms de cohortes à la liste de ses utilisateures dans moodle
-        :param users_by_cohorts_ldap: Un dictionnaire associant des noms de cohortes à la liste de ses utilisateures dans le ldap
+        :param users_by_cohorts_db: L'association nom de cohorte moodle -> liste de ses utilisateurs
+        :param users_by_cohorts_ldap:L'association nom de cohorte ldap -> liste de ses utilisateurs
         :param cohortname_pattern: Le pattern à faire correspondre pour le nom des cohortes
         :param log: Le logger
         """
@@ -1465,8 +1462,7 @@ class Synchronizer:
         """
         Purge les cohortes dane des différents types d'utilisateurs dans les lycées.
 
-        :param lycee_ldap: Un dictionnaire contenant les listes des utilisateurs contenus dans les cohortes des lycées danse dans le ldap par type d'utilisateur
-        :param log: Le logger
+        :param lycee_ldap: Les utilisateurs des cohortes dane lycées par type d'utilisateur
         """
         #Pour chaque cohorte de chaque type d'utilisateur
         for user_type in UserType:
@@ -1481,13 +1477,14 @@ class Synchronizer:
                 if username_db not in lycee_ldap[user_type]:
                     log.info("Désenrollement de l'utilisateur %s de la cohorte dane lycée %s",
                      username_db, user_type)
-                    self.__db.disenroll_user_from_username_and_cohortid(username_db, self.ids_cohorts_dane_lycee_en[user_type])
+                    self.__db.disenroll_user_from_username_and_cohortid(username_db,
+                                                                        self.ids_cohorts_dane_lycee_en[user_type])
 
     def purge_cohort_dane_clg_dep(self, clg_ldap: dict, departement: str, log=getLogger()) -> dict[str,list[str]]:
         """
         Purge les cohortes dane des différents types d'utilisateurs dans les collèges par département.
 
-        :param lycee_ldap: Un dictionnaire contenant les listes des utilisateurs contenus dans les cohortes des lycées dans dans le ldap par type d'utilisateur et par département
+        :param lycee_ldap: Les utilisateurs des cohortes dane collège par type d'utilisateur et département
         :param log: Le logger
         """
         #Pour chaque cohorte de chaque type d'utilisateur
