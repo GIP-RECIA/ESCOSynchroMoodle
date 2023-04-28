@@ -144,7 +144,6 @@ La structure de la configuration est modélisée par les classes situées dans
 | id_role_proprietaire_cours | Id pour le role propriétaire de cours                                    | 11                            |     Nombre entier    |
 | id_role_enseignant         | Id pour le role enseignant                                               | 3                             |     Nombre entier    |
 | id_role_eleve              | Id pour le role eleve                                                    | 5                             |     Nombre entier    |
-| id_role_inspecteur         | Id pour le role inspecteur                                               | 9                             |     Nombre entier    |
 | id_role_directeur          | Id pour le role directeur                                                | 18                            |     Nombre entier    |
 | id_role_utilisateur_limite | Id pour le role d'utilisateur avec droits limites                        | 14                            |     Nombre entier    |
 | type_structure_cfa         | Type de structure d'un CFA                                               | "CFA"                         | Chaine de caractères |

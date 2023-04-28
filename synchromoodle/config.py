@@ -143,9 +143,6 @@ class ConstantesConfig(_BaseConfig):
         self.id_role_eleve = 5  # type: int
         """Id pour le role eleve"""
 
-        self.id_role_inspecteur = 9  # type: int
-        """Id pour le role inspecteur"""
-
         self.id_role_directeur = 18  # type: int
         """Id pour le role directeur"""
 
