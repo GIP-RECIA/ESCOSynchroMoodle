@@ -424,11 +424,16 @@ class Synchronizer:
                 self.ids_cohorts_dane_dep_clg[UserType.ELEVE][etablissement_context.departement],
                 eleve_id, self.context.timestamp_now_sql
                 )
+            eleve_cohorts.append(self.ids_cohorts_dane_dep_clg[UserType.ELEVE][etablissement_context.departement])
         elif etablissement_context.lycee and etablissement_context.etablissement_en:
             self.__db.enroll_user_in_cohort(
                 self.ids_cohorts_dane_lycee_en[UserType.ELEVE],
                 eleve_id, self.context.timestamp_now_sql
                 )
+            eleve_cohorts.append(self.ids_cohorts_dane_lycee_en[UserType.ELEVE])
+
+        log.info("Désinscription de l'élève %s des anciennes cohortes", eleve_ldap)
+        self.__db.disenroll_user_from_cohorts(eleve_cohorts, eleve_id)
 
         # Mise a jour de la classe
         id_user_info_data = self.__db.get_id_user_info_data(eleve_id, self.context.id_field_classe)
