@@ -78,6 +78,14 @@ Il est possible de générer une documentation sous forme de fichiers `.html` gr
 pipenv run make html
 ```
 
+## Vérification de la qualité
+
+Le code suit au mieux les recommandations officielles PEP8. Il est possible de vérifier la qualité du code avec la librairie pylint :
+
+```
+pipenv run python -m pylint [nom du package]
+```
+
 # Usage
 
 ```bash
