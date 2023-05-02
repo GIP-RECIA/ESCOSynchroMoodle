@@ -212,6 +212,8 @@ def nettoyage(config: Config, action: ActionConfig):
         # Purge des cohortes pour n'y conserver que les utilisateurs qui doivent encore être dedans
         if config.delete.purge_cohorts:
 
+            log.debug("Purge des cohortes activée")
+
             for uai in action.etablissements.liste_etab:
                 etablissement_log = log.getChild(f'etablissement.{uai}')
 

@@ -420,12 +420,15 @@ class Synchronizer:
 
         # Inscription dans les cohortes de la Dane
         if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
+            log.info("Inscription de l'élève %s dans la cohorte collège %s de la dane",
+                     eleve_ldap, etablissement_context.departement)
             self.__db.enroll_user_in_cohort(
                 self.ids_cohorts_dane_dep_clg[UserType.ELEVE][etablissement_context.departement],
                 eleve_id, self.context.timestamp_now_sql
                 )
             eleve_cohorts.append(self.ids_cohorts_dane_dep_clg[UserType.ELEVE][etablissement_context.departement])
         elif etablissement_context.lycee and etablissement_context.etablissement_en:
+            log.info("Inscription de l'élève %s dans la cohorte lycée de la dane", eleve_ldap)
             self.__db.enroll_user_in_cohort(
                 self.ids_cohorts_dane_lycee_en[UserType.ELEVE],
                 eleve_id, self.context.timestamp_now_sql
@@ -514,7 +517,7 @@ class Synchronizer:
                 or etablissement_context.structure_ldap.type == self.__config.constantes.type_structure_cfa_agricole):
                 if set(enseignant_ldap.profils).intersection(['National_ENS','National_DOC','National_DIR',\
                                                               'National_ETA', 'National_EVS']):
-                    log.info("Ajout du rôle bigbluebutton pour l'utilisateur %s", id_user)
+                    log.info("Ajout du rôle bigbluebutton pour l'utilisateur %s", enseignant_ldap)
                     self.__db.add_role_to_user(self.__config.constantes.id_role_bigbluebutton,
                                                self.__config.constantes.id_instance_moodle, id_user)
 
@@ -591,25 +594,27 @@ class Synchronizer:
                         enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
                     else:
                         log.warning(
-                        "Problème avec l'enseignant %s pour l'inscrire dans les cohortes de niveau de formation",
-                         enseignant_ldap
+                        "Problème avec l'enseignant %s pour l'inscrire dans les cohortes"
+                        " de niveau de formation associées à la classe %s",
+                         enseignant_ldap, classe
                          )
 
-                log.info("Inscription de l'enseignant %s dans les cohortes de niveau de formation %s",
-                         enseignant_ldap, enseignant_niv_formation)
+                if len(enseignant_niv_formation) > 0:
+                    log.info("Inscription de l'enseignant %s dans les cohortes de niveau de formation %s",
+                             enseignant_ldap, enseignant_niv_formation)
 
-                name_pattern = self.__config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s")
-                desc_pattern = self.__config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s")
-                #Création des cohortes de niveau de formation
-                ids_niv_formation_cohorts = self.get_or_create_niv_formation_cohorts(etablissement_context.id_context_categorie,
-                                                                                     enseignant_niv_formation,
-                                                                                     self.context.timestamp_now_sql,
-                                                                                     name_pattern=name_pattern,
-                                                                                     desc_pattern=desc_pattern,
-                                                                                     log=log)
-                #Inscription dans les cohortes de niveau de formation
-                for id_cohort_niv_formation in ids_niv_formation_cohorts:
-                    self.__db.enroll_user_in_cohort(id_cohort_niv_formation, id_user, self.context.timestamp_now_sql)
+                    name_pattern = self.__config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s")
+                    desc_pattern = self.__config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s")
+                    #Création des cohortes de niveau de formation
+                    ids_niv_formation_cohorts = self.get_or_create_niv_formation_cohorts(etablissement_context.id_context_categorie,
+                                                                                         enseignant_niv_formation,
+                                                                                         self.context.timestamp_now_sql,
+                                                                                         name_pattern=name_pattern,
+                                                                                         desc_pattern=desc_pattern,
+                                                                                         log=log)
+                    #Inscription dans les cohortes de niveau de formation
+                    for id_cohort_niv_formation in ids_niv_formation_cohorts:
+                        self.__db.enroll_user_in_cohort(id_cohort_niv_formation, id_user, self.context.timestamp_now_sql)
 
         if set(enseignant_ldap.object_classes).intersection(["ENTAuxEnseignant"]):
             log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
@@ -621,9 +626,9 @@ class Synchronizer:
         # Inscription dans les cohortes de la dane
         # Enseignants
         if set(enseignant_ldap.profils).intersection(['National_ENS']):
-            log.info("Inscription de l'enseignant %s dans la cohorte de la dane", enseignant_ldap)
             if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
-                log.info("Inscription de l'enseignant %s dans la cohorte collège de la dane", enseignant_ldap)
+                log.info("Inscription de l'enseignant %s dans la cohorte collège %s de la dane",
+                         enseignant_ldap, etablissement_context.departement)
                 self.__db.enroll_user_in_cohort(
                     self.ids_cohorts_dane_dep_clg[UserType.ENSEIGNANT][etablissement_context.departement],
                     id_user, self.context.timestamp_now_sql)
@@ -635,7 +640,8 @@ class Synchronizer:
         # Personnel de direction
         if set(enseignant_ldap.profils).intersection(['National_DIR']):
             if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
-                log.info("Inscription du personnel de direction %s dans la cohorte collège de la dane", enseignant_ldap)
+                log.info("Inscription du personnel de direction %s dans la cohorte collège %s de la dane",
+                         enseignant_ldap, etablissement_context.departement)
                 self.__db.enroll_user_in_cohort(self.ids_cohorts_dane_dep_clg[
                     UserType.PERSONNEL_DE_DIRECTION][etablissement_context.departement],
                     id_user, self.context.timestamp_now_sql)
