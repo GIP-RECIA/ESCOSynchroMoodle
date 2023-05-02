@@ -48,7 +48,7 @@ class TimestampStore:
         self.timestamps.clear()
 
         try:
-            with open(self.config.file, 'r') as time_stamp_file:
+            with open(self.config.file, 'r', encoding="utf-8") as time_stamp_file:
                 for line in time_stamp_file.readlines():
                     line = line.strip(os.linesep)
                     if line:
@@ -64,7 +64,7 @@ class TimestampStore:
         Ecrit le fichier contenant la date de derniers traitement des établissements.
         """
 
-        with open(self.config.file, 'w') as time_stamp_file:
+        with open(self.config.file, 'w', encoding="utf-8") as time_stamp_file:
             time_stamp_file.writelines(
                 map(lambda item: item[0].upper() + self.config.separator + item[1].isoformat() + os.linesep,
                     self.timestamps.items()))

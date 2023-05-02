@@ -61,8 +61,8 @@ class WebService:
 
         params = {}
 
-        for i in range(len(courseids)):
-            params[f"courseids[{i}]"] = courseids[i]
+        for i,course_id in enumerate(courseids):
+            params[f"courseids[{i}]"] = course_id
 
         res = requests.get(url=self.url,
                            params={
@@ -222,8 +222,8 @@ class WebService:
         """
 
         cohorts_to_delete = {}
-        for i in range(len(cohortids)):
-            cohorts_to_delete[f"cohortids[{i}]"] = cohortids[i]
+        for i,cohort_id in enumerate(cohortids):
+            cohorts_to_delete[f"cohortids[{i}]"] = cohort_id
 
         res = requests.get(url=self.url,
                            params={

@@ -23,7 +23,7 @@ def fake_get_courses_user_enrolled_test_enseignants(userid: int):
     """
     return_values = {492216:[37000],492217:[37001],492220:[37002],492221:[37003],\
     492224:[37004],492225:[37005],492228:[37006],492229:[37007]}
-    if userid not in return_values.keys():
+    if userid not in return_values:
         return []
     return return_values[userid]
 

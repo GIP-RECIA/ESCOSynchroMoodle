@@ -523,7 +523,7 @@ class ConfigLoader:
         """
         for config_item in config_fp:
             try:
-                with open(config_item) as config_file:
+                with open(config_item, encoding="utf-8") as config_file:
                     yaml_config = yaml.YAML(typ='unsafe', pure=True)
                     data = yaml_config.load(config_file)
                     config.update(**data)

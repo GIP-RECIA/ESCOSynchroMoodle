@@ -587,7 +587,7 @@ class Synchronizer:
                     #Il est possible que l'enseignant enseigne dans une classe mais qui n'est pas dans cet établissement
                     #Il sera alors inscrit dans la cohorte du niveau de formation correspondant à la classe lorsqu'on le
                     #traitera avec l'autre établissement en question
-                    if classe in etablissement_context.classe_to_niv_formation.keys():
+                    if classe in etablissement_context.classe_to_niv_formation:
                         enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
                     else:
                         log.warning(
@@ -891,7 +891,7 @@ class Synchronizer:
         :param id_context_dane: L'id du contexte dans lequel on créé la cohorte
         :param user_type: Le type d'utilisateur pour lequel on créé la cohorte
         :param departement: Le département associé à la cohorte
-        :return: L'id de la cohorte créée
+        :return: L'id de la cohorte récupérée
         """
         all_cohort_name = {
             UserType.ELEVE: 'Élèves des collèges du {}',
@@ -911,7 +911,7 @@ class Synchronizer:
         :param niveau_formation: Le niveau de formation
         :param timestamp_now_sql: Le timestamp actuel
         :param log: Le logger
-        :return:
+        :return: L'id de la cohorte créée ou récupérée
         """
         cohort_name = self.__config.constantes.cohortname_pattern_eleves_niv_formation.replace("%",niveau_formation)
         cohort_description = self.__config.constantes.cohortname_pattern_eleves_niv_formation.replace("%",niveau_formation)
@@ -1453,7 +1453,7 @@ class Synchronizer:
             # Si la cohorte n'est pas présente dans le ldap
             # (ce qui ne doit pas être possible, au pire on a un tableau vide)
             # On désenrole les users de la cohortes côté bdd
-            if cohort_db not in users_by_cohorts_ldap.keys():
+            if cohort_db not in users_by_cohorts_ldap:
                 for username_db in users_by_cohorts_db[cohort_db]:
                     log.info("Désenrollement de l'utilisateur %s de la cohorte \"%s\"", username_db, cohort_db)
                     self.__db.disenroll_user_from_username_and_cohortname(username_db, cohortname)

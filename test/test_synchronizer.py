@@ -403,7 +403,8 @@ class TestEtablissement:
 
         #Cohorte de profs de l'établissement
         for enseignant_uai in enseignant.uais:
-            cohort_name = config.constantes.cohortname_pattern_enseignants_etablissement.replace("%", f"({enseignant_uai})")
+            cohort_name = config.constantes.cohortname_pattern_enseignants_etablissement\
+             .replace("%", f"({enseignant_uai})")
             db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
@@ -425,7 +426,7 @@ class TestEtablissement:
         #Partie lycée
         niveaux_formation = set()
         for classe in enseignant.classes:
-            if classe.classe in etab_context.classe_to_niv_formation.keys():
+            if classe.classe in etab_context.classe_to_niv_formation:
                 niveaux_formation.add(etab_context.classe_to_niv_formation[classe.classe])
 
         for niv_formation in niveaux_formation:
@@ -451,7 +452,7 @@ class TestEtablissement:
         #Partie collège
         niveaux_formation = set()
         for classe in enseignant.classes:
-            if classe.classe in etab_context_clg.classe_to_niv_formation.keys():
+            if classe.classe in etab_context_clg.classe_to_niv_formation:
                 niveaux_formation.add(etab_context_clg.classe_to_niv_formation[classe.classe])
 
         for niv_formation in niveaux_formation:
@@ -692,7 +693,7 @@ class TestEtablissement:
                          config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"),
                          config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"), 0)
         old_cohort_id = db.get_cohort_id_from_name(etab_context.id_context_categorie,
-                                                   config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"))
+           config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"))
 
         #Inscription d'un utilisateur dans cette cohorte
         db.enroll_user_in_cohort(old_cohort_id, db.get_user_id("f1700ivg"), 0)
@@ -800,7 +801,8 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': config.constantes.cohortname_pattern_eleves_niv_formation.replace("%", "TERMINALE GENERALE & TECHNO YC BT")
+                            'cohortname': config.constantes.cohortname_pattern_eleves_niv_formation\
+                                          .replace("%", "TERMINALE GENERALE & TECHNO YC BT")
                         })
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700ivg' not in results
@@ -829,7 +831,8 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': config.constantes.cohortname_pattern_enseignants_etablissement.replace("%", "(0290009C)")
+                            'cohortname': config.constantes.cohortname_pattern_enseignants_etablissement\
+                                          .replace("%", "(0290009C)")
                         })
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700jym' not in results
@@ -843,7 +846,8 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%", "TERMINALE GENERALE & TECHNO YC BT")
+                            'cohortname': config.constantes.cohortname_pattern_enseignants_niv_formation
+                                          .replace("%", "TERMINALE GENERALE & TECHNO YC BT")
                         })
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700jym' not in results
