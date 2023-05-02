@@ -37,7 +37,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Goober.Gromley@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: lola.buet2712@gmail.com
+ENTPersonAutresMails: Goober.Gromley@chercan.fr
 
 # F1700790, people, esco-centre.fr
 dn: uid=F1700790,ou=people,dc=esco-centre,dc=fr
@@ -78,7 +78,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Maighdiln.Beare@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: lalamnt18@gmail.com
+ENTPersonAutresMails: Maighdiln.Beare@chercan.fr
 
 # F17009rp, people, esco-centre.fr
 dn: uid=F17009rp,ou=people,dc=esco-centre,dc=fr
@@ -119,7 +119,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Antonia.Betho@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: baptistejosserand@gmail.com
+ENTPersonAutresMails: Antonia.Betho@chercan.fr
 
 # F172002o, people, esco-centre.fr
 dn: uid=F172002o,ou=people,dc=esco-centre,dc=fr
@@ -200,7 +200,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Johnath.Reilingen@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: bouchaib.carl84@gmail.com
+ENTPersonAutresMails: Johnath.Reilingen@chercan.fr
 
 # F18003lf, people, esco-centre.fr
 dn: uid=F18003lf,ou=people,dc=esco-centre,dc=fr
@@ -241,7 +241,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Bee.Coultar@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: mathis.loupot@gmail.com
+ENTPersonAutresMails: Bee.Coultar@chercan.fr
 
 # F180068g, people, esco-centre.fr
 dn: uid=F180068g,ou=people,dc=esco-centre,dc=fr
@@ -282,7 +282,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Torin.Robertot@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: mantzo2003@icloud.com
+ENTPersonAutresMails: Torin.Robertot@chercan.fr
 
 # F180068i, people, esco-centre.fr
 dn: uid=F180068i,ou=people,dc=esco-centre,dc=fr
@@ -323,7 +323,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Kimmy.Jonk@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: moulianathan@gmail.com
+ENTPersonAutresMails: Kimmy.Jonk@chercan.fr
 
 # F18006ao, people, esco-centre.fr
 dn: uid=F18006ao,ou=people,dc=esco-centre,dc=fr
@@ -364,7 +364,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Jewell.Kennler@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: camille.caullier@orange.fr
+ENTPersonAutresMails: Jewell.Kennler@chercan.fr
 
 # F18006b6, people, esco-centre.fr
 dn: uid=F18006b6,ou=people,dc=esco-centre,dc=fr
@@ -405,7 +405,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Karol.Bautiste@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: pir.le.rx@gmail.com
+ENTPersonAutresMails: Karol.Bautiste@chercan.fr
 
 # F18007fv, people, esco-centre.fr
 dn: uid=F18007fv,ou=people,dc=esco-centre,dc=fr
@@ -446,7 +446,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Tyrus.Stirman@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: guillemotmaelle@gmail.com
+ENTPersonAutresMails: Tyrus.Stirman@chercan.fr
 
 # F18007x6, people, esco-centre.fr
 dn: uid=F18007x6,ou=people,dc=esco-centre,dc=fr
@@ -487,7 +487,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 2EME ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Paige.Greger@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: alix.velluet@gmail.com
+ENTPersonAutresMails: Paige.Greger@chercan.fr
 
 # F18400i3, people, esco-centre.fr
 dn: uid=F18400i3,ou=people,dc=esco-centre,dc=fr
@@ -528,7 +528,7 @@ ENTEleveFiliere: SECONDE GENERALE
 ESCODomaines: lycees.netocentre.fr
 mail: Haydon.Dalgardno@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: anais45g@gmail.com
+ENTPersonAutresMails: Haydon.Dalgardno@chercan.fr
 
 # F1840104, people, esco-centre.fr
 dn: uid=F1840104,ou=people,dc=esco-centre,dc=fr
@@ -569,7 +569,7 @@ ENTEleveFiliere: SECONDE GENERALE
 ESCODomaines: lycees.netocentre.fr
 mail: Maddalena.Endecott@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: valentin.roulleau@orange.fr
+ENTPersonAutresMails: Maddalena.Endecott@chercan.fr
 
 # F190010t, people, esco-centre.fr
 dn: uid=F190010t,ou=people,dc=esco-centre,dc=fr
@@ -610,7 +610,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Tammi.Pessel@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: sara.diass6395@gmail.com
+ENTPersonAutresMails: Tammi.Pessel@chercan.fr
 
 # F1900138, people, esco-centre.fr
 dn: uid=F1900138,ou=people,dc=esco-centre,dc=fr
@@ -651,7 +651,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Randolf.Dyne@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: cha.lucas45@gmail.com
+ENTPersonAutresMails: Randolf.Dyne@chercan.fr
 
 # F19003uv, people, esco-centre.fr
 dn: uid=F19003uv,ou=people,dc=esco-centre,dc=fr
@@ -692,7 +692,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Dona.Jirka@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: leonie.dagaud@gmail.com
+ENTPersonAutresMails: Dona.Jirka@chercan.fr
 
 # F19005g9, people, esco-centre.fr
 dn: uid=F19005g9,ou=people,dc=esco-centre,dc=fr
@@ -733,7 +733,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Mariele.Mooreed@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: alexia.isaffo@free.fr
+ENTPersonAutresMails: Mariele.Mooreed@chercan.fr
 
 # F19005h8, people, esco-centre.fr
 dn: uid=F19005h8,ou=people,dc=esco-centre,dc=fr
@@ -774,7 +774,7 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Jsandye.Macveigh@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: ilyesjamal23@outlook.fr
+ENTPersonAutresMails: Jsandye.Macveigh@chercan.fr
 
 # F19005om, people, esco-centre.fr
 dn: uid=F19005om,ou=people,dc=esco-centre,dc=fr
@@ -815,4 +815,4 @@ ENTEleveFiliere: CLASSE PREPA.GRDES ECOLES : 1ERE ANNEE
 ESCODomaines: lycees.netocentre.fr
 mail: Raimund.Calrow@chercan.fr
 ESCOUAI: 0180005H
-ENTPersonAutresMails: esteban.clemente333@gmail.com
+ENTPersonAutresMails: Raimund.Calrow@chercan.fr
