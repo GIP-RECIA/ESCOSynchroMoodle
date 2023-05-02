@@ -619,7 +619,7 @@ class Synchronizer:
                     for id_cohort_niv_formation in ids_niv_formation_cohorts:
                         self.__db.enroll_user_in_cohort(id_cohort_niv_formation, id_user, self.context.timestamp_now_sql)
 
-        if set(enseignant_ldap.object_classes).intersection(["ENTAuxEnseignant"]):
+        if "ENTAuxEnseignant" in enseignant_ldap.object_classes:
             log.info("Inscription de l'enseignant %s dans la cohorte d'enseignants de l'établissement", enseignant_ldap)
             id_prof_etabs_cohort = self.get_or_create_profs_etab_cohort(etablissement_context, log)
 
@@ -628,7 +628,7 @@ class Synchronizer:
 
         # Inscription dans les cohortes de la dane
         # Enseignants
-        if set(enseignant_ldap.profils).intersection(['National_ENS']):
+        if 'National_ENS' in enseignant_ldap.profils:
             if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
                 log.info("Inscription de l'enseignant %s dans la cohorte collège %s de la dane",
                          enseignant_ldap, etablissement_context.departement)
@@ -640,8 +640,9 @@ class Synchronizer:
                 self.__db.enroll_user_in_cohort(
                     self.ids_cohorts_dane_lycee_en[UserType.ENSEIGNANT],
                     id_user, self.context.timestamp_now_sql)
+                    
         # Personnel de direction
-        if set(enseignant_ldap.profils).intersection(['National_DIR']):
+        if 'National_DIR' in enseignant_ldap.profils:
             if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
                 log.info("Inscription du personnel de direction %s dans la cohorte collège %s de la dane",
                          enseignant_ldap, etablissement_context.departement)
