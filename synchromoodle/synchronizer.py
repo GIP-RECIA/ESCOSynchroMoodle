@@ -397,9 +397,13 @@ class Synchronizer:
         if eleve_classes_for_etab:
             log.info("Inscription de l'élève %s "
                      "dans les cohortes de classes %s", eleve_ldap, eleve_classes_for_etab)
+            name_pattern = self.__config.constantes.cohortname_pattern_eleves_classe.replace("%","%s")
+            desc_pattern = self.__config.constantes.cohortname_pattern_eleves_classe.replace("%","%s")
             ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
                                                                      eleve_classes_for_etab,
                                                                      self.context.timestamp_now_sql,
+                                                                     name_pattern,
+                                                                     desc_pattern,
                                                                      log=log)
             for ids_classe_cohorts in ids_classes_cohorts:
                 self.__db.enroll_user_in_cohort(ids_classe_cohorts, eleve_id, self.context.timestamp_now_sql)
@@ -937,12 +941,6 @@ class Synchronizer:
         :param log: Le logger
         :return: La liste des ids des cohortes créees ou récupérées
         """
-
-        if name_pattern is None:
-            name_pattern = self.__config.constantes.cohortname_pattern_eleves_classe.replace("%","%s")
-        if desc_pattern is None:
-            desc_pattern = self.__config.constantes.cohortname_pattern_eleves_classe.replace("%","%s")
-
         ids_cohorts = []
         for class_name in classes_names:
             cohort_name = name_pattern % class_name
