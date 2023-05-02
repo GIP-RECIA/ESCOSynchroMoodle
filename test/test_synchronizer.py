@@ -238,7 +238,7 @@ class TestEtablissement:
         #Vérification des inscriptions dans les cohortes
         #Cohorte de la classe de l'élève
         for classe in eleve.classes:
-            cohort_name = f"Élèves de la Classe {classe.classe}"
+            cohort_name = config.constantes.cohortname_pattern_eleves_classe.replace("%", classe.classe)
             db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
@@ -257,7 +257,7 @@ class TestEtablissement:
             assert result_cohort_enrollment[2] == eleve_id #On vérifie que l'élève est bien inscrit dedans
 
         #Cohorte du niveau de formation de l'élève
-        cohort_name = f"Élèves du niveau de formation {eleve.niveau_formation}"
+        cohort_name = config.constantes.cohortname_pattern_eleves_niv_formation.replace("%", eleve.niveau_formation)
         db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                         params={
                             'name': cohort_name
@@ -383,7 +383,7 @@ class TestEtablissement:
         #On vérifie aussi ses inscriptions dans les cohortes
         #Cohorte de la classe des enseignants
         for classe in enseignant.classes:
-            cohort_name = f"Profs de la Classe {classe.classe}"
+            cohort_name = config.constantes.cohortname_pattern_enseignants_classe.replace("%", classe.classe)
             db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
@@ -403,7 +403,7 @@ class TestEtablissement:
 
         #Cohorte de profs de l'établissement
         for enseignant_uai in enseignant.uais:
-            cohort_name = f'Profs de l\'établissement ({enseignant_uai})'
+            cohort_name = config.constantes.cohortname_pattern_enseignants_etablissement.replace("%", f"({enseignant_uai})")
             db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
@@ -429,7 +429,7 @@ class TestEtablissement:
                 niveaux_formation.add(etab_context.classe_to_niv_formation[classe.classe])
 
         for niv_formation in niveaux_formation:
-            cohort_name = f'Profs du niveau de formation {niv_formation}'
+            cohort_name = config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%", niv_formation)
             db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
                             params={
                                 'name': cohort_name
@@ -687,33 +687,41 @@ class TestEtablissement:
             synchronizer.handle_enseignant(etab_context, enseignant)
 
         #Cration d'une fausse cohorte qui n'est associée à rien dans le ldap
-        db.create_cohort(etab_context.id_context_categorie, "Élèves de la Classe 0EME S2",
-                         "Élèves de la Classe 0EME S2", "Élèves de la Classe 0EME S2", 0)
-        old_cohort_id = db.get_cohort_id_from_name(etab_context.id_context_categorie, "Élèves de la Classe 0EME S2")
+        db.create_cohort(etab_context.id_context_categorie,
+                         config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"),
+                         config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"),
+                         config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"), 0)
+        old_cohort_id = db.get_cohort_id_from_name(etab_context.id_context_categorie,
+                                                   config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"))
 
         #Inscription d'un utilisateur dans cette cohorte
         db.enroll_user_in_cohort(old_cohort_id, db.get_user_id("f1700ivg"), 0)
 
         #Récupération des cohortes dans le ldap et des cohortes crées dans moodle
         eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
-            get_users_by_cohorts_comparators_eleves_classes(etab_context, r'(Élèves de la Classe )(.*)$',
-                                             'Élèves de la Classe %')
+            get_users_by_cohorts_comparators_eleves_classes(etab_context,
+                                                            config.constantes.cohortname_pattern_re_eleves_classe,
+                                                            config.constantes.cohortname_pattern_eleves_classe)
 
         eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
-            get_users_by_cohorts_comparators_eleves_niveau(etab_context, r'(Élèves du Niveau de formation )(.*)$',
-                                             'Élèves du Niveau de formation %')
+            get_users_by_cohorts_comparators_eleves_niveau(etab_context,
+                                                           config.constantes.cohortname_pattern_re_eleves_niv_formation,
+                                                           config.constantes.cohortname_pattern_eleves_niv_formation)
 
         profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
-            get_users_by_cohorts_comparators_profs_classes(etab_context, r'(Profs de la Classe )(.*)$',
-                                             'Profs de la Classe %')
+            get_users_by_cohorts_comparators_profs_classes(etab_context,
+                                                           config.constantes.cohortname_pattern_re_enseignants_classe,
+                                                           config.constantes.cohortname_pattern_enseignants_classe)
 
         profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
-            get_users_by_cohorts_comparators_profs_etab(etab_context, r"(Profs de l'établissement )(.*)$",
-                                             "Profs de l'établissement %")
+            get_users_by_cohorts_comparators_profs_etab(etab_context,
+                                                        config.constantes.cohortname_pattern_re_enseignants_etablissement,
+                                                        config.constantes.cohortname_pattern_enseignants_etablissement)
 
         profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
-            get_users_by_cohorts_comparators_profs_niveau(etab_context, r"(Profs du niveau de formation )(.*)$",
-                                             "Profs du niveau de formation %")
+            get_users_by_cohorts_comparators_profs_niveau(etab_context,
+                                                          config.constantes.cohortname_pattern_re_enseignants_niv_formation,
+                                                          config.constantes.cohortname_pattern_enseignants_niv_formation)
 
         #Suppression manuelle de certaines cohortes d'utilisateurs spécifiques dans le ldap
         #Eleves par classe
@@ -738,15 +746,15 @@ class TestEtablissement:
 
         #Purge des cohortes
         synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
-                                   "Élèves de la Classe %s")
+                                   config.constantes.cohortname_pattern_eleves_classe.replace("%","%s"))
         synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
-                                   'Élèves du Niveau de formation %s')
+                                   config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","%s"))
         synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
-                                   'Profs de la Classe %s')
+                                   config.constantes.cohortname_pattern_enseignants_classe.replace("%","%s"))
         synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
-                                   "Profs de l'établissement %s")
+                                   config.constantes.cohortname_pattern_enseignants_etablissement.replace("%","%s"))
         synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
-                                   "Profs du niveau de formation %s")
+                                   config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s"))
 
         #Suppression des cohortes vides
         synchronizer.delete_empty_cohorts()
@@ -755,12 +763,12 @@ class TestEtablissement:
         cohorts_to_delete_ids = []
         db.mark.execute(f"SELECT id FROM {db.entete}cohort WHERE name = %(cohortname)s",
                         params={
-                            'cohortname': "Élèves de la Classe TES3"
+                            'cohortname': config.constantes.cohortname_pattern_eleves_classe.replace("%", "TES3")
                         })
         cohorts_to_delete_ids.append(db.mark.fetchone()[0])
         db.mark.execute(f"SELECT id FROM {db.entete}cohort WHERE name = %(cohortname)s",
                         params={
-                            'cohortname': "Élèves de la Classe 1ERE S2"
+                            'cohortname': config.constantes.cohortname_pattern_eleves_classe.replace("%", "1ERE S2")
                         })
         cohorts_to_delete_ids.append(db.mark.fetchone()[0])
         cohorts_to_delete_ids.append(old_cohort_id)
@@ -776,7 +784,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Élèves de la Classe TS2"
+                            'cohortname': config.constantes.cohortname_pattern_eleves_classe.replace("%", "TS2")
                         })
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700ivg' not in results
@@ -792,7 +800,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Élèves du Niveau de formation TERMINALE GENERALE & TECHNO YC BT"
+                            'cohortname': config.constantes.cohortname_pattern_eleves_niv_formation.replace("%", "TERMINALE GENERALE & TECHNO YC BT")
                         })
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700ivg' not in results
@@ -807,7 +815,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Profs de la Classe TES1"
+                            'cohortname': config.constantes.cohortname_pattern_enseignants_classe.replace("%", "TES1")
                         })
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700jym' not in results
@@ -821,7 +829,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Profs de l'établissement (0290009C)"
+                            'cohortname': config.constantes.cohortname_pattern_enseignants_etablissement.replace("%", "(0290009C)")
                         })
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700jym' not in results
@@ -835,7 +843,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Profs du niveau de formation TERMINALE GENERALE & TECHNO YC BT"
+                            'cohortname': config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%", "TERMINALE GENERALE & TECHNO YC BT")
                         })
         results = [result[0] for result in db.mark.fetchall()]
         assert 'f1700jym' not in results

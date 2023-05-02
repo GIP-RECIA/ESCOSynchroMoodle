@@ -221,23 +221,28 @@ def nettoyage(config: Config, action: ActionConfig):
 
                 eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
                     get_users_by_cohorts_comparators_eleves_classes(etablissement_context,
-                     r'(Élèves de la Classe )(.*)$', 'Élèves de la Classe %')
+                                                                    config.constantes.cohortname_pattern_re_eleves_classe,
+                                                                    config.constantes.cohortname_pattern_eleves_classe)
 
                 eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
                     get_users_by_cohorts_comparators_eleves_niveau(etablissement_context,
-                     r'(Élèves du Niveau de formation )(.*)$', 'Élèves du Niveau de formation %')
+                                                                   config.constantes.cohortname_pattern_re_eleves_niv_formation,
+                                                                   config.constantes.cohortname_pattern_eleves_niv_formation)
 
                 profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
                     get_users_by_cohorts_comparators_profs_classes(etablissement_context,
-                     r'(Profs de la Classe )(.*)$', 'Profs de la Classe %')
+                                                                   config.constantes.cohortname_pattern_re_enseignants_classe,
+                                                                   config.constantes.cohortname_pattern_enseignants_classe)
 
                 profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
                     get_users_by_cohorts_comparators_profs_etab(etablissement_context,
-                     r"(Profs de l'établissement )(.*)$", "Profs de l'établissement %")
+                                                                config.constantes.cohortname_pattern_re_enseignants_etablissement,
+                                                                config.constantes.cohortname_pattern_enseignants_etablissement)
 
                 profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
                     get_users_by_cohorts_comparators_profs_niveau(etablissement_context,
-                     r"(Profs du niveau de formation )(.*)$", "Profs du niveau de formation %")
+                                                                  config.constantes.cohortname_pattern_re_enseignants_niv_formation,
+                                                                  config.constantes.cohortname_pattern_enseignants_niv_formation)
 
                 if etablissement_context.college and departement in config.constantes.departements:
                     cohorts_elv_dep_clg_ldap[departement].extend(ldap.search_eleve_uid(uai=uai))
@@ -255,23 +260,23 @@ def nettoyage(config: Config, action: ActionConfig):
                 #Sert à purger les élèves qui ne sont plus présents dans l'annuaire LDAP des cohortes
                 etablissement_log.info("Purge des cohortes Elèves de la Classe")
                 synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
-                                           "Élèves de la Classe %s")
+                                          config.constantes.cohortname_pattern_eleves_classe+"s")
 
                 etablissement_log.info("Purge des cohortes Elèves du Niveau de formation")
                 synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
-                                           'Élèves du Niveau de formation %s')
+                                           config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","%s"))
 
                 etablissement_log.info("Purge des cohortes Profs de la Classe")
                 synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
-                                           'Profs de la Classe %s')
+                                           config.constantes.cohortname_pattern_enseignants_classe.replace("%","%s"))
 
                 etablissement_log.info("Purge des cohortes Profs de l'établissement")
                 synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
-                                           "Profs de l'établissement %s")
+                                           config.constantes.cohortname_pattern_enseignants_etablissement.replace("%","%s"))
 
                 etablissement_log.info("Purge des cohortes Profs du niveau de formation")
                 synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
-                                           "Profs du niveau de formation %s")
+                                           config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s"))
 
                 # On commit pour chaque étab afin de libérer rapidement le lock
                 db.connection.commit()

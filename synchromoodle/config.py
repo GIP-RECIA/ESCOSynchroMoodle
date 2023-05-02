@@ -177,6 +177,36 @@ class ConstantesConfig(_BaseConfig):
         self.departements = ['18', '28', '36', '37', '41', '45']  # type: list[int]
         """Liste des départements pour les cohortes de la dane"""
 
+        self.cohortname_pattern_eleves_classe = "Élèves de la Classe %" #type: str
+        """Pattern à appliquer pour le nom des cohortes de classes d'élèves"""
+
+        self.cohortname_pattern_eleves_niv_formation = "Élèves du Niveau de formation %" #type: str
+        """Pattern à appliquer pour le nom des cohortes de niveau de formation d'élèves"""
+
+        self.cohortname_pattern_enseignants_classe = "Profs de la Classe %" #type: str
+        """Pattern à appliquer pour le nom des cohortes de classes d'enseignants"""
+
+        self.cohortname_pattern_enseignants_niv_formation = "Profs du niveau de formation %" #type: str
+        """Pattern à appliquer pour le nom des cohortes de niveau de formation d'enseignants"""
+
+        self.cohortname_pattern_enseignants_etablissement = "Profs de l'établissement %" #type: str
+        """Pattern à appliquer pour le nom des cohortes d'établissements d'enseignants"""
+
+        self.cohortname_pattern_re_eleves_classe = r'(Élèves de la Classe )(.*)$' #type: str
+        """Regex à appliquer pour le nom des cohortes de classes d'élèves"""
+
+        self.cohortname_pattern_re_eleves_niv_formation = r'(Élèves du Niveau de formation )(.*)$' #type: str
+        """Regex à appliquer pour le nom des cohortes de niveau de formation d'élèves"""
+
+        self.cohortname_pattern_re_enseignants_classe = r'(Profs de la Classe )(.*)$' #type: str
+        """Regex à appliquer pour le nom des cohortes de classes d'enseignants"""
+
+        self.cohortname_pattern_re_enseignants_niv_formation = r"(Profs du niveau de formation )(.*)$" #type: str
+        """Regex à appliquer pour le nom des cohortes de niveau de formation d'enseignants"""
+
+        self.cohortname_pattern_re_enseignants_etablissement = r"(Profs de l'établissement )(.*)$" #type: str
+        """Regex à appliquer pour le nom des cohortes d'établissements d'enseignants"""
+
 
         super().__init__(**entries)
 

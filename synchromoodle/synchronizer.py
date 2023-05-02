@@ -568,8 +568,8 @@ class Synchronizer:
             if enseignant_classes_for_etab:
                 log.info("Inscription de l'enseignant %s dans les cohortes de classes %s",
                          enseignant_ldap, enseignant_classes_for_etab)
-                name_pattern = "Profs de la Classe %s"
-                desc_pattern = "Profs de la Classe %s"
+                name_pattern = self.__config.constantes.cohortname_pattern_enseignants_classe.replace("%","%s")
+                desc_pattern = self.__config.constantes.cohortname_pattern_enseignants_classe.replace("%","%s")
                 #Création des cohortes de classes
                 ids_classes_cohorts = self.get_or_create_classes_cohorts(etablissement_context.id_context_categorie,
                                                                          enseignant_classes_for_etab,
@@ -598,8 +598,8 @@ class Synchronizer:
                 log.info("Inscription de l'enseignant %s dans les cohortes de niveau de formation %s",
                          enseignant_ldap, enseignant_niv_formation)
 
-                name_pattern = "Profs du niveau de formation %s"
-                desc_pattern = "Profs du niveau de formation %s"
+                name_pattern = self.__config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s")
+                desc_pattern = self.__config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s")
                 #Création des cohortes de niveau de formation
                 ids_niv_formation_cohorts = self.get_or_create_niv_formation_cohorts(etablissement_context.id_context_categorie,
                                                                                      enseignant_niv_formation,
@@ -905,7 +905,7 @@ class Synchronizer:
     def get_or_create_formation_cohort(self, id_context_etab: int, niveau_formation: str,
                                        timestamp_now_sql: int, log=getLogger()) -> int:
         """
-        Charge ou créer une cohorte de formation.
+        Charge ou créer une cohorte de formation d'élèves.
 
         :param etab_context: Le contexte de l'établissement
         :param niveau_formation: Le niveau de formation
@@ -913,8 +913,8 @@ class Synchronizer:
         :param log: Le logger
         :return:
         """
-        cohort_name = f'Élèves du Niveau de formation {niveau_formation}'
-        cohort_description = f'Eleves avec le niveau de formation {niveau_formation}'
+        cohort_name = self.__config.constantes.cohortname_pattern_eleves_niv_formation.replace("%",niveau_formation)
+        cohort_description = self.__config.constantes.cohortname_pattern_eleves_niv_formation.replace("%",niveau_formation)
         id_cohort = self.get_or_create_cohort(id_context_etab, cohort_name, cohort_name, cohort_description,
                                               timestamp_now_sql, log)
         return id_cohort
@@ -922,7 +922,7 @@ class Synchronizer:
     def get_or_create_classes_cohorts(self, id_context_etab, classes_names, time_created, name_pattern=None,
                                       desc_pattern=None, log=getLogger()) -> list[int]:
         """
-        Charge ou crée des cohortes a partir de classes liées a un établissement..
+        Charge ou crée des cohortes a partir de classes liées a un établissement.
 
         :param id_context_etab: Le contexte de l'établissement dans lequel on crée les cohortes
         :param classes_names: Les différentes classes dont on veut créer les cohortes
@@ -934,9 +934,9 @@ class Synchronizer:
         """
 
         if name_pattern is None:
-            name_pattern = "Élèves de la Classe %s"
+            name_pattern = self.__config.constantes.cohortname_pattern_eleves_classe.replace("%","%s")
         if desc_pattern is None:
-            desc_pattern = "Élèves de la Classe %s"
+            desc_pattern = self.__config.constantes.cohortname_pattern_eleves_classe.replace("%","%s")
 
         ids_cohorts = []
         for class_name in classes_names:
@@ -986,8 +986,8 @@ class Synchronizer:
         :param log: Le logger
         :return: L'id de la cohorte d'enseignants de l'établissement
         """
-        cohort_name = f'Profs de l\'établissement ({etab_context.uai})'
-        cohort_description = f'Enseignants de l\'établissement {etab_context.uai}'
+        cohort_name = self.__config.constantes.cohortname_pattern_enseignants_etablissement.replace("%",f"({etab_context.uai})")
+        cohort_description = self.__config.constantes.cohortname_pattern_enseignants_etablissement.replace("%",f"({etab_context.uai})")
         id_cohort_enseignants = self.get_or_create_cohort(etab_context.id_context_categorie,
                                                           cohort_name,
                                                           cohort_name,
