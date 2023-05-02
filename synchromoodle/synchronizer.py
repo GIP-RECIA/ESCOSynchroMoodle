@@ -330,22 +330,21 @@ class Synchronizer:
 
 
     def construct_classe_to_niv_formation(self, etablissement_context: EtablissementContext,
-                                          list_eleve_ldap: list[EleveLdap]):
+                                          list_eleve_ldap: list[tuple]):
         """
         Associe au contexte de l'établissement un dictionnaire associant une classe à
         un niveau de formation. Utilisé pour pouvoir récupérer le niveau de formation
         d'un enseignant comme il n'est pas présent directement dans le ldap.
 
         :param etablissement_context: Le contexte de l'établissement dans lequel on construit le dictionnaire
-        :param: La liste des élèves dont on va se servir pour construire le dictionnaire
+        :param list_eleve_ldap : Une liste de tuples (classe, niveau) d'élèves
         """
         for eleve_ldap in list_eleve_ldap:
             eleve_classes_for_etab = []
-            for classe in eleve_ldap.classes:
-                if classe.etab_dn == etablissement_context.structure_ldap.dn:
-                    eleve_classes_for_etab.append(classe.classe)
+            if eleve_ldap[0].etab_dn == etablissement_context.structure_ldap.dn:
+                eleve_classes_for_etab.append(eleve_ldap[0].classe)
             for classe in eleve_classes_for_etab:
-                etablissement_context.classe_to_niv_formation[classe] = eleve_ldap.niveau_formation
+                etablissement_context.classe_to_niv_formation[classe] = eleve_ldap[1]
 
 
     def handle_eleve(self, etablissement_context: EtablissementContext, eleve_ldap: EleveLdap, log=getLogger()):
@@ -1144,7 +1143,8 @@ class Synchronizer:
         """
 
         #Construit le dictionnaire pour avoir l'association classe -> niveau de formation
-        self.construct_classe_to_niv_formation(etab_context, self.__ldap.search_eleve(None, etab_context.uai))
+        self.construct_classe_to_niv_formation(etab_context,
+                                               self.__ldap.search_eleve_classe_and_niveau(etab_context.uai))
 
         #Récupère les cohortes coté moodle
         levels_cohorts = self.__db.get_user_filtered_cohorts(etab_context.id_context_categorie, cohortname_pattern)

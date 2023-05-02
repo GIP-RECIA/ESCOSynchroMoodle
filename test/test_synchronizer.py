@@ -310,14 +310,14 @@ class TestEtablissement:
 
         #Synchronisation de l'établissement et des élèves du lycée et de l'enseignant dans ce contexte
         etab_context = synchronizer.handle_etablissement(structure_lyc.uai)
-        synchronizer.construct_classe_to_niv_formation(etab_context, eleves)
+        synchronizer.construct_classe_to_niv_formation(etab_context, ldap.search_eleve_classe_and_niveau(structure_lyc.uai))
         synchronizer.handle_enseignant(etab_context, enseignant)
 
         #Synchronisation aussi du contexte du collège
         structure_clg = ldap.get_structure("0291595B")
         etab_context_clg = synchronizer.handle_etablissement(structure_clg.uai)
         eleves_clg = ldap.search_eleve(None, "0291595B")
-        synchronizer.construct_classe_to_niv_formation(etab_context_clg, eleves_clg)
+        synchronizer.construct_classe_to_niv_formation(etab_context_clg, ldap.search_eleve_classe_and_niveau(structure_clg.uai))
 
         #On va inscrire aussi l'enseignant dans les cohortes du niveau de formation correspondant au collège
         synchronizer.handle_enseignant(etab_context_clg, enseignant)
@@ -680,7 +680,7 @@ class TestEtablissement:
             synchronizer.handle_eleve(etab_context, eleve)
 
         #Construction du dictionnaire d'association classe -> niveau formation
-        synchronizer.construct_classe_to_niv_formation(etab_context, eleves)
+        synchronizer.construct_classe_to_niv_formation(etab_context, ldap.search_eleve_classe_and_niveau("0290009C"))
 
         #Synchronisation des enseignants de cet établissement
         enseignants = ldap.search_enseignant(None, "0290009C", tous=True)
@@ -910,7 +910,7 @@ class TestEtablissement:
             synchronizer.handle_eleve(etab_context, eleve)
 
         #Construction du dictionnaire d'association classe -> niveau formation
-        synchronizer.construct_classe_to_niv_formation(etab_context, eleves)
+        synchronizer.construct_classe_to_niv_formation(etab_context, ldap.search_eleve_classe_and_niveau(uai))
 
         #Synchronisation des enseignants de cet établissement
         enseignants = ldap.search_enseignant(None, uai, tous=True)
@@ -1055,7 +1055,7 @@ class TestEtablissement:
             synchronizer.handle_eleve(etab_context, eleve)
 
         #Construction du dictionnaire d'association classe -> niveau formation
-        synchronizer.construct_classe_to_niv_formation(etab_context, eleves)
+        synchronizer.construct_classe_to_niv_formation(etab_context, ldap.search_eleve_classe_and_niveau(uai))
 
         #Synchronisation des enseignants de cet établissement
         enseignants = ldap.search_enseignant(None, uai, tous=True)

@@ -260,6 +260,21 @@ class Ldap:
                                 'ESCODomaines', 'ESCOUAICourant', '+'])
         return [EleveLdap(entry) for entry in self.connection.entries]
 
+    def search_eleve_classe_and_niveau(self, uai: str = None) -> List[EleveLdap]:
+        """
+        Recherche d'étudiants, mais en retournant seulement leur classes et leur niveau de formation.
+
+        :param uai: code établissement
+        :return: Liste des étudiants correspondant
+        """
+        ldap_filter = _get_filtre_eleves(None, uai)
+        self.connection.search(self.config.personnes_dn, ldap_filter,
+                               search_scope=LEVEL, attributes=
+                               ['uid', 'ENTEleveClasses', 'ENTEleveNivFormation'])
+        return [(extraire_classes_ldap(entry.ENTEleveClasses.values)[0],
+                 entry.ENTEleveNivFormation.value)
+                for entry in self.connection.entries]
+
     def search_eleve_uid(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[str]:
         """
         Recherche d'uid d'étudiants.

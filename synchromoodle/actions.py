@@ -50,7 +50,8 @@ def default(config: Config, action: ActionConfig):
             since_timestamp = timestamp_store.get_timestamp(uai)
 
             etablissement_log.debug("Construction du dictionnaire d'association classe -> niveau formation")
-            synchronizer.construct_classe_to_niv_formation(etablissement_context, ldap.search_eleve(None, uai))
+            synchronizer.construct_classe_to_niv_formation(etablissement_context,
+                                                           ldap.search_eleve_classe_and_niveau(uai))
 
             for eleve in ldap.search_eleve(since_timestamp, uai):
                 utilisateur_log = etablissement_log.getChild(f"eleve.{eleve.uid}")
