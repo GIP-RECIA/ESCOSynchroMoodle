@@ -686,6 +686,14 @@ class TestEtablissement:
         for enseignant in enseignants:
             synchronizer.handle_enseignant(etab_context, enseignant)
 
+        #Cration d'une fausse cohorte qui n'est associée à rien dans le ldap
+        db.create_cohort(etab_context.id_context_categorie, "Élèves de la Classe 0EME S2",
+                         "Élèves de la Classe 0EME S2", "Élèves de la Classe 0EME S2", 0)
+        old_cohort_id = db.get_cohort_id_from_name(etab_context.id_context_categorie, "Élèves de la Classe 0EME S2")
+
+        #Inscription d'un utilisateur dans cette cohorte
+        db.enroll_user_in_cohort(old_cohort_id, db.get_user_id("f1700ivg"), 0)
+
         #Récupération des cohortes dans le ldap et des cohortes crées dans moodle
         eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
             get_users_by_cohorts_comparators_eleves_classes(etab_context, r'(Élèves de la Classe )(.*)$',
@@ -706,13 +714,6 @@ class TestEtablissement:
         profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
             get_users_by_cohorts_comparators_profs_niveau(etab_context, r"(Profs du niveau de formation )(.*)$",
                                              "Profs du niveau de formation %")
-
-        #Sans aucune suppression ou ajout, les cohortes dans le ldap et dans moodle doivent être les mêmes
-        assert eleves_by_cohorts_db == eleves_by_cohorts_ldap
-        assert eleves_lvformation_by_cohorts_db == eleves_lvformation_by_cohorts_ldap
-        assert profs_classe_by_cohorts_db == profs_classe_by_cohorts_ldap
-        assert profs_etab_by_cohorts_db == profs_etab_by_cohorts_ldap
-        assert profs_niveau_by_cohorts_db == profs_niveau_by_cohorts_ldap
 
         #Suppression manuelle de certaines cohortes d'utilisateurs spécifiques dans le ldap
         #Eleves par classe
@@ -750,7 +751,7 @@ class TestEtablissement:
         #Suppression des cohortes vides
         synchronizer.delete_empty_cohorts()
 
-        #Vérification de la suppression des cohortes 1ERE S2 et TES3
+        #Vérification de la suppression des cohortes 1ERE S2 et TES3 et 0EME S2
         cohorts_to_delete_ids = []
         db.mark.execute(f"SELECT id FROM {db.entete}cohort WHERE name = %(cohortname)s",
                         params={
@@ -762,6 +763,7 @@ class TestEtablissement:
                             'cohortname': "Élèves de la Classe 1ERE S2"
                         })
         cohorts_to_delete_ids.append(db.mark.fetchone()[0])
+        cohorts_to_delete_ids.append(old_cohort_id)
         mock_delete_cohorts.assert_has_calls([call(cohorts_to_delete_ids)])
 
         #On s'assure que les utilisateurs qu'on à supprimé des cohortes dans le ldap

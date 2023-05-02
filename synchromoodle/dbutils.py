@@ -1431,7 +1431,7 @@ class Database:
 
     def get_user_filtered_cohorts(self, contextid: int, cohortname_pattern: str) -> list[Cohort]:
         """
-        Obtient les cohortes de classes d'élèves.
+        Obtient les cohortes filtrées selon le pattern passé en paramètre.
 
         :param contextid: L'id du contexte dans lequel on recherche les cohortes
         :param cohortname_pattern: Le pattern à faire correspondre pour le nom de la cohorte
@@ -1444,6 +1444,22 @@ class Database:
                               'like': cohortname_pattern
                           })
         return [Cohort(cohortid=result[0], contextid=result[1], name=result[2]) for result in self.mark.fetchall()]
+
+    def get_cohort_id_from_name(self, contextid: int, name: str) ->  int:
+        """
+        Récupère l'id d'une cohorte dans un contexte donné à partir de son nom.
+
+        :param contextid: L'id du contexte dans lequel on recherche les cohortes
+        :param name: Le nom de la cohorte
+        :return: L'id de la cohorte correspondante
+        """
+        self.mark.execute(f"SELECT id FROM {self.entete}cohort"
+                          " WHERE contextid = %(contextid)s AND name = %(name)s",
+                          params={
+                              'contextid': contextid,
+                              'name': name
+                          })
+        return self.safe_fetchone()[0]
 
     def get_cohort_members(self, cohortid: int) -> list:
         """
