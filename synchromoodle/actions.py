@@ -49,28 +49,34 @@ def default(config: Config, action: ActionConfig):
             etablissement_log.info(f'Traitement de l\'établissement (uai={uai})')
             etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log)
 
-            etablissement_log.info(f'Traitement des élèves pour l\'établissement (uai={uai})')
-            since_timestamp = timestamp_store.get_timestamp(uai)
+            #Si jamais on a trouvé l'établissement, alors on traite ses utilisateurs
+            if etablissement_context.structure_ldap:
 
-            etablissement_log.debug("Construction du dictionnaire d'association classe -> niveau formation")
-            synchronizer.construct_classe_to_niv_formation(etablissement_context,
-                                                           ldap.search_eleve_classe_and_niveau(uai))
+                etablissement_log.info(f'Traitement des élèves pour l\'établissement (uai={uai})')
+                since_timestamp = timestamp_store.get_timestamp(uai)
 
-            for eleve in ldap.search_eleve(since_timestamp, uai):
-                utilisateur_log = etablissement_log.getChild(f"eleve.{eleve.uid}")
-                utilisateur_log.info(f"Traitement de l'élève (uid={eleve.uid})")
-                synchronizer.handle_eleve(etablissement_context, eleve, log=utilisateur_log)
+                etablissement_log.debug("Construction du dictionnaire d'association classe -> niveau formation")
+                synchronizer.construct_classe_to_niv_formation(etablissement_context,
+                                                               ldap.search_eleve_classe_and_niveau(uai))
 
-            etablissement_log.info(f"Traitement du personnel enseignant pour l'établissement (uai={uai})")
-            for enseignant in ldap.search_enseignant(since_timestamp=since_timestamp, uai=uai, tous=True):
-                utilisateur_log = etablissement_log.getChild(f"enseignant.{enseignant.uid}")
-                utilisateur_log.info(f"Traitement de l'enseignant (uid={enseignant.uid})")
-                synchronizer.handle_enseignant(etablissement_context, enseignant, log=utilisateur_log)
+                for eleve in ldap.search_eleve(since_timestamp, uai):
+                    utilisateur_log = etablissement_log.getChild(f"eleve.{eleve.uid}")
+                    utilisateur_log.info(f"Traitement de l'élève (uid={eleve.uid})")
+                    synchronizer.handle_eleve(etablissement_context, eleve, log=utilisateur_log)
 
-            db.connection.commit()
+                etablissement_log.info(f"Traitement du personnel enseignant pour l'établissement (uai={uai})")
+                for enseignant in ldap.search_enseignant(since_timestamp=since_timestamp, uai=uai, tous=True):
+                    utilisateur_log = etablissement_log.getChild(f"enseignant.{enseignant.uid}")
+                    utilisateur_log.info(f"Traitement de l'enseignant (uid={enseignant.uid})")
+                    synchronizer.handle_enseignant(etablissement_context, enseignant, log=utilisateur_log)
 
-            timestamp_store.mark(uai)
-            timestamp_store.write()
+                db.connection.commit()
+
+                timestamp_store.mark(uai)
+                timestamp_store.write()
+
+            else:
+                etablissement_log.warning(f"L'établissement {uai} n'a pas été trouvé dans l'annuaire.")
 
         log.info("Fin du traitement des établissements")
     finally:
@@ -223,66 +229,71 @@ def nettoyage(config: Config, action: ActionConfig):
 
                 etablissement_log.info(f"Nettoyage de l'établissement (uai={uai})")
                 etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
-                departement = etablissement_context.departement
 
-                eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_eleves_classes(etablissement_context,
-                                                                    config.constantes.cohortname_pattern_re_eleves_classe,
-                                                                    config.constantes.cohortname_pattern_eleves_classe)
+                if etablissement_context.structure_ldap:
+                    departement = etablissement_context.departement
 
-                eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_eleves_niveau(etablissement_context,
-                                                                   config.constantes.cohortname_pattern_re_eleves_niv_formation,
-                                                                   config.constantes.cohortname_pattern_eleves_niv_formation)
+                    eleves_by_cohorts_db, eleves_by_cohorts_ldap = synchronizer.\
+                        get_users_by_cohorts_comparators_eleves_classes(etablissement_context,
+                                                                        config.constantes.cohortname_pattern_re_eleves_classe,
+                                                                        config.constantes.cohortname_pattern_eleves_classe)
 
-                profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_profs_classes(etablissement_context,
-                                                                   config.constantes.cohortname_pattern_re_enseignants_classe,
-                                                                   config.constantes.cohortname_pattern_enseignants_classe)
+                    eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
+                        get_users_by_cohorts_comparators_eleves_niveau(etablissement_context,
+                                                                       config.constantes.cohortname_pattern_re_eleves_niv_formation,
+                                                                       config.constantes.cohortname_pattern_eleves_niv_formation)
 
-                profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_profs_etab(etablissement_context,
-                                                                config.constantes.cohortname_pattern_re_enseignants_etablissement,
-                                                                config.constantes.cohortname_pattern_enseignants_etablissement)
+                    profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap = synchronizer.\
+                        get_users_by_cohorts_comparators_profs_classes(etablissement_context,
+                                                                       config.constantes.cohortname_pattern_re_enseignants_classe,
+                                                                       config.constantes.cohortname_pattern_enseignants_classe)
 
-                profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
-                    get_users_by_cohorts_comparators_profs_niveau(etablissement_context,
-                                                                  config.constantes.cohortname_pattern_re_enseignants_niv_formation,
-                                                                  config.constantes.cohortname_pattern_enseignants_niv_formation)
+                    profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap = synchronizer.\
+                        get_users_by_cohorts_comparators_profs_etab(etablissement_context,
+                                                                    config.constantes.cohortname_pattern_re_enseignants_etablissement,
+                                                                    config.constantes.cohortname_pattern_enseignants_etablissement)
 
-                if etablissement_context.college and departement in config.constantes.departements:
-                    cohorts_elv_dep_clg_ldap[departement].extend(ldap.search_eleve_uid(uai=uai))
-                    cohorts_ens_dep_clg_ldap[departement].extend(ldap.search_enseignant_profil_uid(
-                        profil="National_ENS", uai=uai, tous=False)
-                    )
-                    cohorts_dir_dep_clg_ldap[departement].extend(ldap.search_personnel_direction_uid(uai=uai))
+                    profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap = synchronizer.\
+                        get_users_by_cohorts_comparators_profs_niveau(etablissement_context,
+                                                                      config.constantes.cohortname_pattern_re_enseignants_niv_formation,
+                                                                      config.constantes.cohortname_pattern_enseignants_niv_formation)
 
-                if etablissement_context.lycee and etablissement_context.etablissement_en:
-                    cohort_elv_lycee_en_ldap.extend(ldap.search_eleve_uid(uai=uai))
-                    cohort_ens_lycee_en_ldap.extend(ldap.search_enseignant_profil_uid(profil="National_ENS",\
-                     uai=uai, tous=False))
-                    cohort_dir_lycee_en_ldap.extend(ldap.search_personnel_direction_uid(uai=uai))
+                    if etablissement_context.college and departement in config.constantes.departements:
+                        cohorts_elv_dep_clg_ldap[departement].extend(ldap.search_eleve_uid(uai=uai))
+                        cohorts_ens_dep_clg_ldap[departement].extend(ldap.search_enseignant_profil_uid(
+                            profil="National_ENS", uai=uai, tous=False)
+                        )
+                        cohorts_dir_dep_clg_ldap[departement].extend(ldap.search_personnel_direction_uid(uai=uai))
 
-                #Sert à purger les élèves qui ne sont plus présents dans l'annuaire LDAP des cohortes
-                etablissement_log.info("Purge des cohortes Elèves de la Classe")
-                synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
-                                          config.constantes.cohortname_pattern_eleves_classe+"s")
+                    if etablissement_context.lycee and etablissement_context.etablissement_en:
+                        cohort_elv_lycee_en_ldap.extend(ldap.search_eleve_uid(uai=uai))
+                        cohort_ens_lycee_en_ldap.extend(ldap.search_enseignant_profil_uid(profil="National_ENS",\
+                         uai=uai, tous=False))
+                        cohort_dir_lycee_en_ldap.extend(ldap.search_personnel_direction_uid(uai=uai))
 
-                etablissement_log.info("Purge des cohortes Elèves du Niveau de formation")
-                synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
-                                           config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","%s"))
+                    #Sert à purger les élèves qui ne sont plus présents dans l'annuaire LDAP des cohortes
+                    etablissement_log.info("Purge des cohortes Elèves de la Classe")
+                    synchronizer.purge_cohorts(eleves_by_cohorts_db, eleves_by_cohorts_ldap,
+                                              config.constantes.cohortname_pattern_eleves_classe+"s")
 
-                etablissement_log.info("Purge des cohortes Profs de la Classe")
-                synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
-                                           config.constantes.cohortname_pattern_enseignants_classe.replace("%","%s"))
+                    etablissement_log.info("Purge des cohortes Elèves du Niveau de formation")
+                    synchronizer.purge_cohorts(eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap,
+                                               config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","%s"))
 
-                etablissement_log.info("Purge des cohortes Profs de l'établissement")
-                synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
-                                           config.constantes.cohortname_pattern_enseignants_etablissement.replace("%","%s"))
+                    etablissement_log.info("Purge des cohortes Profs de la Classe")
+                    synchronizer.purge_cohorts(profs_classe_by_cohorts_db, profs_classe_by_cohorts_ldap,
+                                               config.constantes.cohortname_pattern_enseignants_classe.replace("%","%s"))
 
-                etablissement_log.info("Purge des cohortes Profs du niveau de formation")
-                synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
-                                           config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s"))
+                    etablissement_log.info("Purge des cohortes Profs de l'établissement")
+                    synchronizer.purge_cohorts(profs_etab_by_cohorts_db, profs_etab_by_cohorts_ldap,
+                                               config.constantes.cohortname_pattern_enseignants_etablissement.replace("%","%s"))
+
+                    etablissement_log.info("Purge des cohortes Profs du niveau de formation")
+                    synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
+                                               config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s"))
+
+                else:
+                    etablissement_log.warning(f"L'établissement {uai} n'a pas été trouvé dans l'annuaire.")
 
                 # On commit pour chaque étab afin de libérer rapidement le lock
                 db.connection.commit()
