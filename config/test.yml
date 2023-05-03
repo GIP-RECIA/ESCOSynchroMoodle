@@ -1,8 +1,42 @@
-delete:
-  ids_users_undeletable: [1, 2, 492066]
+database:
+  database: moodle
+  user: moodle
+  password: moodle
+  host: localhost
+  port: 33306
+  entete: mdl_
+  charset: utf8
+
+
+ldap:
+  uri: "ldap://localhost:389"
+  username: "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr"
+  password: "admin"
+  base_dn: "dc=esco-centre,dc=fr"
+  structures_rdn: "ou=structures"
+  personnes_rdn: "ou=people"
+  groups_rdn: "ou=groups"
+  admin_rdn: "ou=administrateurs"
+
+
 webservice:
-  token: '06ff10543c4488601f6f5cc7f1884f3b'
-  moodle_host: 'https://moodle.synchro-moodle.test'
+  token: "8171f8af9b393be7e4d0e984b39c4223"
+  moodle_host: "http://localhost:8080"
+  backup_cmd: docker exec -it mde_php php admin/cli/backup.php --courseid=%courseid% --destination=../../MoodleBackups
+
+
+constantes:
+  id_role_enseignant : 4
+  id_role_proprietaire_cours : 3
+  id_role_inspecteur : 10
+  id_role_directeur : 11
+  id_role_utilisateur_limite : 12
+
+
+delete:
+  purge_cohorts: True
+
+
 logging:
   formatters:
     console:
@@ -10,10 +44,11 @@ logging:
     file:
       format: '[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s'
   handlers:
-    console:
+    debug:
       class: logging.StreamHandler
       formatter: console
       stream: ext://sys.stdout
+      level: DEBUG
     file:
       class: logging.handlers.TimedRotatingFileHandler
       formatter: file
@@ -26,17 +61,147 @@ logging:
       when: midnight
       filename: 'logs/synchromoodle.error.log'
   root:
-    level: INFO
-    handlers: [console, file, file-error]
+    level: NOTSET
+    handlers: [debug, file, file-error]
+
+
 actions:
 - id: academique
   timestampStore:
     file: "trtAcademique_precedent.txt"
   etablissements:
-    liste_etab: ["0290009C", "0291595B"]
-#- id: nettoyage
-#  type: nettoyage
-#  timestampStore:
-#    file: "trtNettoyage_precedent.txt"
-#  etablissements:
-#    liste_etab: ["0290009C", "0291595B"]
+    prefix_admin_moodle_local: "(esco|clg18|clg28|clg36|clg37|clg41|clg45):admin:Moodle:local:"
+    prefix_admin_local: "(esco|clg18|clg28|clg36|clg37|clg41|clg45):admin:local:"
+    liste_etab: ['0450822X', '0410031L', '0450066C', '0451483T', '0410030K', '0370001A', '0360003H', '0370040T', '0370036N', '0451304Y', '0450051L', '0180008L', '0360011S',
+                '0280036M', '0450062Y', '0280021W', '0360024F', '0410959V', '0371417P', '0280864M', '0450042B', '0370009J', '0360002G', '0370039S', '0180006J', '0410017W',
+                '0450790P', '0451442Y', '0281047L', '0450064A', '0280925D', '0180007K', '0180042Y', '0371418R', '0360008N', '0180024D', '0180026F', '0280044W', '0360009P',
+                '0281077U', '0410832G', '0180823X', '0180777X', '0360658V', '0180036S', '0180010N', '0180005H', '0180009M', '0280009H', '0280015P', '0280022X', '0360019A',
+                '0360005K', '0371211R', '0370037P', '0370038R', '0370053G', '0370054H', '0371100V', '0410002E', '0410899E', '0410718H', '0410036S', '0451484U', '0451526P',
+                '0450750W', '0450050K', '0450782F', '0451067R', '0280659P', '0360050J', '0451104F', '0180025E', '0180035R', '0280007F', '0280019U', '0280700J', '0281021H',
+                '0360043B', '0370016S', '0370032J', '0370035M', '0370771M', '0370888P', '0371099U', '0371123V', '0410001D', '0450029M', '0450040Z', '0450043C', '0450049J',
+                '0450786K', '0451037H', '0451462V', '0410860M', '0370011L','0370000A', '0371122U', '0371159J', '0371204H', '0371316E', '0370991B', '0370041U', '0370006F',
+                '0370015R', '0370768J', '0370791J', '0370792K', '0370799T', '0370886M', '0370887N', '0370994E', '0371101W', '0371158H', '0371191U', '0371248F', '0371391L',
+                '0371397T', '0371403Z', '0371124W', '0370995F', '0370007G', '0370010K', '0371098T', '0370013N', '0371378X', '0370993D', '0370022Y', '0370034L', '0370766G',
+                '0370044X', '0370045Y', '0370769K', '0370886M', '0370884K', '0371189S', '0370024A', '0370023Z', '0370026C', '0370051E', '0370071B', '0370764E', '0370765F',
+                '0370767H', '0370793L', '0370885L', '0370033K', '0371126Y', '0371192V', '0371209N', '0371210P','0180766K', '0180721L', '0180023C', '0180593X', '0180002E',
+                '0180004G', '0180019Y', '0180020Z', '0180028h', '0180031L', '0180033N', '0180037T', '0180586P', '0180591V', '0180592W', '0180643B', '0180644C', '0180646E',
+                '0180673J', '0180710Z', '0180732Y', '0180736C', '0180745M', '0180769N', '0180777X', '0180013S', '0180000A','0360721N', '0360720M', '0360719L', '0360718K',
+                '0360690E', '0360658V', '0360573C', '0360546Y', '0360544W', '0360543V', '0360541T', '0360525A', '0360498W', '0360496U', '0360048G', '0360044C', '0360040Y',
+                '0360038W', '0360037V', '0360033R', '0360030M', '0360028K', '0360023E', '0360022D', '0360018Z', '0360016X', '0360001F', '0360000A','0410593X','0410595Z',
+                '0410631N','0410016V', '0410003F', '0410005H', '0410008L', '0410013S', '0410015U', '0410019Y', '0410024D', '0410035R', '0410566T', '0410596A', '0410632P',
+                '0410651K', '0410714D', '0410715E', '0410716F', '0410717G', '0410768M', '0410790L', '0410792N', '0410793P', '0410914W', '0410952M','0410000A','0451719Z',
+                '0451665R', '0451660K', '0451608D', '0451544J', '0451499K', '0451450G', '0451449F', '0451443Z', '0451434P', '0451421A', '0451365P', '0451286D', '0451245J',
+                '0451241E', '0451173F', '0451148D', '0451107J', '0451074Y', '0451072W', '0451070U', '0451069T', '0451068S', '0451038J', '0451035F', '0450939B', '0450937Z',
+                '0450936Y', '0450840U', '0450839T', '0450790P', '0450789N', '0450787L', '0450785J', '0450784H', '0450783G', '0450069F', '0450063Z', '0450061X', '0450055R',
+                '0450053N', '0450047G', '0450045E', '0450041A', '0450038X', '0450034T', '0450023F', '0450022E', '0450017Z', '0450016Y', '0450008P', '0450007N', '0450006M',
+                '0450005L', '0450004K', '0450003J', '0450000A', '0451787Y', '0451788Z','0281095N', '0281060A', '0281055V', '0281043G', '0281038B', '0280957N', '0280924C',
+                '0280918W', '0280903E', '0280889P', '0280887M', '0280884J', '0280883H', '0280869T', '0280867R', '0280866P', '0280865N', '0280803W', '0280756V', '0280755U',
+                '0280753S', '0280751P', '0280716B', '0280702L', '0280701K', '0280658N', '0280657M', '0280656L', '0280040S', '0280035L', '0280034K', '0280033J', '0280024Z',
+                '0280018T', '0280016R', '0280006E', '0280005D', '0280002A', '0280001Z','0280000A']
+    liste_etab_sans_mail: ["0371204H", "0371159J", "0370011L", "0370041U", "0370991B", "0371316E"]
+- id: agricole
+  timestampStore:
+    file: "trtAgricole_precedent.txt"
+  etablissements:
+    prefix_admin_moodle_local: "agri:admin:Moodle:local:"
+    prefix_admin_local: "agri:admin:local:"
+    liste_etab: ["0410018X", "0180585N", "0280706R", "0370878D", "0450094H", "0451535Z", "0450027K", "0410629L", "0370781Y",
+                "0360017Y", "0370794M", "0410626H"]
+- id: sanitaire
+  timestampStore:
+    file: "trtSanitaire_precedent.txt"
+  etablissements:
+    prefix_admin_moodle_local: "ef2s:admin:Moodle:local:"
+    prefix_admin_local: "ef2s:admin:local:"
+    liste_etab: ['0370074E']
+- id: cfa
+  timestampStore:
+    file: "trtCfa_precedent.txt"
+  etablissements:
+    prefix_admin_moodle_local: "cfa:admin:Moodle:local:"
+    prefix_admin_local: "cfa:admin:local:"
+    liste_etab: ['0180847Y', '0180924G', '0281041E', '0360766M', '0371436K', '0371587Z', '0410955R', '0411045N', '0411065K',
+                '0451463W', '0371513U', '0450807H', '0450808J', '0280738A', '0370811F', '0410590U', '0450809K']
+    etab_rgp:
+      - nom: "CFA AGRICOLE DE L'INDRE ET LOIRE"
+        uais: ['0371436K', '0371513U']
+
+- id: interetab-cfa
+  type: interetab
+  timestampStore:
+    file: "trtInteretabCfa_precedent.txt"
+  interEtablissements:
+    categorie_name: 'Catégorie Inter-CFA'
+    cohorts:
+      "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs"
+      "cfa:Inter_etablissements:Tous_Direction": "CFA : Tout le personnel de direction"
+      "cfa:Inter_etablissements:Tous_Mediateur": "CFA : Tous les mediateurs"
+      "cfa:Inter_etablissements:Tous_Documentation": "CFA : Tous les documentalistes"
+      "cfa:Inter_etablissements:Tous_Profs": "CFA : Tous les formateurs"
+      "cfa:Inter_etablissements:Tous_Responsable_Pedagogique": "CFA : Tous les responsables pedagogiques"
+      "cfa:Inter_etablissements:Tous_Referent_DIMA": "CFA : Tous les referents DIMA"
+      "cfa:Inter_etablissements:Tous_Referent_SCB": "CFA : Tous les referents savoirs et competences de base"
+      "cfa:admin:local:*": "CFA : Tous les administrateurs ENT"
+- id: interetab-all
+  type: interetab
+  timestampStore:
+    file: "trtInteretabAll_precedent.txt"
+  interEtablissements:
+    cohorts:
+      "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs"
+      "cfa:Inter_etablissements:Tous_Direction": "CFA : Tout le personnel de direction"
+      "cfa:Inter_etablissements:Tous_Mediateur": "CFA : Tous les mediateurs"
+      "cfa:Inter_etablissements:Tous_Documentation": "CFA : Tous les documentalistes"
+      "cfa:Inter_etablissements:Tous_Profs": "CFA : Tous les formateurs"
+      "cfa:Inter_etablissements:Tous_Responsable_Pedagogique": "CFA : Tous les responsables pedagogiques"
+      "cfa:Inter_etablissements:Tous_Referent_DIMA": "CFA : Tous les referents DIMA"
+      "cfa:Inter_etablissements:Tous_Referent_SCB": "CFA : Tous les referents savoirs et competences de base"
+      "cfa:admin:local:*": "CFA : Tous les administrateurs ENT"
+      "esco:Etablissements:*:Profs": "LYC : Tous les profs"
+      "esco:admin:local:*": "LYC : Tous les administrateurs ENT"
+      "esco:*:DIRECTION": "LYC : Tous les chefs d'établissement"
+      "esco:*:EDUCATION": "LYC : Tous les CPE"
+      "esco:Etablissements:*:Enseignements:PHYSIQUE-CHIMIE": "LYC : Profs de Physique-Chimie"
+      "agri:Etablissements:*:Profs": "LA : Tous les profs"
+      "agri:admin:local:*": "LA : Tous les administrateurs ENT"
+      "clg37:Etablissements:*:Profs": "CLG37 : Tous les profs"
+      "clg37:admin:local:*": "CLG37 : Tous les administrateurs ENT"
+      "clg37:*:DIRECTION": "CLG37 : Tous les chefs d'établissement"
+      "clg37:*:EDUCATION": "CLG37 : Tous les CPE"
+
+- id: inspecteurs
+  type: inspecteurs
+  timestampStore:
+    file: "trtInspecteurs_precedent.txt"
+
+- id: nettoyage
+  type: nettoyage
+  etablissements:
+    liste_etab: ['0450822X', '0410031L', '0450066C', '0451483T', '0410030K', '0370001A', '0360003H', '0370040T', '0370036N', '0451304Y', '0450051L', '0180008L', '0360011S',
+                '0280036M', '0450062Y', '0280021W', '0360024F', '0410959V', '0371417P', '0280864M', '0450042B', '0370009J', '0360002G', '0370039S', '0180006J', '0410017W',
+                '0450790P', '0451442Y', '0281047L', '0450064A', '0280925D', '0180007K', '0180042Y', '0371418R', '0360008N', '0180024D', '0180026F', '0280044W', '0360009P',
+                '0281077U', '0410832G', '0180823X', '0180777X', '0360658V', '0180036S', '0180010N', '0180005H', '0180009M', '0280009H', '0280015P', '0280022X', '0360019A',
+                '0360005K', '0371211R', '0370037P', '0370038R', '0370053G', '0370054H', '0371100V', '0410002E', '0410899E', '0410718H', '0410036S', '0451484U', '0451526P',
+                '0450750W', '0450050K', '0450782F', '0451067R', '0280659P', '0360050J', '0451104F', '0180025E', '0180035R', '0280007F', '0280019U', '0280700J', '0281021H',
+                '0360043B', '0370016S', '0370032J', '0370035M', '0370771M', '0370888P', '0371099U', '0371123V', '0410001D', '0450029M', '0450040Z', '0450043C', '0450049J',
+                '0450786K', '0451037H', '0451462V', '0410860M', '0370011L','0370000A', '0371122U', '0371159J', '0371204H', '0371316E', '0370991B', '0370041U', '0370006F',
+                '0370015R', '0370768J', '0370791J', '0370792K', '0370799T', '0370886M', '0370887N', '0370994E', '0371101W', '0371158H', '0371191U', '0371248F', '0371391L',
+                '0371397T', '0371403Z', '0371124W', '0370995F', '0370007G', '0370010K', '0371098T', '0370013N', '0371378X', '0370993D', '0370022Y', '0370034L', '0370766G',
+                '0370044X', '0370045Y', '0370769K', '0370886M', '0370884K', '0371189S', '0370024A', '0370023Z', '0370026C', '0370051E', '0370071B', '0370764E', '0370765F',
+                '0370767H', '0370793L', '0370885L', '0370033K', '0371126Y', '0371192V', '0371209N', '0371210P','0180766K', '0180721L', '0180023C', '0180593X', '0180002E',
+                '0180004G', '0180019Y', '0180020Z', '0180028h', '0180031L', '0180033N', '0180037T', '0180586P', '0180591V', '0180592W', '0180643B', '0180644C', '0180646E',
+                '0180673J', '0180710Z', '0180732Y', '0180736C', '0180745M', '0180769N', '0180777X', '0180013S', '0180000A','0360721N', '0360720M', '0360719L', '0360718K',
+                '0360690E', '0360658V', '0360573C', '0360546Y', '0360544W', '0360543V', '0360541T', '0360525A', '0360498W', '0360496U', '0360048G', '0360044C', '0360040Y',
+                '0360038W', '0360037V', '0360033R', '0360030M', '0360028K', '0360023E', '0360022D', '0360018Z', '0360016X', '0360001F', '0360000A','0410593X','0410595Z',
+                '0410631N','0410016V', '0410003F', '0410005H', '0410008L', '0410013S', '0410015U', '0410019Y', '0410024D', '0410035R', '0410566T', '0410596A', '0410632P',
+                '0410651K', '0410714D', '0410715E', '0410716F', '0410717G', '0410768M', '0410790L', '0410792N', '0410793P', '0410914W', '0410952M','0410000A','0451719Z',
+                '0451665R', '0451660K', '0451608D', '0451544J', '0451499K', '0451450G', '0451449F', '0451443Z', '0451434P', '0451421A', '0451365P', '0451286D', '0451245J',
+                '0451241E', '0451173F', '0451148D', '0451107J', '0451074Y', '0451072W', '0451070U', '0451069T', '0451068S', '0451038J', '0451035F', '0450939B', '0450937Z',
+                '0450936Y', '0450840U', '0450839T', '0450790P', '0450789N', '0450787L', '0450785J', '0450784H', '0450783G', '0450069F', '0450063Z', '0450061X', '0450055R',
+                '0450053N', '0450047G', '0450045E', '0450041A', '0450038X', '0450034T', '0450023F', '0450022E', '0450017Z', '0450016Y', '0450008P', '0450007N', '0450006M',
+                '0450005L', '0450004K', '0450003J', '0450000A', '0451787Y', '0451788Z','0281095N', '0281060A', '0281055V', '0281043G', '0281038B', '0280957N', '0280924C',
+                '0280918W', '0280903E', '0280889P', '0280887M', '0280884J', '0280883H', '0280869T', '0280867R', '0280866P', '0280865N', '0280803W', '0280756V', '0280755U',
+                '0280753S', '0280751P', '0280716B', '0280702L', '0280701K', '0280658N', '0280657M', '0280656L', '0280040S', '0280035L', '0280034K', '0280033J', '0280024Z',
+                '0280018T', '0280016R', '0280006E', '0280005D', '0280002A', '0280001Z','0280000A','0410018X', '0180585N', '0280706R', '0370878D', '0450094H', '0451535Z',
+                '0450027K', '0410629L', '0370781Y', '0360017Y', '0370794M', '0410626H', '0370074E', '0180847y', '0180924g', '0281041e', '0360766m', '0371436k', '0371587z',
+                '0410955r', '0411045n', '0411065k', '0451463w', '0371513u', '0450807h', '0450808j', '0280738a', '0370811f', '0410590u', '0450809k']
