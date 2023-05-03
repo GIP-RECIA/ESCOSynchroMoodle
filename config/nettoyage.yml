@@ -77,3 +77,5 @@ actions:
   type: nettoyage
   etablissements:
     liste_etab: ["0290009C", "0291595B", "0180005H", "0180002E"]
+  interEtablissements:
+    cohorts: {"esco:Etablissements:DE L IROISE_0290009C:Enseignements:MATHEMATIQUES": "Profs de mathématiques"}

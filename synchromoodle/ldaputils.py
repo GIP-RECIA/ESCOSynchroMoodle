@@ -245,6 +245,20 @@ class Ldap:
                                 'ENTPersonStructRattach', 'isMemberOf', '+'])
         return [PersonneLdap(entry) for entry in self.connection.entries]
 
+    def search_personne_uid(self, since_timestamp: datetime.datetime = None, **filters) -> List[str]:
+        """
+        Recherche d'uid de personnes.
+
+        :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les personnes.
+        :param filters: Filtres à appliquer
+        :return: Liste des uid des personnes
+        """
+        ldap_filter = _get_filtre_personnes(since_timestamp, **filters)
+        self.connection.search(self.config.personnes_dn, ldap_filter,
+                               search_scope=LEVEL, attributes=
+                               ['objectClass', 'uid'])
+        return [entry.uid.value.lower() for entry in self.connection.entries]
+
     def search_eleve(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[EleveLdap]:
         """
         Recherche d'étudiants.

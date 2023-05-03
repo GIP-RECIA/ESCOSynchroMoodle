@@ -89,8 +89,6 @@ class SyncContext:
         self.id_role_advanced_teacher = None  # type: int
         self.id_field_classe = None  # type: int
         self.id_field_domaine = None  # type: int
-        self.utilisateurs_by_cohortes = {}
-
 
 class EtablissementContext:
     """
@@ -1581,10 +1579,10 @@ class Synchronizer:
     def mise_a_jour_cohorte_interetab(self, is_member_of: str, cohort_name: str, since_timestamp: datetime.datetime,
                                       log=getLogger()):
         """
-        Met à jour la cohorte inter-etablissement.
+        Met à jour une cohorte inter-etablissement.
 
         :param is_member_of: La filtre pour identifier des utilisateurs interEtablissements
-        :param cohort_name: Le nom de la cohorte d'utilisateures inter_etabs
+        :param cohort_name: Le nom de la cohorte d'utilisateurs inter_etabs
         :param since_timestamp: Le timestamp au delà duquel on ne traite pas les utilisateurs
         :param log: Le logger
         """
@@ -1592,9 +1590,6 @@ class Synchronizer:
         self.get_or_create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name,
                                   cohort_name, self.context.timestamp_now_sql, log=log)
         id_cohort = self.__db.get_id_cohort(self.context.id_context_categorie_inter_etabs, cohort_name)
-
-        # Liste permettant de sauvegarder les utilisateurs de la cohorte
-        self.context.utilisateurs_by_cohortes[id_cohort] = []
 
         # Recuperation des utilisateurs
         is_member_of_list = [is_member_of]
@@ -1606,11 +1601,34 @@ class Synchronizer:
             user_id = self.__db.get_user_id(personne_ldap.uid)
             if user_id:
                 self.__db.enroll_user_in_cohort(id_cohort, user_id, self.context.timestamp_now_sql)
-                # Mise a jour des utilisateurs de la cohorte
-                self.context.utilisateurs_by_cohortes[id_cohort].append(user_id)
             else:
                 log.warning("Impossible d'inserer l'utilisateur %s dans la cohorte %s, "
                             "car il n'est pas connu dans Moodle", personne_ldap, cohort_name)
+
+    def purge_cohorte_interetab(self, is_member_of: str, cohort_name: str, log=getLogger()):
+        """
+        Purge une cohorte inter-etablissement.
+
+        :param is_member_of: La filtre pour identifier des utilisateurs interEtablissements
+        :param cohort_name: Le nom de la cohorte d'utilisateurs inter_etabs
+        :param log: Le logger
+        """
+        # Récupération de la cohorte
+        id_cohort = self.__db.get_id_cohort(self.context.id_context_categorie_inter_etabs, cohort_name)
+
+        #Récupération des utilisateurs dans la cohorte dans la bd
+        user_in_cohort_bd = self.__db.get_cohort_members_list(id_cohort)
+
+        # Récupération des utilisateurs du ldap qui doivent être dans la cohorte
+        is_member_of_list = [is_member_of]
+        user_in_cohort_ldap = self.__ldap.search_personne_uid(since_timestamp = None, isMemberOf = is_member_of_list)
+
+        #Pour chaque utilisateur de la cohorte en bd qui n'est pas dans ceux du ldap, on le désinscrit de la cohorte
+        for user_in_bd in user_in_cohort_bd:
+            if user_in_bd not in user_in_cohort_ldap:
+                log.info("Désinscription de l'utilisateur %s de la cohorte %s", user_in_bd, cohort_name)
+                self.__db.disenroll_user_from_username_and_cohortname(user_in_bd, cohort_name)
+
 
     def insert_moodle_structure(self, grp: bool, nom_structure: str, path: str,
      ou: str, siren: str, uai: str):

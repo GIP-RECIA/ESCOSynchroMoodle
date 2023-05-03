@@ -301,6 +301,12 @@ def nettoyage(config: Config, action: ActionConfig):
 
             #--- Fin de la boucle for ---#
 
+            #Purge des cohortes interétablissements
+            log.info("Purge des cohortes inter-établissements")
+            for is_member_of, cohort_name in action.inter_etablissements.cohorts.items():
+                log.info("Purge de la cohorte %s", cohort_name)
+                synchronizer.purge_cohorte_interetab(is_member_of, cohort_name, log=log)
+
             #Traitement des cohortes de la dane
             etablissement_log = log.getChild(f'dane.{config.constantes.uai_dane}')
             #Récupération du contexte de la dane
