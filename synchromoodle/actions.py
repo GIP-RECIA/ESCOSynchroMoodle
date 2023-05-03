@@ -37,9 +37,12 @@ def default(config: Config, action: ActionConfig):
 
         #Avant les autres établissements on s'occupe de celui de la dane
         dane_log = log.getChild(f'dane.{config.constantes.uai_dane}')
-        synchronizer.handle_dane(config.constantes.uai_dane, log=dane_log)
+
+        #Synchronisation de la dane
+        synchronizer.handle_dane(config.constantes.uai_dane, etabonly=False, log=dane_log)
         db.connection.commit()
 
+        #Synchronisation de tous les autres établissements
         for uai in action.etablissements.liste_etab:
             etablissement_log = log.getChild(f'etablissement.{uai}')
 
@@ -291,7 +294,7 @@ def nettoyage(config: Config, action: ActionConfig):
             etablissement_log = log.getChild(f'dane.{config.constantes.uai_dane}')
             #Récupération du contexte de la dane
             etablissement_context = synchronizer.handle_dane(config.constantes.uai_dane,
-             log=etablissement_log, readonly=True)
+             log=etablissement_log, etabonly=True, readonly=True)
 
             #Récupération des cohortes dane lycée dans le ldap
             cohort_dane_lycee = {UserType.ELEVE:cohort_elv_lycee_en_ldap,

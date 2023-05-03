@@ -302,6 +302,23 @@ class LdapConfig(_BaseConfig):
         return self.admin_rdn + ',' + self.base_dn
 
 
+class DaneConfig(_BaseConfig):
+    """
+    Configuration de la dane
+    """
+
+    def __init__(self, **entries):
+        self.dane_attribut = "isMemberOf" # type: str
+        """Valeur de l'attribut de la dane"""
+
+        self.dane_user = "acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:Groupes locaux:DANE"  # type: str
+        """Valeur du filtre pour les utilisateurs de la dane dans le ldap"""
+
+        self.dane_user_medic = "acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:PERSONNELS MEDICO-SOCIAUX" #type: str
+        """Valeur du filtre pour les utilisateurs médicaux-sociaux de la dane"""
+
+        super().__init__(**entries)
+
 class EtablissementRegroupement(_BaseConfig):
     """
     Configuration d'un regroupement d'établissement
@@ -465,6 +482,7 @@ class Config(_BaseConfig):
         self.constantes = ConstantesConfig()  # type: ConstantesConfig
         self.database = DatabaseConfig()  # type: DatabaseConfig
         self.ldap = LdapConfig()  # type: LdapConfig
+        self.dane = DaneConfig()  # type: DaneConfig
         self.actions = []  # type: List[ActionConfig]
         self.logging = True  # type: Union[dict, str, bool]
 

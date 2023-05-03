@@ -173,12 +173,13 @@ class Synchronizer:
         self.context.id_field_domaine = self.__db.get_id_user_info_field_by_shortname('Domaine')
 
 
-    def handle_dane(self, uai_dane: str, log=getLogger(), readonly=False) -> EtablissementContext:
+    def handle_dane(self, uai_dane: str, log=getLogger(), etabonly=False, readonly=False) -> EtablissementContext:
         """
         Synchronise la dane.
 
         :param uai_dane: Le code établissement de la dane
         :param log: Le logger
+        :param etabonly: Si True, synchronise seulement l'établissement et pas ses utilisateurs
         :param readonly: Si True, pas d'insertions/modifications dans la bd
         :return: Le contexte de l'établissement synchronisé
         """
@@ -209,6 +210,67 @@ class Synchronizer:
 
             #Cas ou on est en pas en readonly = on peut créer les cohortes si besoin
             if not readonly:
+                #Cas ou on est pas en etabonly = on va syncrhoniser les utilisateurs de la dane
+                if not etabonly:
+
+                    #Filtres pour récupérer les utilisateurs de la dane
+                    dane_filter_user = {self.__config.dane.dane_attribut: self.__config.dane.dane_user}
+                    dane_filter_medic = {self.__config.dane.dane_attribut: self.__config.dane.dane_user_medic}
+
+                    #Récupération des utilisateurs de la dane
+                    user_dane_list = self.__ldap.search_personne(since_timestamp=None, **dane_filter_user)
+                    user_medic_dane_list = self.__ldap.search_personne(since_timestamp=None, **dane_filter_medic)
+
+                    #Création des utilisateurs de la dane
+                    log.info("Création des utilisateurs de la dane")
+                    for personne_ldap in user_dane_list:
+                        if not personne_ldap.mail:
+                            personne_ldap.mail = self.__config.constantes.default_mail
+                        id_user = self.__db.get_user_id(personne_ldap.uid)
+                        if not id_user:
+                            log.info("Création de l'utilisateur: %s", personne_ldap)
+                            self.__db.insert_moodle_user(personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn,
+                                                         personne_ldap.mail,
+                                                         self.__config.constantes.default_mail_display,
+                                                         self.__config.constantes.default_moodle_theme)
+                            id_user = self.__db.get_user_id(personne_ldap.uid)
+                        else:
+                            log.info("Mise à jour de l'utilisateur: %s", personne_ldap)
+                            self.__db.update_moodle_user(id_user, personne_ldap.given_name, personne_ldap.sn, personne_ldap.mail,
+                                                         self.__config.constantes.default_mail_display,
+                                                         self.__config.constantes.default_moodle_theme)
+                        self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
+                                                   context.id_context_categorie, id_user)
+
+                    #Création des utilisateurs médico-sociaux de la dane
+                    log.info("Création des utilisateurs médico-sociaux de la dane")
+                    for personne_ldap in user_medic_dane_list:
+                        if not personne_ldap.mail:
+                            personne_ldap.mail = self.__config.constantes.default_mail
+                        id_user = self.__db.get_user_id(personne_ldap.uid)
+                        if not id_user:
+                            log.info("Création de l'utilisateur: %s", personne_ldap)
+                            self.__db.insert_moodle_user(personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn,
+                                                         personne_ldap.mail,
+                                                         self.__config.constantes.default_mail_display,
+                                                         self.__config.constantes.default_moodle_theme)
+                            id_user = self.__db.get_user_id(personne_ldap.uid)
+                        else:
+                            log.info("Mise à jour de l'utilisateur: %s", personne_ldap)
+                            self.__db.update_moodle_user(id_user, personne_ldap.given_name, personne_ldap.sn, personne_ldap.mail,
+                                                         self.__config.constantes.default_mail_display,
+                                                         self.__config.constantes.default_moodle_theme)
+                        self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
+                                                   context.id_context_categorie, id_user)
+                        #Création et inscription dans une cohorte spécifique pour les utilisateurs médico-sociaux
+                        cohort_name = "Personnels medico-sociaux"
+                        log.info("Création de la cohorte des utilisateurs médico-sociaux de la dane")
+                        id_medic_cohort = self.get_or_create_cohort(context.id_context_categorie, cohort_name, cohort_name,
+                                                                    cohort_name, self.context.timestamp_now_sql, log)
+                        log.info("Inscription de l'utilisateur %s dans la cohorte des utilisateurs médico-sociaux de la dane",
+                                 personne_ldap)
+                        self.__db.enroll_user_in_cohort(id_medic_cohort, id_user, self.context.timestamp_now_sql)
+
                 # Récupération des identifiants de 3 cohortes pour les lycées de l'enseignement national
                 log.info("Création des cohortes dane pour les lycées de l'enseignement national")
                 for user_type in UserType:
@@ -640,7 +702,7 @@ class Synchronizer:
                 self.__db.enroll_user_in_cohort(
                     self.ids_cohorts_dane_lycee_en[UserType.ENSEIGNANT],
                     id_user, self.context.timestamp_now_sql)
-                    
+
         # Personnel de direction
         if 'National_DIR' in enseignant_ldap.profils:
             if etablissement_context.college and etablissement_context.departement in self.__config.constantes.departements:
