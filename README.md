@@ -120,6 +120,7 @@ La structure de la configuration est modélisée par les classes situées dans
 | actions              | Liste des actions a exécuter avec la configuration associée          | Tableau      |
 | delete               | Informations pour la suppression de données                          | Dictionnaire |
 | webservice           | Informations de connexion au webservice moodle                       | Dictionnaire |
+| dane                 | Informations relatives à la dane                                     | Dictionnaire |
 
 
 #### actions
@@ -219,6 +220,15 @@ La structure de la configuration est modélisée par les classes situées dans
 | backup_success_re | Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le succès de l'opération | "Backup completed"                                                 | Chaine de caractères |
 | user_delete_pagesize        | Nombre d'utilisateurs maximum supprimés en un seul     appel au WebService                                                                      | 50 | Nombres entiers |
 | course_delete_pagesize        | Nombre de cours maximum supprimés en un seul     appel au WebService                                                                      | 50 | Nombres entiers |
+
+###### dane
+
+| Propriété     | Description                 | Valeur par défaut                                  |         Type         |
+|---------------|-----------------------------|----------------------------------------------------|:--------------------:|
+| dane_attribut | Valeur de l'attribut de la dane | "isMemberOf"  | Chaine de caractères |
+| dane_user | Valeur du filtre pour les utilisateurs de la dane dans le ldap  | "acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:Groupes locaux:DANE" | Chaine de caractères |
+| dane_user_medic | Valeur du filtre pour les utilisateurs médicaux-sociaux de la dane | "acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:PERSONNELS MEDICO-SOCIAUX"  | Chaine de caractères |
+| cohort_medic_dane_name | Nom de la cohorte dane des personnels médico-sociaux | "Personnels medico-sociaux" | Chaine de caractères |
 
 ###### timestamp_store
 
