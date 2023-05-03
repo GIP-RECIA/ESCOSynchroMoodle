@@ -205,3 +205,25 @@ actions:
                 '0280018T', '0280016R', '0280006E', '0280005D', '0280002A', '0280001Z','0280000A','0410018X', '0180585N', '0280706R', '0370878D', '0450094H', '0451535Z',
                 '0450027K', '0410629L', '0370781Y', '0360017Y', '0370794M', '0410626H', '0370074E', '0180847y', '0180924g', '0281041e', '0360766m', '0371436k', '0371587z',
                 '0410955r', '0411045n', '0411065k', '0451463w', '0371513u', '0450807h', '0450808j', '0280738a', '0370811f', '0410590u', '0450809k']
+  interEtablissements:
+    cohorts:
+      "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs"
+      "cfa:Inter_etablissements:Tous_Direction": "CFA : Tout le personnel de direction"
+      "cfa:Inter_etablissements:Tous_Mediateur": "CFA : Tous les mediateurs"
+      "cfa:Inter_etablissements:Tous_Documentation": "CFA : Tous les documentalistes"
+      "cfa:Inter_etablissements:Tous_Profs": "CFA : Tous les formateurs"
+      "cfa:Inter_etablissements:Tous_Responsable_Pedagogique": "CFA : Tous les responsables pedagogiques"
+      "cfa:Inter_etablissements:Tous_Referent_DIMA": "CFA : Tous les referents DIMA"
+      "cfa:Inter_etablissements:Tous_Referent_SCB": "CFA : Tous les referents savoirs et competences de base"
+      "cfa:admin:local:*": "CFA : Tous les administrateurs ENT"
+      "esco:Etablissements:*:Profs": "LYC : Tous les profs"
+      "esco:admin:local:*": "LYC : Tous les administrateurs ENT"
+      "esco:*:DIRECTION": "LYC : Tous les chefs d'établissement"
+      "esco:*:EDUCATION": "LYC : Tous les CPE"
+      "esco:Etablissements:*:Enseignements:PHYSIQUE-CHIMIE": "LYC : Profs de Physique-Chimie"
+      "agri:Etablissements:*:Profs": "LA : Tous les profs"
+      "agri:admin:local:*": "LA : Tous les administrateurs ENT"
+      "clg37:Etablissements:*:Profs": "CLG37 : Tous les profs"
+      "clg37:admin:local:*": "CLG37 : Tous les administrateurs ENT"
+      "clg37:*:DIRECTION": "CLG37 : Tous les chefs d'établissement"
+      "clg37:*:EDUCATION": "CLG37 : Tous les CPE"
