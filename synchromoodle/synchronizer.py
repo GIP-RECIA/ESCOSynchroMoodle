@@ -263,10 +263,10 @@ class Synchronizer:
                         self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
                                                    context.id_context_categorie, id_user)
                         #Création et inscription dans une cohorte spécifique pour les utilisateurs médico-sociaux
-                        cohort_name = "Personnels medico-sociaux"
                         log.info("Création de la cohorte des utilisateurs médico-sociaux de la dane")
-                        id_medic_cohort = self.get_or_create_cohort(context.id_context_categorie, cohort_name, cohort_name,
-                                                                    cohort_name, self.context.timestamp_now_sql, log)
+                        id_medic_cohort = self.get_or_create_cohort(context.id_context_categorie, self.__config.dane.cohort_medic_dane_name,
+                                                                    self.__config.dane.cohort_medic_dane_name, self.__config.dane.cohort_medic_dane_name,
+                                                                    self.context.timestamp_now_sql, log)
                         log.info("Inscription de l'utilisateur %s dans la cohorte des utilisateurs médico-sociaux de la dane",
                                  personne_ldap)
                         self.__db.enroll_user_in_cohort(id_medic_cohort, id_user, self.context.timestamp_now_sql)

@@ -142,6 +142,7 @@ class TestEtablissement:
         :param config: La configuration globale pendant la session de tests
         """
         ldap_utils.run_ldif('data/structure_dane.ldif', ldap)
+        ldap_utils.run_ldif('data/user_dane.ldif', ldap)
         db_utils.run_script('data/default-context.sql', db, connect=False)
 
         #Synchronisation de la dane
@@ -154,7 +155,31 @@ class TestEtablissement:
         assert synchronizer.ids_cohorts_dane_lycee_en
         assert synchronizer.ids_cohorts_dane_dep_clg
 
-        #On s'assure de la création des cohortes dane
+        #On s'assure de la création des utilisateurs de la dane
+        assert db.get_user_id("F171008t")
+        medic_id = db.get_user_id("F111009f")
+        assert medic_id
+
+        #On s'assure de la création de la cohorte médic de la dane
+        db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
+                        params={
+                            'name': config.dane.cohort_medic_dane_name
+                        })
+        cohort = db.mark.fetchone()
+        assert cohort is not None
+        cohort_id = cohort[0]
+        #Inscription du bon utilisateur dans la cohorte
+        db.mark.execute(f"SELECT * FROM {db.entete}cohort_members"
+                        " WHERE cohortid = %(cohortid)s AND userid = %(userid)s",
+                        params={
+                            'cohortid': cohort_id,
+                            'userid': medic_id
+                        })
+        result_cohort_enrollment = db.mark.fetchone()
+        assert result_cohort_enrollment is not None
+        assert result_cohort_enrollment[2] == medic_id
+
+        #On s'assure de la création des autres cohortes dane
         #Pour les lycées
         for user_type in UserType:
             db.mark.execute("SELECT * FROM {entete}cohort as cohort"

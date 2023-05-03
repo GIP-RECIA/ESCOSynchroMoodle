@@ -317,6 +317,9 @@ class DaneConfig(_BaseConfig):
         self.dane_user_medic = "acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:PERSONNELS MEDICO-SOCIAUX" #type: str
         """Valeur du filtre pour les utilisateurs médicaux-sociaux de la dane"""
 
+        self.cohort_medic_dane_name = "Personnels medico-sociaux"  #type: str
+        """Nom de la cohorte dane des personnels médico-sociaux"""
+
         super().__init__(**entries)
 
 class EtablissementRegroupement(_BaseConfig):

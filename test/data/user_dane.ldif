@@ -1,0 +1,65 @@
+# F171008t, people, esco-centre.fr
+dn: uid=F171008t,ou=people,dc=esco-centre,dc=fr
+uid: F171008t
+isMemberOf: acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:Groupes
+  locaux:DANE
+isMemberOf: acad:Applications:Espace_Moodle:RECTORAT
+isMemberOf: acad:Applications:Nextcloud:ACADEMIE D ORLEANS-TOURS_0450080T
+isMemberOf: acad:Applications:Espace_Moodle:ACADEMIE D ORLEANS-TOURS_0450080T
+isMemberOf: acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:Tous_AC
+ ADEMIE D ORLEANS-TOURS
+isMemberOf: acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:ADMINIS
+ TRATION
+ESCOUAICourant: 0450080T
+givenName: USER
+sn: DANE
+ENTPersonJointure: AC-ORLEANS-TOURS$6575
+objectClass: ENTAuxNonEnsServAc
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: user.dane
+cn: DANE USER
+ESCODomaines: www.touraine-eschool.fr
+ESCODomaines: www.colleges-eureliens.fr
+ESCODomaines: www.chercan.fr
+ESCODomaines: mon-e-college.loiret.fr
+ESCODomaines: e-college.indre.fr
+ESCODomaines: ent.colleges41.fr
+ESCODomaines: lycees.netocentre.fr
+mail: user.dane@ac-orleans-tours.fr
+ENTPersonStructRattach: ENTStructureSIREN=17450430800019,ou=structures,dc=esco
+ -centre,dc=fr
+ESCOUAI: 0450080T
+ENTPersonProfils: National_ACA
+
+# F111009f, people, esco-centre.fr
+dn: uid=F111009f,ou=people,dc=esco-centre,dc=fr
+uid: F111009f
+ESCOUAICourant: 0450080T
+isMemberOf: acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:Tous_AC
+ ADEMIE D ORLEANS-TOURS
+isMemberOf: acad:Applications:Espace_Moodle:ACADEMIE D ORLEANS-TOURS_0450080T
+isMemberOf: acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:PERSONN
+ ELS MEDICO-SOCIAUX
+givenName: MEDIC
+sn: DANE
+ENTPersonJointure: AC-ORLEANS-TOURS$15478
+objectClass: ENTAuxNonEnsEtab
+objectClass: ENTPerson
+objectClass: ESCOAddons
+objectClass: eduMember
+ENTPersonLogin: medic.dane
+cn: DANE MEDIC
+ENTPersonProfils: National_ETA
+mail: medic.dane@ac-orleans-tours.fr
+ESCODomaines: www.touraine-eschool.fr
+ESCODomaines: www.colleges-eureliens.fr
+ESCODomaines: www.chercan.fr
+ESCODomaines: mon-e-college.loiret.fr
+ESCODomaines: e-college.indre.fr
+ESCODomaines: ent.colleges41.fr
+ESCODomaines: lycees.netocentre.fr
+ESCOUAI: 0450080T
+ENTPersonStructRattach: ENTStructureSIREN=17450430800019,ou=structures,dc=esco
+ -centre,dc=fr
