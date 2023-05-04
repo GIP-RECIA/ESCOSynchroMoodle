@@ -504,6 +504,7 @@ class TestEtablissement:
     def test_maj_user_interetab(self, ldap: Ldap, db: Database, config: Config):
         """
         Permet de vérifier la synchronisation des utilisateurs interetablissement.
+        Teste aussi la création et la purge des cohortes interetablissements.
 
         :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
         :param db: L'objet Database pour intégragir avec le mariabd dans le docker
@@ -517,8 +518,13 @@ class TestEtablissement:
         synchronizer = Synchronizer(ldap, db, config)
         synchronizer.initialize()
         users = ldap.search_personne()
-        user = users[0]
+        user = users[len(users)-1]
         synchronizer.handle_user_interetab(user)
+        user2 = users[len(users)-2]
+        synchronizer.handle_user_interetab(user2)
+        cohorts_inter_etab = {"esco:Etablissements:DE L IROISE_0290009C:Enseignements:BRETON LV1 BIS (SECTION BILINGUE)": "Profs de Breton" }
+        for is_member_of, cohort_name in cohorts_inter_etab.items():
+            synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, None)
 
         db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
@@ -534,9 +540,53 @@ class TestEtablissement:
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 1
 
+        #On teste la création d'une cohorte dans la catégorie interétab
+        db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
+                        params={
+                            'name': "Profs de Breton"
+                        })
+        cohort_inter_etab = db.mark.fetchall()
+        assert len(cohort_inter_etab) > 0
+        assert cohort_inter_etab[0][2] == "Profs de Breton"
+
+        #Test inscription de l'utilisateur dans la cohorte correspondante
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Profs de Breton"
+                        })
+        results = [result[0] for result in db.mark.fetchall()]
+        assert len(results) == 1
+        assert 'f1700jz1' in results
+
+        #On insère un faux utilisateur dans la cohorte pour tester la purge
+        db.enroll_user_in_cohort(cohort_inter_etab[0][0], db.get_user_id('f1700jym'), 0)
+
+        #Test purge de la cohorte
+        for is_member_of, cohort_name in cohorts_inter_etab.items():
+            synchronizer.purge_cohorte_interetab(is_member_of, cohort_name)
+
+        #Test désinscription de l'utilisateur dans la cohorte correspondante
+        db.mark.execute("SELECT {entete}user.username FROM {entete}cohort_members AS cohort_members"
+                        " INNER JOIN {entete}cohort AS cohort"
+                        " ON cohort_members.cohortid = cohort.id"
+                        " INNER JOIN {entete}user"
+                        " ON cohort_members.userid = {entete}user.id"
+                        " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
+                        params={
+                            'cohortname': "Profs de Breton"
+                        })
+        results = [result[0] for result in db.mark.fetchall()]
+        assert len(results) == 1
+        assert 'f1700jym' not in results
+
     def test_maj_usercfa_interetab(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig):
         """
-        Permet de vérifier la synchronisation des utilisateurs interetablissement.
+        Permet de vérifier la synchronisation des utilisateurs interetablissement (cfa).
 
         :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
         :param db: L'objet Database pour intégragir avec le mariabd dans le docker
