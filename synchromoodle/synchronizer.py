@@ -733,6 +733,11 @@ class Synchronizer:
         :param personne_ldap: L'utilisateur à synchroniser
         :param log: Le logger
         """
+
+        #Récupération du contexte à partir du nom de la catégorie paramétrée dans l'action
+        id_categorie_inter_etabs_action = self.__db.get_id_categorie(self.__action_config.inter_etablissements.categorie_name)
+        id_context_categorie_inter_etabs_action = self.__db.get_id_context_categorie(id_categorie_inter_etabs_action)
+
         if not personne_ldap.mail:
             personne_ldap.mail = self.__config.constantes.default_mail
 
@@ -751,19 +756,19 @@ class Synchronizer:
 
         # Ajout du role de createur de cours
         self.__db.add_role_to_user(self.__config.constantes.id_role_createur_cours,
-                                   self.context.id_context_categorie_inter_etabs, id_user)
+                                   id_context_categorie_inter_etabs_action, id_user)
 
         # Attribution du role admin local si necessaire
         for member in personne_ldap.is_member_of:
             admin = re.match(self.__action_config.inter_etablissements.ldap_valeur_attribut_admin, member,
                              flags=re.IGNORECASE)
             if admin:
-                insert = self.__db.insert_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
+                insert = self.__db.insert_moodle_local_admin(id_context_categorie_inter_etabs_action, id_user)
                 if insert:
                     log.info("Insertion d'un admin local %s %s %s",
                              personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn)
                 break
-            delete = self.__db.delete_moodle_local_admin(self.context.id_context_categorie_inter_etabs, id_user)
+            delete = self.__db.delete_moodle_local_admin(id_context_categorie_inter_etabs_action, id_user)
             if delete:
                 log.info("Suppression d'un admin local %s %s %s",
                          personne_ldap.uid, personne_ldap.given_name, personne_ldap.sn)
@@ -1586,10 +1591,15 @@ class Synchronizer:
         :param since_timestamp: Le timestamp au delà duquel on ne traite pas les utilisateurs
         :param log: Le logger
         """
+
+        #Récupération du contexte à partir du nom de la catégorie paramétrée dans l'action
+        id_categorie_inter_etabs_action = self.__db.get_id_categorie(self.__action_config.inter_etablissements.categorie_name)
+        id_context_categorie_inter_etabs_action = self.__db.get_id_context_categorie(id_categorie_inter_etabs_action)
+
         # Creation de la cohort si necessaire
-        self.get_or_create_cohort(self.context.id_context_categorie_inter_etabs, cohort_name, cohort_name,
+        self.get_or_create_cohort(id_context_categorie_inter_etabs_action, cohort_name, cohort_name,
                                   cohort_name, self.context.timestamp_now_sql, log=log)
-        id_cohort = self.__db.get_id_cohort(self.context.id_context_categorie_inter_etabs, cohort_name)
+        id_cohort = self.__db.get_id_cohort(id_context_categorie_inter_etabs_action, cohort_name)
 
         # Recuperation des utilisateurs
         is_member_of_list = [is_member_of]
@@ -1613,8 +1623,12 @@ class Synchronizer:
         :param cohort_name: Le nom de la cohorte d'utilisateurs inter_etabs
         :param log: Le logger
         """
+        #Récupération du contexte à partir du nom de la catégorie paramétrée dans l'action
+        id_categorie_inter_etabs_action = self.__db.get_id_categorie(self.__action_config.inter_etablissements.categorie_name)
+        id_context_categorie_inter_etabs_action = self.__db.get_id_context_categorie(id_categorie_inter_etabs_action)
+
         # Récupération de la cohorte
-        id_cohort = self.__db.get_id_cohort(self.context.id_context_categorie_inter_etabs, cohort_name)
+        id_cohort = self.__db.get_id_cohort(id_context_categorie_inter_etabs_action, cohort_name)
 
         #Récupération des utilisateurs dans la cohorte dans la bd
         user_in_cohort_bd = self.__db.get_cohort_members_list(id_cohort)

@@ -346,7 +346,7 @@ class EtablissementsConfig(_BaseConfig):
         self.etab_rgp = []  # type: List[EtablissementRegroupement]
         """Regroupement d'etablissements"""
 
-        self.inter_etab_categorie_name = 'Catégorie Inter-Établissements'  # type: str
+        self.inter_etab_categorie_name = 'Catégorie interétablissements'  # type: str
         """Nom de la catégorie inter-etablissement"""
 
         self.inter_etab_categorie_name_cfa = 'Catégorie Inter-CFA'  # type: str
@@ -385,7 +385,7 @@ class InterEtablissementsConfig(_BaseConfig):
         self.cohorts = {}  # type: Dict[str, str]
         """Cohortes à synchroniser"""
 
-        self.categorie_name = '%%Cat%%gorie inter%%tablissements'  # type: str
+        self.categorie_name = 'Catégorie interétablissements'  # type: str
         """Nom de la catégorie inter-etablissement"""
 
         self.ldap_attribut_user = "isMemberOf"  # type: str

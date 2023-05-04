@@ -112,12 +112,14 @@ def interetab(config: Config, action: ActionConfig):
 
         since_timestamp = timestamp_store.get_timestamp(action.inter_etablissements.cle_timestamp)
 
+        log.debug("Catégorie Inter-Etablissements : %s", action.inter_etablissements.categorie_name)
+
         for personne_ldap in ldap.search_personne(since_timestamp=since_timestamp, **personne_filter):
             utilisateur_log = log.getChild(f"utilisateur.{personne_ldap.uid}")
             utilisateur_log.info(f"Traitement de l'utilisateur (uid={personne_ldap.uid})")
             synchronizer.handle_user_interetab(personne_ldap, log=utilisateur_log)
 
-        log.info('Mise à jour des cohortes de la categorie inter-établissements')
+        log.info('Mise à jour des cohortes de la categorie %s', action.inter_etablissements.categorie_name)
 
         for is_member_of, cohort_name in action.inter_etablissements.cohorts.items():
             synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, since_timestamp, log=log)
@@ -126,6 +128,13 @@ def interetab(config: Config, action: ActionConfig):
 
         timestamp_store.mark(action.inter_etablissements.cle_timestamp)
         timestamp_store.write()
+
+        if config.delete.purge_cohorts:
+            #Purge des cohortes interétablissements
+            log.info("Purge des cohortes Inter-Etablissements : %s", action.inter_etablissements.categorie_name)
+            for is_member_of, cohort_name in action.inter_etablissements.cohorts.items():
+                log.info("Purge de la cohorte %s", cohort_name)
+                synchronizer.purge_cohorte_interetab(is_member_of, cohort_name, log=log)
 
         log.info("Fin du traitement des utilisateurs inter-établissements")
     finally:
@@ -300,12 +309,6 @@ def nettoyage(config: Config, action: ActionConfig):
 
 
             #--- Fin de la boucle for ---#
-
-            #Purge des cohortes interétablissements
-            log.info("Purge des cohortes inter-établissements")
-            for is_member_of, cohort_name in action.inter_etablissements.cohorts.items():
-                log.info("Purge de la cohorte %s", cohort_name)
-                synchronizer.purge_cohorte_interetab(is_member_of, cohort_name, log=log)
 
             #Traitement des cohortes de la dane
             etablissement_log = log.getChild(f'dane.{config.constantes.uai_dane}')
