@@ -165,11 +165,11 @@ La structure de la configuration est modélisée par les classes situées dans
 | cohortname_pattern_enseignants_classe | Pattern à appliquer pour le nom des cohortes de classes d'enseignants | "Profs de la Classe %" | Chaine de caractères |
 | cohortname_pattern_enseignants_niv_formation | Pattern à appliquer pour le nom des cohortes de niveau de formation d'enseignants | "Profs du niveau de formation %" | Chaine de caractères |
 | cohortname_pattern_enseignants_etablissement | Pattern à appliquer pour le nom des cohortes d'établissements d'enseignants | "Profs de l'établissement %" | Chaine de caractères |
-| cohortname_pattern_re_eleves_classe | """Regex à appliquer pour le nom des cohortes de classes d'élèves""" | r'(Élèves de la Classe )(.*)$' | Chaine de caractères |
-| cohortname_pattern_re_eleves_niv_formation | Regex à appliquer pour le nom des cohortes de niveau de formation d'élèves | r'(Élèves du Niveau de formation )(.*)$' | Chaine de caractères |
-| cohortname_pattern_re_enseignants_classe | Regex à appliquer pour le nom des cohortes de classes d'enseignants | r'(Profs de la Classe )(.*)$' | Chaine de caractères |
-| cohortname_pattern_re_enseignants_niv_formation | Regex à appliquer pour le nom des cohortes de niveau de formation d'enseignants | r"(Profs du niveau de formation )(.*)$" | Chaine de caractères |
-| cohortname_pattern_re_enseignants_etablissement | Regex à appliquer pour le nom des cohortes d'établissements d'enseignants | r"(Profs de l'établissement )(.*)$" | Chaine de caractères |
+| cohortname_pattern_re_eleves_classe | Regex à reconnaître pour le nom des cohortes de classes d'élèves | r'(Élèves de la Classe )(.*)$' | Chaine de caractères |
+| cohortname_pattern_re_eleves_niv_formation | Regex à reconnaître pour le nom des cohortes de niveau de formation d'élèves | r'(Élèves du Niveau de formation )(.*)$' | Chaine de caractères |
+| cohortname_pattern_re_enseignants_classe | Regex à reconnaître pour le nom des cohortes de classes d'enseignants | r'(Profs de la Classe )(.*)$' | Chaine de caractères |
+| cohortname_pattern_re_enseignants_niv_formation | Regex à reconnaître pour le nom des cohortes de niveau de formation d'enseignants | r"(Profs du niveau de formation )(.*)$" | Chaine de caractères |
+| cohortname_pattern_re_enseignants_etablissement | Regex à reconnaître pour le nom des cohortes d'établissements d'enseignants | r"(Profs de l'établissement )(.*)$" | Chaine de caractères |
 
 
 ###### database
@@ -186,11 +186,11 @@ La structure de la configuration est modélisée par les classes situées dans
 
 ###### ldap
 
-| Propriété     | Description                 | Valeur par défaut                                  |         Type         |
-|---------------|-----------------------------|----------------------------------------------------|:--------------------:|
-| uri           | URI du serveur LDAP         | "ldap://192.168.1.100:9889"                        | Chaine de caractères |
-| username      | Utilisateur                 | "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr" | Chaine de caractères |
-| password      | Mot de passe                | "admin"                                            | Chaine de caractères |
+| Propriété      | Description                 | Valeur par défaut                                  |         Type         |
+|----------------|-----------------------------|----------------------------------------------------|:--------------------:|
+| uri            | URI du serveur LDAP         | "ldap://192.168.1.100:9889"                        | Chaine de caractères |
+| username       | Utilisateur                 | "cn=admin,ou=administrateurs,dc=esco-centre,dc=fr" | Chaine de caractères |
+| password       | Mot de passe                | "admin"                                            | Chaine de caractères |
 | base_dn        | DN de base                  | "dc=esco-centre,dc=fr"                             | Chaine de caractères |
 | structures_rdn | OU pour les structures      | "ou=structures"                                    | Chaine de caractères |
 | personnes_rdn  | OU pour les personnes       | "ou=people"                                        | Chaine de caractères |
@@ -208,7 +208,7 @@ La structure de la configuration est modélisée par les classes situées dans
 | delay_delete_teacher    | Délai, en jours, avant de supprimer un enseignant qui n'est plus présent dans l'annuaire LDAP | 395               | Nombres entiers          |
 | delay_backup_course     | Délai, en jours, avant de sauvegarder un cours inutilisé                                      | 365               | Nombres entiers          |
 | delay_force_delete      | Délai, en jours, avant de supprimer un compte qui n'est plus présent dans l'annuaire LDAP peut importe ses références                                                                                                                | 1095              | Nombres entiers          |
-| purge_cohorts           | Indicateur de purge des cohortes                                                              | False             | Booléen                  |
+| purge_cohorts           | Paramétrage de la purge des cohortes                                                          | False             | Booléen                  |
 
 ###### webservice
 
@@ -225,7 +225,7 @@ La structure de la configuration est modélisée par les classes situées dans
 
 | Propriété     | Description                 | Valeur par défaut                                  |         Type         |
 |---------------|-----------------------------|----------------------------------------------------|:--------------------:|
-| dane_attribut | Valeur de l'attribut de la dane | "isMemberOf"  | Chaine de caractères |
+| dane_attribut | Attribut de la dane pour indiquer une appartenance à un groupe | "isMemberOf"  | Chaine de caractères |
 | dane_user | Valeur du filtre pour les utilisateurs de la dane dans le ldap  | "acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:Groupes locaux:DANE" | Chaine de caractères |
 | dane_user_medic | Valeur du filtre pour les utilisateurs médicaux-sociaux de la dane | "acad:Services_Academique:ACADEMIE D ORLEANS-TOURS_0450080T:PERSONNELS MEDICO-SOCIAUX"  | Chaine de caractères |
 | cohort_medic_dane_name | Nom de la cohorte dane des personnels médico-sociaux | "Personnels medico-sociaux" | Chaine de caractères |
@@ -278,4 +278,5 @@ La structure de la configuration est modélisée par les classes situées dans
 
 #### Exemple de configuration
 
-[config/exemple.yml](./config/exemple.yml)
+- [config/test.yml](./config/test.yml)
+- [config/nettoyage.yml](./config/nettoyage.yml)
