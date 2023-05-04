@@ -54,6 +54,12 @@ logging:
       formatter: file
       when: midnight
       filename: 'logs/synchromoodle.log'
+    file-warning:
+      class: logging.handlers.TimedRotatingFileHandler
+      level: WARNING
+      formatter: file
+      when: midnight
+      filename: 'logs/synchromoodle.warning.log'
     file-error:
       class: logging.handlers.TimedRotatingFileHandler
       level: ERROR
@@ -62,7 +68,7 @@ logging:
       filename: 'logs/synchromoodle.error.log'
   root:
     level: NOTSET
-    handlers: [debug, file, file-error]
+    handlers: [debug, file, file-error, file-warning]
 
 
 actions:
