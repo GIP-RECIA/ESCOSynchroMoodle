@@ -501,7 +501,7 @@ class TestEtablissement:
             assert result_cohort_enrollment[2] == enseignant_id
 
 
-    def test_maj_user_interetab(self, ldap: Ldap, db: Database, config: Config):
+    def test_maj_user_interetab(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig):
         """
         Permet de vérifier la synchronisation des utilisateurs interetablissement.
         Teste aussi la création et la purge des cohortes interetablissements.
@@ -509,6 +509,7 @@ class TestEtablissement:
         :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
         :param db: L'objet Database pour intégragir avec le mariabd dans le docker
         :param config: La configuration globale pendant la session de tests
+        :param action_config: La configuration par défaut de l'action interetab
         """
         ldap_utils.run_ldif('data/default-structures.ldif', ldap)
         ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
@@ -522,10 +523,15 @@ class TestEtablissement:
         synchronizer.handle_user_interetab(user)
         user2 = users[len(users)-2]
         synchronizer.handle_user_interetab(user2)
+        user3 = users[0]
+        user3.is_member_of = [action_config.inter_etablissements.ldap_valeur_attribut_admin]
+        synchronizer.handle_user_interetab(user3)
+
         cohorts_inter_etab = {"esco:Etablissements:DE L IROISE_0290009C:Enseignements:BRETON LV1 BIS (SECTION BILINGUE)": "Profs de Breton" }
         for is_member_of, cohort_name in cohorts_inter_etab.items():
             synchronizer.mise_a_jour_cohorte_interetab(is_member_of, cohort_name, None)
 
+        #Vérification de la création de l'utilisateur
         db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
                         params={
                             'username': str(user.uid).lower()
@@ -533,12 +539,30 @@ class TestEtablissement:
         result = db.mark.fetchone()
         user_id = result[0]
 
+        #Vérification du rôle créateur de cours dans la catégorie interetab
         db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
                         params={
                             'userid': user_id
                         })
         roles_results = db.mark.fetchall()
         assert len(roles_results) == 1
+
+        #Vérification de la création d'un autre utilisateur
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
+                        params={
+                            'username': str(user3.uid).lower()
+                        })
+        result = db.mark.fetchone()
+        user3_id = result[0]
+
+        #Vérification que cet autre utilisateur est bien admin local
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
+                        params={
+                            'userid': user3_id
+                        })
+        roles_results = db.mark.fetchall()
+        assert len(roles_results) == 2
+        assert roles_results[1][1] == db.get_id_role_admin_local()
 
         #On teste la création d'une cohorte dans la catégorie interétab
         db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s",
@@ -583,41 +607,6 @@ class TestEtablissement:
         results = [result[0] for result in db.mark.fetchall()]
         assert len(results) == 1
         assert 'f1700jym' not in results
-
-    def test_maj_usercfa_interetab(self, ldap: Ldap, db: Database, config: Config, action_config: ActionConfig):
-        """
-        Permet de vérifier la synchronisation des utilisateurs interetablissement (cfa).
-
-        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
-        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
-        :param config: La configuration globale pendant la session de tests
-        :param action_config: La configuration de l'action cfa interetab
-        """
-        ldap_utils.run_ldif('data/default-structures.ldif', ldap)
-        ldap_utils.run_ldif('data/default-personnes-short.ldif', ldap)
-        ldap_utils.run_ldif('data/default-groups.ldif', ldap)
-        db_utils.run_script('data/default-context.sql', db, connect=False)
-
-        synchronizer = Synchronizer(ldap, db, config)
-        synchronizer.initialize()
-        users = ldap.search_personne()
-        user = users[0]
-        user.is_member_of = [action_config.inter_etablissements.ldap_valeur_attribut_admin]
-        synchronizer.handle_user_interetab(user)
-
-        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
-                        params={
-                            'username': str(user.uid).lower()
-                        })
-        result = db.mark.fetchone()
-        user_id = result[0]
-        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments WHERE userid = %(userid)s",
-                        params={
-                            'userid': user_id
-                        })
-        roles_results = db.mark.fetchall()
-        assert len(roles_results) == 2
-        assert roles_results[1][1] == db.get_id_role_admin_local()
 
 
     def test_maj_inspecteur(self, ldap: Ldap, db: Database, config: Config):
