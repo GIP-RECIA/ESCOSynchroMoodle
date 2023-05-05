@@ -1283,7 +1283,7 @@ class Synchronizer:
         :param log: Le logger
         """
         #Liste stockant tous les cours à supprimer
-        course_ids_to_delete = []
+        course_ids_to_delete = set()
         #Récupère tous les cours de l'utilisateur
         user_courses_ids = [user_course[0] for user_course in self.__db.get_courses_ids_owned_or_teach(user_id)]
         #Date actuelle
@@ -1309,7 +1309,7 @@ class Synchronizer:
                     backup_success = self.backup_course(courseid, log)
                     if backup_success:
                         log.info("La backup du cours %d été sauvegardée", courseid)
-                        course_ids_to_delete.append(courseid)
+                        course_ids_to_delete.add(courseid)
                     else:
                         log.error("Le backup du cours %d a échouée", courseid)
 
