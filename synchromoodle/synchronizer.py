@@ -195,7 +195,7 @@ class Synchronizer:
                         trouve += 1
             #Si on a pas trouvé de cohorte vide alors on en supprime au hasard parmi les cohortes
             if trouve == 0:
-                for id_cohort in cohorts_doublons_ids[1:len(cohorts_doublons_ids)]:
+                for id_cohort, in cohorts_doublons_ids[1:len(cohorts_doublons_ids)]:
                     self.__webservice.delete_cohorts([id_cohort])
                     log.info("Suppression de la cohorte %d dans le contexte %d car"
                              " toutes les cohortes en doublon ont des utilisateurs", id_cohort, contextid)
@@ -360,8 +360,8 @@ class Synchronizer:
 
             # Si l'etablissement fait partie d'un groupement
             if context.etablissement_regroupe:
-                etablissement_ou = context.etablissement_regroupe["nom"]
-                structure_ldap.uai = context.etablissement_regroupe["uais"][0]
+                etablissement_ou = context.etablissement_regroupe.nom
+                structure_ldap.uai = context.etablissement_regroupe.uais[0]
                 log.debug("L'établissement fait partie d'un groupement: ou=%s, uai=%s",
                           etablissement_ou, structure_ldap.uai)
             else:
