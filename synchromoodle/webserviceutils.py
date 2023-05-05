@@ -52,7 +52,8 @@ class WebService:
         """
         Supprime des cours via le webservice moodle.
         L'utilisateur WebService doit avoir les permissions
-        moodle/course:delete et moodle/course:view.
+        moodle/course:delete, moodle/course:view
+        et moodle/course:viewhiddencourses.
 
         :param courseid: La liste des id des cours à supprimer
         :returns: Un dictionnaire avec la liste des warnings

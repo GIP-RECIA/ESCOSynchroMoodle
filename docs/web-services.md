@@ -48,6 +48,7 @@ if (!file_exists($function->classpath)) {
     - webservice/rest:use
     - moodle/user:delete
     - moodle/course:delete
+    - moodle/course:viewhiddencourses
     - moodle/course:view
     - moodle/course:viewparticipants
     - moodle/user:viewdetails
