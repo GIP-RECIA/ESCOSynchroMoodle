@@ -71,7 +71,7 @@ class WebService:
                                'wsfunction': "core_course_delete_courses",
                                **params
                            },
-                           timeout=10)
+                           timeout=600)
 
         json_data = json.loads(res.text)
 
