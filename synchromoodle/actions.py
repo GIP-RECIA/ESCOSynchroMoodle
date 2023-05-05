@@ -33,6 +33,10 @@ def default(config: Config, action: ActionConfig):
 
         timestamp_store = TimestampStore(action.timestamp_store)
 
+        log.info("Suppression des cohortes en doublon")
+        synchronizer.handle_doublons()
+        log.info("Fin de la suppression des cohortes en doublon")
+
         log.info('Traitement des établissements')
 
         #Avant les autres établissements on s'occupe de celui de la dane

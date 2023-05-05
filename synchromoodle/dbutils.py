@@ -1414,6 +1414,18 @@ class Database:
                                                       id_zone_privee)
         return id_contexte_zone_privee
 
+    def get_doublons_cohorts(self) -> tuple[str,int]:
+        """
+        Fonction permettant de retourner une liste de toutes
+        les cohortes qui sont en doublons.
+
+        :return: Une liste de tuples (nom, contexteid)
+        """
+        self.mark.execute(f"SELECT name,contextid FROM {self.entete}cohort"\
+                          " GROUP BY contextid,name having count(*)>1")
+
+        return self.mark.fetchall()
+
     def purge_cohorts(self, users_ids_by_cohorts_ids: dict[int,list[int]]):
         """
         Fonction permettant de purger des cohortes. Le dictionnaire fourni en paramètres
@@ -1460,6 +1472,22 @@ class Database:
                               'name': name
                           })
         return self.safe_fetchone()[0]
+
+    def get_all_cohorts_id_from_name(self, contextid: int, name: str) ->  list[int]:
+        """
+        Récupère des ids de cohorte dans un contexte donné à partir de son nom.
+
+        :param contextid: L'id du contexte dans lequel on recherche les cohortes
+        :param name: Le nom de la cohorte
+        :return: L'id de la cohorte correspondante
+        """
+        self.mark.execute(f"SELECT id FROM {self.entete}cohort"
+                          " WHERE contextid = %(contextid)s AND name = %(name)s",
+                          params={
+                              'contextid': contextid,
+                              'name': name
+                          })
+        return self.mark.fetchall()
 
     def get_cohort_members(self, cohortid: int) -> list:
         """

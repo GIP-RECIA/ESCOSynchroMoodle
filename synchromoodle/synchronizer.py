@@ -170,6 +170,37 @@ class Synchronizer:
         # Recuperation de l'id du champ personnalisé Domaine
         self.context.id_field_domaine = self.__db.get_id_user_info_field_by_shortname('Domaine')
 
+    def handle_doublons(self, log=getLogger()):
+        """
+        Supprime les doublons de cohortes.
+
+        :param log: Le logger
+        """
+
+        #Récupère les doublons
+        cohorts_doublons = self.__db.get_doublons_cohorts()
+
+        #Pour toutes les cohortes en doublon, regarde s'il y'en a une qui est vide
+        for (name, contextid) in cohorts_doublons:
+            log.info("Doublon trouvé sur la cohorte %s dans le contexte %d", name, contextid)
+            trouve = 0
+            cohorts_doublons_ids = self.__db.get_all_cohorts_id_from_name(contextid, name)
+            for id_cohort, in cohorts_doublons_ids:
+                #Il faut qu'il reste au moins une cohorte à la fin
+                if trouve < len(cohorts_doublons_ids)-1:
+                    if len(self.__db.get_cohort_members_list(id_cohort)) == 0:
+                        log.info("Suppression de la cohorte %d dans le contexte %d car"
+                                 " elle ne contient pas d'utilisateurs", id_cohort, contextid)
+                        self.__webservice.delete_cohorts([id_cohort])
+                        trouve += 1
+            #Si on a pas trouvé de cohorte vide alors on en supprime au hasard parmi les cohortes
+            if trouve == 0:
+                for id_cohort in cohorts_doublons_ids[1:len(cohorts_doublons_ids)]:
+                    self.__webservice.delete_cohorts([id_cohort])
+                    log.info("Suppression de la cohorte %d dans le contexte %d car"
+                             " toutes les cohortes en doublon ont des utilisateurs", id_cohort, contextid)
+
+
 
     def handle_dane(self, uai_dane: str, log=getLogger(), etabonly=False, readonly=False) -> EtablissementContext:
         """
