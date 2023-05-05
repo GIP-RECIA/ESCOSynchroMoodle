@@ -248,7 +248,6 @@ class Ldap:
     def search_personne_uid(self, since_timestamp: datetime.datetime = None, **filters) -> List[str]:
         """
         Recherche d'uid de personnes.
-
         :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les personnes.
         :param filters: Filtres à appliquer
         :return: Liste des uid des personnes
@@ -258,6 +257,19 @@ class Ldap:
                                search_scope=LEVEL, attributes=
                                ['objectClass', 'uid'])
         return [entry.uid.value.lower() for entry in self.connection.entries]
+
+    def is_uid_in_ldap(self, uid:str) -> List[str]:
+        """
+        Recherche si une personne est présente dans le ldap par son uid.
+
+        :param uid: L'uid qu'on recherche
+        :return: True si elle est présente, False sinon
+        """
+        ldap_filter = _get_filtre_personnes_uid(uid)
+        self.connection.search(self.config.personnes_dn, ldap_filter,
+                               search_scope=LEVEL, attributes=
+                               ['objectClass', 'uid'])
+        return len([entry.uid.value.lower() for entry in self.connection.entries]) > 0
 
     def search_eleve(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[EleveLdap]:
         """
@@ -469,6 +481,15 @@ class Ldap:
             etabs_ldap[structure.uai] = structure.domaines
         return etabs_ldap
 
+
+def _get_filtre_personnes_uid(uid: str = None) -> str:
+    """
+    Construit le filtre pour récupérer les personnes au sein du LDAP par leur uid.
+
+    :param uai: code établissement
+    :return: Le filtre
+    """
+    return f"(&(objectClass=ENTPerson)(uid={uid}))"
 
 def _get_filtre_eleves(since_timestamp: datetime.datetime = None, uai: str = None) -> str:
     """

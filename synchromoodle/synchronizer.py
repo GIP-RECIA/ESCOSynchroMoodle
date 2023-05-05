@@ -1261,20 +1261,6 @@ class Synchronizer:
 
         return profs_by_cohorts_db, profs_by_cohorts_ldap
 
-
-    def list_contains_username(self, ldap_users: List[PersonneLdap], username: str) -> bool:
-        """
-        Vérifie si une liste d'utilisateurs ldap contient un utilisateur via son username.
-
-        :param ldap_users: La liste des utilisateurs du ldap
-        :param username: Le nom d'utilisateur à tester
-        :return: Vrai ou faux si la liste contient l'utilisateur ou non
-        """
-        for ldap_user in ldap_users:
-            if ldap_user.uid.lower() == username.lower():
-                return True
-        return False
-
     def backup_course(self, courseid: int, log=getLogger()) -> bool:
         """
         Permet de lancer le backup un cours et de vérifier qu'il s'est bien passé.
@@ -1338,11 +1324,10 @@ class Synchronizer:
         if course_ids_to_delete:
             self.delete_courses(course_ids_to_delete)
 
-    def anonymize_or_delete_users(self, ldap_users: List[PersonneLdap], db_users: list[tuple], log=getLogger()):
+    def anonymize_or_delete_users(self, db_users: list[tuple], log=getLogger()):
         """
         Anonymise ou supprime les utilisateurs devenus inutiles.
 
-        :param ldap_users: La liste de toutes les personnes du ldap
         :param db_users: La liste de toutes les personnes dans moodle
         :param log: Le logger
         """
@@ -1360,7 +1345,7 @@ class Synchronizer:
                 continue
 
             #Si l'utilisateur n'est plus présent dans l'annuaire LDAP, alors il faut faire un traitement
-            if not self.list_contains_username(ldap_users, db_user[1]):
+            if not self.__ldap.is_uid_in_ldap(db_user[1]):
                 log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP", db_user[1])
                 #Dans tous les cas, si jamais il n'a jamais utilisé moodle alors on peut le supprimer
                 if not self.__db.user_has_used_moodle(db_user[0]):

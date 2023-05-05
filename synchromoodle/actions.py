@@ -213,9 +213,8 @@ def nettoyage(config: Config, action: ActionConfig):
 
         # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
         log.info("Début de la procédure d'anonymisation/suppression des utilisateurs/cours inutiles")
-        ldap_users = ldap.search_personne()
         db_valid_users = db.get_all_valid_users()
-        synchronizer.anonymize_or_delete_users(ldap_users, db_valid_users)
+        synchronizer.anonymize_or_delete_users(db_valid_users)
 
         db.connection.commit()
 
