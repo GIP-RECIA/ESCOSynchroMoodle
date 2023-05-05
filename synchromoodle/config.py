@@ -130,9 +130,6 @@ class ConstantesConfig(_BaseConfig):
         self.niveau_ctx_bloc = 80  # type: int
         """Niveau de contexte pour un bloc"""
 
-        self.id_role_admin = 1  # type: int
-        """Id pour le role admin"""
-
         self.id_role_createur_cours = 2  # type: int
         """Id pour le role createur de cours"""
 
@@ -167,6 +164,7 @@ class ConstantesConfig(_BaseConfig):
         """Type de structure pour l'enseignement adapté"""
 
         self.type_structure_cfa_agricole = "CFA AGRICOLE"
+        """Type de structure d'un cfa agricole"""
 
         self.type_structure_jointure_en_start_with = "AC-ORLEANS-TOURS$"
         """Jointure de type de structure pour l'enseignement national"""
@@ -346,7 +344,7 @@ class EtablissementsConfig(_BaseConfig):
         self.etab_rgp = []  # type: List[EtablissementRegroupement]
         """Regroupement d'etablissements"""
 
-        self.inter_etab_categorie_name = 'Catégorie interétablissements'  # type: str
+        self.inter_etab_categorie_name = 'Catégorie Inter-Établissements'  # type: str
         """Nom de la catégorie inter-etablissement"""
 
         self.inter_etab_categorie_name_cfa = 'Catégorie Inter-CFA'  # type: str
@@ -385,7 +383,7 @@ class InterEtablissementsConfig(_BaseConfig):
         self.cohorts = {}  # type: Dict[str, str]
         """Cohortes à synchroniser"""
 
-        self.categorie_name = 'Catégorie interétablissements'  # type: str
+        self.categorie_name = 'Catégorie Inter-Établissements'  # type: str
         """Nom de la catégorie inter-etablissement"""
 
         self.ldap_attribut_user = "isMemberOf"  # type: str
