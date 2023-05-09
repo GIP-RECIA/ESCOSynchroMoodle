@@ -40,7 +40,7 @@ class WebService:
                                'wsfunction': "core_user_delete_users",
                                **users_to_delete
                            },
-                           timeout=10)
+                           timeout=100)
         json_data = json.loads(res.text)
 
         if json_data is not None and 'exception' in json_data:

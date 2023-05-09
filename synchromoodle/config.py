@@ -45,7 +45,7 @@ class WebServiceConfig(_BaseConfig):
         self.user_delete_pagesize = 50 # type: int
         """Nombre d'utilisateurs qu'on supprime en 1 seul appel au web service"""
 
-        self.course_delete_pagesize = 50 # type: int
+        self.course_delete_pagesize = 5 # type: int
         """Nombre de cours qu'on supprime en 1 seul appel au web service"""
 
         super().__init__(**entries)
