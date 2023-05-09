@@ -3,13 +3,13 @@
 [![Build Status](http://img.shields.io/travis/GIP-RECIA/ESCOSynchroMoodle.svg)](https://travis-ci.org/GIP-RECIA/ESCOSynchroMoodle)
 [![Coveralls](http://img.shields.io/coveralls/GIP-RECIA/ESCOSynchroMoodle.svg)](https://coveralls.io/github/GIP-RECIA/ESCOSynchroMoodle)
 
-Ce script permet la synchronisation des données de l'annuaire LDAP avec Moodle. Il nécessite Python 3.5+.
+Ce script permet la synchronisation des données de l'annuaire LDAP avec Moodle. Il nécessite Python 3.9+.
 
 # Environnement de développement
 
 ### Prérequis
 
- - Python 3.10+
+ - Python 3.9+
  - [Pipenv](https://github.com/pypa/pipenv)
 
 ##### Note sous windows
