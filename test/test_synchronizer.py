@@ -1411,7 +1411,7 @@ class TestEtablissement:
         #Mocks
         mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
             side_effect=mock_utils.fake_get_courses_user_enrolled_test_cours)
-        mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
+        mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.Database.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
@@ -1419,14 +1419,14 @@ class TestEtablissement:
             return_value=config.webservice.backup_success_re)
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
-        synchronizer.anonymize_or_delete_users(ldap_enseignants, db_valid_users)
+        synchronizer.anonymize_or_delete_users(db_valid_users)
 
         #Cours qui doit être supprimé
         mock_delete_courses.assert_has_calls([call([37003])])
 
         #Cours dont doit être désinscrit l'utilisateur
-        mock_unenrol_user_from_course.assert_has_calls([call(492216,37001),call(492216,37002),
-                                                        call(492216,37004),call(492216,37005)])
+        mock_unenrol_user_from_course.assert_has_calls([call(37001,492216),call(37002,492216),
+                                                        call(37004,492216),call(37005,492216)])
 
         #On n'est pas censé anonymiser ou supprimer des utilisateurs dans les cas testés
         mock_anon_users.assert_not_called()
