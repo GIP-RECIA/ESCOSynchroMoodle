@@ -115,37 +115,6 @@ class WebService:
         return json_data
 
 
-    def unenrol_user_from_course(self, userid: int, courseid: int):
-        """
-        Désinscris un utilisateur à un cours.
-        L'utilisateur WebService doit avoir la permission enrol/manual:unenrol.
-
-        :param userid: L'id de l'utilisateur à désinscrire
-        :param courseid: L'id du cours duquel on déinscrit l'utilisateur
-        :returns: None si la fonction s'est éxécutée correctement
-        :raises Exception: Si le WebService renvoie une exception
-        """
-
-        params = {}
-        params["enrolments[0][userid]"] = userid
-        params["enrolments[0][courseid]"] = courseid
-
-        res = requests.get(url=self.url,
-                           params={
-                               'wstoken': self.config.token,
-                               'moodlewsrestformat': "json",
-                               'wsfunction': "enrol_manual_unenrol_users",
-                               **params
-                           },
-                           timeout=10)
-
-        json_data = json.loads(res.text)
-
-        if json_data is not None and 'exception' in json_data:
-            raise Exception(json_data['message'])
-        return json_data
-
-
     def enrol_user_to_course(self, roleid: int, userid: int, courseid: int):
         """
         Inscris un utilisateur à un cours.

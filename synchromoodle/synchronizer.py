@@ -1318,7 +1318,7 @@ class Synchronizer:
             else:
                 log.info("L'utilisateur %d n'est pas le seul enseignant du cours %d, il va donc être désinscrit",\
                  user_id, courseid)
-                self.__webservice.unenrol_user_from_course(user_id, courseid)
+                self.__db.unenrol_user_from_course(courseid, user_id)
 
         #Suppression des cours
         if course_ids_to_delete:
@@ -1439,7 +1439,7 @@ class Synchronizer:
                             if is_teacher and (db_user[2] < now - (self.__config.delete.delay_backup_course * SECONDS_PER_DAY)):
                                 owned_or_teach_courses = [user_course[0] for user_course in self.__db.get_courses_ids_owned_or_teach(db_user[0])]
                                 if len(owned_or_teach_courses) > 0:
-                                    log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours."
+                                    log.info("L'enseignant %s ne s'est pas connecté depuis au moins %s jours. "
                                              "Un traitement va être effectué sur ses cours",
                                              db_user[1], self.__config.delete.delay_backup_course)
                                     user_ids_to_process_courses.append(db_user[0])

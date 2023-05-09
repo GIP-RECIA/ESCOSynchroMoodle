@@ -1653,6 +1653,48 @@ class Database:
         result = self.safe_fetchone()
         return result[0] > 0
 
+    def get_id_context_from_course_id(self, id_course: int) -> int:
+        """
+        Retourne l'id du contexte associé à un cours
+
+        :param id_course: L'id du cours dont on cherche à trouver le contexte
+        :returns: L'id du contexte associé
+        """
+
+        s = "SELECT id "\
+            f"FROM {self.entete}context "\
+            "WHERE instanceid = %(id_course)s "\
+            "AND contextlevel = %(level)s"
+        self.mark.execute(s, params={'id_course': id_course, 'level': self.constantes.niveau_ctx_cours})
+        return self.safe_fetchone()
+
+    def unenrol_user_from_course(self, id_course: int, id_user: int):
+        """
+        Désinscrit un utilisateur d'un cours. Supprime dans la table user_enrolments
+        l'enrolment du user au cours (quel que soit la méthode). Supprime aussi dans la
+        table role_assignments le role avec lequel l'utilisateur était inscrit au cours.
+
+        :param id_course: L'id du cours dont on veut désinscrire l'utilisateur
+        :param id_user: L'id de l'utilisateur à désiscrire
+        """
+
+        #Récupération de l'id de contexte du cours
+        course_context_id = self.get_id_context_from_course_id(id_course)[0]
+
+        #Suppression de la référence dans la table user_enrolments
+        s = f"DELETE user_enrol FROM {self.entete}enrol as enrol "\
+            f"INNER JOIN {self.entete}user_enrolments as user_enrol "\
+            "ON enrol.id = user_enrol.enrolid "\
+            "WHERE enrol.courseid = %(course_id)s "\
+            "AND user_enrol.userid = %(user_id)s "
+        self.mark.execute(s, params={'course_id': id_course, 'user_id': id_user})
+
+        #Suppression de la référence dans la table role_assignments
+        s = f"DELETE FROM {self.entete}role_assignments "\
+            "WHERE userid = %(user_id)s "\
+            "AND contextid = %(context_id)s"
+        self.mark.execute(s, params={'context_id': course_context_id, 'user_id': id_user})
+
     def set_user_domain(self, id_user: int, id_field_domaine: int, user_domain):
         """
         Fonction pour saisir le Domaine d'un utilisateur Moodle.
