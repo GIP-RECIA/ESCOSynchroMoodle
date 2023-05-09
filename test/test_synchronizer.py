@@ -1252,7 +1252,6 @@ class TestEtablissement:
                 - Variation de la date de dernière connexion
                 - Inscriptions ou non à des cours
                 - Références ou non à des cours
-            - Suppression d'un utilisateur dans le ldap qui est présent dans moodle
 
         :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
         :param db: L'objet Database pour intégragir avec le mariabd dans le docker
@@ -1289,20 +1288,17 @@ class TestEtablissement:
         #Ici on a .WebService mais c'est pour indiquer l'objet WebService et non pas le fichier
         mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
          side_effect=mock_utils.fake_get_courses_user_enrolled_test_eleves)
-        mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
+        mock_unenrol_user_from_course = mocker.patch('synchromoodle.synchronizer.Database.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
 
-        #Suppression d'un utilisateur dans le ldap
-        ldap_eleves.pop()
-
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
-        synchronizer.anonymize_or_delete_users(ldap_eleves, db_valid_users)
+        synchronizer.anonymize_or_delete_users(db_valid_users)
 
         #Vérification de la suppression des utilisateurs
         #Attention on bien 1 seul call à la méthode car on supprime tous les utilisateurs d'un coup
-        mock_delete_users.assert_has_calls([call([492285,492288,492290,492291,492293,492294])])
+        mock_delete_users.assert_has_calls([call([492288,492290,492291,492293,492294])])
 
         #Vérification de l'anonymisation des utilisateurs
         mock_anon_users.assert_has_calls([call([492286,492287,492289,492292,492295])])
@@ -1321,7 +1317,6 @@ class TestEtablissement:
                 - Inscriptions ou non à des cours (hors enseignant)
                 - Références ou non à des cours
                 - Possession de cours (rôles enseignant ou propriétaire de cours)
-            - Suppression d'un utilisateur dans le ldap qui est présent dans moodle
 
         :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
         :param db: L'objet Database pour intégragir avec le mariabd dans le docker
@@ -1356,21 +1351,18 @@ class TestEtablissement:
         #Mocks
         mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
             side_effect=mock_utils.fake_get_courses_user_enrolled_test_enseignants)
-        mocker.patch('synchromoodle.synchronizer.WebService.unenrol_user_from_course')
+        mocker.patch('synchromoodle.synchronizer.Database.unenrol_user_from_course')
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
         mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
             return_value=config.webservice.backup_success_re)
 
-        #Suppression d'un enseignant dans le ldap
-        ldap_enseignants.pop()
-
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
-        synchronizer.anonymize_or_delete_users(ldap_enseignants, db_valid_users)
+        synchronizer.anonymize_or_delete_users(db_valid_users)
 
         #Vérification de la suppression des utilisateurs
-        mock_delete_users.assert_has_calls([call([492215,492231,492232])])
+        mock_delete_users.assert_has_calls([call([492231,492232])])
 
         #Vérification de l'anonymisation des utilisateurs
         mock_anon_users.assert_has_calls([call([492220,492222,492223,492224,492226,492227,492228,492230])])
