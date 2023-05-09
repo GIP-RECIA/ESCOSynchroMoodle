@@ -706,6 +706,89 @@ class TestEtablissement:
         assert len(roles_results) == 0
 
 
+    def test_purge_doublons(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
+        """
+        Teste la suppression des doublons de cohortes.
+        Créée une cohorte en doublon et vérifie que c'est bien la bonne qui est supprimée.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        :param mocker: L'objet permettant de mocker des fonctions
+        """
+        #Chargement du ldap et de la bd
+        ldap_utils.run_ldif('data/all.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        #Mock pour la suppression de cohortes
+        mock_delete_cohorts = mocker.patch('synchromoodle.synchronizer.WebService.delete_cohorts')
+
+        #Initialisation du synchronizer
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.initialize()
+
+        #Synchronisation d'un établissement
+        etab_context = synchronizer.handle_etablissement("0290009C")
+
+        #Synchronisation des élèves de cet établissement
+        eleves = ldap.search_eleve(None, "0290009C")
+        for eleve in eleves:
+            synchronizer.handle_eleve(etab_context, eleve)
+
+        #Récupération des cohort
+        eleves_lvformation_by_cohorts_db, eleves_lvformation_by_cohorts_ldap = synchronizer.\
+            get_users_by_cohorts_comparators_eleves_niveau(etab_context,
+                                                           config.constantes.cohortname_pattern_re_eleves_niv_formation,
+                                                           config.constantes.cohortname_pattern_eleves_niv_formation)
+
+        #Création de la cohorte en doublon
+        db.create_cohort(etab_context.id_context_categorie,
+                         config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","TERMINALE GENERALE & TECHNO YC BT"),
+                         config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","-TERMINALE GENERALE & TECHNO YC BT"),
+                         config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","-TERMINALE GENERALE & TECHNO YC BT"), 0)
+
+
+        #On vérifie qu'on a bien une cohorte en doublon
+        cohorts_doublons_ids = []
+        db.mark.execute(f"SELECT id FROM {db.entete}cohort WHERE name = %(cohortname)s",
+                     params={
+                         'cohortname': config.constantes.cohortname_pattern_eleves_niv_formation\
+                         .replace("%", "TERMINALE GENERALE & TECHNO YC BT")
+                     })
+        cohorts_doublons_ids = db.mark.fetchall()
+
+        #On vérifie qu'on a bien deux cohortes du même nom
+        assert len(cohorts_doublons_ids) == 2
+
+        #On va faire pareil mais cette fois ci on va inscrire des utilisateurs dans les deux cohortes
+        #Création de la cohorte en doublon
+        db.create_cohort(etab_context.id_context_categorie,
+                         config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","PREMIERE GENERALE & TECHNO YC BT"),
+                         config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","-PREMIERE GENERALE & TECHNO YC BT"),
+                         config.constantes.cohortname_pattern_eleves_niv_formation.replace("%","-PREMIERE GENERALE & TECHNO YC BT"), 0)
+
+        #On vérifie qu'on a bien une cohorte en doublon
+        cohorts_doublons_ids = []
+        db.mark.execute(f"SELECT id FROM {db.entete}cohort WHERE name = %(cohortname)s",
+                     params={
+                         'cohortname': config.constantes.cohortname_pattern_eleves_niv_formation\
+                         .replace("%", "PREMIERE GENERALE & TECHNO YC BT")
+                     })
+        cohorts_doublons_ids = db.mark.fetchall()
+
+        #On inscrit quelqu'un dans la nouvelle cohorte
+        db.enroll_user_in_cohort(cohorts_doublons_ids[1][0], db.get_user_id("f1700iwj"), 0)
+
+        #On vérifie qu'on a bien deux cohortes du même nom
+        assert len(cohorts_doublons_ids) == 2
+
+        #On traite les cohortes en doublon
+        synchronizer.handle_doublons()
+
+        #Normalement maintenant on ne doit plus avoir qu'une seule cohorte
+        mock_delete_cohorts.assert_has_calls([call([25545]),call([25544])])
+
+
     def test_purge_cohortes(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la purge des cohortes :
