@@ -937,9 +937,9 @@ class Synchronizer:
         :return: L'id de la cohorte
         """
         all_cohort_name = {
-            UserType.ELEVE: 'Élèves des lycées de l\'éducation nationale',
-            UserType.ENSEIGNANT: 'Enseignants des lycées de l\'éducation nationale',
-            UserType.PERSONNEL_DE_DIRECTION: 'Personnel de direction des lycées de l\'éducation nationale'
+            UserType.ELEVE: 'Élèves des lycées de l\'éducation national',
+            UserType.ENSEIGNANT: 'Enseignants des lycées de l\'éducation national',
+            UserType.PERSONNEL_DE_DIRECTION: 'Personnel de direction des lycées de l\'éducation national'
         }
         cohort_name = all_cohort_name[user_type]
         id_cohort = self.get_cohort(id_context_dane, cohort_name)
@@ -957,9 +957,9 @@ class Synchronizer:
         :return: L'id de la cohorte récupérée
         """
         all_cohort_name = {
-            UserType.ELEVE: 'Élèves des lycées de l\'éducation nationale',
-            UserType.ENSEIGNANT: 'Enseignants des lycées de l\'éducation nationale',
-            UserType.PERSONNEL_DE_DIRECTION: 'Personnel de direction des lycées de l\'éducation nationale'
+            UserType.ELEVE: 'Élèves des lycées de l\'éducation national',
+            UserType.ENSEIGNANT: 'Enseignants des lycées de l\'éducation national',
+            UserType.PERSONNEL_DE_DIRECTION: 'Personnel de direction des lycées de l\'éducation national'
         }
         cohort_name = all_cohort_name[user_type]
         cohort_description = cohort_name

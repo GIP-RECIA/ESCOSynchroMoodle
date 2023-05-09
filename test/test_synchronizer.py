@@ -1167,7 +1167,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Élèves des lycées de l'éducation nationale"
+                            'cohortname': "Élèves des lycées de l'éducation national"
                         })
         cohorts_elv_lyc_bd =[result[0] for result in db.mark.fetchall()]
 
@@ -1178,7 +1178,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Enseignants des lycées de l'éducation nationale"
+                            'cohortname': "Enseignants des lycées de l'éducation national"
                         })
         cohorts_ens_lyc_bd =[result[0] for result in db.mark.fetchall()]
 
@@ -1189,7 +1189,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Personnel de direction des lycées de l'éducation nationale"
+                            'cohortname': "Personnel de direction des lycées de l'éducation national"
                         })
         cohorts_dir_lyc_bd =[result[0] for result in db.mark.fetchall()]
 
@@ -1206,7 +1206,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Élèves des lycées de l'éducation nationale"
+                            'cohortname': "Élèves des lycées de l'éducation national"
                         })
 
         results = [result[0] for result in db.mark.fetchall()]
@@ -1221,7 +1221,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Enseignants des lycées de l'éducation nationale"
+                            'cohortname': "Enseignants des lycées de l'éducation national"
                         })
 
         results = [result[0] for result in db.mark.fetchall()]
@@ -1236,7 +1236,7 @@ class TestEtablissement:
                         " ON cohort_members.userid = {entete}user.id"
                         " WHERE cohort.name = %(cohortname)s".format(entete=db.entete),
                         params={
-                            'cohortname': "Personnel de direction des lycées de l'éducation nationale"
+                            'cohortname': "Personnel de direction des lycées de l'éducation national"
                         })
 
         results = [result[0] for result in db.mark.fetchall()]
