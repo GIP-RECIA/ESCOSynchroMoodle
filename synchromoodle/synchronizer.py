@@ -1097,7 +1097,7 @@ class Synchronizer:
         return id_cohort_enseignants
 
     def get_users_by_cohorts_comparators_eleves_classes(self, etab_context: EtablissementContext,
-     cohortname_pattern_re: str, cohortname_pattern: str) -> (Dict[str, List[str]], Dict[str, List[str]]):
+     cohortname_pattern_re: str, cohortname_pattern: str, log=getLogger()) -> (Dict[str, List[str]], Dict[str, List[str]]):
         """
         Renvoie deux dictionnaires listant les élèves (uid) dans chacune des classes.
         Le premier dictionnaire contient les valeurs de la BDD, le second celles du LDAP.
@@ -1115,13 +1115,17 @@ class Synchronizer:
         # Pour chaque cohorte de la bdd
         for cohort in classes_cohorts:
             matches = re.search(cohortname_pattern_re, cohort.name)
-            # On récupére le nom de la classe (fin du nom de la cohorte qui lui est fixe)
-            classe_name = matches.group(2)
-            # On créé le tableau vide pour y stocker les élèves
-            eleves_by_cohorts_db[classe_name] = []
-            # Et on stocke les élèves de cette cohorte en provenant ce la bdd
-            for username in self.__db.get_cohort_members(cohort.id):
-                eleves_by_cohorts_db[classe_name].append(username.lower())
+            if matches is not None:
+                # On récupére le nom de la classe (fin du nom de la cohorte qui lui est fixe)
+                classe_name = matches.group(2)
+                # On créé le tableau vide pour y stocker les élèves
+                eleves_by_cohorts_db[classe_name] = []
+                # Et on stocke les élèves de cette cohorte en provenant ce la bdd
+                for username in self.__db.get_cohort_members(cohort.id):
+                    eleves_by_cohorts_db[classe_name].append(username.lower())
+            else:
+                log.warning("Problème avec le nom de la cohorte %s dans la catégorie %d",
+                            cohort.name, etab_context.id_context_categorie)
 
         # Dictionnaire contenant la liste des élèves par cohorte provenant du ldap
         eleves_by_cohorts_ldap = {}
