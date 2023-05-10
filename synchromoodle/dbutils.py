@@ -668,13 +668,15 @@ class Database:
         :param user_id: L'id de l'utilisateur concerné
         :returns: La liste des cours dans lequel enseigne l'utilisateur
         """
-        s = f"SELECT instanceid FROM {self.entete}context AS context" \
+        s = f"SELECT DISTINCT instanceid FROM {self.entete}context AS context" \
             f" INNER JOIN {self.entete}role_assignments AS role_assignments" \
             " ON context.id = role_assignments.contextid" \
-            " WHERE role_assignments.userid = %(userid)s AND (role_assignments.roleid = %(roleidowner)s" \
+            " WHERE role_assignments.userid = %(userid)s" \
+            " AND context.contextlevel = %(contextlevel)s" \
+            " AND (role_assignments.roleid = %(roleidowner)s" \
             " OR role_assignments.roleid = %(roleidteacher)s)"
         self.mark.execute(s, params={'userid': user_id, 'roleidowner': self.constantes.id_role_proprietaire_cours,
-        'roleidteacher': self.constantes.id_role_enseignant})
+        'roleidteacher': self.constantes.id_role_enseignant, 'contextlevel' : self.constantes.niveau_ctx_cours})
         return self.mark.fetchall()
 
     def get_userids_owner_of_course(self, course_id: int) -> list[int]:
