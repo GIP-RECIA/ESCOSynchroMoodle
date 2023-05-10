@@ -1324,6 +1324,9 @@ class Synchronizer:
                  user_id, courseid)
                 self.__db.unenrol_user_from_course(courseid, user_id)
 
+        #Commit pour libérer le lock pour le WebService
+        self.__db.connection.commit()
+
         #Suppression des cours
         if course_ids_to_delete:
             self.delete_courses(course_ids_to_delete)
