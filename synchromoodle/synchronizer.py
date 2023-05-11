@@ -1317,8 +1317,10 @@ class Synchronizer:
 
                 #Test pour voir si le cours doit être supprimé
                 if timemodified < now - (delay_backup_course * SECONDS_PER_DAY):
-                    log.info("Le cours %d n'a pas été modifié depuis plus de %d jours, et l'utilisateur %d est le seul"
-                    " propriétaire de ce cours, il va donc être supprimé", courseid, user_id, delay_backup_course)
+                    log.info("Le cours %d n'a pas été modifié depuis plus de %d jours,"
+                             " et l'utilisateur %d est le seul propriétaire de ce cours,"
+                             " il va donc être supprimé", courseid,
+                             int((now - timemodified) / SECONDS_PER_DAY), user_id)
                     #Backup d'abord
                     backup_success = self.backup_course(courseid, log)
                     if backup_success:
