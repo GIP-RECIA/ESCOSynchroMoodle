@@ -213,8 +213,7 @@ def nettoyage(config: Config, action: ActionConfig):
 
         # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
         log.info("Début de la procédure d'anonymisation/suppression des utilisateurs/cours inutiles")
-        db_valid_users = db.get_all_valid_users()
-        synchronizer.anonymize_or_delete_users(db_valid_users)
+        synchronizer.anonymize_or_delete_users(db.get_all_valid_users())
 
         db.connection.commit()
 
@@ -341,6 +340,10 @@ def nettoyage(config: Config, action: ActionConfig):
 
             # On commit afin de libérer le lock
             db.connection.commit()
+
+            #Libération de la mémoire
+            del cohort_dane_clg
+            del cohort_dane_lycee
 
             log.info("Suppression des cohortes vides (sans utilisateur)")
             synchronizer.delete_empty_cohorts()
