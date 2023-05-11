@@ -6,7 +6,7 @@ import datetime
 from collections.abc import Iterable
 from typing import List, Dict, Union
 
-from ldap3 import Server, Connection, LEVEL
+from ldap3 import Server, Connection, LEVEL, RESTARTABLE
 
 from synchromoodle.config import LdapConfig
 
@@ -180,6 +180,7 @@ class Ldap:
         self.connection = Connection(server,
                                      user=self.config.username,
                                      password=self.config.password,
+                                     client_strategy=RESTARTABLE,
                                      auto_bind=True,
                                      raise_exceptions=True)
 
