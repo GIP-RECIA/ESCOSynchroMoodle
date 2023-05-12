@@ -1,22 +1,22 @@
 # Permettre l'utilisation des webservices
 
 ## Activer les Webservices
-- Aller dans **Home > Site Administration > Advanced Features**
-- Cocher **Enable web services**
+- Aller dans **Administration du site > Fonctions avancées**
+- Cocher **_Activer les services web_**
 - Sauvegarder
 
 
-- Aller dans **Home > Site Administration > Plugins > Web services > Manage protocols**
-- Activer le **_REST protocol_**
+- Aller dans **Administration du site > Plugins > Services Web > Gérer les protocoles**
+- Activer le **_Protocole REST_**
 - Sauvegarder
 
 ## Créer un Webservice
-- Aller dans **Home > Site Administration > Plugins > Web services > External services**
-- Ajouter un nouveau service a l'aide du bouton **_Add_** en bas de la section **Custom services**
-- Donner un nom au service (Par exemple: **_Synchronizer Service_**) et cocher les cases **_Enabled_** et **_Authorized users only_**
+- Aller dans **Administration du site > Plugins > Services Web > Services externes**
+- Ajouter un nouveau service a l'aide du bouton **_Ajouter_** en bas de la section **Services personnalisés**
+- Donner un nom au service (Par exemple: **_synchromoodle_**) et cocher les cases **_Activé_** et **_Uniquement utilisateurs autorisés_**
 - Sauvegarder
-- Accéder au menu d'ajout de fonctions à ce service a l'aide du bouton **_Add functions_**
-- Ajouter les fonctions:
+- Accéder au menu d'ajout de fonctions à ce service a l'aide du bouton **_Fonctions_**
+- Cliquer sur **_Ajouter des fonctions_** et ajouter :
     - core_user_delete_users
     - core_course_delete_courses
     - core_cohort_delete_cohorts
@@ -26,7 +26,7 @@
 
 ⚠Cas particulier - Environnement de Dev⚠
 
-Il est possible qu'une erreur survienne sur l'écran d'ajout de fonction. Pour la faire disparaitre, il faut
+Il est possible qu'une erreur survienne sur l'écran d'ajout de fonction. Pour la faire disparaître, il faut
 modifier le code du fichier `/lib/externallib.php` de moodle à la ligne 87 tel que:
 ```php
 if (!file_exists($function->classpath)) {
@@ -36,13 +36,13 @@ if (!file_exists($function->classpath)) {
 ```
 
 ## Créer le compte utilisateur pour utiliser le Webservice
-- Aller dans **Home > Site Administration > Users > Accounts > Browse list of users**
+- Aller dans **Administration du site > Utilisateurs > Comptes > Liste des utilisateurs**
 - Créer un nouvel utilisateur avec les valeurs par défaut.
 
 ## Créer un nouveau rôle système
-- Aller dans **Home > Site Administration > Users > Permissions > Define roles**
-- Créer un nouveau rôle (Par exemple: **_Synchronizer Users_**)
-- Cochez la case **_System_** pour la valeur de **_Context types where this role may be assigned_**
+- Aller dans **Administration du site > Utilisateurs > Permissions > Définition des rôles**
+- Créer un nouveau rôle (Par exemple: **_Webservice_**)
+- Cocher la case **_Système_** pour la valeur de **_Types de contextes où ce rôle peut être attribué_**
 - Assigner les capacités suivantes au rôle:
     - webservice/rest:use
     - moodle/user:delete
@@ -55,13 +55,14 @@ if (!file_exists($function->classpath)) {
 - Sauvegarder
 
 ## Autoriser l'utilisateur à utiliser le service
-- Aller dans **Home > Site Administration > Plugins > Web services > External services**
-- Pour le service créé précédemment, cliquer sur **_Authorised users_**
-- Choisir l'utilisateur créé précédemment et cliquer sur **_Add_**
+- Aller dans **Administration du site > Plugins > Services Web > Services externes**
+- Pour le service créé précédemment, cliquer sur **_Utilisateurs autorisés_**
+- Choisir l'utilisateur créé précédemment et cliquer sur **_Ajouter_**
 
 ## Assigner le rôle au compte utilisateur
-- Aller dans **Home > Site administration > Users > Permissions > Assign system roles**
-- Choisir l'utilisateur créé précédemment et cliquer sur **_Add_**
+- Aller dans **Administration du site > Utilisateurs > Permissions > Attribution des rôles système**
+- Cliquer sur le rôle précédemment créé
+- Choisir l'utilisateur créé précédemment et cliquer sur **_Ajouter_**
 
 ## ⚠ Cas particulier - Rôle utilisateur authentifié ⚠
 Il est possible que le rôle utilisateur authentifié, donné de base à tous les utilisateurs authentifiés écrase la permission pour supprimer un utilisateur et empêche ainsi l'utilisateur WebService de pouvoir réaliser cette action.
@@ -72,8 +73,8 @@ Si c'est le cas, pour résoudre le problème il faut :
 - Cocher la case **_Empêcher_** pour la capacité **_moodle/user:delete_**
 
 ## Créer le token
-- Aller dans **Home > Site Administration > Plugins > Web services > Manage tokens**
-- Cliquer sur **_Add_**
+- Aller dans **Administration du site > Plugins > Services Web > Gérer les jetons**
+- Cliquer sur **_Ajouter_**
 - Sélectionnez l'utilisateur et le service créés précédemment
 - Sauvegarder
 - Fournir le token généré dans la configuration du script de synchronisation
