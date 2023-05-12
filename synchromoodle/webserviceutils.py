@@ -4,10 +4,10 @@ Module comprenant les différentes fonctions permattant de
 faire des appels aux webservices de moodle
 """
 from typing import List
+from logging import getLogger
 import json
 import requests
 from synchromoodle.config import WebServiceConfig
-
 
 class WebService:
     """
@@ -19,12 +19,13 @@ class WebService:
         self.url = f"{config.moodle_host}/webservice/rest/server.php"
 
 
-    def delete_users(self, userids: List[int]):
+    def delete_users(self, userids: List[int], log=getLogger()):
         """
         Supprime des utilisateurs via le webservice moodle.
         L'utilisateur WebService doit avoir la permission moodle/user:delete.
 
         :param userids: La liste des ids des utilisateurs à supprimer
+        :param log: Le logger
         :return: None si la fonction s'est éxécutée correctement
         :raises Exception: Si le WebService renvoie une exception
         """
@@ -41,14 +42,20 @@ class WebService:
                                **users_to_delete
                            },
                            timeout=120)
-        json_data = json.loads(res.text)
 
-        if json_data is not None and 'exception' in json_data:
-            raise Exception(json_data['message'])
-        return json_data
+        try:
+            json_data = json.loads(res.text)
+            if json_data is not None and 'exception' in json_data:
+                raise Exception(json_data['message'])
+            return json_data
+        except json.decoder.JSONDecodeError as exception:
+            log.warning("Problème avec appel au WebService delete_users. "
+                        "Message retourné : %s. Utilisateurs traités : %s",
+                        res.text, str(userids))
+            return None
 
 
-    def delete_courses(self, courseids: list[int]):
+    def delete_courses(self, courseids: list[int], log=getLogger()):
         """
         Supprime des cours via le webservice moodle.
         L'utilisateur WebService doit avoir les permissions
@@ -56,6 +63,7 @@ class WebService:
         et moodle/course:viewhiddencourses.
 
         :param courseid: La liste des id des cours à supprimer
+        :param log: Le logger
         :returns: Un dictionnaire avec la liste des warnings
         :raises Exception: Si le WebService renvoie une exception
         """
@@ -74,19 +82,25 @@ class WebService:
                            },
                            timeout=600)
 
-        json_data = json.loads(res.text)
+        try:
+            json_data = json.loads(res.text)
+            if json_data is not None and 'exception' in json_data:
+                raise Exception(json_data['message'])
+            return json_data
+        except json.decoder.JSONDecodeError as exception:
+            log.warning("Problème avec appel au WebService delete_courses. "
+                        "Message retourné : %s. Cours traités : %s",
+                        res.text, str(courseids))
+            return None
 
-        if json_data is not None and 'exception' in json_data:
-            raise Exception(json_data['message'])
-        return json_data
 
-
-    def get_courses_user_enrolled(self, userid: int, returnusercount=0):
+    def get_courses_user_enrolled(self, userid: int, returnusercount=0, log=getLogger()):
         """
         Récupère la liste de tous les cours auxquels est inscrit un utilisateur.
         L'utilisateur WebService doit avoir les permissions
         moodle/course:viewparticipants et moodle/user:viewdetails.
 
+        :param log: Le logger
         :param userid: L'id de l'utilisateur
         :param returnusercount: - 0 si on ne retourne pas le nombre d'utilisateurs inscrits à un cours
                                 - 1 si on retourne le nombre d'utilisateurs inscrits à un cours
@@ -107,20 +121,24 @@ class WebService:
                                **params
                            },
                            timeout=60)
+        try:
+            json_data = json.loads(res.text)
+            if json_data is not None and 'exception' in json_data:
+                raise Exception(json_data['message'])
+            return json_data
+        except JSONDecodeError as exception:
+            log.warning("Problème avec appel au WebService get_courses_user_enrolled. "
+                        "Message retourné : %s.", res.text)
+            return None
 
-        json_data = json.loads(res.text)
 
-        if json_data is not None and 'exception' in json_data:
-            raise Exception(json_data['message'])
-        return json_data
-
-
-    def delete_cohorts(self, cohortids: list[int]):
+    def delete_cohorts(self, cohortids: list[int], log=getLogger()):
         """
         Supprime une cohorte de moodle.
         L'utilisateur WebService doit avoir la permission moodle/cohort:manage.
 
         :param cohortids: La liste des identifiants des cohortes
+        :param log: Le logger
         :returns: None si la fonction s'est éxécutée correctement
         :raises Exception: Si le WebService renvoie une exception
         """
@@ -136,10 +154,15 @@ class WebService:
                                'wsfunction': "core_cohort_delete_cohorts",
                                **cohorts_to_delete
                            },
-                           timeout=120)
+                           timeout=300)
 
-        json_data = json.loads(res.text)
-
-        if json_data is not None and 'exception' in json_data:
-            raise Exception(json_data['message'])
-        return json_data
+        try:
+            json_data = json.loads(res.text)
+            if json_data is not None and 'exception' in json_data:
+                raise Exception(json_data['message'])
+            return json_data
+        except json.decoder.JSONDecodeError as exception:
+            log.warning("Problème avec appel au WebService delete_cohorts. "
+                        "Message retourné : %s. Cohortes traitées : %s",
+                        res.text, str(cohortids))
+            return None
