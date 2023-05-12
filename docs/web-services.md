@@ -63,6 +63,14 @@ if (!file_exists($function->classpath)) {
 - Aller dans **Home > Site administration > Users > Permissions > Assign system roles**
 - Choisir l'utilisateur créé précédemment et cliquer sur **_Add_**
 
+## ⚠ Cas particulier - Rôle utilisateur authentifié ⚠
+Il est possible que le rôle utilisateur authentifié, donné de base à tous les utilisateurs authentifiés écrase la permission pour supprimer un utilisateur et empêche ainsi l'utilisateur WebService de pouvoir réaliser cette action.
+Si c'est le cas, pour résoudre le problème il faut :
+- Aller dans **Administration du site > Utilisateurs > Permissions > Définition des rôles**
+- Choisir le rôle **_Utilisateur authentifié_**
+- Cliquer sur **_Modifier_**, puis **_Afficher éléments supplémentaires_**
+- Cocher la case **_Empêcher_** pour la capacité **_moodle/user:delete_**
+
 ## Créer le token
 - Aller dans **Home > Site Administration > Plugins > Web services > Manage tokens**
 - Cliquer sur **_Add_**
