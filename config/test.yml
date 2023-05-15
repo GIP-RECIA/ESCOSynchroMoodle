@@ -153,7 +153,7 @@ actions:
   timestampStore:
     file: "trtInteretabAll_precedent.txt"
   interEtablissements:
-    categorie_name: 'Catégorie interétablissements'
+    categorie_name: 'Catégorie Inter-Établissements'
     cohorts:
       "cfa:Inter_etablissements:Tous_Admin_local": "CFA : Tous les formateurs"
       "cfa:Inter_etablissements:Tous_Direction": "CFA : Tout le personnel de direction"
