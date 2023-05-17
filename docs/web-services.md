@@ -52,6 +52,8 @@ if (!file_exists($function->classpath)) {
     - moodle/course:viewparticipants
     - moodle/user:viewdetails
     - moodle/cohort:manage
+    - mod/dataform:managetemplates
+    - mod/dataform:managefields
 - Sauvegarder
 
 ## Autoriser l'utilisateur à utiliser le service
