@@ -154,7 +154,7 @@ class WebService:
                                'wsfunction': "core_cohort_delete_cohorts",
                                **cohorts_to_delete
                            },
-                           timeout=300)
+                           timeout=600)
 
         try:
             json_data = json.loads(res.text)
