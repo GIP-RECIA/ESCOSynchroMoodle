@@ -122,7 +122,6 @@ La structure de la configuration est modélisée par les classes situées dans
 | webservice           | Informations de connexion au webservice moodle                       | Dictionnaire |
 | dane                 | Informations relatives à la dane                                     | Dictionnaire |
 
-
 #### actions
 
 | Propriété            | Description                                                          | Type                 |
@@ -133,7 +132,7 @@ La structure de la configuration est modélisée par les classes situées dans
 | etablissements       | Informations générales sur les établissements                        | Dictionnaire         |
 | inter_etablissements | Informations générales sur les inter-établissements                  | Dictionnaire         |
 | inspecteurs          | Informations générales sur les inspecteurs                           | Dictionnaire         |
-
+| specific_cohorts     | Informations sur les cohortes à créer spécifiquement                 | Dictionnaire         |
 
 ###### constantes
 
@@ -285,6 +284,12 @@ La structure de la configuration est modélisée par les classes situées dans
 | ldap_attribut_user        | Attribut utilisé pour déterminer les inspecteurs                         | "ESCOPersonProfils" |      Chaine de caractères      |
 | ldap_valeur_attribut_user | Valeur de l'attribut pour déterminer les inspecteurs                    | ["INS"]             | Liste de chaines de caractères |
 | cle_timestamp             | Clé pour stocker le timestamp du dernier traitement inter-etablissements | "INSPECTEURS"       |      Chaine de caractères      |
+
+###### specific_cohorts
+
+| Propriété  | Description                                                              | Valeur par défaut | Type |
+|------------|--------------------------------------------------------------------------|------------------ |------|
+| cohorts | Dictionnaire ou la clé représente l'établissement dans lequel on veut créer les cohortes. La valeur est un dictionnaire où la clé est la valeur de l'attribut isMemberOf dans le ldap et la valeur le nom de la cohorte à créer dans moodle. | {} | Dictionnaire |
 
 #### Exemple de configuration
 
