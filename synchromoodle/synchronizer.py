@@ -788,8 +788,28 @@ class Synchronizer:
                 #On récupère l'utilisateur associé dans moodle
                 user_id = self.__db.get_user_id(personne.uid)
                 #On l'inscrit dans la cohorte
+                log.info(f"Inscription de l'utilisateur {personne} dans la cohorte {cohort_name}")
                 self.__db.enroll_user_in_cohort(id_cohort, user_id, self.context.timestamp_now_sql)
 
+
+    def get_specific_cohort_users(self, etablissement_context: EtablissementContext,
+                                  name: str, filter: str) -> tuple[list[str],list[PersonneLdap]]:
+        """
+        Retourne deux listes correspondants aux personnes dans la bd et dans le ldap inscrites dans la cohorte
+
+        :param etablissement_context: Le contexte de l'établissement dans lequel on synchronise l'élève
+        :param name: Le nom de la cohorte dans la BD
+        :param filter: Le valeur de l'attribut isMemberOf dans le LDAP
+        :param log: Le logger
+        :return: Un tuple avec deux listes : un pour les personnes de la bd, et l'autre les personnes du ldap
+        """
+        cohort_id = self.__db.get_cohort_id_from_name(etablissement_context.id_context_categorie, name)
+        personnes_bd = self.__db.get_cohort_members_list(cohort_id)
+        personnes = self.__ldap.search_memberOf(etablissement_context.uai, filter)
+        personnes_ldap = []
+        for personne in personnes:
+            personnes_ldap.append(personne.uid.lower())
+        return personnes_bd, personnes_ldap
 
     def handle_user_interetab(self, personne_ldap: PersonneLdap, log=getLogger()):
         """
@@ -1619,6 +1639,24 @@ class Synchronizer:
                     if username_db not in users_by_cohorts_ldap[cohort_db]:
                         log.info("Désenrollement de l'utilisateur %s de la cohorte \"%s\"", username_db, cohort_db)
                         self.__db.disenroll_user_from_username_and_cohortname(username_db, cohortname)
+
+    def purge_specific_cohort(self, users_by_cohorts_db: List[str],
+                                    users_by_cohorts_ldap: List[str],
+                                    cohortname: str,
+                                    log=getLogger()):
+        """
+        Vide une cohorte d'utilisateurs conformément à l'annuaire LDAP.
+
+        :param users_by_cohorts_db: La liste des utilisateurs de la cohorte dans moodle
+        :param users_by_cohorts_ldap: La liste des utilisateurs qui doivent être dans la cohorte dans le ldap
+        :param cohortname: Le nom de la cohorte dans moodle
+        :param log: Le logger
+        """
+        #On boucle pour chaque utilisateur dans la BD et on regarde s'il est censé y être dans le ldap
+        for username_db in users_by_cohorts_db:
+            if username_db not in users_by_cohorts_ldap:
+                log.info(f"Désenrollement de l'utilisateur %s de la cohorte \"%s\"", username_db, cohortname)
+                self.__db.disenroll_user_from_username_and_cohortname(username_db, cohortname)
 
     def purge_cohort_dane_lycee_en(self, lycee_ldap: dict, log=getLogger()) -> dict[str,list[str]]:
         """

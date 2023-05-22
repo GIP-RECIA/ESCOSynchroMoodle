@@ -76,6 +76,7 @@ def default(config: Config, action: ActionConfig):
 
                 #Traitement des cohortes spécifiques pour l'établissement
                 if uai in action.specific_cohorts.cohorts:
+                    etablissement_log.info(f"Traitement des cohortes spécifiques pour l'établissement (uai={uai})")
                     synchronizer.handle_specific_cohorts(etablissement_context, action.specific_cohorts.cohorts[uai],
                                                          log=etablissement_log)
 
@@ -307,6 +308,17 @@ def nettoyage(config: Config, action: ActionConfig):
                     etablissement_log.info("Purge des cohortes Profs du niveau de formation")
                     synchronizer.purge_cohorts(profs_niveau_by_cohorts_db, profs_niveau_by_cohorts_ldap,
                                                config.constantes.cohortname_pattern_enseignants_niv_formation.replace("%","%s"))
+
+                    #Purge des cohortes spécifiques des établissements
+                    etablissement_log.info("Purge des cohortes spécifiques à l'établissement")
+                    if uai in action.specific_cohorts.cohorts:
+                        for filter,name in action.specific_cohorts.cohorts[uai].items():
+                            etablissement_log.info(f"Purge de la cohorte {name}")
+                            specific_users_db, specific_users_ldap = synchronizer.get_specific_cohort_users(etablissement_context,
+                                                                                                            name,
+                                                                                                            filter)
+
+                            synchronizer.purge_specific_cohort(specific_users_db, specific_users_ldap, name)
 
                 else:
                     etablissement_log.warning(f"L'établissement {uai} n'a pas été trouvé dans l'annuaire.")
