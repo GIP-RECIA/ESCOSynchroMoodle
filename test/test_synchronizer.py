@@ -205,6 +205,55 @@ class TestEtablissement:
                 result = db.mark.fetchone()
                 assert result is not None
 
+    def test_maj_specific_cohort(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Permet de vérifier la synchronisation des cohortes spécifiques à un établissement
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        """
+        #Chargement de la bd et du ldap
+        ldap_utils.run_ldif('data/all.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        #Initialisation du synchronizer
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.initialize()
+
+        #Récupération de l'établissement, des élèves et des enseignants depuis le ldap
+        strucutre = ldap.get_structure("0290009C")
+        enseignants = ldap.search_enseignant(None, "0290009C")
+
+        #Synchronisation de l'établissement et des enseignants
+        etab_context = synchronizer.handle_etablissement(strucutre.uai)
+        synchronizer.construct_classe_to_niv_formation(etab_context, ldap.search_eleve_classe_and_niveau(strucutre.uai))
+        for enseignant in enseignants:
+            synchronizer.handle_enseignant(etab_context, enseignant)
+
+        #Synchronisation des cohortes spécifuques
+        synchronizer.handle_specific_cohorts(etab_context, {"esco:Etablissements:DE L IROISE_0290009C:Enseignements:TRAVAUX PERSONNELS ENCADRES":"TPE"})
+
+        #Vérification de la création de la cohorte
+        db.mark.execute(f"SELECT * FROM {db.entete}cohort WHERE name = %(name)s AND contextid = %(contextid)s",
+                        params={
+                            'name': "TPE",
+                            'contextid': etab_context.id_context_categorie
+                        })
+        results = db.mark.fetchall()
+        assert len(results) > 0
+        assert results[0][2] == "TPE"
+        cohort_id = results[0][0]
+
+        #Vérification des utilisateurs inscrits dans la cohorte
+        db.mark.execute(f"SELECT * FROM {db.entete}cohort_members"
+                        " WHERE cohortid = %(cohortid)s",
+                        params={
+                            'cohortid': cohort_id,
+                        })
+        results = db.mark.fetchall()
+        assert len(results) == 14
+
     def test_maj_eleve(self, ldap: Ldap, db: Database, config: Config):
         """
         Permet de vérifier la synchronisation des élèves dans moodle.
@@ -333,7 +382,7 @@ class TestEtablissement:
                 enseignant = enseignant_searched
         assert enseignant is not None
 
-        #Synchronisation de l'établissement et des élèves du lycée et de l'enseignant dans ce contexte
+        #Synchronisation du lycée et de l'enseignant dans ce contexte
         etab_context = synchronizer.handle_etablissement(structure_lyc.uai)
         synchronizer.construct_classe_to_niv_formation(etab_context, ldap.search_eleve_classe_and_niveau(structure_lyc.uai))
         synchronizer.handle_enseignant(etab_context, enseignant)
