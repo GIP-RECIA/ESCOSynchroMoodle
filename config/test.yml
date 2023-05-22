@@ -120,6 +120,24 @@ actions:
     prefix_admin_moodle_local: "ef2s:admin:Moodle:local:"
     prefix_admin_local: "ef2s:admin:local:"
     liste_etab: ['0370074E']
+  specificCohorts:
+    cohorts:
+      "0370074E": {"*:Formateurs_CAFERUIS_21_23_C21":"Formateurs de la Classe CAFERUIS_21_23_C21",
+                  "*:Formateurs_CAFERUIS_22_23_C22":"Formateurs de la Classe CAFERUIS_22_23_C22",
+                  "*:Formateurs_ETS_20_23_T":"Formateurs de la Classe ETS_20_23_T",
+                  "*:Formateurs_ETS_21_24_T":"Formateurs de la Classe ETS_21_24_T",
+                  "*:Formateurs_ETS_22_25_T":"Formateurs de la Classe ETS_22_25_T",
+                  "*:Formateurs_ES_20_23_T":"Formateurs de la Classe ES_20_23_T",
+                  "*:Formateurs_ES_21_24_T":"Formateurs de la Classe ES_21_24_T",
+                  "*:Formateurs_ES_22_25_T":"Formateurs de la Classe ES_22_25_T",
+                  "*:Formateurs_EJE_20_23_T":"Formateurs de la Classe EJE_20_23_T",
+                  "*:Formateurs_EJE_21_24_T":"Formateurs de la Classe EJE_21_24_T",
+                  "*:Formateurs_EJE_22_25_T":"Formateurs de la Classe EJE_22_25_T",
+                  "*:Formateurs_ME_21_23_T":"Formateurs de la Classe ME_21_23_T",
+                  "*:Formateurs_ME_22_24_T":"Formateurs de la Classe ME_22_24_T",
+                  "*:Formateurs_AES_23_24_T_JAN":"Formateurs de la Classe AES_23_24_T_JAN",
+                  "*:Formateurs_AES_22_23_T_OCT":"Formateurs de la Classe AES_22_23_T_OCT",
+                  "*:Formateurs_AES_22_23_B_OCT":"Formateurs de la Classe AES_22_23_B_OCT"}
 - id: cfa
   timestampStore:
     file: "trtCfa_precedent.txt"

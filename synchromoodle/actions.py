@@ -74,6 +74,11 @@ def default(config: Config, action: ActionConfig):
                     utilisateur_log.info(f"Traitement de l'enseignant (uid={enseignant.uid})")
                     synchronizer.handle_enseignant(etablissement_context, enseignant, log=utilisateur_log)
 
+                #Traitement des cohortes spécifiques pour l'établissement
+                if uai in action.specific_cohorts.cohorts:
+                    synchronizer.handle_specific_cohorts(etablissement_context, action.specific_cohorts.cohorts[uai],
+                                                         log=etablissement_log)
+
                 db.connection.commit()
 
                 timestamp_store.mark(uai)

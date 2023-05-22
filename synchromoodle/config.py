@@ -415,6 +415,16 @@ class EtablissementsConfig(_BaseConfig):
 
         super().update(**entries)
 
+class SpecificCohortsConfig(_BaseConfig):
+    """
+    Configuration des cohortes spécifiques à un établissement
+    """
+
+    def __init__(self, **entries):
+        self.cohorts = {}  # type: Dict[str, Dict[str,str]]
+        """Cohortes spécifiques à syncrhoniser"""
+
+        super().__init__(**entries)
 
 class InterEtablissementsConfig(_BaseConfig):
     """
@@ -489,6 +499,7 @@ class ActionConfig(_BaseConfig):
         self.etablissements = EtablissementsConfig()  # type: EtablissementsConfig
         self.inter_etablissements = InterEtablissementsConfig()  # type: InterEtablissementsConfig
         self.inspecteurs = InspecteursConfig()  # type: InspecteursConfig
+        self.specific_cohorts = SpecificCohortsConfig() #type: SpecificCohortsConfig
 
         super().__init__(**entries)
 
@@ -505,6 +516,9 @@ class ActionConfig(_BaseConfig):
         if 'timestampStore' in entries:
             self.timestamp_store.update(**entries['timestampStore'])
             entries['timestampStore'] = self.timestamp_store
+        if 'specificCohorts' in entries:
+            self.specific_cohorts.update(**entries['specificCohorts'])
+            entries['specificCohorts'] = self.specific_cohorts
 
         super().update(**entries)
 
@@ -545,6 +559,9 @@ class Config(_BaseConfig):
         if 'ldap' in entries:
             self.ldap.update(**entries['ldap'])
             entries['ldap'] = self.ldap
+        if 'dane' in entries:
+            self.dane.update(**entries['dane'])
+            entries['dane'] = self.dane
         if 'actions' in entries:
             actions = entries['actions']
             for action in actions:

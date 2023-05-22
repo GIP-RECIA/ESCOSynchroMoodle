@@ -763,6 +763,34 @@ class Synchronizer:
         self.__db.set_user_domain(id_user, self.context.id_field_domaine, user_domain)
 
 
+    def handle_specific_cohorts(self, etablissement_context: EtablissementContext,
+                                cohorts: dict[str,str], log=getLogger()):
+        """
+        Met à jour les cohortes spécifiques d'un établissement en particulier
+
+        :param etablissement_context: Le contexte de l'établissement dans lequel on synchronise l'élève
+        :param cohorts: Un dictionnaire {filtre_isMemberOf_ldap : nomCohorte_moodle}
+        :param log: Le logger
+        """
+        self.context.timestamp_now_sql = self.__db.get_timestamp_now()
+        for filtre,cohort_name in cohorts.items():
+            #On créé la cohorte dans moodle si elle n'existe pas déjà
+            id_cohort = self.get_or_create_cohort(etablissement_context.id_context_categorie,
+                                                  cohort_name,
+                                                  cohort_name,
+                                                  cohort_name,
+                                                  self.context.timestamp_now_sql,
+                                                  log=log)
+            #On récupère les personnes pour chaque cohorte à créer
+            personnes_ldap = self.__ldap.search_memberOf(etablissement_context.uai,filtre)
+            #On inscrit une à une les personnes dans cette cohorte
+            for personne in personnes_ldap:
+                #On récupère l'utilisateur associé dans moodle
+                user_id = self.__db.get_user_id(personne.uid)
+                #On l'inscrit dans la cohorte
+                self.__db.enroll_user_in_cohort(id_cohort, user_id, self.context.timestamp_now_sql)
+
+
     def handle_user_interetab(self, personne_ldap: PersonneLdap, log=getLogger()):
         """
         Synchronise un utilisateur inter-établissement.

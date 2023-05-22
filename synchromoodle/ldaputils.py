@@ -259,6 +259,21 @@ class Ldap:
                                ['objectClass', 'uid'])
         return [entry.uid.value.lower() for entry in self.connection.entries]
 
+    def search_memberOf(self, uai: str, isMemberOf: str) -> List[PersonneLdap]:
+        """
+        Recherche de personnes membres d'un groupe.
+
+        :param uai: L'UAI de l'établissement dans lequel on effectue la recherche
+        :param isMemberOf: La valeur de isMemberOf recherchée
+        :return: La liste des personnes correspondants aux critères
+        """
+        ldap_filter = _get_filtre_isMemberOf(uai, isMemberOf)
+        self.connection.search(self.config.personnes_dn, ldap_filter,
+                               search_scope=LEVEL, attributes=
+                               ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCODomaines', 'ESCOUAICourant',
+                                'ENTPersonStructRattach', 'isMemberOf', '+'])
+        return [PersonneLdap(entry) for entry in self.connection.entries]
+
     def is_uid_in_ldap(self, uid:str) -> List[str]:
         """
         Recherche si une personne est présente dans le ldap par son uid.
@@ -620,6 +635,19 @@ def _get_filtre_personnes(since_timestamp: datetime.datetime = None, **filters: 
     filtre = filtre + ")"
     return filtre
 
+def _get_filtre_isMemberOf(uai: str, isMemberOf: str) -> str:
+    """
+    Construit le filtre pour récupérer les personnes membres d'un groupe.
+
+    :param uai: L'UAI de l'établissement dans lequel on effectue la recherche
+    :param isMemberOf: La valeur de isMemberOf recherchée
+    :return: La liste des personnes correspondants aux critères
+    """
+    filtre = "(&(ObjectClass=ENTPerson)(!(uid=ADM00000))"
+    filtre += "(ESCOUAI="+uai+")"
+    filtre += "(isMemberOf="+isMemberOf+")"
+    filtre += ")"
+    return filtre
 
 def _get_filtre_etablissement(uai=None):
     """
