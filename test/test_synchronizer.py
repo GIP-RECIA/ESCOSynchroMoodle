@@ -883,6 +883,10 @@ class TestEtablissement:
         for enseignant in enseignants:
             synchronizer.handle_enseignant(etab_context, enseignant)
 
+        #Synchronisation des cohortes spécifiques
+        specific_cohorts = {"esco:Etablissements:DE L IROISE_0290009C:Enseignements:TRAVAUX PERSONNELS ENCADRES":"TPE"}
+        synchronizer.handle_specific_cohorts(etab_context, specific_cohorts)
+
         #Cration d'une fausse cohorte qui n'est associée à rien dans le ldap
         db.create_cohort(etab_context.id_context_categorie,
                          config.constantes.cohortname_pattern_eleves_classe.replace("%","0EME S2"),
@@ -919,6 +923,23 @@ class TestEtablissement:
             get_users_by_cohorts_comparators_profs_niveau(etab_context,
                                                           config.constantes.cohortname_pattern_re_enseignants_niv_formation,
                                                           config.constantes.cohortname_pattern_enseignants_niv_formation)
+
+        #Test purge des cohortes spécifiques
+        for filter,name in specific_cohorts.items():
+            #Récupération des membres avant purge
+            specific_cohort_id = db.get_cohort_id_from_name(etab_context.id_context_categorie, "TPE")
+            old_cohort_members = db.get_cohort_members_list(specific_cohort_id)
+            #Vérification de la fonction pour récupérer les membres des cohortes ldap et bd
+            specific_users_db, specific_users_ldap = synchronizer.get_specific_cohort_users(etab_context, name, filter)
+            assert len(specific_users_db) == len(specific_users_ldap)
+            #Suppression d'un utilisateur
+            deleted_user = specific_users_ldap.pop()
+            #Purge des cohortes spécifiques
+            synchronizer.purge_specific_cohort(specific_users_db, specific_users_ldap, name)
+            #Tests pour vérifier si l'utilisateur a bien été enlevé de la cohorte en bd
+            cohort_members = db.get_cohort_members_list(specific_cohort_id)
+            assert deleted_user not in cohort_members
+            assert len(cohort_members) == len(old_cohort_members)-1
 
         #Suppression manuelle de certaines cohortes d'utilisateurs spécifiques dans le ldap
         #Eleves par classe
