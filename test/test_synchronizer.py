@@ -1508,8 +1508,7 @@ class TestEtablissement:
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
-        mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
-            return_value=config.webservice.backup_success_re)
+        mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course')
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
         synchronizer.anonymize_or_delete_users(db_valid_users)
@@ -1568,8 +1567,7 @@ class TestEtablissement:
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_courses')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
-        mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course',\
-            return_value=config.webservice.backup_success_re)
+        mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course')
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
         synchronizer.anonymize_or_delete_users(db_valid_users)
