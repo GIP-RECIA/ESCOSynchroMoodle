@@ -1337,12 +1337,15 @@ class Synchronizer:
         #URL ou est situé le fichier de backup
         url = self.__db.get_backup_course_file_url(categoryid, shortname)
 
+        #On fait attention aux caractères génants dans le nom du fichier
         from_copy = self.__config.constantes.moodledatadir+"/filedir/"+url
-        to_copy = self.__config.constantes.backup_destination+"/backup-"+str(categoryid)+"-"+shortname+"-"+fullname+"-"+str(now)+".mbz"
+        filename = "backup-"+str(categoryid)+"-"+shortname+"-"+fullname+"-"+str(now)+".mbz"
+        re.sub(r'\W+', '', filename)
+        to_copy = self.__config.constantes.backup_destination+"/"+filename
         log.debug("Copie de %s vers %s", from_copy, to_copy)
 
         #Copie du fichier
-        shutil.copyfile(from_copy, to_copy)
+        shutil.copy(from_copy, to_copy)
 
 
     def check_and_process_user_courses(self, user_id: int, log=getLogger()):
@@ -1603,7 +1606,10 @@ class Synchronizer:
             log.debug("Suppression du cours %d", courseid)
             self.__webservice.delete_course(courseid)
             log.info("Le cours %d a été supprimé", courseid)
+            #Faire apparaître la ligne avec le fichier de backup dans la table mdl_files
+            self.__db.connection.commit()
             #Copie du backup du cours
+            log.debug("Début de la procédure de copie du backup")
             self.backup_course(shortname, fullname, categoryid)
             log.info("Le backup du cours %d a été copié", courseid)
 
