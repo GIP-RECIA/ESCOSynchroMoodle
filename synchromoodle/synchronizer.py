@@ -1339,12 +1339,15 @@ class Synchronizer:
 
         #On fait attention aux caractères génants dans le nom du fichier
         from_copy = self.__config.constantes.moodledatadir+"/filedir/"+url
+        shortname = shortname.replace("-","_")
+        fullname = fullname.replace("-","_")
         filename = "backup-"+str(categoryid)+"-"+shortname+"-"+fullname+"-"+str(now)+".mbz"
+        filename = filename.replace(" ","_").replace("/","")
         re.sub(r'\W+', '', filename)
         to_copy = self.__config.constantes.backup_destination+"/"+filename
-        log.debug("Copie de %s vers %s", from_copy, to_copy)
 
         #Copie du fichier
+        log.debug("Copie de %s vers %s", from_copy, to_copy)
         shutil.copy(from_copy, to_copy)
 
 
