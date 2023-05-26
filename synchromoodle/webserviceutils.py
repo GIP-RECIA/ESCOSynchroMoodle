@@ -55,23 +55,21 @@ class WebService:
             return None
 
 
-    def delete_courses(self, courseids: list[int], log=getLogger()):
+    def delete_course(self, courseid: list[int], log=getLogger()):
         """
-        Supprime des cours via le webservice moodle.
+        Supprime un cours via le webservice moodle.
         L'utilisateur WebService doit avoir les permissions
         moodle/course:delete, moodle/course:view
         et moodle/course:viewhiddencourses.
 
-        :param courseid: La liste des id des cours à supprimer
+        :param courseid: L'id du cours à supprimer
         :param log: Le logger
         :returns: Un dictionnaire avec la liste des warnings
         :raises Exception: Si le WebService renvoie une exception
         """
 
         params = {}
-
-        for i,course_id in enumerate(courseids):
-            params[f"courseids[{i}]"] = course_id
+        params["courseids[0]"] = courseid
 
         res = requests.get(url=self.url,
                            params={
@@ -89,8 +87,8 @@ class WebService:
             return json_data
         except json.decoder.JSONDecodeError as exception:
             log.warning("Problème avec appel au WebService delete_courses. "
-                        "Message retourné : %s. Cours traités : %s",
-                        res.text, str(courseids))
+                        "Message retourné : %s. Cours traité : %s",
+                        res.text, str(courseid))
             return None
 
 

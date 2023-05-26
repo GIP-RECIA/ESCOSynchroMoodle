@@ -4,10 +4,10 @@
 Accès à la base de données Moodle
 """
 
+from logging import getLogger
 import mysql.connector
 from mysql.connector import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
-
 from synchromoodle.config import DatabaseConfig, ConstantesConfig
 
 ###############################################################################
@@ -662,7 +662,7 @@ class Database:
 
     def get_courses_ids_owned_or_teach(self, user_id: int) -> list[int]:
         """
-        Retourne tous les cours auxquels participe un utilisateur
+        Retourne tous les id de cours auxquels participe un utilisateur
         en tant qu'enseignant (role enseignant ou propriétaire de cours).
 
         :param user_id: L'id de l'utilisateur concerné
@@ -671,6 +671,29 @@ class Database:
         s = f"SELECT DISTINCT instanceid FROM {self.entete}context AS context" \
             f" INNER JOIN {self.entete}role_assignments AS role_assignments" \
             " ON context.id = role_assignments.contextid" \
+            " WHERE role_assignments.userid = %(userid)s" \
+            " AND context.contextlevel = %(contextlevel)s" \
+            " AND (role_assignments.roleid = %(roleidowner)s" \
+            " OR role_assignments.roleid = %(roleidteacher)s)"
+        self.mark.execute(s, params={'userid': user_id, 'roleidowner': self.constantes.id_role_proprietaire_cours,
+        'roleidteacher': self.constantes.id_role_enseignant, 'contextlevel' : self.constantes.niveau_ctx_cours})
+        return self.mark.fetchall()
+
+    def get_courses_data_owned_or_teach(self, user_id: int) -> list[tuple[int,str,str,int]]:
+        """
+        Retourne tous les cours auxquels participe un utilisateur
+        en tant qu'enseignant (role enseignant ou propriétaire de cours).
+        Retourne le shortname, le fuullname  et la catégorie du cours en plus de l'id.
+
+        :param user_id: L'id de l'utilisateur concerné
+        :returns: La liste des cours dans lequel enseigne l'utilisateur
+        """
+        s = f"SELECT DISTINCT instanceid,course.shortname,course.fullname,course.category" \
+            f" FROM {self.entete}context AS context" \
+            f" INNER JOIN {self.entete}role_assignments AS role_assignments" \
+            " ON context.id = role_assignments.contextid" \
+            f" INNER JOIN {self.entete}course AS course" \
+            " ON course.id = context.instanceid"\
             " WHERE role_assignments.userid = %(userid)s" \
             " AND context.contextlevel = %(contextlevel)s" \
             " AND (role_assignments.roleid = %(roleidowner)s" \
@@ -1654,6 +1677,29 @@ class Database:
         self.mark.execute(sql, params={'id_user': id_user, 'id_role_enseignant_avance': id_role_enseignant_avance})
         result = self.safe_fetchone()
         return result[0] > 0
+
+    def get_backup_course_file_url(self, categoryid: int, shortname: str, log=getLogger()) -> str:
+        """
+        Retourne l'url ou se trouve un fichier de backup d'un cours.
+
+        :param categoryid: La catégorie ou se trouvait le cours supprimé
+        :param shortname: Le shortname du cours supprimé
+        :param log: Le logger
+        :return: L'url pour accéder au fichier depuis le filedir
+        """
+        s = f"SELECT contenthash from {self.entete}files as files "\
+            f"INNER JOIN {self.entete}tool_recyclebin_category as bin_cat "\
+            "ON bin_cat.id = files.itemid "\
+            "WHERE files.filename like \"%.mbz\" "\
+            "AND bin_cat.shortname = %(shortname)s "\
+            "AND bin_cat.categoryid = %(categoryid)s"
+        self.mark.execute(s, params={'categoryid': categoryid, 'shortname': shortname})
+        result = self.mark.fetchall()
+        #On prend le dernier s'il y'en a plusieurs
+        if len(result) > 1:
+            log.warning("Plusieurs cours avec le même nom %s dans la même catégorie %s", shortname, categoryid)
+        contenthash = result[len(result)-1][0]
+        return contenthash[:2]+"/"+contenthash[2:4]+"/"+contenthash
 
     def get_id_context_from_course_id(self, id_course: int) -> int:
         """

@@ -179,7 +179,8 @@ La structure de la configuration est modélisée par les classes situées dans
 | cohortname_pattern_re_enseignants_classe | Regex à reconnaître pour le nom des cohortes de classes d'enseignants | r'(Profs de la Classe )(.*)$' | Chaine de caractères |
 | cohortname_pattern_re_enseignants_niv_formation | Regex à reconnaître pour le nom des cohortes de niveau de formation d'enseignants | r"(Profs du niveau de formation )(.*)$" | Chaine de caractères |
 | cohortname_pattern_re_enseignants_etablissement | Regex à reconnaître pour le nom des cohortes d'établissements d'enseignants | r"(Profs de l'établissement )(.*)$" | Chaine de caractères |
-
+| moodledatadir | Path vers le dossier moodledata | "" | Chaine de caractères |
+| backup_destination | Chemin vers la destination des fichiers de backup des cours | "" | Chaine de caractères |
 
 ###### database
 
@@ -224,11 +225,8 @@ La structure de la configuration est modélisée par les classes situées dans
 | Propriété         | Description                                                                                                               | Valeur par défaut                                                  |         Type         |
 |-------------------|---------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|:--------------------:|
 | token             | Token d'accès au webservice Moodle                                                                                        | ""                                                                 | Chaine de caractères |
-| moodle_host       | Host HTTP cible pour accéder au webservice Moodle SANS '/' FINAL                                                          | ""                                                                 | Chaine de caractères |
-| backup_cmd        | Commande à executer pour lancer la backup d'un cours                                                                      | "php backup.php --courseid=%courseid% --destination=/MoodleBackups"| Chaine de caractères |
-| backup_success_re | Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le succès de l'opération | "Backup completed"                                                 | Chaine de caractères |
+| moodle_host       | Host HTTP cible pour accéder au webservice Moodle SANS '/' FINAL                                                          | ""                                                                 | Chaine de caractères |                                               | Chaine de caractères |
 | user_delete_pagesize        | Nombre d'utilisateurs maximum supprimés en un seul     appel au WebService                                                                      | 50 | Nombres entiers |
-| course_delete_pagesize        | Nombre de cours maximum supprimés en un seul     appel au WebService                                                                      | 50 | Nombres entiers |
 
 ###### dane
 

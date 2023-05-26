@@ -5,7 +5,7 @@ Synchronizer
 
 import datetime
 import re
-import os
+import shutil
 from logging import getLogger
 from typing import Dict, List
 from enum import Enum
@@ -788,7 +788,7 @@ class Synchronizer:
                 #On récupère l'utilisateur associé dans moodle
                 user_id = self.__db.get_user_id(personne.uid)
                 #On l'inscrit dans la cohorte
-                log.info(f"Inscription de l'utilisateur {personne} dans la cohorte {cohort_name}")
+                log.info(f"Inscription de l'utilisateur %s dans la cohorte %s", personne, cohort_name)
                 self.__db.enroll_user_in_cohort(id_cohort, user_id, self.context.timestamp_now_sql)
 
 
@@ -1323,19 +1323,27 @@ class Synchronizer:
 
         return profs_by_cohorts_db, profs_by_cohorts_ldap
 
-    def backup_course(self, courseid: int, log=getLogger()) -> bool:
+    def backup_course(self, shortname: str, fullname: str, categoryid: int, log=getLogger()) -> bool:
         """
-        Permet de lancer le backup un cours et de vérifier qu'il s'est bien passé.
+        Permet de copier le backup un cours.
 
-        :param courseid: L'id du cours à backup
-        :return: Un booléen a True si le backup s'est bien passé, False sinon
+        :param shortname: Le shortname du cours supprimé
+        :param shortname: Le fullname du cours supprimé
+        :param categoryid: L'id de la catégorie d'ou le cours à été supprimé
         """
-        log.info("Backup du cours avec l'id %d", courseid)
-        cmd = self.__config.webservice.backup_cmd.replace("%courseid%", str(courseid))
-        backup_process = os.popen(cmd)
-        output = backup_process.read()
-        message = re.search(self.__config.webservice.backup_success_re, output)
-        return message is not None
+
+        now = self.__db.get_timestamp_now()
+
+        #URL ou est situé le fichier de backup
+        url = self.__db.get_backup_course_file_url(categoryid, shortname)
+
+        from_copy = self.__config.constantes.moodledatadir+"/filedir/"+url
+        to_copy = self.__config.constantes.backup_destination+"/backup-"+str(categoryid)+"-"+shortname+"-"+fullname+"-"+str(now)+".mbz"
+        log.debug("Copie de %s vers %s", from_copy, to_copy)
+
+        #Copie du fichier
+        shutil.copyfile(from_copy, to_copy)
+
 
     def check_and_process_user_courses(self, user_id: int, log=getLogger()):
         """
@@ -1345,14 +1353,14 @@ class Synchronizer:
         :param log: Le logger
         """
         #Liste stockant tous les cours à supprimer
-        course_ids_to_delete = set()
+        courses_to_delete = set()
         #Récupère tous les cours de l'utilisateur
-        user_courses_ids = [user_course[0] for user_course in self.__db.get_courses_ids_owned_or_teach(user_id)]
+        user_courses = self.__db.get_courses_data_owned_or_teach(user_id)
         #Date actuelle
         now = self.__db.get_timestamp_now()
 
         #Pour chaque cours de l'utilisateur
-        for courseid in user_courses_ids:
+        for (courseid,shortname,fullname,categoryid) in user_courses:
             log.info("Traitement du cours %d", courseid)
             #On récupère tous les Propriétaire de cours de ce cours
             owners_ids = [ownerid[0] for ownerid in self.__db.get_userids_owner_of_course(courseid)]
@@ -1369,13 +1377,7 @@ class Synchronizer:
                              " et l'utilisateur %d est le seul propriétaire de ce cours,"
                              " il va donc être supprimé", courseid,
                              int((now - timemodified) / SECONDS_PER_DAY), user_id)
-                    #Backup d'abord
-                    backup_success = self.backup_course(courseid, log)
-                    if backup_success:
-                        log.info("La backup du cours %d été sauvegardée", courseid)
-                        course_ids_to_delete.add(courseid)
-                    else:
-                        log.error("Le backup du cours %d a échouée", courseid)
+                    courses_to_delete.add((courseid,shortname,fullname,categoryid))
 
             #Sinon s'il n'est pas tout seul à posséder ce cours, on lui retire son rôle
             #Autrement dit on le désinscrit du cours
@@ -1388,8 +1390,8 @@ class Synchronizer:
         self.__db.connection.commit()
 
         #Suppression des cours
-        if course_ids_to_delete:
-            self.delete_courses(course_ids_to_delete)
+        if courses_to_delete:
+            self.delete_courses(courses_to_delete)
 
     def anonymize_or_delete_users(self, db_users: list[tuple], log=getLogger()):
         """
@@ -1586,28 +1588,24 @@ class Synchronizer:
             log.info("%d / %d utilisateurs supprimés", i, total)
 
 
-    def delete_courses(self, courseids: List[int], log=getLogger()):
+    def delete_courses(self, courses_to_delete: list[tuple[int,str,str,int]], log=getLogger()):
         """
-        Supprime les cours d'une liste en paginant les appels au webservice.
+        Supprime les cours d'une liste en faisant appel au webservice.
+        Copie le backup du cours dans un répertoire configuré.
 
-        :param courseids: La liste des id de cours à supprimer
-        :param pagesize: Le nombre de cours supprimés en un seul appel au webservice
+        :param courses_to_delete: La liste des cours à supprimer
         :param log: Le logger
         """
-        pagesize = self.__config.webservice.course_delete_pagesize
-        i = 0
-        total = len(courseids)
-        courseids_page = []
-        for courseid in courseids:
-            courseids_page.append(courseid)
-            i += 1
-            if i % pagesize == 0:
-                self.__webservice.delete_courses(courseids_page)
-                courseids_page = []
-                log.info("%d / %d cours supprimés", i, total)
-        if i % pagesize > 0:
-            self.__webservice.delete_courses(courseids_page)
-            log.info("%d / %d cours supprimés", i, total)
+
+        #Pour chaque cours à supprimer
+        for (courseid, shortname, fullname, categoryid) in courses_to_delete:
+            #Suppression du cours
+            log.debug("Suppression du cours %d", courseid)
+            self.__webservice.delete_course(courseid)
+            log.info("Le cours %d a été supprimé", courseid)
+            #Copie du backup du cours
+            self.backup_course(shortname, fullname, categoryid)
+            log.info("Le backup du cours %d a été copié", courseid)
 
 
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],
@@ -1655,7 +1653,7 @@ class Synchronizer:
         #On boucle pour chaque utilisateur dans la BD et on regarde s'il est censé y être dans le ldap
         for username_db in users_by_cohorts_db:
             if username_db not in users_by_cohorts_ldap:
-                log.info(f"Désenrollement de l'utilisateur %s de la cohorte \"%s\"", username_db, cohortname)
+                log.info("Désenrollement de l'utilisateur %s de la cohorte \"%s\"", username_db, cohortname)
                 self.__db.disenroll_user_from_username_and_cohortname(username_db, cohortname)
 
     def purge_cohort_dane_lycee_en(self, lycee_ldap: dict, log=getLogger()) -> dict[str,list[str]]:

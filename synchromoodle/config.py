@@ -35,18 +35,8 @@ class WebServiceConfig(_BaseConfig):
         self.moodle_host = ""  # type: str
         """Host HTTP cible pour accéder au webservice Moodle"""
 
-        self.backup_cmd = "php backup.php --courseid=%courseid% --destination=/MoodleBackups" # type: str
-        """Commande à executer pour lancer la backup d'un cours"""
-
-        self.backup_success_re = "Backup completed" # type: str
-        """Expression Reguliere à appliquer sur le retour de la sortie standard de backup_cmd pour vérifier le
-        succès de l'opération"""
-
         self.user_delete_pagesize = 50 # type: int
         """Nombre d'utilisateurs qu'on supprime en 1 seul appel au web service"""
-
-        self.course_delete_pagesize = 5 # type: int
-        """Nombre de cours qu'on supprime en 1 seul appel au web service"""
 
         super().__init__(**entries)
 
@@ -247,6 +237,11 @@ class ConstantesConfig(_BaseConfig):
         self.cohortname_pattern_re_enseignants_etablissement = r"(Profs de l'établissement )(.*)$" #type: str
         """Regex à appliquer pour le nom des cohortes d'établissements d'enseignants"""
 
+        self.moodledatadir = "" #type: str
+        """Path vers le dossier moodledata"""
+
+        self.backup_destination = "" #type: str
+        """Chemin vers la destination des fichiers de backup des cours"""
 
         super().__init__(**entries)
 
