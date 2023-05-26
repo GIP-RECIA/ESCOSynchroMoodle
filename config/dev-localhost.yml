@@ -1,4 +1,0 @@
-database:
-  host: localhost
-ldap:
-  uri: ldap://localhost:9889
