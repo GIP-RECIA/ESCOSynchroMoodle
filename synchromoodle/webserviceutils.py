@@ -48,7 +48,7 @@ class WebService:
             if json_data is not None and 'exception' in json_data:
                 raise Exception(json_data['message'])
             return json_data
-        except json.decoder.JSONDecodeError as exception:
+        except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService delete_users. "
                         "Message retourné : %s. Utilisateurs traités : %s",
                         res.text, str(userids))
@@ -85,7 +85,7 @@ class WebService:
             if json_data is not None and 'exception' in json_data:
                 raise Exception(json_data['message'])
             return json_data
-        except json.decoder.JSONDecodeError as exception:
+        except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService delete_courses. "
                         "Message retourné : %s. Cours traité : %s",
                         res.text, str(courseid))
@@ -124,7 +124,7 @@ class WebService:
             if json_data is not None and 'exception' in json_data:
                 raise Exception(json_data['message'])
             return json_data
-        except JSONDecodeError as exception:
+        except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService get_courses_user_enrolled. "
                         "Message retourné : %s.", res.text)
             return None
@@ -159,7 +159,7 @@ class WebService:
             if json_data is not None and 'exception' in json_data:
                 raise Exception(json_data['message'])
             return json_data
-        except json.decoder.JSONDecodeError as exception:
+        except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService delete_cohorts. "
                         "Message retourné : %s. Cohortes traitées : %s",
                         res.text, str(cohortids))

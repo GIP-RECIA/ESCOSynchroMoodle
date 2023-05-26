@@ -788,24 +788,24 @@ class Synchronizer:
                 #On récupère l'utilisateur associé dans moodle
                 user_id = self.__db.get_user_id(personne.uid)
                 #On l'inscrit dans la cohorte
-                log.info(f"Inscription de l'utilisateur %s dans la cohorte %s", personne, cohort_name)
+                log.info("Inscription de l'utilisateur %s dans la cohorte %s", personne, cohort_name)
                 self.__db.enroll_user_in_cohort(id_cohort, user_id, self.context.timestamp_now_sql)
 
 
     def get_specific_cohort_users(self, etablissement_context: EtablissementContext,
-                                  name: str, filter: str) -> tuple[list[str],list[PersonneLdap]]:
+                                  name: str, filtre: str) -> tuple[list[str],list[PersonneLdap]]:
         """
         Retourne deux listes correspondants aux personnes dans la bd et dans le ldap inscrites dans la cohorte
 
         :param etablissement_context: Le contexte de l'établissement dans lequel on synchronise l'élève
         :param name: Le nom de la cohorte dans la BD
-        :param filter: Le valeur de l'attribut isMemberOf dans le LDAP
+        :param filtre: Le valeur de l'attribut isMemberOf dans le LDAP
         :param log: Le logger
         :return: Un tuple avec deux listes : un pour les personnes de la bd, et l'autre les personnes du ldap
         """
         cohort_id = self.__db.get_cohort_id_from_name(etablissement_context.id_context_categorie, name)
         personnes_bd = self.__db.get_cohort_members_list(cohort_id)
-        personnes = self.__ldap.search_memberOf(etablissement_context.uai, filter)
+        personnes = self.__ldap.search_memberOf(etablissement_context.uai, filtre)
         personnes_ldap = []
         for personne in personnes:
             personnes_ldap.append(personne.uid.lower())
