@@ -61,22 +61,5 @@ logging:
     handlers: [debug, file, file-error]
 
 actions:
-- id: academique
-  timestampStore:
-    file: "trtAcademique_precedent.txt"
-  etablissements:
-    liste_etab: ["0290009C", "0291595B", "0180005H", "0180002E"]
-- id: interetab-all
-  type: interetab
-  timestampStore:
-    file: "trtInteretabAll_precedent.txt"
-  interEtablissements:
-    cohorts: {"esco:Etablissements:DE L IROISE_0290009C:Enseignements:MATHEMATIQUES": "Profs de mathématiques"}
-- id: inspecteurs
-  type: inspecteurs
 - id: nettoyage
   type: nettoyage
-  etablissements:
-    liste_etab: ["0290009C", "0291595B", "0180005H", "0180002E"]
-  interEtablissements:
-    cohorts: {"esco:Etablissements:DE L IROISE_0290009C:Enseignements:MATHEMATIQUES": "Profs de mathématiques"}

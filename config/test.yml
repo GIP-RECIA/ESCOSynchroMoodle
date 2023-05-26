@@ -22,8 +22,6 @@ ldap:
 webservice:
   token: "8171f8af9b393be7e4d0e984b39c4223"
   moodle_host: "http://localhost:8080"
-  backup_cmd: docker exec -it mde_php php admin/cli/backup.php --courseid=%courseid% --destination=../../MoodleBackups
-
 
 delete:
   purge_cohorts: True
@@ -35,7 +33,8 @@ constantes:
   id_role_inspecteur : 10
   id_role_directeur : 11
   id_role_utilisateur_limite : 12
-
+  moodledatadir: "/home/cailbourdin/moodle-dev-stack/docker/php/data/moodledata"
+  backup_destination: "/home/cailbourdin/MoodleBackups"
 
 logging:
   formatters:
