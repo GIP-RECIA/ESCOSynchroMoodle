@@ -1436,6 +1436,9 @@ class TestEtablissement:
         #Récupération des utilisateurs de la bd coté moodle
         db_valid_users = db.get_all_valid_users()
 
+        #Récupération des utilisateurs coté ldap
+        ldap_users = ldap.search_personne_uid_paged()
+
         #Mocks
         #Attention on mock les fonctions dans synchronizer.py et pas dans webserviceutils.py
         #Ici on a .WebService mais c'est pour indiquer l'objet WebService et non pas le fichier
@@ -1447,7 +1450,7 @@ class TestEtablissement:
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
-        synchronizer.anonymize_or_delete_users(db_valid_users)
+        synchronizer.anonymize_or_delete_users(db_valid_users, ldap_users)
 
         #Vérification de la suppression des utilisateurs
         #Attention on bien 1 seul call à la méthode car on supprime tous les utilisateurs d'un coup
@@ -1501,6 +1504,9 @@ class TestEtablissement:
         #Récupération des utilisateurs de la bd coté moodle
         db_valid_users = db.get_all_valid_users()
 
+        #Récupération des utilisateurs coté ldap
+        ldap_users = ldap.search_personne_uid_paged()
+
         #Mocks
         mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
             side_effect=mock_utils.fake_get_courses_user_enrolled_test_enseignants)
@@ -1511,7 +1517,7 @@ class TestEtablissement:
         mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course')
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
-        synchronizer.anonymize_or_delete_users(db_valid_users)
+        synchronizer.anonymize_or_delete_users(db_valid_users, ldap_users)
 
         #Vérification de la suppression des utilisateurs
         mock_delete_users.assert_has_calls([call([492231,492232])])
@@ -1560,6 +1566,9 @@ class TestEtablissement:
         #Récupération des utilisateurs de la bd coté moodle
         db_valid_users = db.get_all_valid_users()
 
+        #Récupération des utilisateurs coté ldap
+        ldap_users = ldap.search_personne_uid_paged()
+
         #Mocks
         mocker.patch('synchromoodle.synchronizer.WebService.get_courses_user_enrolled',\
             side_effect=mock_utils.fake_get_courses_user_enrolled_test_cours)
@@ -1570,7 +1579,7 @@ class TestEtablissement:
         mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course')
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
-        synchronizer.anonymize_or_delete_users(db_valid_users)
+        synchronizer.anonymize_or_delete_users(db_valid_users, ldap_users)
 
         #Cours qui doit être supprimé
         mock_delete_courses.assert_has_calls([call(37003)])
