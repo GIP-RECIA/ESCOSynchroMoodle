@@ -40,6 +40,8 @@ logging:
   root:
     handlers: [console, file, file-error]
 actions:
+- id: presynchro
+  type: prepare
 - id: academique
   timestampStore:
     file: "trtAcademique_precedent.txt"

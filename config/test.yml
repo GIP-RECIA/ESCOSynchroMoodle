@@ -71,6 +71,8 @@ logging:
 
 
 actions:
+- id: presynchro
+  type: prepare
 - id: academique
   timestampStore:
     file: "trtAcademique_precedent.txt"

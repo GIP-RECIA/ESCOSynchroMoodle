@@ -13,6 +13,33 @@ from .dbutils import Database
 from .ldaputils import Ldap
 
 
+def prepare(config: Config, action: ActionConfig):
+    """
+    Prépare la base de données à la synchronisation
+
+    :param config: Configuration d'execution
+    :param action: Configuration de l'action
+    """
+    log = getLogger()
+
+    db = Database(config.database, config.constantes)
+    ldap = Ldap(config.ldap)
+    try:
+        db.connect()
+        ldap.connect()
+
+        synchronizer = Synchronizer(ldap, db, config, action)
+        synchronizer.initialize()
+
+        log.info("Suppression des cohortes en doublon")
+        synchronizer.handle_doublons()
+        log.info("Fin de la suppression des cohortes en doublon")
+
+    finally:
+        db.disconnect()
+        ldap.disconnect()
+
+
 def default(config: Config, action: ActionConfig):
     """
     Execute la mise à jour de la base de données Moodle à partir des informations du LDAP.
@@ -32,11 +59,6 @@ def default(config: Config, action: ActionConfig):
         synchronizer.initialize()
 
         timestamp_store = TimestampStore(action.timestamp_store)
-
-        log.info("Suppression des cohortes en doublon")
-        synchronizer.handle_doublons()
-        log.info("Fin de la suppression des cohortes en doublon")
-
         log.info('Traitement des établissements')
 
         #Avant les autres établissements on s'occupe de celui de la dane

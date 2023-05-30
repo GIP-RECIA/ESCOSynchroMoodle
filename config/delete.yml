@@ -61,5 +61,7 @@ logging:
     handlers: [debug, file, file-error]
 
 actions:
+- id: presynchro
+  type: prepare
 - id: nettoyage
   type: nettoyage
