@@ -259,6 +259,25 @@ class Ldap:
                                ['objectClass', 'uid'])
         return [entry.uid.value.lower() for entry in self.connection.entries]
 
+    def search_personne_uid_paged(self, since_timestamp: datetime.datetime = None, **filters) -> set[str]:
+        """
+        Recherche d'uid de personnes avec un système de pagniation.
+        Utilisé pour récupérer tous les utilisateurs du ldap
+        :param since_timestamp: Le temps de dernière modification au delà duquel on ne récupère pas les personnes.
+        :param filters: Filtres à appliquer
+        :return: Ensemble des uid des personnes
+        """
+        ldap_filter = _get_filtre_personnes(since_timestamp, **filters)
+        entries = self.connection.extend.standard.paged_search(self.config.personnes_dn, ldap_filter,
+                                              search_scope=LEVEL, attributes=
+                                              ['objectClass', 'uid'],
+                                              paged_size=self.config.page_size)
+        personnes = set()
+        for entry in entries:
+            personnes.add(entry["raw_attributes"]["uid"][0].decode("UTF-8").lower())
+        return personnes
+
+
     def search_memberOf(self, uai: str, isMemberOf: str) -> List[PersonneLdap]:
         """
         Recherche de personnes membres d'un groupe.
@@ -273,19 +292,6 @@ class Ldap:
                                ['objectClass', 'uid', 'sn', 'givenName', 'mail', 'ESCODomaines', 'ESCOUAICourant',
                                 'ENTPersonStructRattach', 'isMemberOf', '+'])
         return [PersonneLdap(entry) for entry in self.connection.entries]
-
-    def is_uid_in_ldap(self, uid:str) -> List[str]:
-        """
-        Recherche si une personne est présente dans le ldap par son uid.
-
-        :param uid: L'uid qu'on recherche
-        :return: True si elle est présente, False sinon
-        """
-        ldap_filter = _get_filtre_personnes_uid(uid)
-        self.connection.search(self.config.personnes_dn, ldap_filter,
-                               search_scope=LEVEL, attributes=
-                               ['objectClass', 'uid'])
-        return len([entry.uid.value.lower() for entry in self.connection.entries]) > 0
 
     def search_eleve(self, since_timestamp: datetime.datetime = None, uai: str = None) -> List[EleveLdap]:
         """

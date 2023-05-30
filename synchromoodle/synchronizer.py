@@ -692,7 +692,7 @@ class Synchronizer:
                         enseignant_niv_formation.add(etablissement_context.classe_to_niv_formation[classe])
                     else:
                         log.warning(
-                        "Problème avec l'enseignant %s pour l'inscrire dans les cohortes"
+                        "Impossible d'inscrire l'enseignant %s dans les cohortes"
                         " de niveau de formation associées à la classe %s",
                          enseignant_ldap, classe
                          )
@@ -1182,7 +1182,7 @@ class Synchronizer:
                 for username in self.__db.get_cohort_members(cohort.id):
                     eleves_by_cohorts_db[classe_name].append(username.lower())
             else:
-                log.warning("Problème avec le nom de la cohorte %s dans la catégorie %d",
+                log.warning("Nom de la cohorte %s dans la catégorie %d invalide",
                             cohort.name, etab_context.id_context_categorie)
 
         # Dictionnaire contenant la liste des élèves par cohorte provenant du ldap
@@ -1326,10 +1326,11 @@ class Synchronizer:
     def backup_course(self, shortname: str, fullname: str, categoryid: int, log=getLogger()) -> bool:
         """
         Permet de copier le backup un cours.
+        La règle de nommage est : backup-categorie-shortname-fullname-timestamp
 
         :param shortname: Le shortname du cours supprimé
         :param shortname: Le fullname du cours supprimé
-        :param categoryid: L'id de la catégorie d'ou le cours à été supprimé
+        :param categoryid: L'id de la catégorie d'ou le cours a été supprimé
         """
 
         now = self.__db.get_timestamp_now()
@@ -1399,11 +1400,12 @@ class Synchronizer:
         if courses_to_delete:
             self.delete_courses(courses_to_delete)
 
-    def anonymize_or_delete_users(self, db_users: list[tuple], log=getLogger()):
+    def anonymize_or_delete_users(self, db_users: list[tuple], ldap_users: set[str], log=getLogger()):
         """
         Anonymise ou supprime les utilisateurs devenus inutiles.
 
         :param db_users: La liste de toutes les personnes dans moodle
+        :param ldap_users: L'ensemble des uid de toutes les personnes dans le ldap
         :param log: Le logger
         """
         user_ids_to_delete = [] #Utilisateurs à supprimer
@@ -1419,8 +1421,11 @@ class Synchronizer:
             if db_user[0] in self.__config.delete.ids_users_undeletable:
                 continue
 
+            # TEMP:
+            print(len(ldap_users))
+
             #Si l'utilisateur n'est plus présent dans l'annuaire LDAP, alors il faut faire un traitement
-            if not self.__ldap.is_uid_in_ldap(db_user[1]):
+            if db_user[1] not in ldap_users:
                 log.info("L'utilisateur %s n'est plus présent dans l'annuaire LDAP", db_user[1])
                 #Dans tous les cas, si jamais il n'a jamais utilisé moodle alors on peut le supprimer
                 if not self.__db.user_has_used_moodle(db_user[0]):

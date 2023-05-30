@@ -219,7 +219,7 @@ def nettoyage(config: Config, action: ActionConfig):
 
         # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
         log.info("Début de la procédure d'anonymisation/suppression des utilisateurs/cours inutiles")
-        synchronizer.anonymize_or_delete_users(db.get_all_valid_users())
+        synchronizer.anonymize_or_delete_users(db.get_all_valid_users(), ldap.search_personne_uid_paged())
 
         db.connection.commit()
 
@@ -312,11 +312,11 @@ def nettoyage(config: Config, action: ActionConfig):
                     #Purge des cohortes spécifiques des établissements
                     etablissement_log.info("Purge des cohortes spécifiques à l'établissement")
                     if uai in action.specific_cohorts.cohorts:
-                        for filter,name in action.specific_cohorts.cohorts[uai].items():
+                        for filtre,name in action.specific_cohorts.cohorts[uai].items():
                             etablissement_log.info(f"Purge de la cohorte {name}")
                             specific_users_db, specific_users_ldap = synchronizer.get_specific_cohort_users(etablissement_context,
                                                                                                             name,
-                                                                                                            filter)
+                                                                                                            filtre)
 
                             synchronizer.purge_specific_cohort(specific_users_db, specific_users_ldap, name)
 

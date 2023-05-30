@@ -306,6 +306,9 @@ class LdapConfig(_BaseConfig):
         self.admin_rdn = "ou=administrateurs"  # type: str
         """OU pour les administrateurs"""
 
+        self.page_size = 10000 # type: int
+        """Taille d'une page pour les grandes requêtes"""
+
         super().__init__(**entries)
 
     @property

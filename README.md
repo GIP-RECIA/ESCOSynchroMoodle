@@ -206,6 +206,7 @@ La structure de la configuration est modélisée par les classes situées dans
 | personnes_rdn  | OU pour les personnes       | "ou=people"                                        | Chaine de caractères |
 | groups_rdn     | OU pour les groupes         | "ou=groups"                                        | Chaine de caractères |
 | admin_rdn      | OU pour les administrateurs | "ou=administrateurs"                               | Chaine de caractères |
+| page_size      | Taille d'une page pour les grandes requêtes | 10000                              | Nombre entier        |
 
 ###### delete
 
