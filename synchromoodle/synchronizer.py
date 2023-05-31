@@ -1408,6 +1408,7 @@ class Synchronizer:
         :param ldap_users: L'ensemble des uid de toutes les personnes dans le ldap
         :param log: Le logger
         """
+        log.debug("Utilisateurs récupérés. Début de la procédure.")
         user_ids_to_delete = [] #Utilisateurs à supprimer
         user_ids_to_anonymize = [] #Utilisateurs à anonymiser
         user_ids_to_process_courses = [] #Enseignants dont les cours doivent subir un traitement
@@ -1420,9 +1421,6 @@ class Synchronizer:
             #Si jamais c'est un utilisateur à ne pas supprimer
             if db_user[0] in self.__config.delete.ids_users_undeletable:
                 continue
-
-            # TEMP:
-            print(len(ldap_users))
 
             #Si l'utilisateur n'est plus présent dans l'annuaire LDAP, alors il faut faire un traitement
             if db_user[1] not in ldap_users:
