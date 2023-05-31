@@ -394,28 +394,6 @@ class Database:
             " VALUES (%(id_cohort)s, %(id_user)s, %(time_added)s)"
         self.mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user, 'time_added': time_added})
 
-    def delete_moodle_local_admins(self, id_context_categorie: int, ids_not_admin: list[int]):
-        """
-        Fonction permettant de supprimer les admins locaux
-        d'un contexte en gardant uniquement les admins specifies.
-
-        :param id_context_categorie: L'id du contexte
-        :param ids_not_admin: Les ids à supprimer
-        """
-        if not ids_not_admin:
-            return
-        # Construction de la liste des ids admins a conserver
-        ids_list, ids_list_params = array_to_safe_sql_list(ids_not_admin, 'ids_list')
-        # Recuperation de l'id pour le role d'admin local
-        id_role_admin_local = self.get_id_role_admin_local()
-        # Suppression des admins non presents dans la liste
-        s = f"DELETE FROM {self.entete}role_assignments" \
-            " WHERE roleid = %(id_role_admin_local)s" \
-            " AND contextid = %(id_context_categorie)s" \
-            f" AND userid IN ({ids_list})"
-        self.mark.execute(s, params={'id_role_admin_local': id_role_admin_local,
-                                     'id_context_categorie': id_context_categorie, **ids_list_params})
-
     def get_id_role_admin_local(self) -> int:
         """
         Fonction permettant de recuperer l'id du role admin local
@@ -462,36 +440,6 @@ class Database:
             " AND roleid = %(roleid)s" \
             " AND userid = %(userid)s"
         self.mark.execute(s, params={'id_context_category': id_context_category, 'roleid': roleid, 'userid': userid})
-
-    def delete_role_for_contexts(self, role_id: int, ids_contexts_by_courses: list[int], id_user: int):
-        """
-        Fonction permettant de supprimer un role sur differents
-        contextes pour l'utilisateur spécifié.
-
-        :param role_id: L'id du role
-        :param ids_contexts_by_courses: La listttte des ids de contexte
-        :param id_user: L'id de l'utilisateur
-        """
-        # Suppression des enrolments dans les cours
-        for id_course in ids_contexts_by_courses:
-            # Recuperation de la methode d'enrolment
-            id_enrol = self.get_id_enrol(ENROL_METHOD_MANUAL, role_id, id_course)
-            if not id_enrol:
-                continue
-            # Suppression de l'enrolment associe
-            id_user_enrolment = self.get_id_user_enrolment(id_enrol, id_user)
-            if id_user_enrolment:
-                s = f"DELETE FROM {self.entete}user_enrolments " \
-                    "WHERE id = %(id_user_enrolment)s"
-                self.mark.execute(s, params={'id_user_enrolment': id_user_enrolment})
-
-        # Suppression des roles dans les contextes
-        ids_list, ids_list_params = array_to_safe_sql_list(ids_contexts_by_courses.values(), 'ids_list')
-        s = f"DELETE FROM {self.entete}role_assignments" \
-            " WHERE roleid = %(role_id)s" \
-            f" AND contextid IN ({ids_list})" \
-            " AND userid = %(id_user)s"
-        self.mark.execute(s, params={'role_id': role_id, 'id_user': id_user, **ids_list_params})
 
     def get_id_enrol(self, enrol_method: str, role_id: int, id_course: int) -> int:
         """
@@ -556,32 +504,6 @@ class Database:
             f" AND cohortid NOT IN ({ids_list})"
         self.mark.execute(s, params={'id_user': id_user, **ids_list_params})
 
-    def disenroll_user_from_cohort(self, id_cohort: int, id_user: int):
-        """
-        Fonction permettant d'enlever un utilisateur d'une cohorte.
-
-        :param id_cohort: L'id de la cohorte
-        :param id_user: L'id de l'utilisateur
-        """
-        s = f"DELETE FROM {self.entete}cohort_members" \
-            " WHERE cohortid = %(id_cohort)s" \
-            " AND userid = %(id_user)s"
-        self.mark.execute(s, params={'id_cohort': id_cohort, 'id_user': id_user})
-
-    def get_cohort_name(self, id_cohort: int) -> str:
-        """
-        Fonction permettant de recuperer le nom d'une cohorte à partir de son id.
-
-        :param id_cohort: L'id de la cohorte
-        :return: Le nom de la cohorte
-        """
-        s = f"SELECT name FROM {self.entete}cohort WHERE id = %(id_cohort)s"
-        self.mark.execute(s, params={'id_cohort': id_cohort})
-        ligne = self.safe_fetchone()
-        if ligne is None:
-            return None
-        return ligne[0]
-
     def get_description_course_category(self, id_category: int) -> str:
         """
         Fonction permettant de recuperer la description d'une catégorie.
@@ -645,20 +567,6 @@ class Database:
         if ligne is None:
             return None
         return ligne[0]
-
-    def get_courses_ids_owned_by(self, user_id: int) -> list[int]:
-        """
-        Recherche tous les cours dont l'utilisateur est propriétaire.
-
-        :param user_id: L'id de l'utilisateur concerné
-        :returns: La liste des cours dont l'utilisateur est propriétaire
-        """
-        s = f"SELECT instanceid FROM {self.entete}context AS context" \
-            f" INNER JOIN {self.entete}role_assignments AS role_assignments" \
-            " ON context.id = role_assignments.contextid" \
-            " WHERE role_assignments.userid = %(userid)s AND role_assignments.roleid = %(roleid)s"
-        self.mark.execute(s, params={'userid': user_id, 'roleid': self.constantes.id_role_proprietaire_cours})
-        return self.mark.fetchall()
 
     def get_courses_ids_owned_or_teach(self, user_id: int) -> list[int]:
         """
@@ -872,23 +780,6 @@ class Database:
         """
         return self.get_id_context(self.constantes.niveau_ctx_categorie, 2, id_etab_categorie)
 
-    def get_id_context_inter_etabs(self) -> int:
-        """
-        Fonction permettant de recuperer l'id du contexte de la categorie inter-etablissements.
-
-        :return: L'id du contexte inter-établissements
-        """
-        s = "SELECT id" \
-            f" FROM {self.entete}context" \
-            " WHERE contextlevel = %(context_level)s" \
-            " AND instanceid = %(instanceid)s"
-        self.mark.execute(s, params={'context_level': self.constantes.niveau_ctx_categorie,
-                                     'instanceid': self.constantes.id_instance_moodle})
-        ligne = self.safe_fetchone()
-        if ligne is None:
-            return None
-        return ligne[0]
-
     def get_id_course_by_id_number(self, id_number: str) -> int:
         """
         Fonction permettant de recuperer l'id d'un cours a partir de son idnumber.
@@ -1063,19 +954,6 @@ class Database:
         self.mark.execute(s)
         now = self.mark.fetchone()[0]
         return now
-
-    def get_users_ids(self, usernames: list[str]) -> list[int]:
-        """
-        Fonction permettant de recuperer les ids des utilisateurs moodle via leurs usernames.
-
-        :param usernames: La liste des noms d'utilisateurs
-        :return: La liste des ids des utilisateurs
-        """
-        users_ids = []
-        for username in usernames:
-            user_id = self.get_user_id(username)
-            users_ids.append(user_id)
-        return users_ids
 
     def user_has_role(self, userid: int, roles_list: list[int]) -> bool:
         """
@@ -1367,33 +1245,6 @@ class Database:
             " VALUES (%(id_user)s, %(id_field)s, %(data)s)"
         self.mark.execute(s, params={'id_user': id_user, 'id_field': id_field, 'data': data})
 
-    def insert_moodle_user_info_field(self, short_name: str, name: str, data_type: str,
-     id_category: int, param1, param2, locked: int, visible: int):
-        """
-        Fonction permettant d'insérer un user info field.
-
-        :param short_name: Le shortname du user info field
-        :param name: Le shortname du user info field
-        :param data_type: Le data type du user info field
-        :param id_category: L'id de catégorie du user info field
-        :param param1:
-        :param param2:
-        :param locked: Si le user info field est locked
-        :param visible: Si le user info field est visible
-        """
-        s = f"INSERT INTO {self.entete}user_info_field" \
-            " (shortname, name, datatype, categoryid, param1, param2, locked, visible)" \
-            " VALUES (%(short_name)s, %(name)s, %(data_type)s, %(id_category)s, %(param1)s, %(param2)s, %(locked)s," \
-            " %(visible)s)"
-        self.mark.execute(s, params={'short_name': short_name,
-                                     'name': name,
-                                     'data_type': data_type,
-                                     'id_category': id_category,
-                                     'param1': param1,
-                                     'param2': param2,
-                                     'locked': locked,
-                                     'visible': visible})
-
     def insert_zone_privee(self, id_categorie_etablissement: int, siren: str, ou: str, time: int) -> int:
         """
         Fonction permettant d'insérer le cours correspondant à la zone privée.
@@ -1639,28 +1490,6 @@ class Database:
             " WHERE userid = %(id_user)s" \
             " AND fieldid = %(id_field)s"
         self.mark.execute(s, params={'new_data': new_data, 'id_user': id_user, 'id_field': id_field})
-
-    def get_field_domaine(self) -> int:
-        """
-        Fonction pour récupére l'id du champ Domaine.
-
-        :return: L'id du champ Domaine
-        """
-        id_field_domaine = []
-        sql = "SELECT id" \
-              f" FROM {self.entete}user_info_field" \
-              " WHERE shortname = 'Domaine'" \
-              " AND name ='Domaine'"
-        self.mark.execute(sql)
-        row = self.mark.fetchall()
-
-        # Si le champ n'existe pas, on le crée et on récupère l'id
-        if not bool(row):
-            id_field_domaine = 0
-        else:
-            id_field_domaine = row[0][0]
-
-        return id_field_domaine
 
     def is_enseignant_avance(self, id_user: int, id_role_enseignant_avance: int) -> bool:
         """
