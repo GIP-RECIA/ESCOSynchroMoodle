@@ -1351,6 +1351,12 @@ class Synchronizer:
         log.debug("Copie de %s vers %s", from_copy, to_copy)
         shutil.copy(from_copy, to_copy)
 
+        #Réécriture de l'ancien fichier pour le vider
+        log.debug("Nettoyage du fichier %s", from_copy)
+        old_file = open(from_copy, "w")
+        old_file.write("")
+        old_file.close()
+
 
     def check_and_process_user_courses(self, user_id: int, log=getLogger()):
         """
