@@ -1343,7 +1343,7 @@ class Synchronizer:
         shortname = shortname.replace("-","_")
         fullname = fullname.replace("-","_")
         filename = "backup-"+str(categoryid)+"-"+shortname+"-"+fullname+"-"+str(now)+".mbz"
-        filename = filename.replace(" ","_").replace("/","")
+        filename = filename.replace("/","")
         re.sub(r'\W+', '', filename)
         to_copy = self.__config.constantes.backup_destination+"/"+filename
 
