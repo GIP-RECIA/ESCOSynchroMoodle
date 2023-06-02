@@ -1424,6 +1424,18 @@ class Database:
             " WHERE id = %(id_category)s"
         self.mark.execute(s, params={'new_description': new_description, 'id_category': id_category})
 
+    def update_course_category_idnumber(self, id_category: int, new_idnumber: str):
+        """
+        Fonction permettant de mettre à jour l'idnumber d'une categorie.
+
+        :param id_category: L'id de la catégorie
+        :param new_description: Le nouveau idnumber
+        """
+        s = f"UPDATE {self.entete}course_categories" \
+            " SET idnumber = %(new_idnumber)s" \
+            " WHERE id = %(id_category)s"
+        self.mark.execute(s, params={'new_idnumber': new_idnumber, 'id_category': id_category})
+
     def update_course_category_name(self, id_category: int, new_name: str):
         """
         Fonction permettant de mettre à jour le nom d'une categorie.

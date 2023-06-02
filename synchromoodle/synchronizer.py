@@ -388,6 +388,13 @@ class Synchronizer:
                                              structure_ldap.siren, context.etablissement_theme)
                 id_etab_categorie = self.__db.get_id_course_category_by_id_number(structure_ldap.siren)
 
+            #Mise à jour de l'idnumber et de la description de l'établissement (utile si changement de SIREN)
+            else:
+                if id_etab_categorie is not None and not readonly and not context.etablissement_regroupe:
+                    log.info("Mise à jour de la structure")
+                    self.__db.update_course_category_description(id_etab_categorie, structure_ldap.siren)
+                    self.__db.update_course_category_idnumber(id_etab_categorie, structure_ldap.siren)
+
             # Mise a jour de la description dans la cas d'un groupement d'etablissement
             if context.etablissement_regroupe and not readonly:
                 description = self.__db.get_description_course_category(id_etab_categorie)
