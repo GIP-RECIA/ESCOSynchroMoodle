@@ -85,7 +85,7 @@ class WebService:
                         res.text, str(courseid))
 
 
-    def get_courses_user_enrolled(self, userid: int, returnusercount=0, log=getLogger()):
+    def get_courses_user_enrolled(self, userid: int, returnusercount=0, log=getLogger()) -> dict:
         """
         Récupère la liste de tous les cours auxquels est inscrit un utilisateur.
         L'utilisateur WebService doit avoir les permissions
@@ -95,6 +95,7 @@ class WebService:
         :param userid: L'id de l'utilisateur
         :param returnusercount: - 0 si on ne retourne pas le nombre d'utilisateurs inscrits à un cours
                                 - 1 si on retourne le nombre d'utilisateurs inscrits à un cours
+        :returns: Un dictionnaire contenant les cours de l'utilisateur
         """
 
         params = {}
@@ -113,9 +114,12 @@ class WebService:
             json_data = json.loads(res.text)
             if json_data is not None and 'exception' in json_data:
                 log.warning(json_data['message'])
+                return {}
+            return json_data
         except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService get_courses_user_enrolled. "
                         "Message retourné : %s.", res.text)
+            return {}
 
 
     def delete_cohorts(self, cohortids: list[int], log=getLogger()):
