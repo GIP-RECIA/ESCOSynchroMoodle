@@ -26,8 +26,6 @@ class WebService:
 
         :param userids: La liste des ids des utilisateurs à supprimer
         :param log: Le logger
-        :return: None si la fonction s'est éxécutée correctement
-        :raises Exception: Si le WebService renvoie une exception
         """
         i = 0
         users_to_delete = {}
@@ -46,13 +44,12 @@ class WebService:
         try:
             json_data = json.loads(res.text)
             if json_data is not None and 'exception' in json_data:
-                raise Exception(json_data['message'])
-            return json_data
+                log.warning("Exception suppression utilisateurs %s : "+json_data['message'],
+                            str(userids))
         except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService delete_users. "
                         "Message retourné : %s. Utilisateurs traités : %s",
                         res.text, str(userids))
-            return None
 
 
     def delete_course(self, courseid: list[int], log=getLogger()):
@@ -64,8 +61,6 @@ class WebService:
 
         :param courseid: L'id du cours à supprimer
         :param log: Le logger
-        :returns: Un dictionnaire avec la liste des warnings
-        :raises Exception: Si le WebService renvoie une exception
         """
 
         params = {}
@@ -83,13 +78,11 @@ class WebService:
         try:
             json_data = json.loads(res.text)
             if json_data is not None and 'exception' in json_data:
-                raise Exception(json_data['message'])
-            return json_data
+                log.warning("Exception cours %s : "+json_data['message'], str(courseid))
         except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService delete_courses. "
                         "Message retourné : %s. Cours traité : %s",
                         res.text, str(courseid))
-            return None
 
 
     def get_courses_user_enrolled(self, userid: int, returnusercount=0, log=getLogger()):
@@ -102,9 +95,6 @@ class WebService:
         :param userid: L'id de l'utilisateur
         :param returnusercount: - 0 si on ne retourne pas le nombre d'utilisateurs inscrits à un cours
                                 - 1 si on retourne le nombre d'utilisateurs inscrits à un cours
-
-        :returns: Un dictionnaire contenant les cours de l'utilisateur
-        :raises Exception: Si le WebService renvoie une exception
         """
 
         params = {}
@@ -122,12 +112,10 @@ class WebService:
         try:
             json_data = json.loads(res.text)
             if json_data is not None and 'exception' in json_data:
-                raise Exception(json_data['message'])
-            return json_data
+                log.warning(json_data['message'])
         except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService get_courses_user_enrolled. "
                         "Message retourné : %s.", res.text)
-            return None
 
 
     def delete_cohorts(self, cohortids: list[int], log=getLogger()):
@@ -137,8 +125,6 @@ class WebService:
 
         :param cohortids: La liste des identifiants des cohortes
         :param log: Le logger
-        :returns: None si la fonction s'est éxécutée correctement
-        :raises Exception: Si le WebService renvoie une exception
         """
 
         cohorts_to_delete = {}
@@ -157,10 +143,9 @@ class WebService:
         try:
             json_data = json.loads(res.text)
             if json_data is not None and 'exception' in json_data:
-                raise Exception(json_data['message'])
-            return json_data
+                log.warning("Exception suppression cohortes %s : "+json_data['message'],
+                            str(cohortids))
         except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService delete_cohorts. "
                         "Message retourné : %s. Cohortes traitées : %s",
                         res.text, str(cohortids))
-            return None
