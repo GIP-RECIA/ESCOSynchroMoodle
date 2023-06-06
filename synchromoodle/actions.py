@@ -239,6 +239,8 @@ def nettoyage(config: Config, action: ActionConfig):
         synchronizer = Synchronizer(ldap, db, config, action)
         synchronizer.initialize()
 
+        log.info("Début de l'action de nettoyage")
+
         # Nettoyage par anonymisation/suppression des utilisateurs inutiles et des cours
         log.info("Début de la procédure d'anonymisation/suppression des utilisateurs/cours inutiles")
         log.debug("Récupération de tous les utilisateurs en BD et dans le LDAP")
@@ -258,7 +260,6 @@ def nettoyage(config: Config, action: ActionConfig):
             cohorts_ens_dep_clg_ldap[departement] = []
             cohorts_dir_dep_clg_ldap[departement] = []
 
-        log.info("Début de l'action de nettoyage")
         # Purge des cohortes pour n'y conserver que les utilisateurs qui doivent encore être dedans
         if config.delete.purge_cohorts:
 

@@ -1543,7 +1543,7 @@ class Synchronizer:
         #Libération mémoire
         del user_ids_to_process_courses
 
-        #Pour chaque utilisateur à supprimer
+        #On supprime les utilisateurs en fonction de user_ids_to_delete
         if user_ids_to_delete:
             log.info("Suppression des utilisateurs en cours...")
             self.delete_users(user_ids_to_delete, log=log)
@@ -1552,7 +1552,12 @@ class Synchronizer:
         #Libération mémoire
         del user_ids_to_delete
 
-        #De même pour user_ids_to_anonymize
+        #Ici on peut perdre la connection à la BD si la suppression à pris trop de temps
+        #Si on est plus connecté, on va donc se reconnecter
+        if not self.__db.connection.is_connected():
+            self.__db.connection.reconnect(attempts=5, delay=1)
+
+        #On anonymise les utilisateurs en fonction de user_ids_to_anonymize
         if user_ids_to_anonymize:
             log.info("Anonymisation des utilisateurs en cours...")
             self.__db.anonymize_users(user_ids_to_anonymize)
