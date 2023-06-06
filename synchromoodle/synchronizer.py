@@ -951,12 +951,22 @@ class Synchronizer:
         # Recuperation des roles sur les forums qui ne devraient plus exister
         ids_roles_non_autorises, forums_summaries = self.__db.get_ids_and_summaries_not_allowed_roles(id_enseignant,
                                                                                                       shortnames_forums)
-
         # Suppression des roles non autorises
         if ids_roles_non_autorises:
             # Suppression des roles
             self.__db.delete_roles(ids_roles_non_autorises)
             log.info("Suppression des rôles d'enseignant pour %s sur les forum '%s' ",
+                     enseignant_infos, str(forums_summaries))
+            log.info("Les seuls établissements autorisés pour cet enseignant sont '%s'", themes_autorises)
+
+        # Recuperation des inscriptions sur les forums qui ne devraient plus exister
+        ids_enrolments_non_autorises, forums_summaries = self.__db.get_ids_and_summaries_not_allowed_enrolments(id_enseignant,
+                                                                                                                shortnames_forums)
+        # Suppression des inscriptions non autorisees
+        if ids_enrolments_non_autorises:
+            # Suppression des inscriptions
+            self.__db.delete_user_enrolments(ids_enrolments_non_autorises)
+            log.info("Suppression des inscriptions pour %s sur les forum '%s' ",
                      enseignant_infos, str(forums_summaries))
             log.info("Les seuls établissements autorisés pour cet enseignant sont '%s'", themes_autorises)
 

@@ -482,11 +482,22 @@ class Database:
         """
         Fonction permettant de supprimer des roles.
 
-        :param ids_roles: Les ids des rpoles à supprimer
+        :param ids_roles: Les ids des roles à supprimer
         """
         # Construction de la liste des ids des roles concernes
         ids_list, ids_list_params = array_to_safe_sql_list(ids_roles, 'ids_list')
         s = f"DELETE FROM {self.entete}role_assignments WHERE id IN ({ids_list})"
+        self.mark.execute(s, params={**ids_list_params})
+
+    def delete_user_enrolments(self, ids_enrolments: list[int]):
+        """
+        Fonction permettant de supprimer des enrolments.
+
+        :param ids_enrolments: Les ids des enrolments à supprimer
+        """
+        # Construction de la liste des ids des roles concernes
+        ids_list, ids_list_params = array_to_safe_sql_list(ids_enrolments, 'ids_list')
+        s = f"DELETE FROM {self.entete}user_enrolments WHERE id IN ({ids_list})"
         self.mark.execute(s, params={**ids_list_params})
 
     def disenroll_user_from_cohorts(self, ids_cohorts_to_keep: list[int], id_user: int):
@@ -904,6 +915,35 @@ class Database:
             " AND mc.contextlevel = 50" \
             " AND mc.id = mra.contextid" \
             " AND mra.userid = %(id_user)s"
+        self.mark.execute(s, params={'id_user': id_user, **ids_list_params})
+        result_set = self.mark.fetchall()
+        if not result_set:
+            return [], []
+        # Recuperation des ids et themes non autorises
+        ids = [result[0] for result in result_set]
+        summaries = [result[1] for result in result_set]
+        return ids, summaries
+
+    def get_ids_and_summaries_not_allowed_enrolments(self, id_user: int,
+                                                     allowed_forums_shortnames: list[str]) -> tuple[int,str]:
+        """
+        Fonction permettant de recuperer les ids des inscriptions non autorisées sur
+        les forums, ainsi que les noms des forums sur lesquels portent ces inscriptions.
+
+        :param id_user: L'id de l'utilisateur
+        :param allowed_forums_shortnames: Les noms des forums autorisés pour l'utilisateur
+        :return: Un tuple avec la liste des ids et la liste des forums non autorisés
+        """
+        # Construction de la liste des shortnames
+        ids_list, ids_list_params = array_to_safe_sql_list(allowed_forums_shortnames, 'ids_list')
+        s = f"SELECT mue.id,mco.summary FROM {self.entete}enrol me" \
+            f" INNER JOIN {self.entete}user_enrolments mue" \
+            " ON me.id = mue.enrolid" \
+            f" INNER JOIN {self.entete}course mco" \
+            " ON mco.id = me.courseid" \
+            " WHERE mco.shortname LIKE 'ZONE-PRIVEE-%%'" \
+            f" AND mco.shortname NOT IN ({ids_list})" \
+            " AND mue.userid = %(id_user)s"
         self.mark.execute(s, params={'id_user': id_user, **ids_list_params})
         result_set = self.mark.fetchall()
         if not result_set:
