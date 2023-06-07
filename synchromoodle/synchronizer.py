@@ -945,8 +945,19 @@ class Synchronizer:
         sirens = self.__db.get_descriptions_course_categories_by_themes(themes_autorises)
 
         # Shortname des forums associes
-        # Ancien code : shortnames_forums = [ ( "ZONE-PRIVEE-%s" % str( siren ) ) for siren in sirens ]
-        shortnames_forums = [f"ZONE-PRIVEE-{siren}" for siren in sirens]
+        shortnames_forums = []
+        for siren in sirens:
+            #Cas spécifique pour les regroupement d'établissement, pour construire le nom des zones
+            #privées il ne suffit pas de concaténer le valeur dans la colonne description dans la bd
+            if "$" in siren:
+                #Récupération de tous les sirens des établissements du regroupement
+                rgp_sirens = siren.split("$")
+                rgp_sirens[-1] = rgp_sirens[-1].split("@")[0]
+                for rgp_siren in rgp_sirens:
+                    shortnames_forums.append(f"ZONE-PRIVEE-{rgp_siren}")
+            #Cas général
+            else:
+                shortnames_forums.append(f"ZONE-PRIVEE-{siren}")
 
         # Recuperation des roles sur les forums qui ne devraient plus exister
         ids_roles_non_autorises, forums_summaries = self.__db.get_ids_and_summaries_not_allowed_roles(id_enseignant,
