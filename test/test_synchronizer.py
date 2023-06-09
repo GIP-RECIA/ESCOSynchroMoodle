@@ -755,6 +755,86 @@ class TestEtablissement:
         assert len(roles_results) == 0
 
 
+    def test_purge_zones_privees(self, ldap: Ldap, db: Database, config: Config):
+        """
+        Teste la purge des zones privées.
+
+        :param ldap: L'objet Ldap pour intéragir avec le ldap dans le docker
+        :param db: L'objet Database pour intégragir avec le mariabd dans le docker
+        :param config: La configuration globale pendant la session de tests
+        """
+
+        #Chargement du ldap et de la bd
+        ldap_utils.run_ldif('data/all.ldif', ldap)
+        db_utils.run_script('data/default-context.sql', db, connect=False)
+
+        #Initialisation du synchronizer
+        synchronizer = Synchronizer(ldap, db, config)
+        synchronizer.initialize()
+
+        #Synchronisation d'un établissement
+        etab_context = synchronizer.handle_etablissement("0290009C")
+
+        #Construction du dictionnaire d'association classe -> niveau formation
+        synchronizer.construct_classe_to_niv_formation(etab_context, ldap.search_eleve_classe_and_niveau("0290009C"))
+
+        #Synchronisation des enseignants de cet établissement
+        enseignants = ldap.search_enseignant(None, "0290009C", tous=True)
+        for enseignant in enseignants:
+            synchronizer.handle_enseignant(etab_context, enseignant)
+
+        #Synchronisation d'un second établissement
+        etab_context_other = synchronizer.handle_etablissement("0291595B")
+        synchronizer.construct_classe_to_niv_formation(etab_context_other, ldap.search_eleve_classe_and_niveau("0291595B"))
+        enseignants = ldap.search_enseignant(None, "0291595B", tous=True)
+        for enseignant in enseignants:
+            synchronizer.handle_enseignant(etab_context_other, enseignant)
+
+        #Récupération de l'id de l'utilisateur en fonction de son username
+        db.mark.execute(f"SELECT * FROM {db.entete}user WHERE username = %(username)s",
+                        params={
+                            'username': "f1700jyo"
+                        })
+        result = db.mark.fetchone()
+        id_user = result[0]
+
+        #On inscrit de force un utilisateur dans une zone privée alors qu'il n'a pas le droit d'y être
+        # Ajout des roles sur le contexte forum
+        db.add_role_to_user(config.constantes.id_role_eleve, etab_context.id_context_course_forum, id_user)
+        # Inscription à la Zone Privée
+        db.enroll_user_in_course(config.constantes.id_role_eleve, etab_context.id_zone_privee, id_user)
+
+        #On s'assure qu'il a bien été inscrit
+        db.mark.execute(f"SELECT * FROM {db.entete}user_enrolments"
+                        " WHERE userid = %(user_id)s",
+                     params={'user_id': id_user})
+        assert len(db.mark.fetchall()) == 2
+        db.mark.execute(f"SELECT * FROM {db.entete}role_assignments"
+                        " WHERE userid = %(user_id)s",
+                     params={'user_id': id_user})
+        assert len(db.mark.fetchall()) == 5
+
+        #On fait passer la purge
+        synchronizer.purge_zones_privees(etab_context)
+
+        #On vérifie que l'utilisateur n'est plus inscrit dans la zone privée
+        #Table mdl_user_enrolments
+        db.mark.execute(f"SELECT id FROM {db.entete}user_enrolments"
+                        " WHERE userid = %(user_id)s",
+                     params={'user_id': id_user})
+        result = db.mark.fetchall()
+        assert len(result) == 1
+        assert result[0][0] == 3284193
+
+        #Table mdl_role_assignments
+        db.mark.execute(f"SELECT id FROM {db.entete}role_assignments"
+                        " WHERE userid = %(user_id)s",
+                     params={'user_id': id_user})
+        results = db.mark.fetchall()
+        assert len(results) == 4
+        assert (3766211,) not in results
+
+
     def test_purge_doublons(self, ldap: Ldap, db: Database, config: Config, mocker: pytest_mock.plugin.MockerFixture):
         """
         Teste la suppression des doublons de cohortes.
