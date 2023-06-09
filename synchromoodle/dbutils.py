@@ -579,6 +579,46 @@ class Database:
             return None
         return ligne[0]
 
+    def get_users_enrolled_in_course(self, course_id: int) -> set[int]:
+        """
+        Retourne la liste de tous les utilisateurs inscrits à un cours.
+        (selon la table mdl_user_enrolments)
+
+        :param course_id: L'id du cours concerné
+        :returns: L'ensemble des utilisateurs inscrits dans le cours
+        """
+        s = f"SELECT mu.username from {self.entete}user_enrolments mue" \
+            f" INNER JOIN {self.entete}enrol me" \
+            " ON me.id = mue.enrolid" \
+            f" INNER JOIN {self.entete}user mu" \
+            " ON mu.id = mue.userid" \
+            " WHERE me.courseid = %(courseid)s"
+        self.mark.execute(s, params={'courseid': course_id})
+        results = self.mark.fetchall()
+        users_in_course = set()
+        for ligne in results:
+            users_in_course.add(ligne[0])
+        return users_in_course
+
+    def get_users_assigned_in_course(self, context_id: int) -> set[int]:
+        """
+        Retourne la liste de tous les utilisateurs inscrits à un cours.
+        (selon la table mdl_role_assignments)
+
+        :param contextid: L'id de contexte du cours concerné
+        :returns: L'ensemble des utilisateurs inscrits dans le cours
+        """
+        s = f"SELECT mu.username FROM {self.entete}role_assignments mra" \
+            f" INNER JOIN {self.entete}user mu" \
+            " ON mu.id = mra.userid" \
+            " WHERE contextid = %(contextid)s"
+        self.mark.execute(s, params={'contextid': context_id})
+        results = self.mark.fetchall()
+        users_in_course = set()
+        for ligne in results:
+            users_in_course.add(ligne[0])
+        return users_in_course
+
     def get_courses_ids_owned_or_teach(self, user_id: int) -> list[int]:
         """
         Retourne tous les id de cours auxquels participe un utilisateur

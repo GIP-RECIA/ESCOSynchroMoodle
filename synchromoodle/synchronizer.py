@@ -170,6 +170,53 @@ class Synchronizer:
         # Recuperation de l'id du champ personnalisé Domaine
         self.context.id_field_domaine = self.__db.get_id_user_info_field_by_shortname('Domaine')
 
+
+    def purge_zones_privees(self, etab_context: EtablissementContext, log=getLogger()):
+        """
+        Purge les zones privées en désinscrivant les utilisateurs qui ne
+        sont plus dans le ldap mais pas encore supprimés.
+
+        :param etab_context: Le contexte de l'établissement
+        :param log: Le logger
+        """
+        #Récupération du theme de l'établissement
+        theme = etab_context.structure_ldap.uai
+
+        #Construction de la liste des utilisateurs devant être dans la zone privée (selon le ldap)
+        ldap_users = self.__ldap.search_enseignant(since_timestamp=None, uai=theme, tous=True)
+        zone_privee_ldap = set()
+        for enseignant_ldap in ldap_users:
+            if set(enseignant_ldap.profils).intersection(['National_ENS', 'National_DIR', 'National_EVS', 'National_ETA']):
+                zone_privee_ldap.add(enseignant_ldap.uid.lower())
+
+        #Construction de la liste des utilisateurs qui sont inscrits à la zone privée en BD
+        zone_privee_enrolled_bd = self.__db.get_users_enrolled_in_course(etab_context.id_zone_privee)
+
+        #Construction de la liste des utilisateurs qui ont un role assigné dans la zone privée en BD
+        zone_privee_assigned_bd = self.__db.get_users_assigned_in_course(etab_context.id_context_course_forum)
+
+        #Ensemble qui va contenir tous les utilisateurs à désinscrire des zones privées, deux tables comprises
+        users_to_unenrol = set()
+
+        #Comparaison pour savoir quels inscriptions on doit enlever
+        for userid in zone_privee_enrolled_bd:
+            if userid not in zone_privee_ldap:
+                users_to_unenrol.add(userid)
+
+        #Comparaison pour savoir quels rôles on doit enlever
+        for userid in zone_privee_assigned_bd:
+            if userid not in zone_privee_ldap:
+                users_to_unenrol.add(userid)
+
+        for userid in users_to_unenrol:
+            log.info("Désinscription de l'utilisateur %s de la zone privée %s",
+                        userid, etab_context.id_zone_privee)
+            self.__db.unenrol_user_from_course(etab_context.id_zone_privee, self.__db.get_user_id(userid))
+
+        #On enregistre toutes les modifs
+        self.__db.connection.commit()
+
+
     def handle_doublons(self, log=getLogger()):
         """
         Supprime les doublons de cohortes.
@@ -197,8 +244,8 @@ class Synchronizer:
             if trouve == 0:
                 for id_cohort, in cohorts_doublons_ids[1:len(cohorts_doublons_ids)]:
                     self.__webservice.delete_cohorts([id_cohort])
-                    log.info("Suppression de la cohorte %d dans le contexte %d car"
-                             " toutes les cohortes en doublon ont des utilisateurs", id_cohort, contextid)
+                    log.warning("Suppression de la cohorte %d dans le contexte %d car"
+                                " toutes les cohortes en doublon ont des utilisateurs", id_cohort, contextid)
 
 
 

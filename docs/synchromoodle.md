@@ -99,6 +99,7 @@ Ce fichier définit une classe ``Synchronizer`` qui est l'élément central de t
  - Synchronisation des utilisateurs Inter-Etablissements -> ``handle_user_interetab``
  - Suppression des cohortes en doublon -> ``handle_doublons``
  - Purge des cohortes -> ``purge_cohorts``
+ - Purge des zones privées -> ``purge_zones_privees``
  - Suppression des cohortes vides -> ``delete_empty_cohorts``
  - Suppression/Anonymisation des utilisateurs inutiles -> ``anonymize_or_delete_users``
  - Suppression des cours -> ``check_and_process_user_courses``

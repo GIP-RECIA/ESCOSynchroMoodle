@@ -389,6 +389,18 @@ def nettoyage(config: Config, action: ActionConfig):
             log.info("Suppression des cohortes vides (sans utilisateur)")
             synchronizer.delete_empty_cohorts()
 
+        #Purge des zones privées
+        if config.delete.purge_zones_privees:
+            log.debug("Purge des zones privées activée")
+
+            for uai in action.etablissements.liste_etab:
+                etablissement_log = log.getChild(f'etablissement.{uai}')
+                etablissement_context = synchronizer.handle_etablissement(uai, log=etablissement_log, readonly=True)
+
+                if etablissement_context.structure_ldap:
+                    etablissement_log.info(f"Nettoyage de la zone privée de l'établissement (uai={uai})")
+                    synchronizer.purge_zones_privees(etablissement_context, log=etablissement_log)
+
         log.info("Fin de l'action de nettoyage")
     finally:
         db.disconnect()

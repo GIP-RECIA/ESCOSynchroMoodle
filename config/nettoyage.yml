@@ -32,6 +32,7 @@ constantes:
 
 delete:
   purge_cohorts: True
+  purge_zones_privees: True
 
 logging:
   formatters:

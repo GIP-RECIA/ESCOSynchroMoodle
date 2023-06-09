@@ -25,6 +25,7 @@ webservice:
 
 delete:
   purge_cohorts: True
+  purge_zones_privees: True
 
 
 constantes:

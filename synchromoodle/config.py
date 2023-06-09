@@ -75,6 +75,9 @@ class DeleteConfig(_BaseConfig):
         self.purge_cohorts = False  # type: bool
         """Booléen indiquant si on purge les cohortes s'il y a une action de suppression"""
 
+        self.purge_zones_privees = False  # type: bool
+        """Booléen indiquant si on purge les zones privées s'il y a une action de suppression"""
+
         super().__init__(**entries)
 
 
