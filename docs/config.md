@@ -191,5 +191,5 @@ La structure de la configuration est modélisée par les classes situées dans
 
 #### Exemple de configuration
 
-- [config/test.yml](./config/test.yml)
-- [config/nettoyage.yml](./config/nettoyage.yml)
+- [config/test.yml](../config/test.yml)
+- [config/nettoyage.yml](../config/nettoyage.yml)
