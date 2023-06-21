@@ -14,6 +14,7 @@
 - Aller dans **Administration du site > Plugins > Services Web > Services externes**
 - Ajouter un nouveau service a l'aide du bouton **_Ajouter_** en bas de la section **Services personnalisés**
 - Donner un nom au service (Par exemple: **_synchromoodle_**) et cocher les cases **_Activé_** et **_Uniquement utilisateurs autorisés_**
+- Donner la description suivante : "Webservice pour la synchro moodle permettant l'effacement des cours et des utilisateurs."
 - Sauvegarder
 - Accéder au menu d'ajout de fonctions à ce service a l'aide du bouton **_Fonctions_**
 - Cliquer sur **_Ajouter des fonctions_** et ajouter :
@@ -21,8 +22,8 @@
     - core_course_delete_courses
     - core_cohort_delete_cohorts
     - core_enrol_get_users_courses
-    - core_webservice_get_site_infos
-- Sauvegarder
+    - core_webservice_get_site_info
+- Ajouter des fonctions
 
 ⚠Cas particulier - Environnement de Dev⚠
 
@@ -41,7 +42,7 @@ if (!file_exists($function->classpath)) {
 
 ## Créer un nouveau rôle système
 - Aller dans **Administration du site > Utilisateurs > Permissions > Définition des rôles**
-- Créer un nouveau rôle (Par exemple: **_Webservice_**)
+- Créer un nouveau rôle (Par exemple: **_Webservice_** pour "Nom abrégé" et "Nom complet personnalisé")
 - Cocher la case **_Système_** pour la valeur de **_Types de contextes où ce rôle peut être attribué_**
 - Assigner les capacités suivantes au rôle:
     - webservice/rest:use
@@ -54,7 +55,7 @@ if (!file_exists($function->classpath)) {
     - moodle/cohort:manage
     - mod/dataform:managetemplates
     - mod/dataform:managefields
-- Sauvegarder
+- Créer ce rôle
 
 ## Autoriser l'utilisateur à utiliser le service
 - Aller dans **Administration du site > Plugins > Services Web > Services externes**
@@ -77,7 +78,9 @@ Si c'est le cas, pour résoudre le problème il faut :
 ## Créer le token
 - Aller dans **Administration du site > Plugins > Services Web > Gérer les jetons**
 - Cliquer sur **_Ajouter_**
-- Sélectionnez l'utilisateur et le service créés précédemment
+- Renseigner le nom "webservice"
+- Sélectionnez le service créé précédemment (synchromoodle)
+- Sélectionner "Activer" et saisir la date la plus éloignée possible
 - Sauvegarder
 - Fournir le token généré dans la configuration du script de synchronisation
 
