@@ -21,7 +21,7 @@
     - core_course_delete_courses
     - core_cohort_delete_cohorts
     - core_enrol_get_users_courses
-    - core_webservice_get_site_infos
+    - core_webservice_get_site_info
 - Sauvegarder
 
 ⚠Cas particulier - Environnement de Dev⚠
