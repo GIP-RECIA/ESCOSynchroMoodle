@@ -1619,8 +1619,13 @@ class Database:
         #On prend le dernier s'il y'en a plusieurs
         if len(result) > 1:
             log.warning("Plusieurs cours avec le même nom %s dans la même catégorie %s", shortname, categoryid)
-        contenthash = result[len(result)-1][0]
-        return contenthash[:2]+"/"+contenthash[2:4]+"/"+contenthash
+        #Dans le cas ou on à pas de résultat
+        if len(result) == 0:
+            return ""
+        #Cas normal ou on a un résultat
+        else:
+            contenthash = result[len(result)-1][0]
+            return contenthash[:2]+"/"+contenthash[2:4]+"/"+contenthash
 
     def get_id_context_from_course_id(self, id_course: int) -> int:
         """

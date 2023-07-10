@@ -1413,25 +1413,33 @@ class Synchronizer:
         #URL ou est situé le fichier de backup
         url = self.__db.get_backup_course_file_url(categoryid, shortname)
 
-        #On fait attention aux caractères génants dans le nom du fichier
-        from_copy = self.__config.constantes.moodledatadir+"/filedir/"+url
-        shortname = shortname.replace("-","_")
-        fullname = fullname.replace("-","_")
-        filename = "backup-"+str(categoryid)+"-"+shortname+"-"+fullname+"-"+str(now)+".mbz"
-        filename = filename.replace("/","")
-        re.sub(r'\W+', '', filename)
-        to_copy = self.__config.constantes.backup_destination+"/"+filename
+        #Si on a trouvé le backup
+        if url != "":
 
-        #Copie du fichier
-        log.debug("Copie de %s vers %s", from_copy, to_copy)
-        shutil.copy(from_copy, to_copy)
+            #On fait attention aux caractères génants dans le nom du fichier
+            from_copy = self.__config.constantes.moodledatadir+"/filedir/"+url
+            shortname = shortname.replace("-","_")
+            fullname = fullname.replace("-","_")
+            filename = "backup-"+str(categoryid)+"-"+shortname+"-"+fullname+"-"+str(now)+".mbz"
+            filename = filename.replace("/","")
+            re.sub(r'\W+', '', filename)
+            to_copy = self.__config.constantes.backup_destination+"/"+filename
 
-        #Réécriture de l'ancien fichier pour le vider
-        log.debug("Nettoyage du fichier %s", from_copy)
-        old_file = open(from_copy, "w")
-        old_file.write("")
-        old_file.close()
+            #Copie du fichier
+            log.debug("Copie de %s vers %s", from_copy, to_copy)
+            shutil.copy(from_copy, to_copy)
 
+            #Réécriture de l'ancien fichier pour le vider
+            log.debug("Nettoyage du fichier %s", from_copy)
+            old_file = open(from_copy, "w")
+            old_file.write("")
+            old_file.close()
+
+            log.info("Le backup du cours %s a été copié", shortname)
+
+        #Sinon on met un warning
+        else:
+            log.warning("Pas de backup trouvé pour le cours %s dans la catégorie %s", shortname, categoryid)
 
     def check_and_process_user_courses(self, user_id: int, log=getLogger()):
         """
@@ -1703,7 +1711,6 @@ class Synchronizer:
             #Copie du backup du cours
             log.debug("Début de la procédure de copie du backup")
             self.backup_course(shortname, fullname, categoryid)
-            log.info("Le backup du cours %d a été copié", courseid)
 
 
     def purge_cohorts(self, users_by_cohorts_db: Dict[str, List[str]],
