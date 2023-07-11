@@ -32,14 +32,22 @@ class WebService:
         for userid in userids:
             users_to_delete[f"userids[{i}]"] = userid
             i += 1
-        res = requests.get(url=self.url,
-                           params={
-                               'wstoken': self.config.token,
-                               'moodlewsrestformat': "json",
-                               'wsfunction': "core_user_delete_users",
-                               **users_to_delete
-                           },
-                           timeout=120)
+
+        try:
+            res = requests.get(url=self.url,
+                               params={
+                                   'wstoken': self.config.token,
+                                   'moodlewsrestformat': "json",
+                                   'wsfunction': "core_user_delete_users",
+                                   **users_to_delete
+                               },
+                               timeout=120)
+        except requests.exceptions.ConnectionError:
+            log.error("Déconnexion du webservice delete_users sur suppression utilisateurs %s", str(userids))
+            return None
+        except requests.exceptions.Timeout:
+            log.warning("Délai de requête au webservice delete_users maximum dépassé sur suppression utilisateurs %s", str(userids))
+            return None
 
         try:
             json_data = json.loads(res.text)
@@ -66,14 +74,21 @@ class WebService:
         params = {}
         params["courseids[0]"] = courseid
 
-        res = requests.get(url=self.url,
-                           params={
-                               'wstoken': self.config.token,
-                               'moodlewsrestformat': "json",
-                               'wsfunction': "core_course_delete_courses",
-                               **params
-                           },
-                           timeout=600)
+        try:
+            res = requests.get(url=self.url,
+                               params={
+                                   'wstoken': self.config.token,
+                                   'moodlewsrestformat': "json",
+                                   'wsfunction': "core_course_delete_courses",
+                                   **params
+                               },
+                               timeout=600)
+        except requests.exceptions.ConnectionError:
+            log.error("Déconnexion du webservice delete_courses sur suppression cours %s", str(courseid))
+            return None
+        except requests.exceptions.Timeout:
+            log.warning("Délai de requête au webservice delete_courses maximum dépassé sur suppression cours %s", str(courseid))
+            return None
 
         try:
             json_data = json.loads(res.text)
@@ -102,14 +117,22 @@ class WebService:
         params["userid"] = userid
         params["returnusercount"] = returnusercount
 
-        res = requests.get(url=self.url,
-                           params={
-                               'wstoken': self.config.token,
-                               'moodlewsrestformat': "json",
-                               'wsfunction': "core_enrol_get_users_courses",
-                               **params
-                           },
-                           timeout=60)
+        try:
+            res = requests.get(url=self.url,
+                               params={
+                                   'wstoken': self.config.token,
+                                   'moodlewsrestformat': "json",
+                                   'wsfunction': "core_enrol_get_users_courses",
+                                   **params
+                               },
+                               timeout=60)
+        except requests.exceptions.ConnectionError:
+            log.error("Déconnexion du webservice get_users_courses sur %s", str(userid))
+            return None
+        except requests.exceptions.Timeout:
+            log.warning("Délai de requête au webservice get_users_courses maximum dépassé sur %s", str(userid))
+            return None
+
         try:
             json_data = json.loads(res.text)
             if json_data is not None and 'exception' in json_data:
@@ -135,14 +158,21 @@ class WebService:
         for i,cohort_id in enumerate(cohortids):
             cohorts_to_delete[f"cohortids[{i}]"] = cohort_id
 
-        res = requests.get(url=self.url,
-                           params={
-                               'wstoken': self.config.token,
-                               'moodlewsrestformat': "json",
-                               'wsfunction': "core_cohort_delete_cohorts",
-                               **cohorts_to_delete
-                           },
-                           timeout=600)
+        try:
+            res = requests.get(url=self.url,
+                               params={
+                                   'wstoken': self.config.token,
+                                   'moodlewsrestformat': "json",
+                                   'wsfunction': "core_cohort_delete_cohorts",
+                                   **cohorts_to_delete
+                               },
+                               timeout=600)
+        except requests.exceptions.ConnectionError:
+            log.error("Déconnexion du webservice delete_cohorts sur suppression cohortes %s", str(cohortids))
+            return None
+        except requests.exceptions.Timeout:
+            log.warning("Délai de requête au webservice delete_cohorts maximum dépassé sur suppression cohortes %s", str(cohortids))
+            return None
 
         try:
             json_data = json.loads(res.text)
