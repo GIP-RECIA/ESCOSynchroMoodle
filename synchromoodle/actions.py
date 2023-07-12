@@ -389,6 +389,11 @@ def nettoyage(config: Config, action: ActionConfig):
             log.info("Suppression des cohortes vides (sans utilisateur)")
             synchronizer.delete_empty_cohorts()
 
+        #Ici on peut perdre la connection à la BD si la suppression à pris trop de temps
+        #Si on est plus connecté, on va donc se reconnecter
+        if not db.connection.is_connected():
+            db.connection.reconnect(attempts=5, delay=1)
+
         #Purge des zones privées
         if config.delete.purge_zones_privees:
             log.debug("Purge des zones privées activée")
