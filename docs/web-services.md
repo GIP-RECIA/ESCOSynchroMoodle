@@ -14,7 +14,6 @@
 - Aller dans **Administration du site > Plugins > Services Web > Services externes**
 - Ajouter un nouveau service a l'aide du bouton **_Ajouter_** en bas de la section **Services personnalisés**
 - Donner un nom au service (Par exemple: **_synchromoodle_**) et cocher les cases **_Activé_** et **_Uniquement utilisateurs autorisés_**
-- Donner la description suivante : "Webservice pour la synchro moodle permettant l'effacement des cours et des utilisateurs."
 - Sauvegarder
 - Accéder au menu d'ajout de fonctions à ce service a l'aide du bouton **_Fonctions_**
 - Cliquer sur **_Ajouter des fonctions_** et ajouter :
@@ -44,6 +43,7 @@ if (!file_exists($function->classpath)) {
 - Aller dans **Administration du site > Utilisateurs > Permissions > Définition des rôles**
 - Créer un nouveau rôle (Par exemple: **_Webservice_** pour "Nom abrégé" et "Nom complet personnalisé")
 - Cocher la case **_Système_** pour la valeur de **_Types de contextes où ce rôle peut être attribué_**
+- Donner la description suivante : "Webservice pour la synchro moodle permettant l'effacement des cours et des utilisateurs."
 - Assigner les capacités suivantes au rôle:
     - webservice/rest:use
     - moodle/user:delete
@@ -80,7 +80,7 @@ Si c'est le cas, pour résoudre le problème il faut :
 - Cliquer sur **_Ajouter_**
 - Renseigner le nom "webservice"
 - Sélectionnez le service créé précédemment (synchromoodle)
-- Sélectionner "Activer" et saisir la date la plus éloignée possible
+- Dans Restriction IP mettre l'ip d'Aquaray
 - Sauvegarder
 - Fournir le token généré dans la configuration du script de synchronisation
 
