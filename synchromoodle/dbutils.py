@@ -1090,10 +1090,6 @@ class Database:
                           " department = %(anonymous_name)s,"
                           " phone1 = %(anonymous_phone)s,"
                           " phone2 = %(anonymous_phone)s,"
-                          " skype = %(anonymous_name)s,"
-                          " yahoo = %(anonymous_name)s,"
-                          " aim = %(anonymous_name)s,"
-                          " msn = %(anonymous_name)s,"
                           " email = %(anonymous_mail)s,"
                           " description = NULL"
                           f" WHERE id IN ({ids_list})",
