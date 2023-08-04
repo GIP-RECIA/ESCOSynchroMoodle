@@ -1139,6 +1139,18 @@ class Database:
             " VALUES (%(context_level)s, %(instance_id)s,  %(depth)s)"
         self.mark.execute(s, params={'context_level': context_level, 'instance_id': instance_id, 'depth': depth})
 
+    def insert_moodle_course_section(self, course_id: int, section_number: int, course_module: int):
+        """
+        Insère une section dans un cours.
+
+        :param course_id: L'id du cours dans lequel on insère la section
+        :param section_number: Le numéro de la section (0)
+        :param course_module: L'id du module de cours à insérer dans la séquence de la section
+        """
+        s = f"INSERT INTO {self.entete}course_sections (course, section, sequence)" \
+            " VALUES (%(course_id)s, %(section_number)s,  %(course_module)s)"
+        self.mark.execute(s, params={'course_id': course_id, 'section_number': section_number, 'course_module': course_module})
+
     def insert_moodle_course(self, id_category: int, full_name: str, id_number: str, short_name: str, summary: str,
      format_: str, visible: int, start_date: int, time_created: int, time_modified: int):
         """

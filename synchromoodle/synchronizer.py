@@ -1984,6 +1984,12 @@ class Synchronizer:
         self.__db.update_context_path(id_contexte_module, path_contexte_module)
 
         #########################
+        # PARTIE SECTION
+        #########################
+        # Insertion d'une section dans la zone privée avec le forum dedans:
+        self.__db.insert_moodle_course_section(id_zone_privee, 0, id_course_module)
+
+        #########################
         # PARTIE BLOC
         #########################
         # Insertion du bloc de recherche forum
