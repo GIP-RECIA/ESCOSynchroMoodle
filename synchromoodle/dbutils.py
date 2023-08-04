@@ -57,7 +57,7 @@ COURSE_VISIBLE_ZONE_PRIVEE = 0
 # MODULE DE COURS
 #######################################
 # Nombre pour le module du forum dans la zone privee
-COURSE_MODULES_MODULE = 5
+COURSE_MODULES_MODULE = 6
 
 #######################################
 # ROLES
