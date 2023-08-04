@@ -1988,6 +1988,9 @@ class Synchronizer:
         #########################
         # Insertion d'une section dans la zone privée avec le forum dedans:
         self.__db.insert_moodle_course_section(id_zone_privee, 0, id_course_module)
+        # Mise à jour du module avec la section dans laquelle il est (pas obligatoire mais plus propre)
+        id_section = self.__db.get_id_first_course_section(id_zone_privee)
+        self.__db.update_course_module_section(id_course_module, id_section)
 
         #########################
         # PARTIE BLOC

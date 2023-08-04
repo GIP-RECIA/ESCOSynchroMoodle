@@ -1197,6 +1197,32 @@ class Database:
             " VALUES(%(name)s, %(id_number)s, %(description)s, 0, 999,0, 1, 1, %(theme)s)"
         self.mark.execute(s, params={'name': name, 'id_number': id_number, 'description': description, 'theme': theme})
 
+    def get_id_first_course_section(self, course_id: int) -> int:
+        """
+        Fonction permettant de recuperer l'id de la première section d'un cours.
+
+        :param role_id: L'id du cours
+        :return: L'id de la section 0 associée au cours
+        """
+        s = f"SELECT id FROM {self.entete}course_sections" \
+            " WHERE course = %(course_id)s AND section = 0" \
+            " LIMIT 1"
+        self.mark.execute(s, params={'course_id': course_id})
+        ligne = self.safe_fetchone()
+        if ligne is None:
+            return None
+        return ligne[0]
+
+    def update_course_module_section(self, module_id: int, section: int):
+        """
+        Fonction permettant de mettre à jour l'attribut section d'un module de cours
+
+        :param module_id: L'id du module
+        :param section: L'id de la section
+        """
+        s = f"UPDATE {self.entete}course_modules SET section = %(section)s WHERE id = %(module_id)s"
+        self.mark.execute(s, params={'section': section, 'module_id': module_id})
+
     def insert_moodle_course_module(self, course: int, module: int, instance: int, added):
         """
         Fonction permettant d'insérer un module de cours.
