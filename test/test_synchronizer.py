@@ -1595,6 +1595,8 @@ class TestEtablissement:
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
         mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course')
+        mocker.patch('synchromoodle.synchronizer.WebService.get_last_course_access',\
+                     side_effect=mock_utils.fake_get_last_course_access_test_cours)
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro
         synchronizer.anonymize_or_delete_users(db_valid_users, ldap_users)
@@ -1656,6 +1658,8 @@ class TestEtablissement:
         mock_delete_courses = mocker.patch('synchromoodle.synchronizer.WebService.delete_course')
         mock_delete_users = mocker.patch('synchromoodle.synchronizer.WebService.delete_users')
         mock_anon_users = mocker.patch('synchromoodle.synchronizer.Database.anonymize_users')
+        mocker.patch('synchromoodle.synchronizer.WebService.get_last_course_access',\
+                     side_effect=mock_utils.fake_get_last_course_access_test_cours)
         mocker.patch('synchromoodle.synchronizer.Synchronizer.backup_course')
 
         #Appel direct à la méthode s'occupant d'anonymiser et de supprimer les utilisateurs dans la synchro

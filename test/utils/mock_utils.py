@@ -34,3 +34,13 @@ def fake_get_courses_user_enrolled_test_cours(notused):
     :return: La liste des ids des cours
     """
     return [37000,37001,37002,37003,37004,37005]
+
+def fake_get_last_course_access_test_cours(courseid: int):
+    """
+    Retourne la date de dernier accès pour les tests des cours
+    :param courseid: L'id du cours
+    :return: La date de dernier accès
+    """
+    print(courseid)
+    return_values = {37003: 0, 37005: 0, 37007: 0}
+    return return_values[courseid]
