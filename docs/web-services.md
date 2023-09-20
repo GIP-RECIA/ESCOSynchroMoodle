@@ -21,6 +21,7 @@
     - core_course_delete_courses
     - core_cohort_delete_cohorts
     - core_enrol_get_users_courses
+    - core_enrol_get_enrolled_users
     - core_webservice_get_site_info
 - Ajouter des fonctions
 
@@ -51,10 +52,14 @@ if (!file_exists($function->classpath)) {
     - moodle/course:viewhiddencourses
     - moodle/course:view
     - moodle/course:viewparticipants
+    - moodle/course:useremail
+    - moodle/user:update
     - moodle/user:viewdetails
+    - moodle/user:viewhiddendetails
     - moodle/cohort:manage
     - mod/dataform:managetemplates
     - mod/dataform:managefields
+    - moodle/site:accessallgroups
 - Créer ce rôle
 
 ## Autoriser l'utilisateur à utiliser le service

@@ -137,12 +137,12 @@ class WebService:
             json_data = json.loads(res.text)
             if json_data is not None and 'exception' in json_data:
                 log.warning(json_data['message'])
-                return {}
+                return None
             return json_data
         except json.decoder.JSONDecodeError:
             log.warning("Problème avec appel au WebService get_courses_user_enrolled. "
                         "Message retourné : %s.", res.text)
-            return {}
+            return None
 
 
     def delete_cohorts(self, cohortids: list[int], log=getLogger()):
@@ -183,3 +183,73 @@ class WebService:
             log.warning("Problème avec appel au WebService delete_cohorts. "
                         "Message retourné : %s. Cohortes traitées : %s",
                         res.text, str(cohortids))
+
+
+    def get_users_enrolled_in_course(self, courseid: int, log=getLogger()):
+        """
+        Récupère la liste des utilisateurs inscrits dans un cours donné.
+        L'utilisateur WebService doit avoir les permissions .
+
+        :param courseid: L'id du cours dont on veut récupérer la liste des utilisateurs
+        :param log: Le logger
+        :returns: La liste des utilisateurs inscrits au cours
+        """
+
+        params = {"courseid": courseid}
+
+        try:
+            res = requests.get(url=self.url,
+                               params={
+                                   'wstoken': self.config.token,
+                                   'moodlewsrestformat': "json",
+                                   'wsfunction': "core_enrol_get_enrolled_users",
+                                   **params
+                               },
+                               timeout=600)
+        except requests.exceptions.ConnectionError:
+            log.error("Déconnexion du webservice core_enrol_get_enrolled_users sur cours %s", str(courseid))
+            return None
+        except requests.exceptions.Timeout:
+            log.warning("Délai de requête au webservice core_enrol_get_enrolled_users maximum dépassé sur cours %s",
+                        str(courseid))
+            return None
+
+        try:
+            json_data = json.loads(res.text)
+            if json_data is not None and 'exception' in json_data:
+                log.warning("Exception core_enrol_get_enrolled_users %s : " + json_data['message'],
+                            str(courseid))
+                return None
+            return json_data
+        except json.decoder.JSONDecodeError:
+            log.warning("Problème avec appel au WebService core_enrol_get_enrolled_users. "
+                        "Message retourné : %s. Cours traité : %s",
+                        res.text, str(courseid))
+            return None
+
+
+    def get_last_course_access(self, courseid: int, log=getLogger()):
+        """
+        Récupère le timestamp correspondant au dernier accès d'un cours donné.
+        L'utilisateur WebService doit avoir les permissions moodle/cohort:manage.
+
+        :param courseid: L'id du cours dont on veut récupérer le dernier accès
+        :param log: Le logger
+        :returns: Le timestamp du dernier accès au cours, 0 si le cours n'a jamais été accédé,
+        """
+
+        #Récupère la liste des utilisateurs inscrits
+        course_users = self.get_users_enrolled_in_course(courseid)
+        max_access = 0
+
+        #Récupère le timestamp max parmi les utilisateurs = le dernier accès
+        if course_users is not None:
+            for user in course_users:
+                lastcourseaccess = user["lastcourseaccess"]
+                if max_access == 0:
+                    max_access = lastcourseaccess
+                else:
+                    if lastcourseaccess > max_access:
+                        max_access = lastcourseaccess
+
+        return max_access

@@ -68,6 +68,9 @@ class DeleteConfig(_BaseConfig):
         self.delay_backup_course = 365  # type: int
         """Délai, en jours, avant de sauvegarder un cours inutilisé"""
 
+        self.delay_unused_course = 360  # type: int
+        """Délai, en jours, avant de sauvegarder un cours non accédé"""
+
         self.delay_force_delete = 1095  # type: int
         """Délai, en jours, avant de supprimer un compte qui n'est plus présent
          dans l'annuaire LDAP peu importe ses références"""

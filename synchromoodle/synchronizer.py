@@ -1464,16 +1464,23 @@ class Synchronizer:
             if len(owners_ids) == 1 and owners_ids[0] == user_id:
                 #Récupération de la date de dernière modification
                 timemodified = self.__db.get_course_timemodified(courseid)
-                #Récupération du délai avant suppression du cours
+                #Récupération des délais avant suppression du cours
                 delay_backup_course = self.__config.delete.delay_backup_course
+                delay_unused_course = self.__config.delete.delay_unused_course
 
-                #Test pour voir si le cours doit être supprimé
+                #Test pour voir si le cours doit être supprimé : dernière modif
                 if timemodified < now - (delay_backup_course * SECONDS_PER_DAY):
-                    log.info("Le cours %d n'a pas été modifié depuis plus de %d jours,"
-                             " et l'utilisateur %d est le seul propriétaire de ce cours,"
-                             " il va donc être supprimé", courseid,
-                             int((now - timemodified) / SECONDS_PER_DAY), user_id)
-                    courses_to_delete.add((courseid,shortname,fullname,categoryid))
+                    #Dernier accès
+                    timeaccessed = self.__webservice.get_last_course_access(courseid)
+                    if timeaccessed < now - (delay_unused_course * SECONDS_PER_DAY):
+                        log.info("Le cours %d n'a pas été modifié depuis plus de %d jours,"
+                                 " n'a pas été accédé depuis plus de %d jours,"
+                                 " et l'utilisateur %d est le seul propriétaire de ce cours,"
+                                 " il va donc être supprimé", courseid,
+                                 int((now - timemodified) / SECONDS_PER_DAY),
+                                 int((now - timeaccessed) / SECONDS_PER_DAY),
+                                 user_id)
+                        courses_to_delete.add((courseid,shortname,fullname,categoryid))
 
             #Sinon s'il n'est pas tout seul à posséder ce cours, on lui retire son rôle
             #Autrement dit on le désinscrit du cours
@@ -1537,7 +1544,7 @@ class Synchronizer:
                     if is_teacher:
                         owned_courses = self.__db.get_courses_ids_owned_or_teach(db_user[0])
                         for course_owned in owned_courses:
-                            if course_owned in user_courses:
+                            if user_courses is not None and course_owned in user_courses:
                                 user_courses.remove(course_owned)
 
                     #Cas ou on doit supprimer un élève : plus présent dans le ldap, et
@@ -1554,7 +1561,7 @@ class Synchronizer:
                         #Cas ou on doit supprimer un utilisateur : plus présent dans le ldap
                         #et pas de connection à moodle depuis plus de delete_delay jours
                         if db_user[2] < now - (delete_delay * SECONDS_PER_DAY):
-                            if len(user_courses) == 0: #inscription à aucun cours
+                            if user_courses is not None and len(user_courses) == 0: #inscription à aucun cours
                                 #Différence de traitement au niveau des références entre un enseignant et un élève
                                 if is_teacher:
                                     if not self.__db.enseignant_has_references(db_user[0]): #si pas de références
