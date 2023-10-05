@@ -58,7 +58,7 @@ def default(config: Config, action: ActionConfig):
         synchronizer = Synchronizer(ldap, db, config, action)
         synchronizer.initialize()
 
-        timestamp_store = TimestampStore(action.timestamp_store)
+        timestamp_store = TimestampStore(action.timestamp_store, config.ldap.modify_timestamp_delay)
         log.info('Traitement des établissements')
 
         #Avant les autres établissements on s'occupe de celui de la dane
@@ -135,7 +135,7 @@ def interetab(config: Config, action: ActionConfig):
         synchronizer = Synchronizer(ldap, db, config, action)
         synchronizer.initialize()
 
-        timestamp_store = TimestampStore(action.timestamp_store)
+        timestamp_store = TimestampStore(action.timestamp_store, config.ldap.modify_timestamp_delay)
 
         log.info('Traitement des utilisateurs inter-établissements')
         personne_filter = {
@@ -194,7 +194,7 @@ def inspecteurs(config: Config, action: ActionConfig):
         synchronizer.initialize()
 
         log.info('Traitement des inspecteurs')
-        timestamp_store = TimestampStore(action.timestamp_store)
+        timestamp_store = TimestampStore(action.timestamp_store, config.ldap.modify_timestamp_delay)
 
         personne_filter = {
             action.inspecteurs.ldap_attribut_user: action.inspecteurs.ldap_valeur_attribut_user

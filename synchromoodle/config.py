@@ -315,6 +315,9 @@ class LdapConfig(_BaseConfig):
         self.page_size = 10000 # type: int
         """Taille d'une page pour les grandes requêtes"""
 
+        self.modify_timestamp_delay = 0 # type: int
+        """Nombre d'heures de marge si désynchro du LDAP"""
+
         super().__init__(**entries)
 
     @property

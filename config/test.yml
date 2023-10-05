@@ -17,7 +17,7 @@ ldap:
   personnes_rdn: "ou=people"
   groups_rdn: "ou=groups"
   admin_rdn: "ou=administrateurs"
-
+  modify_timestamp_delay: 12
 
 webservice:
   token: "8171f8af9b393be7e4d0e984b39c4223"
