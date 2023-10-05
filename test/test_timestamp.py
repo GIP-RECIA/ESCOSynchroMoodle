@@ -4,6 +4,7 @@ Module pour les tests vis à vis des timestamps
 
 import os
 import tempfile
+import datetime
 
 import pytest
 
@@ -41,6 +42,7 @@ def test_read_write(tmp_file):
     """
     time_stamp1 = timestamp.TimestampStore(TimestampStoreConfig(file=tmp_file))
     time_stamp2 = timestamp.TimestampStore(TimestampStoreConfig(file=tmp_file), now=time_stamp1.now)
+    time_stamp3 = timestamp.TimestampStore(TimestampStoreConfig(file=tmp_file), modify_timestamp_delay=8, now=time_stamp1.now)
     time_stamp1.mark("UAI")
     time_stamp1.write()
     time_stamp2.read()
@@ -50,3 +52,8 @@ def test_read_write(tmp_file):
     time_stamp1.write()
     time_stamp2.read()
     assert time_stamp2.get_timestamp("UAI2") == time_stamp1.now
+
+    time_stamp1.mark("UAI3")
+    time_stamp1.write()
+    time_stamp3.read()
+    assert time_stamp3.get_timestamp("UAI3") == time_stamp1.now - datetime.timedelta(hours=8)
